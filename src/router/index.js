@@ -154,6 +154,7 @@ export function getAsyncRoutes() {
 }
 
 export function getRouter(permission) {
+  console.log('permission.component' + [`@/views/${permission.component}`])
   if (permission.children && permission.children.length > 0) { // 一级菜单Layout
     return {
       path: permission.path,
@@ -209,6 +210,14 @@ export function filterAsyncRoutes(routes) {
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })
+  const firstRouteNode =
+    {
+      path: '/',
+      component: Layout,
+      redirect: routes[0].path + '/' + routes[0].children[0].path,
+      hidden: true
+    }
+  accessedRoutes.push(firstRouteNode)
   return accessedRoutes // 返回全部的路由数据
 }
 

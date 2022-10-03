@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">信息资源管理系统</h3>
       </div>
       <el-row>
         <el-form-item prop="username">
@@ -63,12 +63,12 @@
         </el-col>
       </el-row>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
+      <!--      <div class="tips">-->
+      <!--        <span style="margin-right:20px;">username: admin</span>-->
+      <!--        <span> password: any</span>-->
+      <!--      </div>-->
 
     </el-form>
   </div>
