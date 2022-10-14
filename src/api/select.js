@@ -12,7 +12,7 @@ export function getDepartment(postId) {
   return request({
     params: { postId: postId },
     url: '/home/inforesources/getDepartmentByPostId',
-    method: 'post',
+    method: 'get',
     responseType: 'json'
   })
 }

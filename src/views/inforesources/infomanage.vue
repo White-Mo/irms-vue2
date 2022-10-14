@@ -345,7 +345,9 @@ export default {
       }
       const params = {
         dataName: this.initdata,
-        dataValue: this.inputValue
+        dataValue: this.inputValue,
+        start: 0,
+        limit: 10
       }
       // console.log(this.initdata)
       getList(params).then((response) => {
@@ -355,7 +357,9 @@ export default {
       })
     },
 
-    addInfo() {},
+    addInfo() {
+      this.ifUpdate = !this.ifUpdate
+    },
     handleDetail(index, row) {
       console.log(index, row)
     },
@@ -372,7 +376,17 @@ export default {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      const params = {
+        dataName: this.initdata,
+        dataValue: this.inputValue,
+        start: val,
+        limit: 10
+      }
+      getList(params).then((response) => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
 }
@@ -446,7 +460,6 @@ export default {
 }
 .block{
   text-align: center;
-  width: 130px;
 }
 </style>
 <style  lang="less">
