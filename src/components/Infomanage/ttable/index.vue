@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息管理</span></div>
+    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span><slot name="header" /></span></div>
     <div class="app-container">
       <div v-show="!ifUpdate" class="show">
         <el-row>
-          <el-col :span="24"><div class="grid-content bg-purple-dark">综合信息管理</div></el-col>
+          <el-col :span="24"><div class="grid-content bg-purple-dark"><slot name="top" /></div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2"><div class="grid-content bg-purple">查询条件：</div></el-col>
@@ -99,6 +99,12 @@ export default {
   components: {
     Addinfo
   },
+  props: {
+    labels: {
+      type: Object,
+      required: true
+    }
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -125,12 +131,7 @@ export default {
         value: '选项2',
         label: '双皮奶'
       }],
-      value: '',
-      labels:
-        { 'postName': '所属单位', 'departmentName': '所属部门', 'equipmentTypeName': '设备类型', 'equipmentName': '设备名', 'brandName': '设备品牌',
-          'businessSystemName': '业务系统', 'machineRoomName': '安装位置', 'cabinetName': '机柜编号', 'onlineTime': '上线时间',
-          'hostName': '主机名', 'equipmentAdminName': '设备管理员', 'equipmentAdminPhone': '设备管理员电话', 'appAdminName': '应用管理员',
-          'appAdminPhone': '应用管理员电话', 'brandModelName': '型号', 'serialNumber': '序列号', 'guaranteePeriod': '保修期', 'offlineTime': '下线时间' }
+      value: ''
     }
   },
   created() {

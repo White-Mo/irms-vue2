@@ -7,3 +7,12 @@ export function getList() {
     responseType: 'json'
   })
 }
+
+export function addEquipment(eq) {
+  return request({
+    data: JSON.stringify(eq),
+    url: '/home/inforesources/AddExcelBaseInfo',
+    method: 'post',
+    responseType: 'json'
+  })
+}
