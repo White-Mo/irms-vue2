@@ -16,7 +16,7 @@ export function getList(obj) {
 export function addEquipment(eq) {
   return request({
     data: eq,
-    url: '/home/inforesources/AddExcel',
+    url: '/home/inforesources/AddEquipment',
     method: 'post',
     responseType: 'json'
   })
