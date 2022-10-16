@@ -15,8 +15,8 @@ export function getList(obj) {
 
 export function addEquipment(eq) {
   return request({
-    data: JSON.stringify(eq),
-    url: '/home/inforesources/AddExcelBaseInfo',
+    data: eq,
+    url: '/home/inforesources/AddExcel',
     method: 'post',
     responseType: 'json'
   })

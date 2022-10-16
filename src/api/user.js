@@ -39,11 +39,3 @@ export function getMoveRoute() {
     responseType: 'json'
   })
 }
-
-export function getList() {
-  return request({
-    url: '/syslogin/getViewAll',
-    method: 'get',
-    responseType: 'json'
-  })
-}
