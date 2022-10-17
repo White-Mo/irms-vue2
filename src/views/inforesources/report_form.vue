@@ -8,7 +8,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { getExcelDemo2 } from '@/api/get_excel'
+import { getList } from '@/api/table'
 export default {
   name: 'Dashboard',
   computed: {
@@ -16,6 +17,23 @@ export default {
       'name',
       'roles'
     ])
+  },
+  // data () {
+  //   return {
+  //     list: [],
+  //   }
+  // },
+  mounted() {
+    this.get_data()
+  },
+  methods: {
+    get_data() {
+      // getList().then((res) => {
+      //   console.log(res)
+        // getExcelDemo1(res.data.items)
+        getExcelDemo2()
+      // })
+    }
   }
 }
 </script>
