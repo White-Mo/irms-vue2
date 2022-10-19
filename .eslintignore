@@ -1,4 +1,7 @@
 build/*.js
-src/assets
+src
 public
 dist
+view
+mock
+vue.config.js
