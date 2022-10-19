@@ -46,6 +46,10 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
+    },
+    externals: {
+      BMap: 'BMap',
+      BMap_Symbol_SHAPE_POINT:'BMap_Symbol_SHAPE_POINT'
     }
   },
   chainWebpack(config) {
