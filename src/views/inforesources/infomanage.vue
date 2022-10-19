@@ -81,12 +81,12 @@
           >
             <div class="grid-content bg-purple">
               <el-select
-                v-model="basicValue"
+                v-model="DataName"
                 placeholder="详细字段查询"
                 multiple
               >
                 <el-option
-                  v-for="(item,index) in basicvalue"
+                  v-for="(item,index) in dataname"
                   :key="index"
                   :label="item.label"
                   :value="item.value"
@@ -160,12 +160,21 @@
           stripe
         >
           <el-table-column type="index" />
-          <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+          <af-table-column
+            v-for="(value,key,index) in labels"
+            :key="index"
+            align="center"
+            :label="value"
+          >
             <template slot-scope="scope">
               {{ scope.row[key] }}
             </template>
-          </el-table-column>
-          <el-table-column align="center" label="操作" width="250px">
+          </af-table-column>
+          <el-table-column
+            align="center"
+            label="操作"
+            width="250px"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -223,8 +232,9 @@ export default {
       list: null,
       total: 0,
       currentPage1: 5,
-      basicValue: '',
-      initdata: ['123'],
+      DataName: 'all',
+      keyname: [],
+      initname: ['123'],
       department: '',
       inputValue: '',
       postname: '',
@@ -232,7 +242,7 @@ export default {
       ifUpdate: false,
       listLoading: true,
       singalInfo: {},
-      basicvalue: [
+      dataname: [
         {
           value: 'postName',
           label: '所属单位'
@@ -338,16 +348,18 @@ export default {
       this.listLoading = true
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
-      if (this.basicValue === '') {
-        this.initdata = ['111']
+      if (this.DataName === 'all' || this.DataName.length === 0) {
+        console.log(this.DataName)
+        this.initname = ['111']
       } else {
-        this.initdata = this.basicValue
+        // console.log(JSON.parse(JSON.stringify(this.DataName)))
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initname,
         dataValue: this.inputValue,
         start: 0,
-        limit: 10
+        limit: 5
       }
       // console.log(this.initdata)
       getList(params).then((response) => {
