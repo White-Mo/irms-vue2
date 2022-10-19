@@ -105,6 +105,10 @@ export default {
       dialogForm: {},
       formLabelWidth: '120px',
       fileList: [],
+      excelData: {
+        total: 0,
+        equipments: {}
+      },
       equipments: [],
       equipment: {
         equipmentBaseInfo: {},
@@ -273,8 +277,10 @@ export default {
           _this.equipment.appSoftware = _this.appSoftware
           _this.equipment.appStore = _this.appStore
           _this.equipments.push(_this.equipment)
+          _this.excelData.equipments = _this.equipments
+          _this.excelData.total = _this.equipments.length
           console.log('所有数据', _this.equipments)
-          importExcel(_this.equipments).then((res) => {
+          importExcel(_this.excelData).then((res) => {
             console.log(res.data)
             _this.dialogFormVisible = false
           })
