@@ -11,7 +11,10 @@
             <div class="grid-content bg-purple-dark">综合信息管理</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
+        <el-row
+          :gutter="10"
+          class="bg-condition"
+        >
           <el-col
             :xs="2"
             :sm="2"
@@ -19,7 +22,7 @@
             :lg="2"
             :xl="2"
           >
-            <div class="bg-condition">查询条件：</div>
+            <span>查询条件：</span>
           </el-col>
           <!-- <el-col
             :xs="4"
@@ -73,27 +76,26 @@
             </div>
           </el-col> -->
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
-            <div class="grid-content bg-purple">
-              <el-select
-                v-model="basicValue"
-                placeholder="详细字段查询"
-                multiple
-              >
-                <el-option
-                  v-for="(item,index) in basicvalue"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                  class="searchInput"
-                />
-              </el-select>
-            </div>
+            <el-select
+              v-model="DataName"
+              placeholder="详细字段查询"
+              multiple
+              size="medium"
+            >
+              <el-option
+                v-for="(item,index) in dataname"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+                class="searchInput"
+              />
+            </el-select>
           </el-col>
           <el-col
             :xs="4"
@@ -102,6 +104,7 @@
             :lg="4"
             :xl="4"
           >
+<<<<<<< HEAD
             <div class="grid-content bg-purple">
               <el-input
                 v-model="inputValue"
@@ -109,6 +112,14 @@
                 clearable
               />
             </div>
+=======
+            <el-input
+              v-model="inputValue"
+              placeholder="输入查询内容"
+              clearable
+              size="medium"
+            />
+>>>>>>> 4d313fb09d84f86e204fa1339303e3718ec1b157
           </el-col>
           <el-col
             :xs="2"
@@ -118,6 +129,7 @@
             :xl="2"
           >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-search"
               clearable="true"
@@ -125,13 +137,14 @@
             >搜索</el-button>
           </el-col>
           <el-col
-            :xs="3"
-            :sm="3"
-            :md="4"
-            :lg="4"
-            :xl="5"
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
           >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-download"
             >导出</el-button>
@@ -144,6 +157,7 @@
             :xl="1"
           >
             <el-button
+              size="medium"
               type="info"
               @click="addInfo()"
             >添加设备信息</el-button>
@@ -158,12 +172,21 @@
           stripe
         >
           <el-table-column type="index" />
-          <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+          <af-table-column
+            v-for="(value,key,index) in labels"
+            :key="index"
+            align="center"
+            :label="value"
+          >
             <template slot-scope="scope">
               {{ scope.row[key] }}
             </template>
-          </el-table-column>
-          <el-table-column align="center" label="操作" width="250px">
+          </af-table-column>
+          <el-table-column
+            align="center"
+            label="操作"
+            width="250px"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -199,7 +222,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList, getdataCount } from '@/api/table'
 import Addinfo from '@/components/Infomanage/addInfo'
 
 export default {
@@ -221,8 +244,9 @@ export default {
       list: null,
       total: 0,
       currentPage1: 5,
-      basicValue: '',
-      initdata: ['123'],
+      DataName: 'all',
+      keyname: [],
+      initname: ['123'],
       department: '',
       inputValue: '',
       postname: '',
@@ -230,7 +254,7 @@ export default {
       ifUpdate: false,
       listLoading: true,
       singalInfo: {},
-      basicvalue: [
+      dataname: [
         {
           value: 'postName',
           label: '所属单位'
@@ -336,26 +360,35 @@ export default {
       this.listLoading = true
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
-      if (this.basicValue === '') {
-        this.initdata = ['111']
+      if (this.DataName === 'all' || this.DataName.length === 0) {
+        console.log(this.DataName)
+        this.initname = ['111']
       } else {
-        this.initdata = this.basicValue
+        // console.log(JSON.parse(JSON.stringify(this.DataName)))
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initname,
         dataValue: this.inputValue,
         status: '',
         start: 0,
-        limit: 10
+        limit: 5
       }
+      const numparams = {
+        dataName: this.initname,
+        dataValue: this.inputValue
+      }
+      getdataCount(numparams).then((response) => {
+        this.total = response.data.total
+        console.log(this.total)
+        this.listLoading = false
+      })
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
-        this.total = response.data.total
         this.listLoading = false
       })
     },
-
     addInfo() {
       this.ifUpdate = !this.ifUpdate
     },
@@ -393,9 +426,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 
 .searchInput {
   height: 40px;
@@ -409,7 +442,7 @@ export default {
 // }
 
 .el-row {
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   /* &:last-child {
       margin-bottom: 0;
     } */
@@ -424,11 +457,10 @@ export default {
   background: #d3dce6;
 }
 .bg-condition {
-  line-height: 60px;
+  line-height: 50px;
   text-align: center;
-  height: 58px;
-  margin-left: 20px;
-  width: 120px;
+  height: 54px;
+  margin: 0px !important;
   background: #d3dce6;
 }
 .bg-purple-light {
@@ -453,12 +485,12 @@ export default {
   font-size: 18px;
 }
 .el-cascader .el-input {
-    width: 130px;
-  }
-.el-pagination > *{
+  width: 130px;
+}
+.el-pagination > * {
   font-size: 18px;
 }
-.block{
+.block {
   text-align: center;
 }
 </style>
@@ -466,7 +498,7 @@ export default {
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
-  height: 50px;
+  height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
@@ -501,10 +533,10 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-.el-button--primary {
-  height: 58px;
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
+//.el-button--primary {
+//  height: 58px;
+//  color: #fff;
+//  background-color: #409eff;
+//  border-color: #409eff;
+//}
 </style>

@@ -196,29 +196,29 @@ export default {
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
-        config: [{ projectName: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
-        software: [{ project: '', projectName: '', edition: '', type: '' }],
-        network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
-        protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareliaison: '' }],
-        appSystemUser: [{ userName: '', endUser: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
-        appBusiness: [{ businessName: '', domainName: '', userScope: '', icpNum: '' }],
-        appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
-        appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
+        config: [{ project_name: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
+        software: [{ project: '', project_name: '', edition: '', type: '' }],
+        network: [{ network_card_name: '', ip_address: '', switch_info: '', network_card_port: '', mac_address: '' }],
+        protocolPort: [{ protocol_name: '', app_name: '', network_card_port: '' }],
+        appSoftware: [{ software_name: '', software_edition: '', software_port: '', software_online_time: '', software_develop_company: '', software_liaison: '' }],
+        appSystemUser: [{ user_name: '', end_user: '', user_level: '', local_access_mode: '', remote_access_mode: '', createdate: '', other: '' }],
+        appBusiness: [{ business_name: '', domain_name: '', user_scope: '', icp_num: '' }],
+        appAccessRights: [{ lan_intranet: '', industry_network: '', intranet: '', other: '' }],
+        appLinksInfo: [{ company: '', user_name: '', IP_address: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
-        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
+        appNativeStore: [{ total_capacity: '', used_space: '', unused_space: '', annual_growth_space: '' }]
       },
-      configLable: { projectName: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
-      protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
-      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
-      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
-      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
-      appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
+      configLable: { project_name: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
+      softwareLable: { project: '项目', project_name: '名称', edition: '版本', type: '类型' },
+      networkLable: { network_card_name: '网卡', ip_address: 'IP地址', switch_info: '端口', network_card_port: '交换机', mac_address: 'MAC地址' },
+      protocolPortLable: { protocol_name: '协议', app_name: '应用名称', network_card_port: '端口' },
+      appSoftwareLable: { software_name: '名称', software_edition: '版本', software_port: '端口', software_online_time: '上线时间', software_develop_company: '研发单位', software_liaison: '联系人' },
+      appSystemUserLable: { user_name: '用户名', end_user: '使用人', user_level: '级别权限', local_access_mode: '本地访问方式', remote_access_mode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      appBusinessLable: { business_name: 'HTTP应用 / FTP应用', domain_name: '域名/地址', user_scope: 'ICP号', icp_num: '用户范围' },
+      appAccessRightsLable: { lan_intranet: '内网', industry_network: '行内网', intranet: '互联网', other: '其他' },
+      appLinksInfoLable: { company: '单位', user_name: '用户名', IP_address: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
-      appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
+      appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
       postAll: [],
       departmentAll: [],
       equipmentTypeAll: [],
@@ -273,8 +273,7 @@ export default {
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
-          this.$router.go(0)
-          this.active = 0
+          // this.$router.go(0)
           this.$message({
             message: '新增成功',
             type: 'success'
