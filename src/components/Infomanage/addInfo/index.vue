@@ -273,7 +273,8 @@ export default {
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
-          // this.$router.go(0)
+          this.$router.go(0)
+          this.active = 0
           this.$message({
             message: '新增成功',
             type: 'success'

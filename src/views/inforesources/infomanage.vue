@@ -107,9 +107,7 @@
                 v-model="inputValue"
                 placeholder="输入查询内容"
                 clearable
-              >
-
-              </el-input>
+              />
             </div>
           </el-col>
           <el-col
@@ -346,6 +344,7 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
+        status: '',
         start: 0,
         limit: 10
       }
@@ -379,6 +378,7 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
+        status: this.tab_name,
         start: val,
         limit: 10
       }
