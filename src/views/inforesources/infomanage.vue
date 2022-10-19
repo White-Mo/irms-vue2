@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList, getdataCount } from '@/api/table'
 import Addinfo from '@/components/Infomanage/addInfo'
 
 export default {
@@ -363,14 +363,21 @@ export default {
         start: 0,
         limit: 5
       }
+      const numparams = {
+        dataName: this.initname,
+        dataValue: this.inputValue
+      }
+      getdataCount(numparams).then((response) => {
+        this.total = response.data.total
+        console.log(this.total)
+        this.listLoading = false
+      })
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
-        this.total = response.data.total
         this.listLoading = false
       })
     },
-
     addInfo() {
       this.ifUpdate = !this.ifUpdate
     },
@@ -466,12 +473,12 @@ export default {
   font-size: 18px;
 }
 .el-cascader .el-input {
-    width: 130px;
-  }
-.el-pagination > *{
+  width: 130px;
+}
+.el-pagination > * {
   font-size: 18px;
 }
-.block{
+.block {
   text-align: center;
 }
 </style>
