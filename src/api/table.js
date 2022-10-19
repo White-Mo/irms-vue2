@@ -24,6 +24,14 @@ export function getdataCount(obj) {
     responseType: 'json'
   })
 }
+// 获取统计数据
+export function getStatisticsData(par) {
+  return request({
+    url: '/home/inforesources/' + par,
+    method: 'get',
+    responseType: 'json'
+  })
+}
 export function addEquipment(eq) {
   return request({
     data: eq,

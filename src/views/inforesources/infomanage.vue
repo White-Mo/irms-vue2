@@ -1,27 +1,17 @@
 <template>
   <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息管理</span></div>
+    <div class="grid-content bg-purple">
+      <i class="el-icon-s-order" /><span>信息管理</span>
+    </div>
     <div class="app-container">
-      <div
-        v-show="!ifUpdate"
-        class="show"
-      >
+      <div v-show="!ifUpdate" class="show">
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">综合信息管理</div>
           </el-col>
         </el-row>
-        <el-row
-          :gutter="10"
-          class="bg-condition"
-        >
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
+        <el-row :gutter="10" class="bg-condition">
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <span>查询条件：</span>
           </el-col>
           <!-- <el-col
@@ -75,13 +65,7 @@
               <el-cascader :options="options" :show-all-levels="false" placeholder="详情字段查询" />
             </div>
           </el-col> -->
-          <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
-          >
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-select
               v-model="DataName"
               placeholder="详细字段查询"
@@ -89,7 +73,7 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in dataname"
+                v-for="(item, index) in dataname"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -97,13 +81,7 @@
               />
             </el-select>
           </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
+          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
             <el-input
               v-model="inputValue"
               placeholder="输入查询内容"
@@ -111,13 +89,7 @@
               size="medium"
             />
           </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button
               size="medium"
               type="primary"
@@ -126,31 +98,11 @@
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-download"
-            >导出</el-button>
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+            <el-button size="medium" type="primary" icon="el-icon-download">导出</el-button>
           </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="3"
-            :xl="1"
-          >
-            <el-button
-              size="medium"
-              type="info"
-              @click="addInfo()"
-            >添加设备信息</el-button>
+          <el-col :xs="1" :sm="1" :md="1" :lg="3" :xl="1">
+            <el-button size="medium" type="info" @click="addInfo()">添加设备信息</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -163,7 +115,7 @@
         >
           <el-table-column type="index" />
           <af-table-column
-            v-for="(value,key,index) in labels"
+            v-for="(value, key, index) in labels"
             :key="index"
             align="center"
             :label="value"
@@ -172,11 +124,7 @@
               {{ scope.row[key] }}
             </template>
           </af-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            width="250px"
-          >
+          <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
               <el-button
                 size="mini"

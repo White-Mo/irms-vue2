@@ -1,13 +1,3 @@
-// // exceljs 所需的 polyfills
-// require('core-js/modules/es.promise');
-// require('core-js/modules/es.string.includes');
-// require('core-js/modules/es.object.assign');
-// require('core-js/modules/es.object.keys');
-// require('core-js/modules/es.symbol');
-// require('core-js/modules/es.symbol.async-iterator');
-// require('regenerator-runtime/runtime');
-
-// const ExcelJS = require('exceljs/dist/es5');
 const ExcelJS = require('exceljs');
 
 export async function getExcelDemo1(data){
@@ -92,7 +82,7 @@ export async function getExcelDemo1(data){
     let link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     document.body.appendChild(link);
-    link.download = "导出报表.xlsx";
+    link.download = "总表.xlsx";
     link.click();
     document.body.removeChild(link);
 }
@@ -1253,7 +1243,7 @@ export async function getExcelDemo2(){
     }
     //第48 +n-1 + x-1 + z-1 + c-1 + c2-1到48 +n-1 + x + z-1 + c-1 + c2-1 + c3行 如果有的话
     let C48 = []
-    let y = 55 // y是’链接（服务）用户信息’中的最大条数
+    let y = 5 // y是’链接（服务）用户信息’中的最大条数
     let c3 = 0 //表格超出数
     if( 7 + c + 2 + c2 < y){
         c3 = y - (7 + c + 2 + c2)
@@ -1481,10 +1471,112 @@ export async function getExcelDemo2(){
         }
     }
 
-    // var
+    //导出下载
+    const buffer = await workbook.xlsx.writeBuffer();
+    let blob = new Blob([buffer])
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    document.body.appendChild(link);
+    link.download = "详细报表.xlsx";
+    link.click();
+    document.body.removeChild(link);
+}
 
+export async function getExcelDemo3(StatisticsData){
+    //创建工作簿↓
+    const workbook = new ExcelJS.Workbook();
+    //设置工作簿属性↓
+    workbook.creator = '中国地震局信息管理系统';
+    // workbook.lastModifiedBy = 'Her';
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    workbook.lastPrinted = new Date();
+    workbook.properties.date1904 = true;
+    workbook.calcProperties.fullCalcOnLoad = true;
+    //工作簿视图 ？？啥玩意
+    workbook.views = [{
+            x: 0,
+            y: 0,
+            width: 10000,
+            height: 20000,
+            firstSheet: 0,
+            activeTab: 1,
+            visibility: 'visible'
+        }]
+        //添加工作表
+    const sheet = workbook.addWorksheet('1');
+    // 设置padding 列宽
+    sheet.getColumn('A').width = 1.88
+    let col_i = 'BCDE'
+    for (let i = 0; i < col_i.length; i++) {
+        sheet.getColumn(col_i[i]).width = 13
+    }
+    //样式
+    const content_row = { vertical: 'middle', horizontal: 'center' };
+    const table_header2 = {
+        name: 'Arial Black',
+        color: { argb: '000' },
+        family: 2,
+        size: 14,
+        bold: true,
+    };
+    const table_header3 = {
+        name: 'Black',
+        color: { argb: '000' },
+        family: 2,
+        size: 14,
+        bold: false,
+    };
+    const black = { style: 'medium', color: { argb: '000' } }
 
-
+    // 第2到n行
+    let name_list = [
+        '名称',
+        '总设备数量(台)',
+        '总设备类型(种)',
+        '保修期内设备数量(台)',
+        '总应用系统数量(台)',
+        '应用管理员数量(个)',
+        '设备管理员数量(个)'
+    ]
+    let B2 = []
+    for (let i in name_list){
+        let item_list = []
+        let num = 2 + parseInt(i) 
+        if(i == 0){
+            sheet.getRow(num).height = 30
+        }else{
+            sheet.getRow(num).height = 25.5
+        }
+        sheet.mergeCells('B'+num+':C'+num);
+        sheet.mergeCells('D'+num+':E'+num);
+        item_list.push(sheet.getCell('B'+num))
+        item_list.push(sheet.getCell('D'+num))
+        for(let cell in item_list){
+            if(cell == 0){
+                item_list[cell].value = name_list[i]
+            }
+            if(i == 0 && cell == 1){
+                item_list[cell].value = '数量'
+            }else if(cell == 1){
+                item_list[cell].value = StatisticsData[i-1]
+            }
+            if(i == 0){
+                item_list[cell].font = table_header2
+            }else{
+                item_list[cell].font = table_header3
+            }
+            item_list[cell].alignment = content_row
+            item_list[cell].border = {
+                top: black,
+                left: black,
+                bottom: black,
+                right: black,
+            }
+        }
+        B2.push(item_list)
+        
+    }
 
     //导出下载
     const buffer = await workbook.xlsx.writeBuffer();
@@ -1492,7 +1584,7 @@ export async function getExcelDemo2(){
     let link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     document.body.appendChild(link);
-    link.download = "导出报表.xlsx";
+    link.download = "统计报表.xlsx";
     link.click();
     document.body.removeChild(link);
 }
