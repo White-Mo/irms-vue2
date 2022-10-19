@@ -1,6 +1,6 @@
 <template>
   <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息管理</span></div>
+    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
     <div class="app-container">
       <div
         v-show="!ifUpdate"

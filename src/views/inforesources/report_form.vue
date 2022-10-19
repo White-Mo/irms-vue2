@@ -9,7 +9,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getExcelDemo2 } from '@/api/get_excel'
-import { getList } from '@/api/table'
+// import { getList } from '@/api/table'
 export default {
   name: 'Dashboard',
   computed: {
@@ -30,8 +30,8 @@ export default {
     get_data() {
       // getList().then((res) => {
       //   console.log(res)
-        // getExcelDemo1(res.data.items)
-        getExcelDemo2()
+      // getExcelDemo1(res.data.items)
+      getExcelDemo2()
       // })
     }
   }

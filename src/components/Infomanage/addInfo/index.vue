@@ -194,7 +194,7 @@ export default {
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
-          machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
+          machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
         config: [{ projectName: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '', projectName: '', edition: '', type: '' }],
@@ -225,7 +225,7 @@ export default {
       active: 0,
       labels:
         { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end' }
+          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end', 'basicInfoId': '设备编号' }
     }
   },
   created() {
@@ -274,9 +274,12 @@ export default {
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           // this.$router.go(0)
-          this.$message({
-            message: '新增成功',
-            type: 'success'
+          this.$alert(res.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.$router.go(0)
           })
           console.log(res)
         }).catch(err => {
