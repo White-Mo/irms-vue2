@@ -11,7 +11,10 @@
             <div class="grid-content bg-purple-dark">综合信息管理</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
+        <el-row
+          :gutter="10"
+          class="bg-condition"
+        >
           <el-col
             :xs="2"
             :sm="2"
@@ -19,7 +22,7 @@
             :lg="2"
             :xl="2"
           >
-            <div class="bg-condition">查询条件：</div>
+            <span>查询条件：</span>
           </el-col>
           <!-- <el-col
             :xs="4"
@@ -73,27 +76,26 @@
             </div>
           </el-col> -->
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
-            <div class="grid-content bg-purple">
-              <el-select
-                v-model="DataName"
-                placeholder="详细字段查询"
-                multiple
-              >
-                <el-option
-                  v-for="(item,index) in dataname"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                  class="searchInput"
-                />
-              </el-select>
-            </div>
+            <el-select
+              v-model="DataName"
+              placeholder="详细字段查询"
+              multiple
+              size="medium"
+            >
+              <el-option
+                v-for="(item,index) in dataname"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+                class="searchInput"
+              />
+            </el-select>
           </el-col>
           <el-col
             :xs="4"
@@ -102,15 +104,12 @@
             :lg="4"
             :xl="4"
           >
-            <div class="grid-content bg-purple">
-              <el-input
-                v-model="inputValue"
-                placeholder="输入查询内容"
-                clearable
-              >
-
-              </el-input>
-            </div>
+            <el-input
+              v-model="inputValue"
+              placeholder="输入查询内容"
+              clearable
+              size="medium"
+            />
           </el-col>
           <el-col
             :xs="2"
@@ -120,6 +119,7 @@
             :xl="2"
           >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-search"
               clearable="true"
@@ -127,13 +127,14 @@
             >搜索</el-button>
           </el-col>
           <el-col
-            :xs="3"
-            :sm="3"
-            :md="4"
-            :lg="4"
-            :xl="5"
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
           >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-download"
             >导出</el-button>
@@ -146,6 +147,7 @@
             :xl="1"
           >
             <el-button
+              size="medium"
               type="info"
               @click="addInfo()"
             >添加设备信息</el-button>
@@ -405,9 +407,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 
 .searchInput {
   height: 40px;
@@ -421,7 +423,7 @@ export default {
 // }
 
 .el-row {
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   /* &:last-child {
       margin-bottom: 0;
     } */
@@ -436,11 +438,10 @@ export default {
   background: #d3dce6;
 }
 .bg-condition {
-  line-height: 60px;
+  line-height: 50px;
   text-align: center;
-  height: 58px;
-  margin-left: 20px;
-  width: 120px;
+  height: 54px;
+  margin: 0px !important;
   background: #d3dce6;
 }
 .bg-purple-light {
@@ -478,7 +479,7 @@ export default {
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
-  height: 50px;
+  height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
@@ -513,10 +514,10 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-.el-button--primary {
-  height: 58px;
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
+//.el-button--primary {
+//  height: 58px;
+//  color: #fff;
+//  background-color: #409eff;
+//  border-color: #409eff;
+//}
 </style>

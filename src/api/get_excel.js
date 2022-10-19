@@ -66,7 +66,7 @@ export async function getExcelDemo1(data){
             size: 12,
             bold: true,
         };
-        
+
       });
     header_row.commit();
     // 表格内容
@@ -192,7 +192,7 @@ export async function getExcelDemo2(){
     C1.value = "信息资产基础信息表"
     let item_row = sheet.getRow(1);
     item_row.height = 24;
-    
+
     //第三行
     sheet.getRow(3).height = 37.5
     sheet.mergeCells('C3:D3');
@@ -202,7 +202,7 @@ export async function getExcelDemo2(){
     C3.font = table_header
     C3.fill = table_fill1
 
-    
+
     sheet.mergeCells('E3:J3');
     let E3 = sheet.getCell("E3")
     E3.alignment = content_row
@@ -222,7 +222,7 @@ export async function getExcelDemo2(){
     D4.alignment = content_row
     D4.font = table_header3
     D4.fill = table_fill2
-    
+
 
     let F4 = sheet.getCell('F4')
     F4.value = "部  门"
@@ -463,7 +463,7 @@ export async function getExcelDemo2(){
     I11.alignment = content_row
     I11.font = table_header2
     I11.fill = table_fill3
-    
+
     // 绘制边框
         //里面的
     let inside = [D4,F4,G4,I4,
@@ -617,7 +617,7 @@ export async function getExcelDemo2(){
     J14.alignment = content_row;
     J14.font = table_header2
     J14.fill = table_fill4
-    
+
     // 第15到第15+n-1行
     let n = 5 // n是配置信息或者通用软件信息中的信息最大条数
     let cols = 'CDEFGHIJ'
@@ -637,11 +637,11 @@ export async function getExcelDemo2(){
         }
         row_list.push(item_row)
     }
-    
+
     // 第16+n-1行
     let num = 16+n-1
     sheet.getRow(num).height = 18.75
-    let C16 = [] 
+    let C16 = []
     sheet.mergeCells('C' + num + ':' + 'F' + num );
     sheet.mergeCells('G' + num + ':' + 'J' + num );
     for(let i of "CG"){
@@ -758,7 +758,7 @@ export async function getExcelDemo2(){
         C21[0][1],C21[0][2],C21[0][3],C21[0][4],
         C21[1][1],C21[1][2],C21[1][3],C21[1][4],
         C21[2][1],C21[2][2],C21[2][3],C21[2][4]
-    ] 
+    ]
     for(let i in row_list){
         for(let item = 2;item < 7;item++){
             inside.push(row_list[i][item])
@@ -886,8 +886,8 @@ export async function getExcelDemo2(){
     C26.alignment = content_row
     C26.font = table_header2
     C26.fill = table_fill4
-    
-    // 第27 +n-1到27 +n-1 + x-1行 
+
+    // 第27 +n-1到27 +n-1 + x-1行
     num = 27+n-1
     let x = 1 + 2 // x是专用软件信息中信息最大条数 第一行是表头
     let C27 = []
@@ -1115,7 +1115,7 @@ export async function getExcelDemo2(){
     let C39 = []
     for (let item = 0;item < 3;item++){
         sheet.getRow(num).height = 14.25
-        sheet.mergeCells('C' + num + ':' + 'D' + num );     
+        sheet.mergeCells('C' + num + ':' + 'D' + num );
         let item_list = []
         for(let i of 'CEFGHIJ'){
             let item_cell = sheet.getCell(i+num)
@@ -1128,7 +1128,7 @@ export async function getExcelDemo2(){
         num++
     }
     // 第42 +n-1 + x-1 + z-1行
-    num = 42 +n-1 + x-1 + z-1    
+    num = 42 +n-1 + x-1 + z-1
     sheet.getRow(num).height = 18
     sheet.mergeCells('C' + num + ':' + 'F' + num );
     let C42 = []
@@ -1349,7 +1349,7 @@ export async function getExcelDemo2(){
             bottom: white,
             right: white,
         }
-    } 
+    }
     for(let i of C44){
         i[0].border= {
             left: black,
@@ -1403,7 +1403,7 @@ export async function getExcelDemo2(){
             bottom: white,
             right: black,
         }
-    } 
+    }
     if(C48.length > 0){
         for(let i = 0;i < C48.length-1;i++){
             for(let item = 4;item < 7;item++){
@@ -1479,7 +1479,7 @@ export async function getExcelDemo2(){
             bottom: white,
             right: white,
         }
-    } 
+    }
 
     // var
 
