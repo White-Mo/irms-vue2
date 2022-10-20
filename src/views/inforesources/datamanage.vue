@@ -126,6 +126,16 @@ export default {
       },
       // 基础性
       equipmentBaseInfo: {
+        equipmentId: '', //  设备id
+        equipmentTypeName: '', // 设备类型
+        postName: '', // 单位名称
+        cabinetUStart: '', // 机柜起点
+        cabinetUEnd: '', // 机柜终点
+        shelfOff: '', // 是否可下架
+        dataSources: '', // 数据来源
+        insertUserId: '', // 数据插入用户
+        remarks: '', // 备注
+        status: '', // 标志位
         equipmentName: '', // 设备名称
         hostName: '', // 主机名
         departmentName: '', // 部门
@@ -284,6 +294,7 @@ export default {
             console.log(res.data)
             _this.dialogFormVisible = false
           })
+          _this.equipments = []
           _this.$refs.myUpload.clearFiles()
           _this.fileList = []
           // console.log(_this.equipmentBaseInfo)
