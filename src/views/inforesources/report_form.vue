@@ -31,25 +31,25 @@
             </el-select>
           </el-col>
           <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-            <el-input v-model="inputValue" placeholder="输入查询内容" clearable />
+            <el-input size="medium" v-model="inputValue" placeholder="输入查询内容" clearable />
           </el-col>
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button
               type="primary"
               icon="el-icon-search"
-              style="height: 2.8rem;"
+              size="medium"
               clearable="true"
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
         </el-row>
 
@@ -415,26 +415,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.my-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
-</style>
 <style lang="less" scoped>
-* {
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 
 .searchInput {
   height: 40px;
@@ -448,7 +432,7 @@ export default {
 // }
 
 .el-row {
-  // margin-bottom: 20px;
+  //margin-bottom: 20px;
   /* &:last-child {
       margin-bottom: 0;
     } */
@@ -499,15 +483,12 @@ export default {
 .block {
   text-align: center;
 }
-input.el-input__inner {
-  width: 18rem;
-}
 </style>
 <style  lang="less">
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
-  height: 50px;
+  height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
@@ -542,16 +523,10 @@ input.el-input__inner {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-.el-button--primary {
-  height: 58px;
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
+//.el-button--primary {
+//  height: 58px;
+//  color: #fff;
+//  background-color: #409eff;
+//  border-color: #409eff;
+//}
 </style>
