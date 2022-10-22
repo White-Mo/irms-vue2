@@ -33,9 +33,21 @@ export function getStatisticsData(par) {
   })
 }
 export function addEquipment(eq) {
+  console.log(eq)
   return request({
+
     data: eq,
     url: '/home/inforesources/AddEquipment',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function delEquipment(equipmentId) {
+  console.log(typeof (equipmentId))
+  return request({
+
+    params: { equipmentId: equipmentId },
+    url: '/home/inforesources/DelEquipment',
     method: 'post',
     responseType: 'json'
   })
