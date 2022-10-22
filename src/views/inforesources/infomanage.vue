@@ -182,15 +182,34 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
+              <el-button size="mini">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
+                text
+                @click="dialogVisible = true"
               >删除</el-button>
+              <el-dialog
+                :append-to-body="true"
+                title="删除提示"
+                :visible.sync="dialogVisible"
+                width="30%"
+              >
+                <span>
+                  你确定要永久删除这条数据吗？
+                </span>
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">Cancel</el-button>
+                    <el-button
+                      type="primary"
+                      @click="handleDelete(scope.row)"
+                    >
+                      确认
+                    </el-button>
+                  </span>
+                </template>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
@@ -212,10 +231,12 @@
 </template>
 
 <script>
-import { getList, getdataCount } from '@/api/table'
+import { getList, getdataCount, delEquipment } from '@/api/table'
 import Addinfo from '@/components/Infomanage/addInfo'
 
 export default {
+  // 引用vue reload方法
+  inject: ['reload'],
   components: {
     Addinfo
   },
@@ -231,6 +252,7 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
       list: null,
       total: 0,
       currentPage1: 5,
@@ -387,8 +409,12 @@ export default {
     handleEdit(index, row) {
       console.log(index, row)
     },
-    handleDelete(index, row) {
-      console.log(index, row)
+    handleDelete(row) {
+      delEquipment(row.equipmentId).then((response) => {
+      })
+      this.dialogVisible = false
+      console.log(row.equipmentId)
+      this.reload()
     },
     updateIfupdate(e) {
       this.ifUpdate = e
