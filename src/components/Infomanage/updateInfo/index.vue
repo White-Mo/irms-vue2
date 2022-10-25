@@ -275,7 +275,7 @@ export default {
         addEquipment({ equipments: equipments }).then(res => {
           // this.$router.go(0)
           this.$message({
-            message: '新增成功',
+            message: res.data,
             type: 'success'
           })
           console.log(res)

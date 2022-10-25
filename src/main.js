@@ -19,6 +19,13 @@ import AFTableColumn from 'af-table-column'
 
 Vue.use(AFTableColumn)
 
+import BaiduMap from 'vue-baidu-map'
+Vue.prototype.$echarts = echarts
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'ZlgTYsyV08aajZSuH7uEAFbvsWgLKfA4'
+})
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -35,6 +42,11 @@ Vue.use(AFTableColumn)
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
+
+
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 

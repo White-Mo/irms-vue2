@@ -1,6 +1,6 @@
 <template>
   <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息管理</span></div>
+    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
       <div
         v-show="!ifUpdate"
@@ -134,7 +134,7 @@
         </div>
       </div>
       <div v-show="ifUpdate">
-        <addPost @ifUpdateChange="updateIfupdate" />
+        <AddPost @ifUpdateChange="updateIfupdate" />
       </div>
     </div>
   </div>
@@ -239,7 +239,7 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
-        start: val,
+        start: val-1,
         limit: 10
       }
       getPostByPage(params).then((response) => {
@@ -262,17 +262,6 @@ export default {
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
-}
-// .el-scrollbar {
-//   overflow: hidden;
-//   position: relative;
-// }
-
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
 }
 .el-col {
   border-radius: 4px;

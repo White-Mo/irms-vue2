@@ -59,15 +59,15 @@
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
               <el-button
-                size="mini"
+                size="small"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
               <el-button
-                size="mini"
+                size="small"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button
-                size="mini"
+                size="small"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
@@ -99,12 +99,6 @@ export default {
   components: {
     Addinfo
   },
-  props: {
-    labels: {
-      type: Object,
-      required: true
-    }
-  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -113,6 +107,12 @@ export default {
         deleted: 'danger'
       }
       return statusMap[status]
+    }
+  },
+  props: {
+    labels: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -172,9 +172,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 .el-row {
   margin-bottom: 20px;
   /* &:last-child {
@@ -208,15 +208,15 @@ export default {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
-.font{
-  font-size: 18px;
-}
+//.font{
+//  font-size: 18px;
+//}
 .el-cascader .el-input {
     width: 130px;
   }
-.el-pagination > *{
-  font-size: 18px;
-}
+//.el-pagination > *{
+//  font-size: 18px;
+//}
 .block{
   text-align: center;
 }

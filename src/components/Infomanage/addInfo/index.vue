@@ -194,17 +194,17 @@ export default {
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
-          machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
+          machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
         config: [{ projectName: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareliaison: '' }],
-        appSystemUser: [{ userName: '', endUser: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
-        appBusiness: [{ businessName: '', domainName: '', userScope: '', icpNum: '' }],
+        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
+        appSystemUser: [{ userName: '', realName: '', userLevel: '', localAccessMode: '', remoteAccessMode: '', createDate: '', other: '' }],
+        appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
-        appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
+        appLinksInfo: [{ company: '', userName: '', ipAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
       },
@@ -212,11 +212,11 @@ export default {
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
       networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
-      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
-      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
-      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
-      appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
+      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
+      appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
+      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
+      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
+      appLinksInfoLable: { company: '单位', userName: '用户名', ipAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
       postAll: [],
@@ -225,7 +225,7 @@ export default {
       active: 0,
       labels:
         { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end' }
+          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end', 'basicInfoId': '设备编号' }
     }
   },
   created() {
@@ -274,9 +274,12 @@ export default {
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           // this.$router.go(0)
-          this.$message({
-            message: '新增成功',
-            type: 'success'
+          this.$alert(res.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.$router.go(0)
           })
           console.log(res)
         }).catch(err => {

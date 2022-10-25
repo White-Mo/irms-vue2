@@ -154,7 +154,7 @@ export function getAsyncRoutes() {
 }
 
 export function getRouter(permission) {
-  console.log('permission.component' + [`@/views/${permission.component}`])
+  // console.log('permission.component' + [`@/views/${permission.component}`])
   if (permission.children && permission.children.length > 0) { // 一级菜单Layout
     return {
       path: permission.path,
@@ -187,6 +187,7 @@ export function initRoute(permission) { // 封装路由
     const route = {
       path: permission.path,
       component: Layout,
+      alwaysShow: true,
       meta: {
         title: permission.meta.title,
         icon: permission.meta.icon,

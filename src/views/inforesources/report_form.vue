@@ -31,25 +31,25 @@
             </el-select>
           </el-col>
           <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-            <el-input v-model="inputValue" placeholder="输入查询内容" clearable />
+            <el-input size="medium" v-model="inputValue" placeholder="输入查询内容" clearable />
           </el-col>
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button
               type="primary"
               icon="el-icon-search"
-              style="height: 2.8rem;"
+              size="medium"
               clearable="true"
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="height: 2.8rem;" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
         </el-row>
 
@@ -110,18 +110,6 @@
                   </span>
                 </span>
               </span>
-              <!-- <div>
-                <br>
-                选择怎么导出数据
-                <el-radio-group v-model="select_teble_type">
-                  <el-radio :label="2">2条</el-radio>
-                  <el-radio :label="8">8条</el-radio>
-                  <el-radio :label="10">10条</el-radio>
-                  <el-radio :label="-2">全部</el-radio>
-                  <el-radio :label="-3">自定义</el-radio>
-                  <el-input v-model="select_teble_type2" placeholder="输入数量" />
-                </el-radio-group>
-              </div> -->
             </div>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
@@ -264,11 +252,13 @@ export default {
         dataName: this.initdata,
         dataValue: this.inputValue,
         start: 0,
-        limit: 10
+        limit: 10,
+        status: 0
       }
       const numparams = {
         dataName: this.initname,
-        dataValue: this.inputValue
+        dataValue: this.inputValue,
+        status: 0
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -331,7 +321,8 @@ export default {
           dataName: this.initdata,
           dataValue: this.inputValue,
           start: 0,
-          limit: this.totalCount
+          limit: this.totalCount,
+          status: 0
         }
         getList(params).then((response) => {
           getExcelDemo1(response.data.items)
@@ -454,26 +445,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.my-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
-</style>
 <style lang="less" scoped>
-* {
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 
 .searchInput {
   height: 40px;
@@ -487,7 +462,7 @@ export default {
 // }
 
 .el-row {
-  // margin-bottom: 20px;
+  //margin-bottom: 20px;
   /* &:last-child {
       margin-bottom: 0;
     } */
@@ -538,15 +513,12 @@ export default {
 .block {
   text-align: center;
 }
-input.el-input__inner {
-  width: 18rem;
-}
 </style>
 <style  lang="less">
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
-  height: 50px;
+  height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
@@ -581,6 +553,7 @@ input.el-input__inner {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
+
 .el-button--primary {
   height: 58px;
   color: #fff;
@@ -598,4 +571,5 @@ input.el-input__inner {
   height:2rem;
   width:100%;
 }
+
 </style>
