@@ -61,8 +61,7 @@
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column label="" width="40" type="selection">
-            </el-table-column>
+            <el-table-column label="" width="40" type="selection" />
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -90,26 +89,27 @@
             title="详表导出模式选择"
             :visible.sync="centerDialogVisible"
             width="30%"
-            center>
-            <div style="width:100%;text-align:center;">
+            center
+          >
+            <div style="width:100%;text-align: center;">
               <span>
-                <el-radio v-model="select_teble_radio" label="1">单独导出每条数据</el-radio>
-                <el-radio v-model="select_teble_radio" label="2">多条数据存放在一个文件中导出</el-radio>
+                <span class="radio_class">
+                  <el-radio v-model="select_teble_radio" label="1">单独导出每条数据</el-radio>
+                  <el-radio v-model="select_teble_radio" label="2">多条数据存放在一个文件中导出</el-radio>
+                </span>
+                <span v-if="select_teble_radio==2">
+                  <el-radio-group v-model="select_teble_type">
+                    <el-radio :label="2">2条</el-radio>
+                    <el-radio :label="8">8条</el-radio>
+                    <el-radio :label="10">10条</el-radio>
+                    <el-radio :label="-2">全部</el-radio>
+                    <el-radio :label="-3">自定义</el-radio>
+                  </el-radio-group>
+                  <span v-if="select_teble_type == -3" class="radio_class">
+                    <el-input v-model="select_teble_type2" placeholder="输入数量" style="width: 24rem;" />
+                  </span>
+                </span>
               </span>
-              <div>
-
-                <br>
-                选择怎么导出数据
-                <el-radio-group v-model="select_teble_type">
-                  <el-radio :label="2">2条</el-radio>
-                  <el-radio :label="8">8条</el-radio>
-                  <el-radio :label="10">10条</el-radio>
-                  <el-radio :label="-2">全部</el-radio>
-                  <el-radio :label="-3">自定义</el-radio>
-                  <el-input v-model="select_teble_type2" placeholder="输入数量" />
-                </el-radio-group>
-
-              </div>
             </div>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
@@ -143,11 +143,11 @@ export default {
       PageSize: 12,
       // 上一次的筛选参数
       par_str: '',
-      selectData:[],
+      selectData: [],
       centerDialogVisible: false,
       select_teble_radio: -1,
       select_teble_type: -1,
-      select_teble_type2:'',
+      select_teble_type2: '',
       inputValue: '',
       initdata: ['123'],
       radio: -1,
@@ -293,7 +293,7 @@ export default {
           // getExcelDemo2()
         }
       }
-      for (let i of item_list) {
+      for (const i of item_list) {
         getStatisticsData(i).then((res) => {
           // console.log(res,i)
           // StatisticsData.push(res)
@@ -330,18 +330,45 @@ export default {
       } else if (model === 1) {
         // 选择怎么导出数据 1.单独导出每条数据 2.多条数据存放在一个文件中导出
         // 设置弹窗导出
-        this.centerDialogVisible = true
-
-
-        // getExcelDemo2()
+        if (this.selectData.length > 1) {
+          this.centerDialogVisible = true
+        } else if (this.selectData.length === 1) {
+          // getExcelDemo2(this.selectData)
+          console.log('this')
+        } else {
+          this.$message.error('请选择需要导出的信息')
+        }
       } else if (model === 2) {
         this.getStatisticsExcel()
       }
     },
     getExcel2() {
-      console.log(this.select_teble_radio)
-      if (this.select_teble_radio != -1) {
+      // eslint-disable-next-line eqeqeq
+      let data_num = 0
+      if (this.select_teble_radio != -1 || this.select_teble_type != -1 || this.select_teble_type2 != '') {
+        if (this.select_teble_radio == 1) {
+          data_num = 1
+        } else if (this.select_teble_type != -3) {
+          data_num = this.select_teble_type
+        } else {
+          const item_num = parseInt(this.select_teble_type2)
+          if (item_num > 0 && item_num < this.selectData.length) {
+            data_num = item_num
+          } else {
+            this.$message.error('请选择填入合理的数字')
+            data_num = 0
+          }
+        }
+        if (data_num !== 0) {
+          getExcelDemo2(this.selectData, data_num)
+        }
+        console.log(typeof data_num, data_num)
         this.centerDialogVisible = false
+        this.select_teble_radio = -1
+        this.select_teble_type = -1
+        this.select_teble_type2 = ''
+        // 取消表格选择
+        this.$refs.multipleTable.clearSelection();
       }
       // getExcelDemo2()
     },
@@ -398,7 +425,7 @@ export default {
       // this.currentPage = 1;
       // this.getData_plus(0, this.currentPage * this.PageSize, this.par_str);
       // console.log(val);
-    },
+    }
     // 显示第几页
     // handleCurrentChange(val) {
     //   // 改变默认的页数
@@ -526,10 +553,23 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
+.el-button--primary {
+  height: 58px;
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
+
 </style>

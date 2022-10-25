@@ -87,7 +87,7 @@ export async function getExcelDemo1(data){
     document.body.removeChild(link);
 }
 
-export async function getExcelDemo2(){
+export async function getExcelDemo2(data_list, data_num = 1){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
@@ -134,7 +134,7 @@ export async function getExcelDemo2(){
         bold: true,
     };
     const table_header3 = {
-        name: 'Black',
+        name: '黑体',
         color: { argb: '000' },
         family: 2,
         size: 11,
@@ -307,6 +307,7 @@ export async function getExcelDemo2(){
 
     let F6 = sheet.getCell("F6")
     F6.alignment = content_row_item
+    F6.value = '√\n□'
     F6.font = table_header3
     F6.fill = table_fill2
 
