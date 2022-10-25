@@ -327,10 +327,10 @@ export default {
       } else if (model === 1) {
         // 选择怎么导出数据 1.单独导出每条数据 2.多条数据存放在一个文件中导出
         // 设置弹窗导出
-        this.centerDialogVisible = true
+        // this.centerDialogVisible = true
         
 
-        // getExcelDemo2()
+        getExcelDemo2()
       } else if (model === 2) {
         this.getStatisticsExcel()
       }

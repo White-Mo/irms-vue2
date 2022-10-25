@@ -134,7 +134,7 @@ export async function getExcelDemo2(){
         bold: true,
     };
     const table_header3 = {
-        name: 'Black',
+        name: '黑体',
         color: { argb: '000' },
         family: 2,
         size: 11,
@@ -307,6 +307,7 @@ export async function getExcelDemo2(){
 
     let F6 = sheet.getCell("F6")
     F6.alignment = content_row_item
+    F6.value = '√\n□'
     F6.font = table_header3
     F6.fill = table_fill2
 
