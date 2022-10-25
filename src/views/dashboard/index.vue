@@ -1,32 +1,28 @@
 <template>
-  <el-container>
-    <el-header>
-    <el-row>
-      <el-col :span="8" class="nav2">
-        <ul>
-          <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size: 16px">设备概况</a> </li>
-        </ul>
-      </el-col>
-      <el-col :span="8" class="header_center" >
-        <h2><strong>智能可视化展示平台</strong></h2>
-      </el-col>
-      <el-col :span="8"></el-col>
-    </el-row>
-    </el-header>
-    <el-main>
+  <div class="bg-main">
+      <el-row>
+        <el-col :span="7" class="nav2">
+          <ul>
+            <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size: 16px">设备概况</a> </li>
+          </ul>
+        </el-col>
+        <el-col :span="7" class="header_center" >
+          <h2><strong>智能可视化展示平台</strong></h2>
+        </el-col>
+        <el-col :span="7"></el-col>
+      </el-row>
       <el-row class="total_line">
         <el-col :span="8" class="count_box">
           <div class="content_count_box left">
             <div class="child_count_box_icon">
               <img src="../../assets/dashboard_imgs/info_1.png">
             </div>
-            <div class="child_count_box_p">
+            <div :span="8" class="child_count_box_p">
               <p class="mainfont">总设备数据量(台)</p>
               <p id="equipmentAll">2</p>
             </div>
           </div>
-
-          <div class="content_count_box right">
+          <div :span="8" class="content_count_box right">
             <div class="child_count_box_icon">
               <img src="../../assets/dashboard_imgs/info_2.png">
             </div>
@@ -82,11 +78,11 @@
       <el-row class="charts_line">
         <el-col :span="6" class="left col_charts">
           <el-row class="child_charts">
-          <div class="chart_title">
-            <img src="../../assets/dashboard_imgs/title_1.png">
-            <span id="chart1Data">各单位设备数据量</span>
-          </div>
-          <p class="p_chart" id="pieChart1"></p>
+            <div class="chart_title">
+              <img src="../../assets/dashboard_imgs/title_1.png">
+              <span id="chart1Data">各单位设备数据量</span>
+            </div>
+            <p class="p_chart" id="pieChart1"></p>
           </el-row>
           <el-row class="child_charts">
             <div class="chart_title">
@@ -97,48 +93,47 @@
           </el-row>
         </el-col>
         <el-col :span="12" class="center col_charts">
-        <div class="map_height child_charts">
-          <div class="map_width chart_title">
-            <img src="../../assets/dashboard_imgs/title_0.png">
-            <span>信息分布图</span>
-
-          </div>
-          <div id="myChart" :style="{width:'97.5%',height:'95%',display: 'inline-block',paddingLeft:'1.25%',paddingTop:'2.2%'}"></div>
-          <div id="el-dialog" class="dialog">
-            <div class="xc_layer"></div>
-            <div class="popBox" id="printView" :style="{height:'68%'}">
-              <div class="ttBox"><span class="tt" id="reportTitle"></span>
-                <img src="../../assets/dashboard_imgs/close.png" :style="{width:'30px',float: 'right',cursor:'pointer'}" title="关闭弹窗" class="close" @click="changeMood"/>
-              </div>
-              <div class="txtBox" id="el-dialog_body">
-                <div :style="{height:'100%',width: '98%',marginLeft: '2%'}">
-                  <div class="left div_any01" :style="{width:'64%'}">
-                    <div class="div_any_child_tanchu">
-                      <div class="div_any_title"><div type="text" class="demo-input" id="date1" :style="{display: 'inline-block',cursor: 'pointer',marginRight: '16px'}"></div><img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数</div>
-                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：0<span id="IP_total" :style="{fontsize:'17px'}"></span></div>
-                      <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
-                      <p id="main1"  style="width: 900px; height: 460px"></p>
-                    </div>
-
-                  </div>
-                  <div class="left div_any01"  :style="{width: '32%',}">
-                    <div class="div_any_child_tanchu">
-                      <div class="div_any_title"><div type="text" class="demo-input" id="date3" :style="{display:'inline-block' ,cursor:'pointer' ,marginRight: '16px'}"></div>
-                        <img src="../../assets/dashboard_imgs/title_18.png">
-                        设备类型
+          <div class="map_height child_charts">
+            <div class="map_width chart_title">
+              <img src="../../assets/dashboard_imgs/title_0.png">
+              <span>信息分布图</span>
+            </div>
+            <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%'}"></div>
+            <div id="el-dialog" class="dialog">
+              <div class="xc_layer"></div>
+              <div class="popBox" id="printView" :style="{height:'68%'}">
+                <div class="ttBox"><span class="tt" id="reportTitle"></span>
+                  <img src="../../assets/dashboard_imgs/close.png" :style="{width:'30px',float: 'right',cursor:'pointer'}" title="关闭弹窗" class="close" @click="changeMood"/>
+                </div>
+                <div class="txtBox" id="el-dialog_body">
+                  <div :style="{height:'100%',width: '98%',marginLeft: '2%'}">
+                    <div class="left div_any01" :style="{width:'64%'}">
+                      <div class="div_any_child_tanchu">
+                        <div class="div_any_title"><div type="text" class="demo-input" id="date1" :style="{display: 'inline-block',cursor: 'pointer',marginRight: '16px'}"></div><img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数</div>
+                        <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：0<span id="IP_total" :style="{fontsize:'17px'}"></span></div>
+                        <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
+                        <p id="main1"  style="width: 900px; height: 460px"></p>
                       </div>
-                      <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
-                      <p id="main"  style="width: 771px; height: 416px;left:-66px" class="pieCHart"></p>
+
+                    </div>
+                    <div class="left div_any01"  :style="{width: '32%',}">
+                      <div class="div_any_child_tanchu">
+                        <div class="div_any_title"><div type="text" class="demo-input" id="date3" :style="{display:'inline-block' ,cursor:'pointer' ,marginRight: '16px'}"></div>
+                          <img src="../../assets/dashboard_imgs/title_18.png">
+                          设备类型
+                        </div>
+                        <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
+                        <p id="main"  style="width: 771px; height: 416px;left:-66px" class="pieCHart"></p>
+                      </div>
+
                     </div>
 
                   </div>
-
                 </div>
               </div>
             </div>
-          </div>
 
-        </div>
+          </div>
         </el-col>
         <el-col :span="6" class="right col_charts">
           <el-row class="child_charts">
@@ -157,8 +152,7 @@
           </el-row>
         </el-col>
       </el-row>
-    </el-main>
-  </el-container>
+    </div>
 </template>
 
 <script>
@@ -308,7 +302,6 @@ export default {
           center: [105,38],
           zoom: 5,
           roam: true,
-
         },
         tooltip : {
           trigger: 'item',
@@ -1646,7 +1639,6 @@ export default {
         }];
 
       bmap.setMapStyleV2({styleJson:styleJson});
-
     },
     changeMood(){
       $(".close").click(function(event) {
@@ -1866,19 +1858,12 @@ export default {
   text-decoration: none;
   list-style: none;
 }
-.el-header{
-  background-color: #030829;
-  color: white;
-  text-align: center;
-  height: 80px !important;
-  line-height: 80px;
-}
-.el-main {
+.bg-main {
   background-color: #081832;
   color: white;
   text-align: center;
-  height: 838px;
   padding-top: 20px;
+  height: calc(100vh - 50px);
 }
 .nav_active{
   border-bottom: 4px solid #4b8df8;
@@ -1906,16 +1891,13 @@ export default {
   background-size: 100% 100%;
 }
 .total_line{
-  height: 110px;
+  height: 10vh;
   margin-bottom: 25px;
   margin-left: 5px;
 }
 .count_box{
-  margin-right: 22px;
   height: 100%;
   background-color: #034c6a;
-  width: 32%;
-
 }
 .content_count_box{
   width: 50%;
@@ -1956,7 +1938,7 @@ export default {
 }
 
 .charts_line{
-  height: 610px;
+  height: 100%;
   margin-bottom: 25px;
   margin-left: 5px;
 }
@@ -2001,7 +1983,7 @@ export default {
   margin-top: 15px;
 }
 .map_height{
-  height: calc(66vh);;
+  height: calc(66vh);
 }
 .map_width{
   width: 30% !important;

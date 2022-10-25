@@ -383,11 +383,13 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         start: 0,
-        limit: 5
+        limit: 5,
+        status: 0
       }
       const numparams = {
         dataName: this.initname,
-        dataValue: this.inputValue
+        dataValue: this.inputValue,
+        status:0
       }
       getdataCount(numparams).then((response) => {
         this.total = response.data.total
@@ -427,7 +429,8 @@ export default {
         dataName: this.initdata,
         dataValue: this.inputValue,
         start: val,
-        limit: 10
+        limit: 10,
+        status:0
       }
       getList(params).then((response) => {
         this.list = response.data.items

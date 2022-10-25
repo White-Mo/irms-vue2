@@ -5,19 +5,19 @@
     </div>
     <div class="source">
       <el-row>
-        <el-form ref="form" :model="form = post" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
+        <el-form ref="postForm" :model="postForm = post" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
           <el-form-item label="单位名称" prop="postName">
             <el-col :span="10">
-              <el-input v-model="form.postName" />
+              <el-input v-model="postForm.postName" />
             </el-col>
           </el-form-item>
           <el-form-item label="单位代码" prop="postCode">
             <el-col :span="10">
-              <el-input v-model="form.postCode" />
+              <el-input v-model="postForm.postCode" />
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">添加单位</el-button>
+            <el-button type="primary" @click="onSubmit(postForm)">添加单位</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -86,21 +86,28 @@ export default {
     back() {
       this.$emit('ifUpdateChange', false)
     },
-    onSubmit() {
-      const post = { ...this.post }
-      createPost(post).then(res => {
-        // this.$router.go(0)
-        this.$alert(res.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.$router.go(0)
-        })
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+    onSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const post = { ...this.post }
+          createPost(post).then(res => {
+            // this.$router.go(0)
+            this.$alert(res.data, '提示', {
+              confirmButtonText: '确定',
+              type: 'info',
+              showClose: false
+            }).then(() => {
+              this.$router.go(0)
+            })
+            console.log(res)
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
     // 验证用户名是否存在
     getNameRules() {
