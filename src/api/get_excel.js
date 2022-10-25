@@ -87,7 +87,7 @@ export async function getExcelDemo1(data){
     document.body.removeChild(link);
 }
 
-export async function getExcelDemo2(){
+export async function getExcelDemo2(data_list, data_num = 1){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
