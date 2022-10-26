@@ -52,3 +52,12 @@ export function delEquipment(equipmentId) {
     responseType: 'json'
   })
 }
+export function getbasic(equipmentId) {
+  console.log(equipmentId)
+  return request({
+    params: { equipmentId: equipmentId },
+    url: '/home/inforesources/getBasicInfoById',
+    method: 'post',
+    responseType: 'json'
+  })
+}
