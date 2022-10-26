@@ -373,6 +373,15 @@ export default {
     },
     handleDelete(row) {
       delEquipment(row.equipmentId).then((response) => {
+        this.active = 0
+        this.$alert(response.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.$router.go(0)
+        })
+        console.log(response)
       })
       this.dialogVisible = false
       console.log(row.equipmentId)
@@ -410,18 +419,12 @@ export default {
 .shadows{
   box-shadow: 0 0 4px #0000004d !important;
 }
-
 .searchInput {
   height: 40px;
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
 }
-// .el-scrollbar {
-//   overflow: hidden;
-//   position: relative;
-// }
-
 .el-row {
   //margin-bottom: 20px;
   /* &:last-child {
@@ -487,18 +490,26 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
-</style>
-<style  lang ="less" scoped>
-                      /* //需要覆盖的组件样式 */
-                      // .el-scrollbar /deep/
-                    .el-select-dropdown__item {
-                      height: 30px;
-                      flex: 1 0 25%;
-                      margin: 10px;
-                    }
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 25%;
+  margin: 10px;
+}
 
 // 必须给子元素一个上层class名才不会影响到其他页面同名组件
-
+.el-select-dropdown__list {
+  margin-right: 20px;
+  margin-left: 5px;
+  margin-top: 5px;
+  height: auto;
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: stretch;
+}
 .el-scrollbar {
   height: 380px;
   overflow: hidden;
@@ -515,10 +526,24 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
+.el-button--primary {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
+.el-button--primary {
+  height: 40px;
+}
 </style>

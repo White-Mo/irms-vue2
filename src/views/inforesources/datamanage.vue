@@ -67,8 +67,8 @@
             :file-list="fileList"
             :auto-upload="false"
           >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
+            <el-button slot="trigger" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" type="success" @click="submitUpload">上传文件</el-button>
             <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5个。</div>
           </el-upload>
         </div>
@@ -138,7 +138,7 @@ export default {
         remarks: '', // 备注
         status: '', // 标志位
         equipmentName: '', // 设备名称
-        businessSyste: '', // 所属系统
+        businessSystem: '', // 所属系统
         hostName: '', // 主机名
         departmentName: '', // 部门
         basicInfoId: '', // 编号
@@ -607,7 +607,7 @@ export default {
     // 获取基本信息
     getBaseinfo(outdata) {
       this.equipmentBaseInfo.equipmentName = this.underfindTrans(Object.values(outdata[0])[2] + Object.values(outdata[0])[3], '设备名称')// 设备名称
-      this.equipmentBaseInfo.businessSyste = this.underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统')// 所属系统
+      this.equipmentBaseInfo.businessSystem = this.underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统')// 所属系统
       this.equipmentBaseInfo.hostName = this.underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[2], '主机名') // 主机名
       this.equipmentBaseInfo.departmentName = this.underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门') // 部门
       this.equipmentBaseInfo.basicInfoId = this.underfindTrans(Object.values(outdata[1])[7], '编号') // 编号

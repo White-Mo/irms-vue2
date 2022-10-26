@@ -254,12 +254,12 @@ export default {
         dataValue: this.inputValue,
         start: 0,
         limit: 10,
-        status: 0
+        status: ''
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: 0
+        status: ''
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -323,7 +323,7 @@ export default {
           dataValue: this.inputValue,
           start: 0,
           limit: this.totalCount,
-          status: 0
+          status: ''
         }
         getList(params).then((response) => {
           getExcelDemo1(response.data.items)
