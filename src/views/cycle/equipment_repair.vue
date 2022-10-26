@@ -10,7 +10,10 @@
             <div class="grid-content bg-purple-dark">设备维修</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
+        <el-row
+          :gutter="10"
+          class="bg-condition"
+        >
           <el-col
             :xs="2"
             :sm="2"
@@ -18,45 +21,43 @@
             :lg="2"
             :xl="2"
           >
-            <div class="bg-condition">查询条件：</div>
+            <span>查询条件：</span>
           </el-col>
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
-            <div class="grid-content bg-purple">
-              <el-select
-                v-model="basicValue"
-                placeholder="详细字段查询"
-                multiple
-              >
-                <el-option
-                  v-for="(item,index) in basicvalue"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                  class="searchInput"
-                />
-              </el-select>
-            </div>
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <div class="grid-content bg-purple">
-              <el-input
-                v-model="inputValue"
-                placeholder="输入查询内容"
-                clearable
+            <el-select
+              v-model="DataName"
+              placeholder="详细字段查询"
+              multiple
+              size="medium"
+            >
+              <el-option
+                v-for="(item,index) in dataname"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+                class="searchInput"
               />
-            </div>
+            </el-select>
+          </el-col>
+          <el-col
+            :xs="4"
+            :sm="4"
+            :md="4"
+            :lg="4"
+            :xl="4"
+          >
+            <el-input
+              v-model="inputValue"
+              placeholder="输入查询内容"
+              clearable
+              size="medium"
+            />
           </el-col>
           <el-col
             :xs="2"
@@ -66,6 +67,7 @@
             :xl="2"
           >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-search"
               clearable="true"
@@ -89,7 +91,7 @@
                   {{ scope.row[key] }}
                 </template>
               </el-table-column>
-              <el-table-column prop="tag" label="标签" width="100">
+              <el-table-column prop="tag" align="center" label="标签" width="100">
                 <el-tag type="primary">正常</el-tag>
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
@@ -100,7 +102,7 @@
                   >详情</el-button>
                   <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)"
+                    @click="handleRepair(scope.$index, scope.row)"
                   >维修</el-button>
                 </template>
               </el-table-column>
@@ -132,7 +134,7 @@
                   >详情</el-button>
                   <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)"
+                    @click="handleRecover(scope.$index, scope.row)"
                   >正常</el-button>
                 </template>
               </el-table-column>
@@ -154,7 +156,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { hunhe1 } from '@/layout/mixin/cycleMix'
+import { changeStatus } from '@/api/table'
 
 export default {
   filters: {
@@ -167,21 +170,22 @@ export default {
       return statusMap[status]
     }
   },
+  mixins: [hunhe1],
   data() {
     return {
       tab_name: '0',
       list: null,
       total: 0,
       currentPage1: 5,
-      basicValue: '',
-      initdata: ['123'],
+      DataName: 'all',
+      initname: ['123'],
       department: '',
       inputValue: '',
       postname: '',
       input3: '',
       listLoading: true,
       singalInfo: {},
-      basicvalue: [
+      dataname: [
         {
           value: 'postName',
           label: '所属单位'
@@ -282,30 +286,33 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      const params = {
-        dataName: this.initdata,
-        dataValue: this.inputValue,
-        status: this.tab_name,
-        start: 0,
-        limit: 10
-      }
-      getList(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    },
 
     handleDetail(index, row) {
       console.log(index, row)
     },
-    handleEdit(index, row) {
+    handleRepair(index, row) {
       console.log(index, row)
-      row.status = '1'
-      this.fetchData()
-      console.log(this.list)
+      changeStatus({ id: row.equipmentId, status: '1' }).then(res => {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    handleRecover(index, row) {
+      console.log(index, row)
+      changeStatus({ id: row.equipmentId, status: '0' }).then(res => {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(err => {
+        console.log(err)
+      })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
@@ -322,9 +329,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 
 .searchInput {
   height: 40px;
@@ -338,7 +345,7 @@ export default {
 // }
 
 .el-row {
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   /* &:last-child {
       margin-bottom: 0;
     } */
@@ -353,11 +360,10 @@ export default {
   background: #d3dce6;
 }
 .bg-condition {
-  line-height: 60px;
+  line-height: 50px;
   text-align: center;
-  height: 58px;
-  margin-left: 20px;
-  width: 120px;
+  height: 54px;
+  margin: 0px !important;
   background: #d3dce6;
 }
 .bg-purple-light {
@@ -382,20 +388,20 @@ export default {
   font-size: 18px;
 }
 .el-cascader .el-input {
-    width: 130px;
-  }
-.el-pagination > *{
+  width: 130px;
+}
+.el-pagination > * {
   font-size: 18px;
 }
-.block{
+.block {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
-  height: 50px;
+  height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
@@ -430,13 +436,10 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-.el-button--primary {
-  height: 58px;
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.el-tabs--border-card{
-  margin: 20px;
-}
+//.el-button--primary {
+//  height: 58px;
+//  color: #fff;
+//  background-color: #409eff;
+//  border-color: #409eff;
+//}
 </style>
