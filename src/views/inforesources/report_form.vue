@@ -558,7 +558,6 @@ export default {
 }
 
 .el-button--primary {
-  height: 58px;
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
