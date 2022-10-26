@@ -310,7 +310,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {

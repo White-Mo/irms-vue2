@@ -3,7 +3,7 @@
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
     <div class="app-container">
       <div
-        v-show="!ifUpdate"
+        v-show="ifUpdate === '0'"
         class="show"
       >
         <el-row>
@@ -24,57 +24,6 @@
           >
             <span>查询条件：</span>
           </el-col>
-          <!-- <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          > -->
-          <!-- el-select里面的v-model必须是对象（A），与el-option里面的:value的值（B）配合使用，A用来初始化在选择框里，B用来结合A间接传值给后台 -->
-          <!-- <div class="grid-content bg-purple-light">
-              <span>单位</span>
-              <el-select
-                v-model="postname"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="(item,index) in options"
-                  :key="index"
-                  :value="item.value"
-                  :label="item.label"
-                />
-              </el-select>
-            </div>
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <div class="grid-content bg-purple">
-              <span>部门</span>
-              <el-select
-                v-model="department"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="(item,index) in departments"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select> -->
-          <!-- </div>
-          </el-col> -->
-          <!-- <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="4">
-            <div class="grid-content bg-purple-light">
-              <span>详情查询</span>
-              <el-cascader :options="options" :show-all-levels="false" placeholder="详情字段查询" />
-            </div>
-          </el-col> -->
           <el-col
             :xs="3"
             :sm="3"
@@ -155,6 +104,7 @@
         </el-row>
         <el-table
           v-loading="listLoading"
+          :diisable="true"
           :data="list"
           element-loading-text="Loading"
           border
@@ -223,8 +173,11 @@
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <addinfo @ifUpdateChange="updateIfupdate" />
+      <div v-if="ifUpdate === '1'">
+        <addinfo @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
+        <updataInfo :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -233,12 +186,14 @@
 <script>
 import { getList, getdataCount, delEquipment } from '@/api/table'
 import Addinfo from '@/components/Infomanage/addInfo'
+import UpdataInfo from '@/components/Infomanage/updateInfo'
 
 export default {
   // 引用vue reload方法
   inject: ['reload'],
   components: {
-    Addinfo
+    Addinfo,
+    UpdataInfo
   },
   filters: {
     statusFilter(status) {
@@ -253,6 +208,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      row: {},
       list: null,
       total: 0,
       currentPage1: 5,
@@ -263,7 +219,7 @@ export default {
       inputValue: '',
       postname: '',
       input3: '',
-      ifUpdate: false,
+      ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       dataname: [
@@ -382,14 +338,14 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
+        status: '',
         start: 0,
         limit: 5,
-        status: 0
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status:0
+        status: ''
       }
       getdataCount(numparams).then((response) => {
         this.total = response.data.total
@@ -403,13 +359,17 @@ export default {
       })
     },
     addInfo() {
-      this.ifUpdate = !this.ifUpdate
+      this.ifUpdate = '1'
     },
     handleDetail(index, row) {
       console.log(index, row)
+      this.row = row
+      this.ifUpdate = '2'
     },
     handleEdit(index, row) {
       console.log(index, row)
+      this.row = row
+      this.ifUpdate = '3'
     },
     handleDelete(row) {
       delEquipment(row.equipmentId).then((response) => {
@@ -418,34 +378,38 @@ export default {
       console.log(row.equipmentId)
       this.reload()
     },
-    updateIfupdate(e) {
-      this.ifUpdate = e
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
       const params = {
-        dataName: this.initdata,
+        dataName: this.initname,
         dataValue: this.inputValue,
+        status: this.t,
         start: val,
         limit: 10,
-        status:0
       }
       getList(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-//*{
-//  font-size: 18px;
-//}
+.tile-content{
+  padding: 9px;
+  margin-bottom: 20px;
+}
+.shadows{
+  box-shadow: 0 0 4px #0000004d !important;
+}
 
 .searchInput {
   height: 40px;
@@ -510,18 +474,7 @@ export default {
 .block {
   text-align: center;
 }
-</style>
-<style  lang="less">
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
-.el-select-dropdown__item {
-  height: 30px;
-  flex: 1 0 25%;
-  margin: 10px;
-}
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
-.el-select-dropdown__list {
+/deep/.el-select-dropdown__list {
   margin-right: 20px;
   margin-left: 5px;
   margin-top: 5px;
@@ -534,6 +487,18 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+</style>
+<style  lang ="less" scoped>
+                      /* //需要覆盖的组件样式 */
+                      // .el-scrollbar /deep/
+                    .el-select-dropdown__item {
+                      height: 30px;
+                      flex: 1 0 25%;
+                      margin: 10px;
+                    }
+
+// 必须给子元素一个上层class名才不会影响到其他页面同名组件
+
 .el-scrollbar {
   height: 380px;
   overflow: hidden;

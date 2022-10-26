@@ -191,7 +191,7 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
-        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
+        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
@@ -274,6 +274,7 @@ export default {
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           // this.$router.go(0)
+          this.active = 0
           this.$alert(res.data, '提示', {
             confirmButtonText: '确定',
             type: 'info',
@@ -288,9 +289,6 @@ export default {
         })
       }
     },
-    back() {
-      this.$emit('ifUpdateChange', false)
-    },
     changePost(val) {
       console.log(val)
       this.postAll.forEach(element => {
@@ -301,6 +299,9 @@ export default {
           })
         }
       })
+    },
+    back() {
+      this.$emit('changeDiv', '0')
     }
   }
 }
