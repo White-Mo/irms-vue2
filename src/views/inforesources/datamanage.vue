@@ -427,7 +427,6 @@ export default {
         if (Object.values(outdata[index])[0] === '存  储') {
           index = index + 2
           for (;index < outdata.length; index++) {
-            // console.log(outdata[index])
             if (Object.values(outdata[index])[0] !== '本  机  存  储' && Object.values(outdata[index])[0] !== '') {
               var appStoreConfig = {
                 volume: '', // 卷
@@ -449,11 +448,18 @@ export default {
         }
         if (Object.values(outdata[index])[0] === '本  机  存  储') {
           index = index + 2
-          var NativeStoredata = Object.values(outdata[index])
-          this.appNativeStore.totalCapacity = NativeStoredata[0]
-          this.appNativeStore.usedSpace = NativeStoredata[1]
-          this.appNativeStore.unusedSpace = NativeStoredata[2]
-          this.appNativeStore.annualGrowthSpace = NativeStoredata[3]
+          // console.log(index)
+          // console.log(outdata[index])
+          // debugger
+          if (outdata[index] !== undefined) {
+            if (Object.values(outdata[index])[0] !== '') {
+              var NativeStoredata = Object.values(outdata[index])
+              this.appNativeStore.totalCapacity = NativeStoredata[0]
+              this.appNativeStore.usedSpace = NativeStoredata[1]
+              this.appNativeStore.unusedSpace = NativeStoredata[2]
+              this.appNativeStore.annualGrowthSpace = NativeStoredata[3]
+            }
+          }
         }
         // console.log('本机存储', this.appNativeStore)
         index += 1
