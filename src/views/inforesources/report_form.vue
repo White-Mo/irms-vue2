@@ -55,6 +55,7 @@
 
         <div class="grid-content">
           <el-table
+            ref="multipleTable"
             :data="tableData"
             stripe
             border
@@ -333,8 +334,8 @@ export default {
         if (this.selectData.length > 1) {
           this.centerDialogVisible = true
         } else if (this.selectData.length === 1) {
-          // getExcelDemo2(this.selectData)
-          console.log('this')
+          getExcelDemo2(this.selectData)
+          // console.log('this')
         } else {
           this.$message.error('请选择需要导出的信息')
         }
@@ -354,15 +355,17 @@ export default {
           const item_num = parseInt(this.select_teble_type2)
           if (item_num > 0 && item_num < this.selectData.length) {
             data_num = item_num
+          } else if (item_num >= this.selectData.length) {
+            data_num = -2
           } else {
             this.$message.error('请选择填入合理的数字')
             data_num = 0
           }
         }
         if (data_num !== 0) {
-          getExcelDemo2(this.selectData, data_num)
+          console.log(data_num == -2 ? this.selectData.length : data_num )
+          getExcelDemo2(this.selectData, data_num == -2 ? this.selectData.length : data_num > this.selectData.length ? this.selectData.length : data_num )
         }
-        console.log(typeof data_num, data_num)
         this.centerDialogVisible = false
         this.select_teble_radio = -1
         this.select_teble_type = -1
@@ -571,5 +574,7 @@ export default {
   height:2rem;
   width:100%;
 }
-
+.el-button--primary {
+    height: 40px;
+}
 </style>
