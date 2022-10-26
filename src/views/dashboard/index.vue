@@ -166,7 +166,6 @@ export default {
     return{
       chart1Count: 0,
       postIndex: 0,
-
     }
   },
   created() {
