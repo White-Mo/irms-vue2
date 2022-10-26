@@ -42,19 +42,19 @@
     </el-col>
     <el-dialog title=" 数据导入详情" :visible.sync="dialogFormVisible">
       <el-form :model="dialogForm">
-        <el-form-item label="数据来源" :label-width="formLabelWidth">
-          <el-cascader :props="props" placeholder="请选择单位和部门" style="width: 50%" />
-        </el-form-item>
-        <el-form-item label="文件类型" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择文件类型" style="width: 30%">
-            <el-option
-              v-for="item in fileTaypes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="数据来源" :label-width="formLabelWidth">-->
+<!--          <el-cascader :props="props" placeholder="请选择单位和部门" style="width: 50%" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="文件类型" :label-width="formLabelWidth">-->
+<!--          <el-select v-model="value" placeholder="请选择文件类型" style="width: 30%">-->
+<!--            <el-option-->
+<!--              v-for="item in fileTaypes"-->
+<!--              :key="item.value"-->
+<!--              :label="item.label"-->
+<!--              :value="item.value"-->
+<!--            />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <div class="uploadCard">
           <el-upload
             ref="myUpload"
@@ -88,14 +88,15 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      value: '',
-      fileTaypes: [{
-        value: '信息资产基础信息表',
-        label: '资产信息表'
-      }, {
-        value: '汇总表',
-        label: '汇总表'
-      }],
+      value: '信息资产基础信息表',
+      excelIndex: 11,
+      // fileTaypes: [{
+      //   value: '信息资产基础信息表',
+      //   label: '资产信息表'
+      // }, {
+      //   value: '汇总表',
+      //   label: '汇总表'
+      // }],
       name: '',
       dialogFormVisible: false,
       tableData: [{
@@ -128,7 +129,7 @@ export default {
       equipmentBaseInfo: {
         equipmentId: '', //  设备id
         equipmentTypeName: '', // 设备类型
-        postName: '', // 单位名称
+        postName: '中国地震局台网中心', // 单位名称
         cabinetUStart: '', // 机柜起点
         cabinetUEnd: '', // 机柜终点
         shelfOff: '', // 是否可下架
@@ -137,6 +138,7 @@ export default {
         remarks: '', // 备注
         status: '', // 标志位
         equipmentName: '', // 设备名称
+        businessSyste: '', // 所属系统
         hostName: '', // 主机名
         departmentName: '', // 部门
         basicInfoId: '', // 编号
@@ -264,12 +266,19 @@ export default {
           type: 'binary'
         })
         // console.log(wb)
-        const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])
+        const sheet2JSONOpts = {
+          /** Default value for null/undefined values */
+          defval: ''// 给defval赋值为空的字符串
+        }
+        const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], sheet2JSONOpts)
         var filetype = Object.keys(outdata[0])[0]
+        // console.log(Object.keys(outdata[0]))
+        // debugger
         // 获取 Excel 表头 判断 是否为同一文件类型
         if (_this.value === filetype) {
-          // console.log(outdata)
           _this.getBaseinfo(outdata)
+          // console.log(_this.equipmentBaseInfo)
+          // debugger
           _this.getConfig(outdata)
           _this.getPortagreement(outdata)
           _this.appSoftwareFir(outdata)
@@ -290,6 +299,7 @@ export default {
           _this.excelData.equipments = _this.equipments
           _this.excelData.total = _this.equipments.length
           console.log('所有数据', _this.equipments)
+          // debugger
           importExcel(_this.excelData).then((res) => {
             console.log(res.data)
             _this.dialogFormVisible = false
@@ -312,29 +322,29 @@ export default {
     // 获取专用软件信息
     appSoftwareFir(outdata) {
       // console.log('专用软件信息', outdata)
-      var index = 27
+      var index = this.excelIndex + 1
       while (index < outdata.length) {
         if (Object.values(outdata[index])[0] === '专用软件信息') {
           // console.log('专用软件信息', outdata[index])
           // console.log(index)
           index = index + 2
           for (;index < outdata.length; index++) {
-            // console.log(outdata[index])
             if (Object.values(outdata[index])[0] !== '系统用户信息') {
               var appSoftwareData = {
-                softwareLiaison: '', // 联系人
+                softwareLiaisonName: '', // 联系人
+                softwareLiaisonNum: '', // 联系人电话号码
                 softwareOnlineTime: '', // 上线时间
                 softwareName: '', // 名称
                 softwarePort: '', // 端口
                 softwareDevelopCompany: '', // 研发单位
                 softwareEdition: '' // 版本
               }
-              appSoftwareData.softwareName = outdata[index].信息资产基础信息表
-              appSoftwareData.softwareEdition = outdata[index].__EMPTY_4
-              appSoftwareData.softwarePort = outdata[index].__EMPTY_6
-              appSoftwareData.softwareOnlineTime = outdata[index].__EMPTY_8
-              appSoftwareData.softwareDevelopCompany = outdata[index].__EMPTY_9
-              appSoftwareData.softwareLiaison = outdata[index].__EMPTY_10
+              appSoftwareData.softwareName = Object.values(outdata[index])[0]
+              appSoftwareData.softwareEdition = Object.values(outdata[index])[2]
+              appSoftwareData.softwarePort = Object.values(outdata[index])[3]
+              appSoftwareData.softwareOnlineTime = Object.values(outdata[index])[4]
+              appSoftwareData.softwareDevelopCompany = Object.values(outdata[index])[5]
+              appSoftwareData.softwareLiaison = Object.values(outdata[index])[6]
               this.appSoftware.push(appSoftwareData)
             } else {
               break
@@ -343,6 +353,7 @@ export default {
           }
         }
         if (Object.values(outdata[index])[0] === '系统用户信息') {
+          // console.log(Object.values(outdata[index]))
           index = index + 3
           for (;index < outdata.length; index++) {
             // console.log(outdata[index])
@@ -356,63 +367,67 @@ export default {
                 createData: '', // 创建时间
                 other: '' // 其他
               }
-              appSystemUserData.userName = outdata[index].信息资产基础信息表
-              appSystemUserData.realName = outdata[index].__EMPTY_3
-              appSystemUserData.userLevel = outdata[index].__EMPTY_4
-              appSystemUserData.remoteAccessMode = outdata[index].__EMPTY_8
-              appSystemUserData.localAccessMode = outdata[index].__EMPTY_9
-              appSystemUserData.createData = outdata[index].__EMPTY_10
-              appSystemUserData.other = outdata[index].__EMPTY_11
+              appSystemUserData.userName = Object.values(outdata[index])[0]
+              appSystemUserData.realName = Object.values(outdata[index])[1]
+              appSystemUserData.userLevel = Object.values(outdata[index])[2]
+              appSystemUserData.remoteAccessMode = Object.values(outdata[index])[5]
+              appSystemUserData.localAccessMode = Object.values(outdata[index])[4]
+              appSystemUserData.createData = Object.values(outdata[index])[6]
+              appSystemUserData.other = Object.values(outdata[index])[7]
               this.appSystemUser.push(appSystemUserData)
             } else {
               break
             }
           }
-          // console.log('系统用户信息', this.appSystemUser)
+          this.excelIndex = index
         }
-        if (Object.values(outdata[index])[0] === 'HTTP应用') {
-          index = index + 1
+        // console.log(index)
+        if (Object.values(outdata[index])[0] === '业务应用') {
+          index = index + 2
           for (;index < outdata.length; index++) {
-            if (Object.values(outdata[index])[0] !== 'FTP应用') {
+            if (Object.values(outdata[index])[0] !== '存  储' && Object.values(outdata[index])[0] !== '') {
               var appBusinessData = {
                 ICPNum: '', // ICP
                 userScope: '', // 用户范围
-                domainName: 'HTTP', // HTTP/FTP
-                businessName: '' // 应用
+                domainName: '', // HTTP/FTP
+                businessName: '' // 域名地址
               }
-              appBusinessData.businessName = outdata[index].信息资产基础信息表
-              appBusinessData.userScope = outdata[index].__EMPTY_6
-              appBusinessData.ICPNum = outdata[index].__EMPTY_4
+              appBusinessData.domainName = Object.values(outdata[index])[0]
+              appBusinessData.businessName = Object.values(outdata[index])[1]
+              appBusinessData.userScope = Object.values(outdata[index])[2]
+              appBusinessData.ICPNum = Object.values(outdata[index])[3]
               this.appBusiness.push(appBusinessData)
             } else {
               break
             }
           }
         }
-        if (Object.values(outdata[index])[0] === 'FTP应用') {
-          index = index + 1
-          for (;index < outdata.length; index++) {
-            if (Object.values(outdata[index])[0] !== '存  储') {
-              var appBusinessDatas = {
-                ICPNum: '', // ICP
-                userScope: '', // 用户范围
-                domainName: 'FTP', // HTTP/FTP
-                businessName: '' // 应用
-              }
-              appBusinessDatas.businessName = outdata[index].信息资产基础信息表
-              appBusinessDatas.userScope = outdata[index].__EMPTY_6
-              appBusinessDatas.ICPNum = outdata[index].__EMPTY_4
-              this.appBusiness.push(appBusinessDatas)
-            } else {
-              break
-            }
-          }
-        }
+        // console.log(index)
+        // console.log(this.appBusiness)
+        // debugger
+        // if (Object.values(outdata[index])[0] === 'FTP应用') {
+        //   index = index + 1
+        //   for (;index < outdata.length; index++) {
+        //     if (Object.values(outdata[index])[0] !== '存  储') {
+        //       var appBusinessDatas = {
+        //         ICPNum: '', // ICP
+        //         userScope: '', // 用户范围
+        //         domainName: 'FTP', // HTTP/FTP
+        //         businessName: '' // 应用
+        //       }
+        //       appBusinessDatas.businessName = outdata[index].信息资产基础信息表
+        //       appBusinessDatas.userScope = outdata[index].__EMPTY_6
+        //       appBusinessDatas.ICPNum = outdata[index].__EMPTY_4
+        //       this.appBusiness.push(appBusinessDatas)
+        //     } else {
+        //       break
+        //     }
+        //   }
+        // }
         if (Object.values(outdata[index])[0] === '存  储') {
           index = index + 2
           for (;index < outdata.length; index++) {
-            // console.log(outdata[index])
-            if (Object.values(outdata[index])[0] !== '本  机  存  储') {
+            if (Object.values(outdata[index])[0] !== '本  机  存  储' && Object.values(outdata[index])[0] !== '') {
               var appStoreConfig = {
                 volume: '', // 卷
                 SAN_NAS: '',
@@ -421,71 +436,80 @@ export default {
               var appStoredata = Object.values(outdata[index])
               // console.log(appStoredata)
               appStoreConfig.volume = appStoredata[0]
-              appStoreConfig.SAN_NAS = appStoredata[1]
-              appStoreConfig.capacity = appStoredata[2]
+              appStoreConfig.SAN_NAS = appStoredata[2]
+              appStoreConfig.capacity = appStoredata[3]
               this.appStore.push(appStoreConfig)
             } else {
               break
             }
           }
+          // console.log(this.appStore)
+          // debugger
         }
-        // console.log('存储', this.appStore)
         if (Object.values(outdata[index])[0] === '本  机  存  储') {
           index = index + 2
-          var NativeStoredata = Object.values(outdata[index])
-          this.appNativeStore.totalCapacity = NativeStoredata[0]
-          this.appNativeStore.usedSpace = NativeStoredata[1]
-          this.appNativeStore.unusedSpace = NativeStoredata[2]
-          this.appNativeStore.annualGrowthSpace = NativeStoredata[3]
+          // console.log(index)
+          // console.log(outdata[index])
+          // debugger
+          if (outdata[index] !== undefined) {
+            if (Object.values(outdata[index])[0] !== '') {
+              var NativeStoredata = Object.values(outdata[index])
+              this.appNativeStore.totalCapacity = NativeStoredata[0]
+              this.appNativeStore.usedSpace = NativeStoredata[1]
+              this.appNativeStore.unusedSpace = NativeStoredata[2]
+              this.appNativeStore.annualGrowthSpace = NativeStoredata[3]
+            }
+          }
         }
         // console.log('本机存储', this.appNativeStore)
-        // debugger
         index += 1
       }
     },
     // 右一列专用软件信息
     appSoftwareSeLi(outdata) {
-      var index = 27
+      var index = this.excelIndex
+      // console.log(Object.values(outdata[index]))
       while (index < outdata.length) {
-        if (Object.values(outdata[index])[1] === '访问权限') {
+        if (Object.values(outdata[index])[4] === '访问权限') {
           index = index + 2
-          // console.log(outdata[index])
-          this.appAccessRights.intranet = outdata[index].__EMPTY_8
-          this.appAccessRights.industryNetwork = outdata[index].__EMPTY_9
-          this.appAccessRights.internet = outdata[index].__EMPTY_10
-          this.appAccessRights.other = outdata[index].__EMPTY_11
+          // console.log(Object.values(outdata[index]))
+          this.appAccessRights.intranet = Object.values(outdata[index])[4]
+          this.appAccessRights.industryNetwork = Object.values(outdata[index])[5]
+          this.appAccessRights.internet = Object.values(outdata[index])[6]
+          this.appAccessRights.other = Object.values(outdata[index])[7]
         }
-        if (outdata[index].__EMPTY_8 === '服务用户信息') {
-          // console.log(index)
+        if (Object.values(outdata[index])[4] === '服务用户信息') {
           index = index + 2
           for (;index < outdata.length; index++) {
-            if (outdata[index].__EMPTY_8 !== undefined) {
+            if (Object.values(outdata[index])[4] !== '') {
               var appLinksData = {
                 company: '',
                 userName: '',
                 ipAddress: '',
                 other: ''
               }
-              appLinksData.company = outdata[index].__EMPTY_8
-              appLinksData.userName = outdata[index].__EMPTY_9
-              appLinksData.ipAddress = outdata[index].__EMPTY_10
-              appLinksData.other = outdata[index].__EMPTY_11
+              appLinksData.company = Object.values(outdata[index])[4]
+              appLinksData.userName = Object.values(outdata[index])[5]
+              appLinksData.ipAddress = Object.values(outdata[index])[6]
+              appLinksData.other = Object.values(outdata[index])[7]
               // console.log(appLinksData)
               this.appLinksInfo.push(appLinksData)
             }
           }
+          // console.log(this.appLinksInfo)
+          // debugger
         }
         index += 1
       }
       // console.log('访问权限', this.appAccessRights)
       // console.log('服务用户信息', this.appLinksInfo)
-      // debugger
     },
-    // 网路信息 端口协议信息
+    // 网络信息 端口协议信息
     getPortagreement(outdata) {
-      // console.log('获取配置信息')
-      var j = 23
-      for (var index = 20; index < 22; index++) {
+      var j = this.excelIndex + 5
+      var index = this.excelIndex + 2
+      var endIndex = this.excelIndex + 4
+      for (; index < endIndex; index++) {
         var networkCoinfig = {
           networkCardName: '', // 网卡
           networkCardPort: '', // 端口
@@ -493,11 +517,11 @@ export default {
           switchInfo: '', // 交换机
           ipAddress: '' // IP地址
         }
-        networkCoinfig.networkCardName = outdata[index].信息资产基础信息表
-        networkCoinfig.ipAddress = outdata[index].__EMPTY_2
-        networkCoinfig.macAddress = outdata[index].__EMPTY_6
-        networkCoinfig.switchInfo = outdata[j].__EMPTY_2
-        networkCoinfig.networkCardPort = outdata[j].__EMPTY_5
+        networkCoinfig.networkCardName = Object.values(outdata[index])[0]
+        networkCoinfig.ipAddress = Object.values(outdata[index])[1]
+        networkCoinfig.macAddress = Object.values(outdata[index])[2] + Object.values(outdata[index])[3]
+        networkCoinfig.switchInfo = Object.values(outdata[j])[1] + Object.values(outdata[j])[2]
+        networkCoinfig.networkCardPort = Object.values(outdata[j])[3]
         this.network.push(networkCoinfig)
         j++
       }
@@ -508,82 +532,106 @@ export default {
         switchInfo: '', // 交换机
         ipAddress: '' // IP地址
       }
-      networkCoinfigs.networkCardName = outdata[25].信息资产基础信息表
-      networkCoinfigs.switchInfo = outdata[25].__EMPTY_2
-      networkCoinfigs.networkCardPort = outdata[25].__EMPTY_5
+      networkCoinfigs.networkCardName = Object.values(outdata[j])[0]
+      networkCoinfigs.switchInfo = Object.values(outdata[j])[1] + Object.values(outdata[j])[2]
+      networkCoinfigs.networkCardPort = Object.values(outdata[j])[3]
       this.network.push(networkCoinfigs)
-      // console.log(this.network)
+      // console.log('网络信息', this.network)
+      // debugger
       // 获取协议端口信息
-      for (var i = 20; i < 26; i++) {
+      for (var indexs = this.excelIndex + 2; indexs < outdata.length; indexs++) {
         var protocolPortConfig = {
           networkCardPort: '', // 端口
           appName: '', // 应用名称
           protocolName: '' // 协议
         }
-        if (outdata[i].__EMPTY_8 !== undefined) {
-          // console.log(outdata[i])
-          protocolPortConfig.protocolName = outdata[i].__EMPTY_8
-          protocolPortConfig.appName = outdata[i].__EMPTY_9
-          protocolPortConfig.networkCardPort = outdata[i].__EMPTY_11
-          this.protocolPort.push(protocolPortConfig)
+        // console.log(Object.values(outdata[indexs]))
+        if (Object.values(outdata[indexs])[0] !== '业  务  应  用  信  息') {
+          if (Object.values(outdata[indexs])[4] !== '') {
+            // console.log(outdata[i])
+            protocolPortConfig.protocolName = Object.values(outdata[indexs])[4]
+            protocolPortConfig.appName = Object.values(outdata[indexs])[5]
+            protocolPortConfig.networkCardPort = Object.values(outdata[indexs])[7]
+            this.protocolPort.push(protocolPortConfig)
+          }
+        } else {
+          break
         }
       }
-      // console.log(this.protocolPort)
+      this.excelIndex = indexs
+      // console.log('端口协议', this.protocolPort)
     },
     // 获取配置信息  通用软件信息
     getConfig(outdata) {
-      for (var i = 11; i < 18; i++) {
-        var config = {
-          frequency: '', // 频率
-          projectName: '', // 项目
-          corenessOrCapacity: '', // 核数
-          quantity: '' // 数量
-        }
-        config.frequency = outdata[i].__EMPTY_3 // 频率
-        config.projectName = outdata[i].信息资产基础信息表 // 项目
-        config.corenessOrCapacity = outdata[i].__EMPTY_4 // 核数
-        config.quantity = outdata[i].__EMPTY_6 // 数量
-        this.config.push(config)
-        var software = {
-          type: '', // 类型
-          edition: '', // 版本
-          project: '', // 项目
-          projectName: '' // 名称
-        }
-        // 排除空数据
-        if (outdata[i].__EMPTY_8 !== undefined) {
-          software.project = outdata[i].__EMPTY_8
-          software.projectName = outdata[i].__EMPTY_9
-          software.edition = outdata[i].__EMPTY_10
-          software.type = outdata[i].__EMPTY_11
-          this.software.push(software)
+      // console.log(Object.values(outdata[11]))
+      var index = 11
+      // console.log(Object.values(outdata[10])[1])
+      for (;index < outdata.length; index++) {
+        // console.log(outdata[index])
+        if (Object.values(outdata[index])[0] !== '网络信息') {
+          // console.log(Object.values(outdata[index]))
+          var config = {
+            frequency: '', // 频率
+            projectName: '', // 项目
+            corenessOrCapacity: '', // 核数
+            quantity: '' // 数量
+          }
+          // console.log(outdata[index])
+          config.frequency = this.underfindTrans(Object.values(outdata[index])[1]) // 性能指标 频率
+          config.projectName = this.underfindTrans(Object.values(outdata[index])[0]) // 项目
+          config.corenessOrCapacity = this.underfindTrans(Object.values(outdata[index])[2]) // 容量 核数
+          config.quantity = this.underfindTrans(Object.values(outdata[index])[3]) // 数量
+          this.config.push(config)
+          var software = {
+            type: '', // 类型
+            edition: '', // 版本
+            project: '', // 项目
+            projectName: '' // 名称
+          }
+          if (Object.values(outdata[index])[4] !== '') {
+            software.project = Object.values(outdata[index])[4]
+            software.projectName = Object.values(outdata[index])[5]
+            software.edition = Object.values(outdata[index])[6]
+            software.type = Object.values(outdata[index])[7]
+            this.software.push(software)
+          }
+        } else {
+          break
         }
       }
-      // console.log(this.config)
-      // console.log('software', this.software)
+      this.excelIndex = index
+      // console.log(index)
+      // console.log('配置信息', this.config)
+      // console.log('通用软件信息', this.software)
     },
     // 获取基本信息
     getBaseinfo(outdata) {
-      this.equipmentBaseInfo.equipmentName = Object.values(outdata[0])[1] // 设备名称
-      this.equipmentBaseInfo.hostName = Object.values(outdata[1])[1] // 主机名
-      this.equipmentBaseInfo.departmentName = Object.values(outdata[1])[3] // 部门
-      this.equipmentBaseInfo.basicInfoId = Object.values(outdata[1])[5] // 编号
-      this.equipmentBaseInfo.equipmentAdminName = Object.values(outdata[2])[1] // 设备管理员
-      this.equipmentBaseInfo.equipmentAdminPhone = Object.values(outdata[2])[3]
-      this.equipmentBaseInfo.appAdminName = Object.values(outdata[2])[5] // 应用管理员
-      this.equipmentBaseInfo.appAdminPhone = Object.values(outdata[2])[7] // 是否可// 迁移
+      this.equipmentBaseInfo.equipmentName = this.underfindTrans(Object.values(outdata[0])[2] + Object.values(outdata[0])[3], '设备名称')// 设备名称
+      this.equipmentBaseInfo.businessSyste = this.underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统')// 所属系统
+      this.equipmentBaseInfo.hostName = this.underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[2], '主机名') // 主机名
+      this.equipmentBaseInfo.departmentName = this.underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门') // 部门
+      this.equipmentBaseInfo.basicInfoId = this.underfindTrans(Object.values(outdata[1])[7], '编号') // 编号
+      this.equipmentBaseInfo.equipmentTypeName = Object.values(outdata[1])[7].split('-')[1] // 涉笔类型
+      this.equipmentBaseInfo.equipmentAdminName = this.underfindTrans(Object.values(outdata[2])[1], '设备管理员') // 设备管理员
+      this.equipmentBaseInfo.equipmentAdminPhone = this.underfindTrans(Object.values(outdata[2])[3], '设备管理员电话号码')
+      this.equipmentBaseInfo.appAdminName = this.underfindTrans(Object.values(outdata[2])[5], '应用管理员') // 应用管理员
+      this.equipmentBaseInfo.appAdminPhone = this.underfindTrans(Object.values(outdata[2])[7], '应用管理员电话号码') // 是否可// 迁移
       this.equipmentBaseInfo.businessOrExperimental = this.statusTrans(Object.values(outdata[3])[1])// 业务机试验机
       this.equipmentBaseInfo.mainOrBackup = this.statusTrans(Object.values(outdata[3])[3]) // 主机 备机
       this.equipmentBaseInfo.tureOrVirtual = this.statusTrans(Object.values(outdata[3])[5]) // 实体机虚拟机
       this.equipmentBaseInfo.migratable = this.statusTrans(Object.values(outdata[3])[7]) // 是否迁移
-      this.equipmentBaseInfo.brandName = Object.values(outdata[6])[0] // 品牌
-      this.equipmentBaseInfo.brandModelName = Object.values(outdata[6])[1] // 型号
-      this.equipmentBaseInfo.machineRoomName = Object.values(outdata[6])[2] // 安装位置
-      this.equipmentBaseInfo.cabinetName = Object.values(outdata[6])[3]
-      this.equipmentBaseInfo.serialNumber = Object.values(outdata[8])[0] // 序列号
-      this.equipmentBaseInfo.guaranteePeriod = Object.values(outdata[8])[1] // 保修期
-      this.equipmentBaseInfo.onlineTime = Object.values(outdata[8])[2] // 上线时间
-      this.equipmentBaseInfo.offlineTime = Object.values(outdata[8])[3] // 下线时间
+      this.equipmentBaseInfo.brandName = this.underfindTrans(Object.values(outdata[6])[0] + Object.values(outdata[6])[1], '品牌') // 品牌
+      this.equipmentBaseInfo.brandModelName = this.underfindTrans(Object.values(outdata[6])[2] + Object.values(outdata[6])[3], '型号') // 型号
+      this.equipmentBaseInfo.machineRoomName = this.underfindTrans(Object.values(outdata[6])[4] + Object.values(outdata[6])[5], '安装位置') // 安装位置
+      var cabinetName = Object.values(outdata[6])[6] + Object.values(outdata[6])[7]
+      cabinetName = cabinetName.split('-')[0]
+      this.equipmentBaseInfo.cabinetName = this.underfindTrans(cabinetName, '机柜号')
+      this.equipmentBaseInfo.serialNumber = this.underfindTrans(Object.values(outdata[8])[0] + Object.values(outdata[8])[1], '序列号') // 序列号
+      this.equipmentBaseInfo.guaranteePeriod = this.underfindTrans(Object.values(outdata[8])[2] + Object.values(outdata[8])[3], '保修期') // 保修期
+      this.equipmentBaseInfo.onlineTime = this.underfindTrans(Object.values(outdata[8])[4] + Object.values(outdata[8])[5], '上线时间') // 上线时间
+      this.equipmentBaseInfo.offlineTime = this.underfindTrans(Object.values(outdata[8])[6] + Object.values(outdata[8])[7], '下线时间') // 下线时间
+      // console.log(this.equipmentBaseInfo)
+      // debugger
     },
     // 解析判断状态
     statusTrans(status) {
@@ -592,6 +640,25 @@ export default {
         return '0'
       } else {
         return '1'
+      }
+    },
+    // underfind值转换
+    underfindTrans(status, part) {
+      if (status === '' && part !== '') {
+        this.$message({
+          type: 'error',
+          message: part + '不能为空'
+        })
+        this.$refs.myUpload.clearFiles()
+        this.fileList = []
+        this.excelData = {
+          total: 0,
+          equipments: {}
+        }
+      } else if (status === undefined) {
+        return ''
+      } else {
+        return status
       }
     },
     // 手动移除
@@ -640,32 +707,5 @@ export default {
 .upload-demo{
   height: 80%;
 }
-
-//.el-row {
-//  margin-bottom: 20px;
-//  &:last-child {
-//    margin-bottom: 0;
-//  }
-//}
-//.el-col {
-//  border-radius: 4px;
-//}
-//.bg-purple-dark {
-//  background: #99a9bf;
-//}
-//.bg-purple {
-//  background: #d3dce6;
-//}
-//.bg-purple-light {
-//  background: #e5e9f2;
-//}
-//.grid-content {
-//  border-radius: 4px;
-//  min-height: 36px;
-//}
-//.row-bg {
-//  padding: 10px 0;
-//  background-color: #f9fafc;
-//}
 
 </style>
