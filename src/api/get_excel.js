@@ -1,5 +1,5 @@
 const ExcelJS = require('exceljs');
-
+import { getbasic } from '@/api/table'
 export async function getExcelDemo1(data){
     console.log(data)
     //创建工作簿↓
@@ -25,24 +25,69 @@ export async function getExcelDemo1(data){
     //添加工作表
     const sheet = workbook.addWorksheet('1');
     const row = sheet.getRow(1);
-
+    
 	let header = []
 	let items = []
-	Object.keys(data[0]).map(key => {
-		header.push(key)
-
+    let c_to_e_obj = {
+        "hostName": "主机名",
+        "departmentCode": "部门代码",
+        "machineRoomName": "机房名称",
+        "appAdminPhone": "应用管理员电话",
+        "insertDate": '在线时间',
+        "equipmentId": "设备ID",
+        "lastmodifyDate": '上次修改日期',
+        "shelfOff": "是否可下架",
+        "brandModelName": "型号",
+        "businessSystemName": "所属系统",
+        "equipmentAdminId": "设备管理员ID",
+        "tureOrVirtual": "实体机/虚拟机",
+        "insertUserId": "安装用户标识",
+        "postName": "单位名称",
+        "migratable": "是否可迁移",
+        "onlineTime": '上线时间',
+        "equipmentName": "设备名称",
+        "offlineTime": '下线时间',
+        "dataSources": "数据来源",
+        "departmentName": "部门名称",
+        "lastmodifyUserId": "上一次修改用户ID",
+        "brandName": "品牌",
+        "cabinetName": "机柜名称",
+        "equipmentTypeName": "设备类型",
+        "serialNumber": "序列号",
+        "mainOrBackup": "主机/备机",
+        "appAdminName": "应用管理员",
+        "basicInfoId": "编号",
+        "equipmentAdminPhone": "设备管理员电话",
+        "cabinetUStart": "机柜起点",
+        "equipmentAdminName": "设备管理员",
+        "equipmentTypeId": "设备类型ID",
+        "brandModelId": "品牌型号ID",
+        "businessOrExperimental": "业务机/实验机",
+        "appAdminId": "应用管理员ID",
+        "cabinetUEnd": "机柜终点",
+        "guaranteePeriod": "质保期",
+        "postCode": "单位代码",
+        "remarks": "备注",
+        "status": "标志位"
+    }
+	Object.keys(c_to_e_obj).map(key => {
+		header.push(c_to_e_obj[key])
 	})
+    for(let i of data){
+        let i_list = []
+        Object.keys(c_to_e_obj).map(key => {
+            i_list.push(i[key])
+        })
+        items.push(i_list)
+    }
     // for
     let num = 0
     for(let i = 0;i<data.length;i++){
-        let item = []
         Object.keys(data[i]).map(key => {
-            sheet.getColumn(++num).width = 20
-            item.push(data[i][key])
+            sheet.getColumn(++num).width = 22
         })
-        items.push(item)
     }
-    data = items
+    // data = items
     // 表头
     const header_row = sheet.getRow(1);
     header_row.values = header
@@ -60,9 +105,10 @@ export async function getExcelDemo1(data){
       });
     header_row.commit();
     // 表格内容
-    for(let i = 0;i<data.length;i++){
+    for(let i = 0;i<items.length;i++){
         let row = sheet.getRow(i + 2);
-        row.values = data[i]
+        row.values = items[i]
+        row.numFmt = '0'
         row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
             // console.log('Cell ' + colNumber + ' = ' + cell.value);
             cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -88,7 +134,6 @@ export async function getExcelDemo1(data){
 }
 
 export async function getExcelDemo2(data_list, data_num = 1){
-    console.log(data_list,data_num)
     let data_len = data_list.length
     let file_list = []
     let data_index = 0
@@ -177,6 +222,30 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 visibility: 'visible'
             }]
         for(let sheet_num = 1;sheet_num < file_num + 1;sheet_num++){
+            // 填充数据准备
+            let item_data = data_list[data_index]
+            let basic_data = await getbasic(item_data['equipmentId'])
+            basic_data = basic_data['data']['items']
+
+            // basicInfoAppBusiness_list 业务应用
+            // basicInfoAppAccessRights_list 应用访问 权限
+            // basicInfoAppLinksInfo_list 链接用户信息
+            // basicInfoAppStore_list 存储
+            // basicInfoAppNativeStore_list 本机存储
+            // basicInfoAppSoftware_list 专用软件信息
+            // basicInfoAppSystemUser_list 系统用户信息
+            // basicInfoConfig_list 配置信息
+            // basicInfoNetwork_list 网络信息
+            // basicInfoProtocolPort_list 协议端口信息
+            // basicInfoSoftware_list 通用软件信息
+            console.log(basic_data, item_data)
+            let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
+            let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
+            let z = basic_data['basicInfoAppSystemUser_list'].length // z是系统用户信息中信息的最大条数
+            let a = basic_data['basicInfoAppBusiness_list'].length - 3 > 0 ? basic_data['basicInfoAppBusiness_list'].length - 3 : 0 // a是业务应用中数据条数超过3条的数量
+            let c = basic_data['basicInfoAppStore_list'].length // c是’存储’信息中的最大条数
+            let c2 = basic_data['basicInfoAppNativeStore_list'].length // c2是’本机存储’信息中的最大条数
+            let y = basic_data['basicInfoAppLinksInfo_list'].length // y是’链接（服务）用户信息’中的最大条数
             //添加工作表
             let sheet = workbook.addWorksheet('' + sheet_num);
             //设置列宽
@@ -652,14 +721,15 @@ export async function getExcelDemo2(data_list, data_num = 1){
             J14.fill = table_fill4
         
             // 第15到第15+n-1行
-            let n = 5 // n是配置信息或者通用软件信息中的信息最大条数
+            // let n = 5 // n是配置信息或者通用软件信息中的信息最大条数
             let cols = 'CDEFGHIJ'
-            let row_list = [] // 存放第15到第15+n行的单元格
+            let C15 = [] // 存放第15到第15+n行的单元格
             for(let i = 1;i <= n;i++){
                 sheet.getRow(14+i).height = 15.25
                 let item_row = []
                 for(let col of cols){
                     let cell = sheet.getCell(col+(14+i))
+                    cell.alignment = content_row
                     cell.font = table_header3
                     if(i%2==0){
                         cell.fill = table_fill5
@@ -668,7 +738,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                     }
                     item_row.push(cell)
                 }
-                row_list.push(item_row)
+                C15.push(item_row)
             }
         
             // 第16+n-1行
@@ -707,9 +777,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // 第18+n-1到19+n-1行
             num = 18+n-1
             let C18 = []
-            sheet.mergeCells('E' + num + ':' + 'F' + num );
-            sheet.mergeCells('H' + num + ':' + 'I' + num );
             for(let item = 0;item < 2;item++){
+                sheet.mergeCells('E' + num + ':' + 'F' + num );
+                sheet.mergeCells('H' + num + ':' + 'I' + num );
                 sheet.getRow(num).height = 14.25
                 let item_list = []
                 for(let i of "CDEGHJ"){
@@ -745,7 +815,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for(let i of "GHJ"){
                 let item_cell = sheet.getCell(i+num)
                 item_cell.alignment = content_row
-                item_cell.font = table_header2
+                item_cell.font = table_header3
                 item_cell.fill = table_fill5
                 C20.push(item_cell)
             }
@@ -792,9 +862,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C21[1][1],C21[1][2],C21[1][3],C21[1][4],
                 C21[2][1],C21[2][2],C21[2][3],C21[2][4]
             ]
-            for(let i in row_list){
+            for(let i in C15){
                 for(let item = 2;item < 7;item++){
-                    inside.push(row_list[i][item])
+                    inside.push(C15[i][item])
                 }
             }
             for(let i of inside){
@@ -823,8 +893,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C14,
                 C17[0],C18[0][0],C18[1][0],C20[0],C21[0][0],C21[1][0]
             ]
-            for(let i in row_list){
-                l.push(row_list[i][0])
+            for(let i in C15){
+                l.push(C15[i][0])
             }
             for(let i of l){
                 i.border = {
@@ -838,8 +908,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 J14,
                 C17[5],C18[0][5],C18[1][5],C20[5],C21[0][5],C21[1][5]
             ]
-            for(let i in row_list){
-                r.push(row_list[i][7])
+            for(let i in C15){
+                r.push(C15[i][7])
             }
             for(let i of r){
                 i.border = {
@@ -922,7 +992,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         
             // 第27 +n-1到27 +n-1 + x-1行
             num = 27+n-1
-            let x = 1 + 2 // x是专用软件信息中信息最大条数 第一行是表头
+            // let x = 1 + 2 // x是专用软件信息中信息最大条数 第一行是表头
             let C27 = []
             for(let item = 0;item < x;item++){
                 let item_list = []
@@ -997,7 +1067,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         
             // 第31 +n-1 + x-1到31 +n-1 + x-1 + z-1行
             num = 31 +n-1 + x-1
-            let z = 4 // z是系统用户信息中信息的最大条数
+            // let z = 4 // z是系统用户信息中信息的最大条数
             let C31 = []
             for(let item = 0;item < z;item++){
                 sheet.getRow(num).height = 15
@@ -1035,9 +1105,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
             num = 33 +n-1 + x-1 + z-1
             let C33 = []
             sheet.getRow(num).height = 14.25
-            sheet.mergeCells('C' + num + ':' + 'D' + num );
-            tables = ['C','E','F']
-            tables_i = ['域名/地址','ICP号','用户范围']
+            // sheet.mergeCells('C' + num + ':' + 'D' + num );
+            tables = ['C','D','E','F']
+            tables_i = ['应用类型','域名/地址','ICP号','用户范围']
             for (let i in tables){
                 let item_cell = sheet.getCell(tables[i]+num)
                 item_cell.value = tables_i[i]
@@ -1058,17 +1128,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
         
             // 第34 +n-1 + x-1 + z-1行
             num = 34 +n-1 + x-1 + z-1
-            sheet.getRow(num).height = 18
-            sheet.mergeCells('C' + num + ':' + 'F' + num );
             let C34 = []
-            C34.push(sheet.getCell('C' + num))
-            C34[0].alignment = content_row
-            C34[0].font = table_header2
-            C34[0].fill = table_fill4
-            C34[0].value = 'HTTP应用'
-            tables = ['G','H','I','J']
-            for (let i in tables){
-                let item_cell = sheet.getCell(tables[i]+num)
+            for (let i of 'CDEFGHIJ'){
+                let item_cell = sheet.getCell(i+num)
                 item_cell.alignment = content_row
                 item_cell.font = table_header3
                 item_cell.fill = table_fill5
@@ -1078,15 +1140,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // 第35 +n-1 + x-1 + z-1行
             num = 35 +n-1 + x-1 + z-1
             sheet.getRow(num).height = 14.25
-            sheet.mergeCells('C' + num + ':' + 'D' + num );
+            // sheet.mergeCells('C' + num + ':' + 'D' + num );
             sheet.mergeCells('G' + num + ':' + 'J' + num );
             let C35 = []
-            C35.push(sheet.getCell('G' + num))
-            C35[0].alignment = content_row
-            C35[0].font = table_header2
-            C35[0].fill = table_fill4
-            C35[0].value = '链接（服务）用户信息'
-            tables = ['C','E','F']
+            tables = ['C','D','E','F']
             for (let i in tables){
                 let item_cell = sheet.getCell(tables[i]+num)
                 item_cell.alignment = content_row
@@ -1094,16 +1151,22 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C35.push(item_cell)
             }
+            C35.push(sheet.getCell('G' + num))
+            C35[C35.length -1].alignment = content_row
+            C35[C35.length -1].font = table_header2
+            C35[C35.length -1].fill = table_fill4
+            C35[C35.length -1].value = '链接（服务）用户信息'
             // 第36 +n-1 + x-1 + z-1行
             num = 36 +n-1 + x-1 + z-1
             sheet.getRow(num).height = 14.25
-            sheet.mergeCells('C' + num + ':' + 'F' + num );
             let C36 = []
-            C36.push(sheet.getCell('C' + num))
-            C36[0].alignment = content_row
-            C36[0].font = table_header2
-            C36[0].fill = table_fill4
-            C36[0].value = 'FTP应用'
+            for (let i of 'CDEF'){
+                let item_cell = sheet.getCell(i+num)
+                item_cell.alignment = content_row
+                item_cell.font = table_header3
+                item_cell.fill = table_fill5
+                C36.push(item_cell)
+            }
             tables = ['G','H','I','J']
             tables_i = ['单位','用户名','IP地址','其它']
             for (let i in tables){
@@ -1114,54 +1177,26 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C36.push(item_cell)
             }
-        
-            // 第37 +n-1 + x-1 + z-1行
             num = 37 +n-1 + x-1 + z-1
+            // let a = 0 // a是业务应用中数据条数超过3条的数量
             sheet.getRow(num).height = 14.25
-            sheet.mergeCells('C' + num + ':' + 'D' + num );
+            // sheet.mergeCells('C' + num + ':' + 'D' + num );
             let C37 = []
-            for (let i of 'CEFGHIJ'){
-                let item_cell = sheet.getCell(i+num)
-                item_cell.alignment = content_row
-                item_cell.font = table_header3
-                item_cell.fill = table_fill5
-                C37.push(item_cell)
-            }
-            // 第38 +n-1 + x-1 + z-1行
-            num = 38 +n-1 + x-1 + z-1
-            sheet.getRow(num).height = 14.25
-            sheet.mergeCells('C' + num + ':' + 'F' + num );
-            let C38 = []
-            C38.push(sheet.getCell('C' + num))
-            C38[0].alignment = content_row
-            C38[0].font = table_header2
-            C38[0].fill = table_fill4
-            for (let i in tables){
-                let item_cell = sheet.getCell(tables[i]+num)
-                item_cell.alignment = content_row
-                item_cell.font = table_header3
-                item_cell.fill = table_fill5
-                C38.push(item_cell)
-            }
-            // 第39~41 +n-1 + x-1 + z-1行
-            num = 39 +n-1 + x-1 + z-1
-            let C39 = []
-            for (let item = 0;item < 3;item++){
+            for (let item = 0;item < a;item++){
                 sheet.getRow(num).height = 14.25
-                sheet.mergeCells('C' + num + ':' + 'D' + num );
                 let item_list = []
-                for(let i of 'CEFGHIJ'){
+                for(let i of 'CDEFGHIJ'){
                     let item_cell = sheet.getCell(i+num)
                     item_cell.alignment = content_row
                     item_cell.font = table_header3
                     item_cell.fill = table_fill5
                     item_list.push(item_cell)
                 }
-                C39.push(item_list)
+                C37.push(item_list)
                 num++
             }
             // 第42 +n-1 + x-1 + z-1行
-            num = 42 +n-1 + x-1 + z-1
+            num = 42 +n-1 + x-1 + z-1 + a-1 - 4
             sheet.getRow(num).height = 18
             sheet.mergeCells('C' + num + ':' + 'F' + num );
             let C42 = []
@@ -1178,7 +1213,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C42.push(item_cell)
             }
             // 第43 +n-1 + x-1 + z-1行
-            num = 43 +n-1 + x-1 + z-1
+            num = 43 +n-1 + x-1 + z-1 + a-1 - 4
             sheet.getRow(num).height = 14.25
             sheet.mergeCells('C' + num + ':' + 'D' + num );
             let C43 = []
@@ -1199,9 +1234,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C43.push(item_cell)
             }
         
-            // 第44 +n-1 + x + z-1到44 +n-1 + x-1 + z-1 + c-1行
-            num = 44 +n-1 + x-1 + z-1
-            let c = 5 // c是’存储’信息中的最大条数
+            // 第44 +n-1 + x + z-1 + a-1 - 4到44 +n-1 + x-1 + z-1 + a-1 - 4 + c-1行
+            num = 44 +n-1 + x-1 + z-1 + a-1 - 4
+            // let c = 5 // c是’存储’信息中的最大条数
             let C44 = []
             for (let item = 0;item < c;item++){
                 sheet.getRow(num).height = 14.25
@@ -1210,7 +1245,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 for (let i of 'CEF'){
                     let item_cell = sheet.getCell(i+num)
                     item_cell.alignment = content_row
-                    item_cell.font = table_header2
+                    item_cell.font = table_header3
                     item_list.push(item_cell)
                 }
                 for (let i of 'GHIJ'){
@@ -1223,8 +1258,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C44.push(item_list)
                 num++
             }
-            // 第45 +n-1 + x-1 + z-1 + c-1行
-            num = 45 +n-1 + x-1 + z-1 + c-1
+            // 第45 +n-1 + x-1 + z-1 + a-1 - 4 + c-1行
+            num = 45 +n-1 + x-1 + z-1 + a-1 - 4 + c-1
             sheet.getRow(num).height = 18
             sheet.mergeCells('C' + num + ':' + 'F' + num );
             let C45 = []
@@ -1241,8 +1276,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C45.push(item_cell)
             }
-            // 第46 +n-1 + x-1 + z-1 + c-1行
-            num = 46 +n-1 + x-1 + z-1 + c-1
+            // 第46 +n-1 + x-1 + z-1 + a-1 - 4 + c-1行
+            num = 46 +n-1 + x-1 + z-1 + a-1 - 4 + c-1
             sheet.getRow(num).height = 14.25
             let C46 = []
             tables = ['C','D','E','F']
@@ -1261,9 +1296,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C46.push(item_cell)
             }
-            // 第47 +n-1 + x-1 + z-1 + c-1到47 +n-1 + x-1 + z-1 + c-1 + c2-1行
-            num = 47 +n-1 + x-1 + z-1 + c-1
-            let c2 = 5 // c2是’本机存储’信息中的最大条数
+            // 第47 +n-1 + x-1 + z-1 + a-1 - 4 + c-1到47 +n-1 + x-1 + z-1 + a-1 - 4 + c-1 + c2-1行
+            num = 47 +n-1 + x-1 + z-1 + a-1 - 4 + c-1
+            // let c2 = 5 // c2是’本机存储’信息中的最大条数
             let C47 = []
             for (let item = 0;item < c2;item++){
                 sheet.getRow(num).height = 14.25
@@ -1271,7 +1306,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 for (let i of 'CDEF'){
                     let item_cell = sheet.getCell(i+num)
                     item_cell.alignment = content_row
-                    item_cell.font = table_header2
+                    item_cell.font = table_header3
                     item_list.push(item_cell)
                 }
                 for (let i of 'GHIJ'){
@@ -1284,12 +1319,12 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C47.push(item_list)
                 num++
             }
-            //第48 +n-1 + x-1 + z-1 + c-1 + c2-1到48 +n-1 + x + z-1 + c-1 + c2-1 + c3行 如果有的话
+            //第48 +n-1 + x-1 + z-1 + a-1 - 4 + c-1 + c2-1到48 +n-1 + x + z-1 + a-1 - 4 + c-1 + c2-1 + c3行 如果有的话
             let C48 = []
-            let y = 5 // y是’链接（服务）用户信息’中的最大条数
+            // let y = 5 // y是’链接（服务）用户信息’中的最大条数
             let c3 = 0 //表格超出数
-            if( 7 + c + 2 + c2 < y){
-                c3 = y - (7 + c + 2 + c2)
+            if( 4 + c + a + c2 < y){
+                c3 = y - (4 + c + a + c2)
                 for (let item = 0;item < c3;item++){
                     sheet.getRow(num).height = 14.25
                     let item_list = []
@@ -1315,10 +1350,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 //里面的
             inside = [
                 C29[1],C29[2],C29[3],C29[4],C29[6],C29[7],
-                C33[3],C33[4],C33[5],
-                C34[1],C34[2],C34[3],
-                C35[2],C35[3],
-                C36[1],C36[2],C36[3],
+                C33[4],C33[5],C33[5],
+                C34[1],C34[2],C34[3],C34[4],C34[5],C34[6],
+                C35[1],C35[2],C35[3],
+                C36[1],C36[2],C36[3],C36[4],C36[5],C36[6],
                 C43[3],C43[4],C43[5],
                 C45[1],C45[2],C45[3],
                 C46[4],C46[5],C46[6],
@@ -1333,15 +1368,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
                     inside.push(C31[i][item])
                 }
             }
-            for(let item = 1;item < 6;item++){
-                inside.push(C37[item])
-            }
-            for(let item = 1;item < 4;item++){
-                inside.push(C38[item])
-            }
-            for(let j in C39){
-                for(let item = 1;item < 6;item++){
-                    inside.push(C39[j][item])
+
+            for(let j in C37){
+                for(let item = 1;item < 7;item++){
+                    inside.push(C37[j][item])
                 }
             }
             for(let item = 1;item < 4;item++){
@@ -1369,8 +1399,9 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
             }
                 // 四边的
-            l = [C29[0],C32[0],C33[0],C34[0],C35[1],C36[0],C37[0],C38[0],C42[0],C45[0]]
-            for (let item of [C27,C31,C39]){
+            l = [C29[0],C32[0],C34[0],C35[0],C36[0],C42[0],C45[0]]
+            C33[0].border = { left: black}
+            for (let item of [C27,C31,C37]){
                 for (let i of item){
                     l.push(i[0])
                 }
@@ -1415,16 +1446,14 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C32[1],
                 C33[C33.length-1],
                 C34[C34.length-1],
-                C35[0],
+                C35[C35.length-1],
                 C36[C36.length-1],
-                C37[C37.length-1],
-                C38[C38.length-1],
                 C42[C42.length-1],
                 C43[C43.length-1],
                 C45[C45.length-1],
                 C46[C46.length-1]
             ]
-            for (let item of [C27,C31,C39,C44]){
+            for (let item of [C27,C31,C37,C44]){
                 for (let i of item){
                     r.push(i[i.length-1])
                 }
@@ -1514,9 +1543,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
             }
             // 填入数据
-            let item_data = data_list[data_index]
-            console.log(item_data.length)
             const git_time = (s) =>{
+                if(!s) return ""
                 let date = new Date(parseInt(s));  // 参数需要毫秒数，所以这里将秒数乘于 1000
                 return date.getFullYear() + '/' + (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/' + date.getDate();
             }
@@ -1541,6 +1569,201 @@ export async function getExcelDemo2(data_list, data_num = 1){
             E11.value = item_data['guaranteePeriod']
             G11.value = git_time(item_data['onlineTime'])
             I11.value = git_time(item_data['offlineTime'])
+            let n_list = []
+            let x_list = []
+            let z_list = []
+            let a_list = []
+            let y_list = []
+            let c_list = []
+            let c2_list = []
+            // 配置信息和通用软件信息
+            for (let i = 0;i < n;i++){
+                let item = []
+                if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
+                    item = item.concat(['','','',''])
+                }else{
+                    item.push(basic_data['basicInfoConfig_list'][i]['project_name'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
+                }
+                if(typeof basic_data['basicInfoSoftware_list'][i] == 'undefined'){
+                    item = item.concat(['','','',''])
+                }else{
+                    item.push(basic_data['basicInfoSoftware_list'][i]['project'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['projectName'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['edition'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['type'])
+                }
+                n_list.push(item)
+            }
+            for(let i in C15){
+                for(let j in C15[i]){
+                    C15[i][j].value = n_list[i][j]
+                }
+            }
+            // 网络信息
+            for(let i in basic_data['basicInfoNetwork_list']){
+                if(i > 1){
+                    C21[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
+                    C21[i][2].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
+                    break
+                }
+                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['macAddress']
+                C21[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
+                C21[i][2].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
+            }
+            // 协议端口信息
+            for(let i in basic_data['basicInfoProtocolPort_list']){
+                let item
+                if(i<2){
+                    item = C18[i]
+                }else if(i == 2){
+                    item = C20
+                }else if(i > 2){
+                    item = C21[i-3]
+                }
+                item[3].value = basic_data['basicInfoProtocolPort_list'][i]['protocolName']
+                item[4].value = basic_data['basicInfoProtocolPort_list'][i]['appName']
+                item[5].value = basic_data['basicInfoProtocolPort_list'][i]['networkCardPort']
+            }
+            // 专用软件信息
+            for (let i = 0;i < x -1;i++){
+                let item_field = ['softwareName','businessName','softwarePort','softwareOnlineTime','softwareDevelopCompany','softwareLiaison']
+                let item = []
+                for(let f of item_field){
+                    item.push(typeof basic_data['basicInfoAppSoftware_list'][i][f] == 'undefined' ? '' :basic_data['basicInfoAppSoftware_list'][i][f])
+                }
+                x_list.push(item)
+            }
+            for(let i in x_list){
+                for(let j in C27[i]){
+                    i = parseInt(i)
+                    j = parseInt(j)
+                    C27[i+1][j].value = x_list[i][j]
+
+                }
+            }
+            // 系统用户信息
+            for(let i = 0;i < z;i++){
+                let item_field = ['userName','realName','userLevel','localAccessMode','remoteAccessMode','createDate','other']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppSystemUser_list'][i][f])
+                }
+                z_list.push(item)
+            }
+            for(let i in z_list){
+                for(let j in C31[i]){
+                    i = parseInt(i)
+                    j = parseInt(j)
+                    C31[i][j].value = z_list[i][j]
+
+                }
+            }
+            // 业务应用
+            for (let i = 0;i < basic_data['basicInfoAppBusiness_list'].length;i++){
+                let item_field = ['businessName','domainName','ICPNum','userScope']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppBusiness_list'][i][f])
+                }
+                a_list.push(item)
+            }
+            for(let i in a_list){
+                let item
+                if(i < 3){
+                    if(i == 0) item = C34
+                    if(i == 1) item = C35
+                    if(i == 2) item = C36
+                }else if (i >= 3){
+                    item = C37[i-3]
+                }
+                for(let j in a_list[i]){
+                    item[j].value = a_list[i][j]
+                }
+            }
+            // 访问权限
+            C34[4].value = basic_data['basicInfoAppAccessRights_list'][0]['intranet']
+            C34[5].value = basic_data['basicInfoAppAccessRights_list'][0]['industryNetwork']
+            C34[6].value = basic_data['basicInfoAppAccessRights_list'][0]['internet']
+            C34[7].value = basic_data['basicInfoAppAccessRights_list'][0]['other']
+            // 链接用户信息
+            for (let i = 0;i < y;i++){
+                let item_field = ['company','userName','ipAddress','other']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppLinksInfo_list'][i][f])
+                }
+                y_list.push(item)
+            }
+            for(let i in y_list){
+                let item
+                let C37_len = C37.length
+                if(typeof C37[i] != 'undefined'){
+                    for(let j in y_list[i]){
+                        C37[i][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C37_len){
+                    for(let j in y_list[i]){
+                        C42[1+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C37_len + 1){
+                    for(let j in y_list[i]){
+                        C43[3+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i > C37_len + 1 && i <= C37_len + 1 + c){
+                    for(let j in y_list[i]){
+                        C44[i - (C37_len + 1) - 1][3+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C37_len + 1 + c + 1){
+                    for(let j in y_list[i]){
+                        C45[1+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C37_len + 1 + c + 1 + 1){
+                    for(let j in y_list[i]){
+                        C46[4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i > C37_len + 1 + c + 1 + 1 && i <= C37_len + 1 + c + 1 + 1 + c2){
+                    for(let j in y_list[i]){
+                        C47[i - (C37_len + 1 + c + 1 + 1) - 1][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(c3 > 0){
+                    for(let j in y_list[i]){
+                        C48[i - (C37_len + 1 + c + 1 + 1 + c2) - 1][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }
+            }
+            // 存储
+            for (let i = 0;i < c;i++){
+                let item_field = ['volume','SAN_NAS','capacity']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppStore_list'][i][f])
+                }
+                c_list.push(item)
+            }
+            for (let i in c_list){
+                for(let j in c_list[i]){
+                    C44[i][j].value = c_list[i][j]
+                }
+            }
+            // 本机存储
+            for (let i = 0;i < c2;i++){
+                let item_field = ['totalCapacity','usedSpace','unusedSpace','annualGrowthSpace']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppNativeStore_list'][i][f])
+                }
+                c2_list.push(item)
+            }
+            for (let i in c2_list){
+                for(let j in c2_list[i]){
+                    C47[i][j].value = c2_list[i][j]
+                }
+            }
+            
             data_index ++
         }
         //导出下载
