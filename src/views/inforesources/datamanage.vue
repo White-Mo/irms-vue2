@@ -57,7 +57,7 @@
         <!--        </el-form-item>-->
         <div class="uploadCard">
           <el-upload
-            :limit="2"
+            :limit="5"
             :on-exceed="handleExceed"
             ref="myUpload"
             class="upload-demo"
@@ -657,7 +657,7 @@ export default {
     },
     // 数量限制
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 2 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       this.equipments = []
       this.$refs.myUpload.clearFiles()
       this.fileList = []
