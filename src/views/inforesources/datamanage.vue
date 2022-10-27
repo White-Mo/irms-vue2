@@ -42,21 +42,23 @@
     </el-col>
     <el-dialog title=" 数据导入详情" :visible.sync="dialogFormVisible">
       <el-form :model="dialogForm">
-<!--        <el-form-item label="数据来源" :label-width="formLabelWidth">-->
-<!--          <el-cascader :props="props" placeholder="请选择单位和部门" style="width: 50%" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="文件类型" :label-width="formLabelWidth">-->
-<!--          <el-select v-model="value" placeholder="请选择文件类型" style="width: 30%">-->
-<!--            <el-option-->
-<!--              v-for="item in fileTaypes"-->
-<!--              :key="item.value"-->
-<!--              :label="item.label"-->
-<!--              :value="item.value"-->
-<!--            />-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="数据来源" :label-width="formLabelWidth">-->
+        <!--          <el-cascader :props="props" placeholder="请选择单位和部门" style="width: 50%" />-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="文件类型" :label-width="formLabelWidth">-->
+        <!--          <el-select v-model="value" placeholder="请选择文件类型" style="width: 30%">-->
+        <!--            <el-option-->
+        <!--              v-for="item in fileTaypes"-->
+        <!--              :key="item.value"-->
+        <!--              :label="item.label"-->
+        <!--              :value="item.value"-->
+        <!--            />-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
         <div class="uploadCard">
           <el-upload
+            :limit="5"
+            :on-exceed="handleExceed"
             ref="myUpload"
             class="upload-demo"
             action=""
@@ -83,7 +85,6 @@
 
 <script>
 import { importExcel } from '@/api/import'
-let id = 0
 export default {
   name: 'Dashboard',
   data() {
@@ -179,23 +180,7 @@ export default {
         internet: '', // 互联网
         other: '' // 其他
       },
-      appLinksInfo: [], // 服务用户信息
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          const { level } = node
-          setTimeout(() => {
-            const nodes = Array.from({ length: level + 1 })
-              .map(item => ({
-                value: ++id,
-                label: `单位${id}`,
-                leaf: level >= 2
-              }))
-            // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-            resolve(nodes)
-          }, 1000)
-        }
-      }
+      appLinksInfo: [] // 服务用户信息
     }
   },
   methods: {
@@ -669,6 +654,13 @@ export default {
     handlePreview(file) {
       // console.log('1111', file)
       // this.tableData.push()
+    },
+    // 数量限制
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.equipments = []
+      this.$refs.myUpload.clearFiles()
+      this.fileList = []
     }
   }
 }
