@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">单位管理</span>
+              <span style="color: #ffffff">部门管理</span>
             </div>
           </el-col>
         </el-row>
@@ -87,8 +87,8 @@
             <el-button
               size="medium"
               type="info"
-              @click="addPost()"
-            >添加单位</el-button>
+              @click="addDepartment()"
+            >添加部门</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -134,19 +134,19 @@
         </div>
       </div>
       <div v-show="ifUpdate">
-        <AddPost @ifUpdateChange="updateIfupdate" />
+        <addDepartment @ifUpdateChange="updateIfupdate" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getPostByPage } from '@/api/baseparameter'
-import AddPost from '@/components/Baseparameter/addPost'
+import { getPostDepartmentByPage } from '@/api/baseparameter'
+import addDepartment from '@/components/Baseparameter/addDepartment'
 
 export default {
   components: {
-    AddPost
+    addDepartment
   },
   filters: {
     statusFilter(status) {
@@ -167,25 +167,25 @@ export default {
       initdata: ['123'],
       department: '',
       inputValue: '',
-      postname: '',
+      departmentname: '',
       input3: '',
       ifUpdate: false,
       listLoading: true,
       singalInfo: {},
       basicvalue: [
         {
-          value: 'postName',
-          label: '单位名称'
+          value: 'departmentName',
+          label: '部门名称'
         },
         {
-          value: 'postCode',
-          label: '单位代码'
+          value: 'departmentCode',
+          label: '部门代码'
         }
       ],
       value: '',
       labels: {
-        postName: '单位名称',
-        postCode: '单位代码'
+        departmentName: '部门名称',
+        departmentCode: '部门代码'
       }
     }
   },
@@ -210,14 +210,14 @@ export default {
         limit: 10
       }
       // console.log(this.initdata)
-      getPostByPage(params).then((response) => {
+      getPostDepartmentByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
       })
     },
 
-    addPost() {
+    addDepartment() {
       this.ifUpdate = !this.ifUpdate
     },
     handleDetail(index, row) {
@@ -242,7 +242,7 @@ export default {
         start: val-1,
         limit: 10
       }
-      getPostByPage(params).then((response) => {
+      getPostDepartmentByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -310,7 +310,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {

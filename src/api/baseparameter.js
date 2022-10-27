@@ -31,3 +31,11 @@ export function checkPostCode(data) {
     responseType: 'json'
   })
 }
+
+export function getPostDepartmentByPage(data) {
+  return request({
+    url: '/home/baseparameter/getPostDepartmentByPage',
+    method: 'get',
+    params: data
+  })
+}
