@@ -231,6 +231,7 @@ export default {
         for (var i = 0; i < this.fileList.length; i++) {
           this.importfile(this.fileList[i])
         }
+        this.uploadFunc()
       }
     },
     // 读取文件
@@ -284,14 +285,6 @@ export default {
           _this.excelData.equipments = _this.equipments
           _this.excelData.total = _this.equipments.length
           console.log('所有数据', _this.equipments)
-          // debugger
-          importExcel(_this.excelData).then((res) => {
-            console.log(res.data)
-            _this.dialogFormVisible = false
-          })
-          _this.equipments = []
-          _this.$refs.myUpload.clearFiles()
-          _this.fileList = []
           // console.log(_this.equipmentBaseInfo)
         } else {
           _this.$message({
@@ -303,6 +296,18 @@ export default {
         }
         // const ws = wb.Sheets[workbook.SheetNames[0]]
       }
+    },
+    // 发送请求
+    uploadFunc() {
+      console.log('全部数据', this.excelData)
+      // debugger
+      importExcel(this.excelData).then((res) => {
+        console.log(res.data)
+        this.dialogFormVisible = false
+      })
+      this.equipments = []
+      this.$refs.myUpload.clearFiles()
+      this.fileList = []
     },
     // 获取专用软件信息
     appSoftwareFir(outdata) {
@@ -562,10 +567,10 @@ export default {
             quantity: '' // 数量
           }
           // console.log(outdata[index])
-          config.frequency = this.underfindTrans(Object.values(outdata[index])[1]) // 性能指标 频率
-          config.projectName = this.underfindTrans(Object.values(outdata[index])[0]) // 项目
-          config.corenessOrCapacity = this.underfindTrans(Object.values(outdata[index])[2]) // 容量 核数
-          config.quantity = this.underfindTrans(Object.values(outdata[index])[3]) // 数量
+          config.frequency = Object.values(outdata[index])[1] // 性能指标 频率
+          config.projectName = Object.values(outdata[index])[0] // 项目
+          config.corenessOrCapacity = Object.values(outdata[index])[2] // 容量 核数
+          config.quantity = Object.values(outdata[index])[3] // 数量
           this.config.push(config)
           var software = {
             type: '', // 类型
@@ -615,7 +620,7 @@ export default {
       this.equipmentBaseInfo.guaranteePeriod = this.underfindTrans(Object.values(outdata[8])[2] + Object.values(outdata[8])[3], '保修期') // 保修期
       this.equipmentBaseInfo.onlineTime = this.underfindTrans(Object.values(outdata[8])[4] + Object.values(outdata[8])[5], '上线时间') // 上线时间
       this.equipmentBaseInfo.offlineTime = this.underfindTrans(Object.values(outdata[8])[6] + Object.values(outdata[8])[7], '下线时间') // 下线时间
-      // console.log(this.equipmentBaseInfo)
+      console.log(this.equipmentBaseInfo)
       // debugger
     },
     // 解析判断状态
@@ -629,6 +634,7 @@ export default {
     },
     // underfind值转换
     underfindTrans(status, part) {
+      // console.log(status, part)
       if (status === '' && part !== '') {
         this.$message({
           type: 'error',
