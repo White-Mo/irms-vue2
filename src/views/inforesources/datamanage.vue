@@ -299,11 +299,16 @@ export default {
     },
     // 发送请求
     uploadFunc() {
-      console.log('全部数据', this.excelData)
+      // console.log('全部数据', this.excelData)
       // debugger
+      this.dialogFormVisible = false
+      this.$message('文件上传中')
       importExcel(this.excelData).then((res) => {
         console.log(res.data)
-        this.dialogFormVisible = false
+        this.$message({
+          message: '文件上传成功！',
+          type: 'success'
+        })
       })
       this.equipments = []
       this.$refs.myUpload.clearFiles()
