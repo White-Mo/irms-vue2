@@ -1,7 +1,7 @@
 <template>
   <div class="update_detail">
     <el-row class="tile-content shadows">
-      <el-col :span="23"><div>修改信息</div></el-col>
+      <el-col :span="23"><div>详细信息</div></el-col>
       <el-col :span="1"><el-button size="mini" @click="back">返回</el-button></el-col>
     </el-row>
     <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
@@ -309,6 +309,7 @@ export default {
     console.log(this.currentShow)
   },
   mounted() {
+    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -361,7 +362,6 @@ export default {
     commit() {
       const equipments = []
       console.log(this.form)
-      this.handleData()
       const equip = { ...this.equipment }
       console.log(equip)
       const equipmentBaseInfo = equip.equipmentBaseInfo

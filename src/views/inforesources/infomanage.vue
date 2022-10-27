@@ -132,34 +132,34 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-              <el-button size="mini">编辑</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 text
-                @click="dialogVisible = true"
+                @click="handleDelete(scope.row)"
               >删除</el-button>
-              <el-dialog
-                :append-to-body="true"
-                title="删除提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-              >
-                <span>
-                  你确定要永久删除这条数据吗？
-                </span>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">Cancel</el-button>
-                    <el-button
-                      type="primary"
-                      @click="handleDelete(scope.row)"
-                    >
-                      确认
-                    </el-button>
-                  </span>
-                </template>
-              </el-dialog>
+<!--              <el-dialog-->
+<!--                :append-to-body="true"-->
+<!--                title="删除提示"-->
+<!--                :visible.sync="dialogVisible"-->
+<!--                width="30%"-->
+<!--              >-->
+<!--                <span>-->
+<!--                  你确定要永久删除这条数据吗？-->
+<!--                </span>-->
+<!--                <template #footer>-->
+<!--                  <span class="dialog-footer">-->
+<!--                    <el-button @click="dialogVisible = false">Cancel</el-button>-->
+<!--                    <el-button-->
+<!--                      type="primary"-->
+<!--                      @click="handleDelete(scope.row)"-->
+<!--                    >-->
+<!--                      确认-->
+<!--                    </el-button>-->
+<!--                  </span>-->
+<!--                </template>-->
+<!--              </el-dialog>-->
             </template>
           </el-table-column>
         </el-table>
@@ -373,6 +373,7 @@ export default {
       this.ifUpdate = '3'
     },
     handleDelete(row) {
+      console.log(row)
       delEquipment(row.equipmentId).then((response) => {
         this.active = 0
         this.$alert(response.data, '提示', {
@@ -380,13 +381,12 @@ export default {
           type: 'info',
           showClose: false
         }).then(() => {
-          this.$router.go(0)
+          // this.$router.go(0)
         })
-        console.log(response)
       })
       this.dialogVisible = false
       console.log(row.equipmentId)
-      this.reload()
+      // this.reload()
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
@@ -413,6 +413,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
@@ -478,19 +479,10 @@ export default {
 .block {
   text-align: center;
 }
-/deep/.el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
-  height: auto;
-  width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-}
+</style>
+<style  lang="less">
+/* //需要覆盖的组件样式 */
+// .el-scrollbar /deep/
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;

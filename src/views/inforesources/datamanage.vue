@@ -361,7 +361,7 @@ export default {
                 localAccessMode: '', // 本地
                 userLevel: '', // 级别权限
                 remoteAccessMode: '', // 远程
-                createData: '', // 创建时间
+                createDate: '', // 创建时间
                 other: '' // 其他
               }
               appSystemUserData.userName = Object.values(outdata[index])[0]
@@ -369,7 +369,7 @@ export default {
               appSystemUserData.userLevel = Object.values(outdata[index])[2]
               appSystemUserData.remoteAccessMode = Object.values(outdata[index])[5]
               appSystemUserData.localAccessMode = Object.values(outdata[index])[4]
-              appSystemUserData.createData = Object.values(outdata[index])[6]
+              appSystemUserData.createDate = Object.values(outdata[index])[6]
               appSystemUserData.other = Object.values(outdata[index])[7]
               this.appSystemUser.push(appSystemUserData)
             } else {

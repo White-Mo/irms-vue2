@@ -167,7 +167,7 @@ export default {
       initdata: ['123'],
       department: '',
       inputValue: '',
-      departmentname: '',
+      postname: '',
       input3: '',
       ifUpdate: false,
       listLoading: true,
@@ -175,17 +175,22 @@ export default {
       basicvalue: [
         {
           value: 'departmentName',
-          label: '部门名称'
+          label: '部门名称',
         },
         {
           value: 'departmentCode',
           label: '部门代码'
+        },
+        {
+          value: 'posName',
+          label: '所属单位'
         }
       ],
       value: '',
       labels: {
         departmentName: '部门名称',
-        departmentCode: '部门代码'
+        departmentCode: '部门代码',
+        postName:'所属单位'
       }
     }
   },
