@@ -355,6 +355,7 @@ export default {
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
+        console.log(this.list)
         this.listLoading = false
       })
     },
