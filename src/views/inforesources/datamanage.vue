@@ -55,29 +55,29 @@
         <!--            />-->
         <!--          </el-select>-->
         <!--        </el-form-item>-->
-        <div class="uploadCard">
-          <el-upload
-            :limit="5"
-            :on-exceed="handleExceed"
-            ref="myUpload"
-            class="upload-demo"
-            action=""
-            :multiple="true"
-            :on-change="handleChange"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="fileList"
-            :auto-upload="false"
-          >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5个。</div>
-          </el-upload>
-        </div>
       </el-form>
+      <div class="uploadCard">
+        <el-upload
+          :limit="5"
+          :on-exceed="handleExceed"
+          ref="myUpload"
+          class="upload-demo"
+          action=""
+          :multiple="true"
+          :on-change="handleChange"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5个。</div>
+        </el-upload>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+<!--        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
       </div>
     </el-dialog>
   </div>
@@ -309,6 +309,8 @@ export default {
           message: '文件上传成功！',
           type: 'success'
         })
+      }).catch((err) => {
+        console.log(err)
       })
       this.equipments = []
       this.$refs.myUpload.clearFiles()
