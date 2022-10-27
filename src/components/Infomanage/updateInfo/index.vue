@@ -228,17 +228,28 @@ export default {
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
       },
-      configLable: { project_name: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
+      // configLable: { project_name: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
+      // softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
+      // networkLable: { network_card_name: '网卡', ip_address: 'IP地址', switch_info: '端口', network_card_port: '交换机', mAC_address: 'MAC地址' },
+      // protocolPortLable: { protocol_name: '协议', app_name: '应用名称', network_card_port: '端口' },
+      // appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
+      // appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      // appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
+      // appAccessRightsLable: { lan_intranet: '内网', industry_network: '行内网', intranet: '互联网', other: '其他' },
+      // appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
+      // appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
+      // appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
+      configLable: { projectName: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      networkLable: { network_card_name: '网卡', ip_address: 'IP地址', switch_info: '端口', network_card_port: '交换机', mAC_address: 'MAC地址' },
-      protocolPortLable: { protocol_name: '协议', app_name: '应用名称', network_card_port: '端口' },
+      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
+      protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
       appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
-      appAccessRightsLable: { lan_intranet: '内网', industry_network: '行内网', intranet: '互联网', other: '其他' },
+      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
-      appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
+      appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
       // KeySet: {
       //   config: ['project_name', 'frequency', 'corenessOrCapacity', 'quantity'],
       //   software: ['project', 'projectame', 'edition', 'type'],
@@ -340,7 +351,7 @@ export default {
         for (const key in item) {
           if (Object.hasOwnProperty.call(item, key)) {
             const e = item[key]
-            if (e.length !== 0) {
+            if (e !== null && e.length !== 0) {
               this.checkKey(key, e)
             }
           }
@@ -388,81 +399,34 @@ export default {
     back() {
       this.$emit('changeDiv', '0')
     },
-    checkKey(e, value) {
-      for (const key in this.equipment) {
-        if (Object.hasOwnProperty.call(this.equipment, key)) {
-          if (e.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
-            console.log(value)
-            this.equipment[key] = value
-          }
-        }
-      }
-    },
-    handleData() {
-      let arr = []
-      for (const equip in this.equipment) {
-        if (Object.hasOwnProperty.call(this.equipment, equip)) {
-          if (this.equipment[equip].length !== undefined) {
-            // arr = this.changeKey(this.equipment[equip], this.KeySet[equip])
-            arr = this.changeName(this.equipment[equip], this.KeySet[equip])
-            console.log(arr)
-            this.equipment[equip] = arr
-          }
-        }
-      }
-    },
-    changeKey(arr, key) {
-      console.log(arr)
-      const newArr = []
-      arr.forEach((item, index) => {
-        const newObj = {}
-        for (const k in item) {
-          for (let i = 0; i < key.length; i++) {
-            if (key[i].toLowerCase() === this.handleString(k).toLowerCase()) {
-              newObj[key[i]] = item[k]
-            } else {
-              newObj[k] = item[k]
+    checkKey(listname, value) {
+      console.log(value)
+      const a = this.handleList(listname)
+      const arr = []
+      if (a !== -1) {
+        const objKey = { ...this.equipment[a][0] }
+        value.forEach(e => {
+          const obj = { ...objKey }
+          for (const k in obj) {
+            if (Object.hasOwnProperty.call(obj, k)) {
+              obj[k] = e[k] === undefined ? '' : e[k]
             }
           }
-        }
-        newArr.push(newObj)
-      })
-      console.log('-------------------------')
-      console.log(newArr)
-      return newArr
-    },
-    changeName(arr, names) {
-      const newArr = []
-      arr.forEach((item) => {
-        const objL = Object.entries(item)
-        objL.forEach((ite, i) => {
-          // if (names[i] === undefined) return
-          // console.log(this.handleString(ite[0]).toLowerCase())
-          // if (names[i].toLowerCase() !== this.handleString(ite[0]).toLowerCase()) return
-          const field = this.handleField(ite[0], names)
-          if (field === -1) return
-          ite[0] = field
+          console.log(obj)
+          arr.push(obj)
         })
-        item = Object.fromEntries(objL)
-        newArr.push(item)
-      })
-      return newArr
+        this.equipment[a] = arr
+      }
     },
-    handleField(key, keys) {
-      for (let i = 0; i < keys.length; i++) {
-        if (key.indexOf('_') === -1) return -1
-        if (keys[i].toLowerCase() === this.handleString(key).toLowerCase()) return keys[i]
+    handleList(listname) {
+      for (const key in this.equipment) {
+        if (Object.hasOwnProperty.call(this.equipment, key)) {
+          if (listname.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+            return key
+          }
+        }
       }
       return -1
-    },
-    handleString(value) {
-      var re = /_(\w)/g
-      if (value.indexOf('_') !== -1) {
-        value = value.replace(re, function($0, $1) {
-          return $1.toLowerCase()
-        })
-      }
-      return value
     }
   }
 }
