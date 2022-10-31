@@ -211,7 +211,8 @@ export default {
       row: {},
       list: null,
       total: 0,
-      currentPage1: 5,
+      start: 0,
+      limit:10,
       DataName: 'all',
       keyname: [],
       initname: ['123'],
@@ -339,8 +340,8 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: '',
-        start: 0,
-        limit: 5,
+        start: this.start,
+        limit: this.limit,
       }
       const numparams = {
         dataName: this.initname,
@@ -390,14 +391,16 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.limit=val
     },
     handleCurrentChange(val) {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: this.t,
-        start: val,
-        limit: 10,
+        // status: "this.t",
+        status: '',
+        start: (val-1)*this.limit,
+        limit: this.limit,
       }
       getList(params).then((response) => {
         this.list = response.data.items

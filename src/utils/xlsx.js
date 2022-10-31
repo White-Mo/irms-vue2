@@ -115,8 +115,10 @@ function getBaseinfo(outdata) {
   equipmentBaseInfo.brandModelName = underfindTrans(Object.values(outdata[6])[2] + Object.values(outdata[6])[3], '型号') // 型号
   equipmentBaseInfo.machineRoomName = underfindTrans(Object.values(outdata[6])[4] + Object.values(outdata[6])[5], '安装位置') // 安装位置
   var cabinetName = Object.values(outdata[6])[6] + Object.values(outdata[6])[7]
-  cabinetName = cabinetName.split('-')[0]
-  equipmentBaseInfo.cabinetName = underfindTrans(cabinetName, '机柜号')
+  const data = cabinetName.split('-')
+  equipmentBaseInfo.cabinetUStart = underfindTrans(data[1])
+  equipmentBaseInfo.cabinetUEnd = underfindTrans(data[2])
+  equipmentBaseInfo.cabinetName = underfindTrans( data[0], '机柜号')
   equipmentBaseInfo.serialNumber = underfindTrans(Object.values(outdata[8])[0] + Object.values(outdata[8])[1], '序列号') // 序列号
   equipmentBaseInfo.guaranteePeriod = underfindTrans(Object.values(outdata[8])[2] + Object.values(outdata[8])[3], '保修期') // 保修期
   equipmentBaseInfo.onlineTime = underfindTrans(Object.values(outdata[8])[4] + Object.values(outdata[8])[5], '上线时间') // 上线时间
@@ -288,7 +290,7 @@ function appSoftwareFir(outdata, excelIndex) {
             localAccessMode: '', // 本地
             userLevel: '', // 级别权限
             remoteAccessMode: '', // 远程
-            createData: '', // 创建时间
+            createDate: '', // 创建时间
             other: '' // 其他
           }
           appSystemUserData.userName = Object.values(outdata[index])[0]
