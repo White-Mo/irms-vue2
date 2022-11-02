@@ -53,7 +53,7 @@
           </el-col>
         </el-row>
 
-        <div class="grid-content">
+        <div class="grid-content form_table_class" >
           <el-table
             ref="multipleTable"
             :data="tableData"
@@ -74,6 +74,8 @@
               :width="flexColumnWidth(item.value, item.label)"
             />
           </el-table>
+          <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
+          <el-alert v-if="isMore" title="没有更多啦！" type="warning" center show-icon></el-alert>
           <!-- <div class="tabListPage" style="text-align: center">
             <el-pagination
               @size-change="handleSizeChange"
@@ -118,6 +120,11 @@
             </span>
           </el-dialog>
         </div>
+        <div class="tabListPage" style="text-align: center">
+          <h3>
+            共{{totalCount}}条数据
+          </h3>
+        </div>
       </div>
     </div>
   </div>
@@ -154,6 +161,10 @@ export default {
       radio: -1,
       basic_info_id: '',
       dataname: [
+        {
+          value: 'num',
+          label: '#'
+        },
         {
           value: 'postName',
           label: '所属单位'
@@ -227,8 +238,16 @@ export default {
           label: '保修期'
         }
       ],
-
+      uploadData: {
+        //懒加载节点信息
+        tree: null,
+        treeNode: null,
+        resolve: null
+      },
+      isflag: false,
+      isMore: false,
       DataName: 'all',
+      ClientHeight:0,
       // 统计数据
       StatisticsData: []
     }
@@ -239,6 +258,46 @@ export default {
 
   mounted() {
     this.get_data()
+    document.getElementsByClassName('form_table_class')[0].addEventListener('scroll',this.load)
+  },
+  destroyed() {
+    document.removeEventListener('scroll',this.load)
+  },
+  watch:{
+    'ClientHeight':function(curVal,oldVal){
+      console.log(curVal,oldVal,'----------------------')
+      console.log(this.tableData.length , this.totalCount)
+
+      // this.tableData = this.tableData.concat(this.tableData)
+      // this.get_data()
+      if (this.DataName === 'all' || this.DataName.length === 0) {
+        console.log(this.DataName)
+        this.initname = ['111']
+      } else {
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
+      }
+      const params = {
+        dataName: this.initdata,
+        dataValue: this.inputValue,
+        start: this.tableData.length ? 0: this.tableData.length,
+        limit: 15,
+        status: ''
+      }
+      getList(params).then((response) => {
+        this.isflag = false
+        console.log(response)
+        if(this.tableData.length < this.totalCount){
+          let num = this.tableData.length
+          for(let i of response.data.items){
+            i["num"] = num
+            num++
+          }
+          this.tableData = this.tableData.concat(response.data.items)
+          // this.totalCount = response.data.total
+          }
+
+      })
+    }
   },
   methods: {
     get_data() {
@@ -246,14 +305,13 @@ export default {
         console.log(this.DataName)
         this.initname = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.DataName)))
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
-        start: 0,
-        limit: 10,
+        start: this.tableData.length ? 0: this.tableData.length,
+        limit: 15,
         status: ''
       }
       const numparams = {
@@ -266,17 +324,30 @@ export default {
       })
       getList(params).then((response) => {
         console.log(response)
-        this.tableData = response.data.items
+        let num = this.tableData.length
+        for(let i of response.data.items){
+          i["num"] = num
+          num++
+        }
+        this.tableData = this.tableData.concat(response.data.items)
         // this.totalCount = response.data.total
       })
-      // getList().then((res) => {
-      //   console.log(res)
-      // getExcelDemo1(res.data.items)
-      // getExcelDemo2()
-      // })
-      // getExcelDemo3(StatisticsData)
-    },
 
+    },
+    load (e) {
+      if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
+        console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
+        if(this.tableData.length >= this.totalCount){
+          this.isMore = true
+          setTimeout(()=>{
+            this.isMore = false
+          },1000)
+        }else{
+          this.isflag = true
+          this.ClientHeight = e.target.scrollHeight
+        }
+      }
+    },
     getStatisticsExcel() {
       const item_list = [
         'getEquipmentCount',
@@ -388,7 +459,7 @@ export default {
       arr.push(label) // 把每列的表头也加进去算
       // console.log(arr)
       // // 2.计算每列内容最大的宽度 + 表格的内间距（依据实际情况而定）
-      return this.getMaxLength(arr) + 50 + 'px'
+      return this.getMaxLength(arr) + 80 + 'px'
     },
 
     /**
@@ -492,6 +563,15 @@ export default {
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
+}
+.form_table_class{
+  overflow-y: scroll;
+  height: 50rem;
+}
+.tabListPage h3 {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    margin: 0.1rem;
 }
 .row-bg {
   padding: 10px 0;
