@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">单位管理</span>
+              <span style="color: #ffffff">机房管理</span>
             </div>
           </el-col>
         </el-row>
@@ -310,7 +310,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
+<style  lang="less">
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {

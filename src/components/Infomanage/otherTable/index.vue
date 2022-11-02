@@ -2,8 +2,10 @@
   <div class="shadows">
     <div class="shadows paddingLeft"><slot /></div>
     <div class="content">
-      <el-button @click="addLine">新增行</el-button>
-      <el-button v-show="form.length !== 1" @click="delLine">删除行</el-button>
+      <div v-if="hh !== '2' && hh !== '3'">
+        <el-button @click="addLine">新增行</el-button>
+        <el-button v-show="form.length !== 1" @click="delLine">删除行</el-button>
+      </div>
       <div class="table">
         <el-table
           :data="form"
@@ -13,7 +15,7 @@
         >
           <af-table-column v-for="(value,key,index) in lable" :key="index" align="center" :label="value">
             <template slot-scope="scope">
-              <el-input v-model="scope.row[key]" />
+              <el-input v-model="scope.row[key]" :disabled="hh==='2'" />
             </template>
           </af-table-column>
         </el-table>
@@ -25,6 +27,13 @@
 <script>
 export default {
   props: {
+    hh: {
+      type: String,
+      default() {
+        return '0'
+      },
+      required: false
+    },
     form: {
       type: Array,
       required: true
