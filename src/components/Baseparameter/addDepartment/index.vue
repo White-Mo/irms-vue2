@@ -1,23 +1,35 @@
 <template>
   <div>
     <div class="source">
-      <el-page-header content="添加单位" @back="back" />
+      <el-page-header content="添加部门" @back="back" />
     </div>
     <div class="source">
       <el-row>
-        <el-form ref="postForm" :model="postForm = post" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
-          <el-form-item label="单位名称" prop="postName">
-            <el-col :span="10">
-              <el-input v-model="postForm.postName" />
+        <el-form ref="departmentForm" :model="departmentForm = department" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
+          <el-form-item>
+            <el-col :span="5" :offset="1">
+              <div class="selectLabel">单位</div>
+              <el-select v-model="departmentForm.postName" placeholder="请选择">
+                <el-option
+                  v-for="item in postAll"
+                  :key="item.value"
+                  :value="item.postName"
+                />
+              </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="单位代码" prop="postCode">
+          <el-form-item label="部门名称" prop="departmentName">
             <el-col :span="10">
-              <el-input v-model="postForm.postCode" />
+              <el-input v-model="departmentForm.departmentName" />
+            </el-col>
+          </el-form-item>
+          <el-form-item label="部门代码" prop="departmentCode">
+            <el-col :span="10">
+              <el-input v-model="departmentForm.departmentCode" />
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit(postForm)">添加单位</el-button>
+            <el-button type="primary" @click="onSubmit('departmentForm')">添加部门</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -26,19 +38,33 @@
 </template>
 
 <script>
-import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
+import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
+import {getDepartment, getPost} from "@/api/select";
 
 export default {
-  name: 'AddPost',
+  name: 'AddDepartment',
+  created() {
+    getPost().then(response => {
+      console.log(response)
+      this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          console.log(element.postName)
+          this.department.postName = element.postName
+          this.department.postId=element.postId
+        }
+      })
+    })
+  },
   data() {
     var checkName = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('单位不能为空'))
+        return callback(new Error('部门不能为空'))
       } else {
         this.getNameRules()
         if (!this.nameRules) {
-          callback(new Error('单位已存在，请重新输入'))
-          this.post.postName = ''
+          callback(new Error('部门已存在，请重新输入'))
+          // this.department.departmentName = ''
         } else {
           callback()
         }
@@ -47,12 +73,12 @@ export default {
     }
     var checkCode = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('单位代码不能为空'))
+        return callback(new Error('部门代码不能为空'))
       } else {
         this.getCodeRules()
         if (!this.codeRules) {
-          callback(new Error('单位代码已存在，请重新输入'))
-          this.post.postCode = ''
+          callback(new Error('部门代码已存在，请重新输入'))
+          // this.department.departmentCode = ''
         } else {
           callback()
         }
@@ -62,19 +88,22 @@ export default {
     return {
       nameRules: false,
       codeRules: false,
-      post: {
-        postName: '',
-        postCode: ''
+      postAll: [],
+      department: {
+        departmentName: '',
+        departmentCode: '',
+        postId:'',
+        postName:''
       },
       rules: {
-        postName: [
-          { required: true, message: '请输入单位名称', trigger: 'blur' },
+        departmentName: [
+          { required: true, message: '请输入部门名称', trigger: 'blur' },
           {
             validator: checkName, trigger: 'blur'
           }
         ],
-        postCode: [
-          { required: true, message: '请输入单位代码', trigger: 'blur' },
+        departmentCode: [
+          { required: true, message: '请输入部门代码', trigger: 'blur' },
           {
             validator: checkCode, trigger: 'blur'
           }
@@ -89,9 +118,8 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const post = { ...this.post }
-          createPost(post).then(res => {
-            // this.$router.go(0)
+          const department = { ...this.department }
+          createDepartment(department).then(res => {
             this.$alert(res.data, '提示', {
               confirmButtonText: '确定',
               type: 'info',
@@ -112,9 +140,9 @@ export default {
     // 验证用户名是否存在
     getNameRules() {
       const params = {
-        postName: this.post.postName
+        departmentName: this.department.departmentName
       }
-      checkPostName(params).then((res) => {
+      checkDepartmentName(params).then((res) => {
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
@@ -124,16 +152,16 @@ export default {
     },
     getCodeRules() {
       const params = {
-        postCode: this.post.postCode
+        departmentCode: this.department.departmentCode
       }
-      checkPostCode(params).then((res) => {
+      checkDepartmentCode(params).then((res) => {
         if (res.data.valid === true) {
           this.codeRules = true
         } else {
           this.codeRules = false
         }
       })
-    }
+    },
   }
 }
 </script>

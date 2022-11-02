@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { getPostDepartmentByPage } from '@/api/baseparameter'
+import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
 import addDepartment from '@/components/Baseparameter/addDepartment'
 
 export default {
@@ -232,7 +232,20 @@ export default {
       console.log(index, row)
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      this.$alert(response.data, '提示', {
+        confirmButtonText: '确定',
+        type: 'info',
+      }).then(()=>{
+        delPostDepartment(row.departmentId).then((response) => {
+          this.$alert(response.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.$router.go(0)
+          })
+        })
+      })
     },
     updateIfupdate(e) {
       this.ifUpdate = e

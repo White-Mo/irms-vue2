@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { getPostByPage } from '@/api/baseparameter'
+import {delPost, delPostDepartment, getPostByPage} from '@/api/baseparameter'
 import AddPost from '@/components/Baseparameter/addPost'
 
 export default {
@@ -227,7 +227,20 @@ export default {
       console.log(index, row)
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      this.$alert(response.data, '提示', {
+        confirmButtonText: '确定',
+        type: 'info',
+      }).then(()=>{
+        delPost(row.postId).then((response) => {
+          this.$alert(response.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.$router.go(0)
+          })
+        })
+      })
     },
     updateIfupdate(e) {
       this.ifUpdate = e
