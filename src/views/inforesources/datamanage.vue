@@ -74,7 +74,7 @@
           :auto-upload="false"
         >
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button style="margin-left: 10px;" size="small" type="success" @click="uploadFunc">上传文件</el-button>
+          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
           <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5个。</div>
         </el-upload>
       </div>
@@ -105,7 +105,7 @@ export default {
       //   label: '汇总表'
       // }],
       name: '',
-      dialogFormVisible: false,
+      dialogFormVisible: false, 
       tableData: [{
         date: '1',
         name: 'irms'
@@ -133,8 +133,6 @@ export default {
             type: 'warning',
             message: '附件格式错误，请重新上传！'
           })
-          this.$refs.myUpload.clearFiles() // 清空 filelist
-          // this.dialogFormVisible = false // 关闭痰喘
         }
       } else {
         this.$message({
@@ -142,53 +140,62 @@ export default {
           message: '请上传附件！'
         })
       }
-      if (this.fileList.length > 0) {
-        this.submitUpload()
-      }
     },
     // 上传文件
-    async submitUpload() {
+    async submitUpload(fileList) {
       if (this.fileList.length === 0) {
         this.$message({
           type: 'error',
           message: '请选择文件！'
         })
       } else {
-        var index = this.fileList.length - 1
-        const outdata = await importfile(this.fileList[index], this.value)
-        const equipment = getEquipment(outdata)
-        this.excelData.equipments.push(equipment)
+        for(let index = 0;index < this.fileList.length;index++){
+          const outdata = await importfile(this.fileList[index], this.value)
+          const {equipment,readStatus} = getEquipment(outdata)
+          if(readStatus == 22) {
+            this.excelData.equipments.push(equipment)
+          }
+        }
       }
+      this.uploadFunc()
     },
     // 发送请求
     uploadFunc() {
       this.excelData.total = this.excelData.equipments.length
       this.dialogFormVisible = false
       this.loading = true
-      const total = this.excelData.total
-      const equipments = this.excelData.equipments
-      importExcel({
-        equipments, total
-      }).then((res) => {
-        console.log(res.data)
-        this.loading = false
-        this.$message({
-          message: '文件上传成功！',
-          type: 'success'
+      // console.log(this.excelData)
+      if(this.excelData.equipments.length > 0) {
+        importExcel(this.excelData).then((res) => {
+          this.loading = false
+          this.$message({
+            message: '文件上传成功！',
+            type: 'success'
+          })
+        }).finally(() =>{
+          this.excelData = {
+          total: 0,
+          equipments: []
+        }
+          this.fileList = []
+          this.loading = false
         })
-      }).finally(() => {
-        this.fileList = []
+      }else{
         this.loading = false
-      })
+        this.fileList = []
+        this.excelData = {
+          total: 0,
+          equipments: []
+        }
+      }
     },
     // 手动移除
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
+    handleRemove(fileList) {
+      this.fileList = fileList
     },
     // 数量限制
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-      this.$refs.myUpload.clearFiles()
+      this.$message.warning(`当前限制选择 5 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       this.fileList = []
     }
   }
