@@ -91,6 +91,7 @@ import {
   importfile
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
+import {mapGetters} from "vuex";
 export default {
   name: 'Dashboard',
   data() {
@@ -105,7 +106,7 @@ export default {
       //   label: '汇总表'
       // }],
       name: '',
-      dialogFormVisible: false, 
+      dialogFormVisible: false,
       tableData: [{
         date: '1',
         name: 'irms'
@@ -122,6 +123,7 @@ export default {
   methods: {
     // 选择文件
     handleChange(file) {
+      debugger
       const types = file.name.split('.')[1]
       this.fileTemp = file.raw
       if (this.fileTemp) {
@@ -151,7 +153,8 @@ export default {
       } else {
         for(let index = 0;index < this.fileList.length;index++){
           const outdata = await importfile(this.fileList[index], this.value)
-          const {equipment,readStatus} = getEquipment(outdata)
+          const postName = this.$store.state.user.roleid
+          const {equipment,readStatus} = getEquipment(outdata,postName)
           if(readStatus == 22) {
             this.excelData.equipments.push(equipment)
           }

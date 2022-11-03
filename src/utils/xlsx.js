@@ -35,12 +35,12 @@ export function importfile(obj, head) {
   })
 }
 
-export function getEquipment(outdata) {
+export function getEquipment(outdata,postName) {
   const equipment = {}
   let excelIndex = 11
-  const {equipmentBaseInfo,readStatus:readStatus} = getBaseinfo(outdata)
+  const {equipmentBaseInfo,readStatus:readStatus} = getBaseinfo(outdata,postName)
   equipment.equipmentBaseInfo = equipmentBaseInfo
-  
+
   const { softwares, configs, excelIndex: configIndex } = getConfig(outdata, excelIndex)
   excelIndex = configIndex
   equipment.config = configs
@@ -68,11 +68,11 @@ export function getEquipment(outdata) {
 }
 
 // 基本信息
-function getBaseinfo(outdata) {
+function getBaseinfo(outdata,postName) {
   const equipmentBaseInfo = {
     equipmentId: '', //  设备id
     equipmentTypeName: '', // 设备类型
-    postName: '中国地震局台网中心', // 单位名称
+    postName: '', // 单位名称
     cabinetUStart: '', // 机柜起点
     cabinetUEnd: '', // 机柜终点
     shelfOff: '', // 是否可下架
@@ -102,6 +102,7 @@ function getBaseinfo(outdata) {
     onlineTime: '', // 上线时间
     offlineTime: '' // 下线时间
   }
+  equipmentBaseInfo.postName = postName
   const {status:equipmentName,readStatus:readStatus1} = underfindTrans(Object.values(outdata[0])[2] + Object.values(outdata[0])[3], '设备名称',0)// 设备名称
   equipmentBaseInfo.equipmentName = equipmentName
 
@@ -112,7 +113,7 @@ function getBaseinfo(outdata) {
   equipmentBaseInfo.hostName = hostName
 
   const {status:departmentName,readStatus:readStatus4} = underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门',readStatus3) // 部门
-  equipmentBaseInfo.departmentName = departmentName  
+  equipmentBaseInfo.departmentName = departmentName
 
   const Serial = Object.values(outdata[1])[8].split('-')
   if(Serial.length != 4){
@@ -148,7 +149,7 @@ function getBaseinfo(outdata) {
   equipmentBaseInfo.brandModelName = brandModelName
 
   const {status:machineRoomName, readStatus: readStatus11} = underfindTrans(Object.values(outdata[6])[5] + Object.values(outdata[6])[6], '安装位置',readStatus10) // 安装位置
-  equipmentBaseInfo.machineRoomName = machineRoomName 
+  equipmentBaseInfo.machineRoomName = machineRoomName
   var cabinetName = Object.values(outdata[6])[7] + Object.values(outdata[6])[8]
   const data = cabinetName.split('-')
   if(data.length != 3){
@@ -170,10 +171,11 @@ function getBaseinfo(outdata) {
 
   const {status:onlineTime, readStatus: readStatus14}  =underfindTrans(Object.values(outdata[8])[5] + Object.values(outdata[8])[6], '上线时间',readStatus13) // 上线时间
   equipmentBaseInfo.onlineTime = onlineTime
- 
+
   const {status:offlineTime, readStatus: readStatus15} = underfindTrans(Object.values(outdata[8])[7] + Object.values(outdata[8])[8], '下线时间',readStatus14) // 下线时间
   equipmentBaseInfo.offlineTime =  offlineTime
-
+  console.log(equipmentBaseInfo)
+  debugger
   return {equipmentBaseInfo, readStatus: readStatus15}
 }
 

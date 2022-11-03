@@ -46,8 +46,15 @@ import {
   importfile
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
+
+import { mapState } from "vuex";
 export default {
   name: 'Dashboard',
+  computed: {
+    ...mapState({
+       print:state=>state.print.all
+    })
+   },
   data() {
     return {
       value: '信息资产基础信息表',
@@ -88,7 +95,7 @@ export default {
       }
     },
     // 上传文件
-    async submitUpload(fileList) {
+    async submitUpload() {
       if (this.fileList.length === 0) {
         this.$message({
           type: 'error',
@@ -107,6 +114,8 @@ export default {
     },
     // 发送请求
     uploadFunc() {
+      console.log(this.$store.state['user']['role_id'])
+      debugger
       this.excelData.total = this.excelData.equipments.length
       this.dialogFormVisible = false
       this.loading = true
