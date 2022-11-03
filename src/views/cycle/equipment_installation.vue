@@ -60,7 +60,7 @@ export default {
       value: '信息资产基础信息表',
       loading: false,
       name: '',
-      dialogFormVisible: false, 
+      dialogFormVisible: false,
       tableData: [{
         date: '1',
         name: 'irms'
@@ -104,7 +104,8 @@ export default {
       } else {
         for(let index = 0;index < this.fileList.length;index++){
           const outdata = await importfile(this.fileList[index], this.value)
-          const {equipment,readStatus} = getEquipment(outdata)
+          const postName = this.$store.state.user.roleid
+          const {equipment,readStatus} = getEquipment(outdata,postName)
           if(readStatus == 22) {
             this.excelData.equipments.push(equipment)
           }
