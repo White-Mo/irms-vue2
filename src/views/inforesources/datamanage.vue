@@ -11,7 +11,8 @@
           <span><i class="el-icon-upload2" /> 数据库管理</span>
         </div>
         <el-row :gutter="20" style="margin-bottom: 2vh">
-          <el-col :span="4"><el-button type="primary" size="small" @click="dialogFormVisible = true">导入Excel文件</el-button></el-col>
+          <el-col :span="2"><el-button type="primary" size="large" @click="dialogFormVisible = true">导入Excel文件</el-button></el-col>
+          <el-col :span="4"><el-button type="success" size="large" @click="downloadFile()">下载模板</el-button></el-col>
         </el-row>
         <el-table
           :data="tableData"
@@ -200,6 +201,16 @@ export default {
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 5 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       this.fileList = []
+    },
+    downloadFile() {
+      // templatefile.xlsx存储在public文件夹下
+      let a = document.createElement('a')
+      a.href = './templatefile.xlsx'
+      a.download = '信息资产基础信息表(模板).xlsx'
+      a.style.display = 'none'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
     }
   }
 }
