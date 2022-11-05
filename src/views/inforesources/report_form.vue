@@ -58,6 +58,7 @@
             ref="multipleTable"
             :data="tableData"
             stripe
+            height="750"
             border
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             @selection-change="handleSelectionChange"
@@ -68,6 +69,7 @@
               :key="index"
               :prop="item.value"
               :label="item.label"
+              :formatter="item.formatter"
               header-align="center"
               align="center"
               style="width: 100%"
@@ -158,7 +160,7 @@ export default {
       select_teble_type: -1,
       select_teble_type2: '',
       inputValue: '',
-      initdata: ['123'],
+      initname: ['123'],
       radio: -1,
       basic_info_id: '',
       dataname: [
@@ -200,11 +202,51 @@ export default {
         },
         {
           value: 'onlineTime',
-          label: '上线时间'
+          label: '上线时间',
+          formatter:function (row) {
+            var time=row.onlineTime
+            if(!time){
+              return time
+            }
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date=new Date(time);
+            var year=date.getFullYear();
+            /* 在日期格式中，月份是从0开始的，因此要加0
+             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+             * */
+            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            return year+"-"+month+"-"+day;
+          }
         },
         {
           value: 'offlineTime',
-          label: '下线时间'
+          label: '下线时间',
+          formatter:function (row) {
+            var time=row.offlineTime
+            if(!time){
+              return time
+            }
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date=new Date(time);
+            var year=date.getFullYear();
+            /* 在日期格式中，月份是从0开始的，因此要加0
+             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+             * */
+            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            return year+"-"+month+"-"+day;
+          }
         },
         {
           value: 'hostName',
@@ -259,7 +301,7 @@ export default {
 
   mounted() {
     this.get_data()
-    document.getElementsByClassName('form_table_class')[0].addEventListener('scroll',this.load)
+    document.getElementsByClassName('el-table__body-wrapper')[0].addEventListener('scroll',this.load)
   },
   destroyed() {
     document.removeEventListener('scroll',this.load)
@@ -275,13 +317,12 @@ export default {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initname,
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
-        limit: this.totalCount < this.tableData.length + 3 ? this.totalCount - this.tableData.length : 3,
+        limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
         status: ''
       }
-      console.log(this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15)
       if(this.tableData.length < this.totalCount){
         console.log("提交请求",params)
         getList(params).then((response) => {
@@ -294,7 +335,6 @@ export default {
               num++
             }
             this.tableData = this.tableData.concat(response.data.items)
-            // this.totalCount = response.data.total
             }
         })
       }
@@ -310,10 +350,10 @@ export default {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initname,
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
-        limit: 6,
+        limit: 15,
         status: ''
       }
       const numparams = {
@@ -334,7 +374,6 @@ export default {
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
-        // this.totalCount = response.data.total
       })
 
     },
@@ -346,23 +385,22 @@ export default {
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
-      const params = {
-        dataName: this.initdata,
-        dataValue: this.inputValue,
-        start: this.tableData.length ? this.tableData.length : 0,
-        limit: 6,
-        status: ''
-      }
+
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: ''
       }
+      const params = {
+        dataName: this.initname,
+        dataValue: this.inputValue,
+        start: this.tableData.length ? this.tableData.length : 0,
+        limit: 15,
+        status: ''
+      }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
       })
-      console.log("提交请求2",params)
-
       getList(params).then((response) => {
         console.log(response)
         let num = this.tableData.length + 1
@@ -371,7 +409,6 @@ export default {
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
-        // this.totalCount = response.data.total
       })
 
     },
@@ -385,17 +422,6 @@ export default {
           },1000)
         }
         this.ClientHeight = e.target.scrollHeight
-        // if(this.tableData.length >= this.totalCount){
-        //   this.isMore = true
-        //   setTimeout(()=>{
-        //     this.isMore = false
-        //   },1000)
-        // }else{
-        //   console.log("----------",this.ClientHeight,e.target.scrollHeight)
-        //   this.isflag = true
-        //   this.ClientHeight = e.target.scrollHeight
-
-        // }
       }
     },
     getStatisticsExcel() {
@@ -432,16 +458,9 @@ export default {
     },
     exportEscel(model) {
       if (model === 0) {
-        if (this.DataName === 'all' || this.DataName.length === 0) {
-          console.log(this.DataName)
-          this.initname = ['111']
-        } else {
-          // console.log(JSON.parse(JSON.stringify(this.DataName)))
-          this.initname = JSON.parse(JSON.stringify(this.DataName))
-        }
         const params = {
-          dataName: this.initdata,
-          dataValue: this.inputValue,
+          dataName: ['111'],
+          dataValue: '',
           start: 0,
           limit: this.totalCount,
           status: ''
@@ -506,10 +525,11 @@ export default {
       // console.log('prop', prop)
       // 1.获取该列的所有数据
       const arr = this.tableData.map((x) => x[prop])
-      arr.push(label) // 把每列的表头也加进去算
+      // arr.push(label) // 把每列的表头也加进去算
+      arr.push(prop) // 把每列的表头也加进去算
       // console.log(arr)
       // // 2.计算每列内容最大的宽度 + 表格的内间距（依据实际情况而定）
-      return this.getMaxLength(arr) + 80 + 'px'
+      return this.getMaxLength(arr)*1.7 + 40 + 'px'
     },
 
     /**
@@ -614,13 +634,13 @@ export default {
   border-radius: 4px;
   min-height: 36px;
 }
-.form_table_class{
-  overflow-y: scroll;
-  height: 20rem;
-}
+// .form_table_class{
+//   // overflow-y: scroll;
+//   // height: 50rem;
+// }
 .tabListPage h3 {
     padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
+    padding-bottom: 0.5rem;
     margin: 0.1rem;
 }
 .row-bg {

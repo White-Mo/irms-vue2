@@ -226,7 +226,6 @@ export async function getExcelDemo2(data_list, data_num = 1){
             let item_data = data_list[data_index]
             let basic_data = await getbasic(item_data['equipmentId'])
             basic_data = basic_data['data']['items']
-
             // basicInfoAppBusiness_list 业务应用
             // basicInfoAppAccessRights_list 应用访问 权限
             // basicInfoAppLinksInfo_list 链接用户信息
@@ -1582,7 +1581,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
                     item = item.concat(['','','',''])
                 }else{
-                    item.push(basic_data['basicInfoConfig_list'][i]['project_name'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['projectName'])
                     item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
                     item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
                     item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
