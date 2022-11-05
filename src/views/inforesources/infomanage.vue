@@ -104,7 +104,7 @@
         </el-row>
         <el-table
           v-loading="listLoading"
-          :diisable="true"
+          :disable="true"
           :data="list"
           element-loading-text="Loading"
           border
@@ -113,14 +113,13 @@
         >
           <el-table-column type="index" />
           <af-table-column
-            v-for="(value,key,index) in labels"
+            v-for="(item,index) in dataname"
             :key="index"
+            :label="item.label"
+            :prop="item.value"
+            :formatter="item.formatter"
             align="center"
-            :label="value"
           >
-            <template slot-scope="scope">
-              {{ scope.row[key] }}
-            </template>
           </af-table-column>
           <el-table-column
             align="center"
@@ -132,34 +131,16 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 text
-                @click="handleDelete(scope.row)"
+                @click=handleDelete(scope.row)
               >删除</el-button>
-<!--              <el-dialog-->
-<!--                :append-to-body="true"-->
-<!--                title="删除提示"-->
-<!--                :visible.sync="dialogVisible"-->
-<!--                width="30%"-->
-<!--              >-->
-<!--                <span>-->
-<!--                  你确定要永久删除这条数据吗？-->
-<!--                </span>-->
-<!--                <template #footer>-->
-<!--                  <span class="dialog-footer">-->
-<!--                    <el-button @click="dialogVisible = false">Cancel</el-button>-->
-<!--                    <el-button-->
-<!--                      type="primary"-->
-<!--                      @click="handleDelete(scope.row)"-->
-<!--                    >-->
-<!--                      确认-->
-<!--                    </el-button>-->
-<!--                  </span>-->
-<!--                </template>-->
-<!--              </el-dialog>-->
             </template>
           </el-table-column>
         </el-table>
@@ -225,6 +206,10 @@ export default {
       singalInfo: {},
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备编号'
+        },
+        {
           value: 'postName',
           label: '所属单位'
         },
@@ -258,11 +243,45 @@ export default {
         },
         {
           value: 'onlineTime',
-          label: '上线时间'
+          label: '上线时间',
+          formatter:function (row) {
+            var time=row.onlineTime
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date=new Date(time);
+              var year=date.getFullYear();
+              /* 在日期格式中，月份是从0开始的，因此要加0
+               * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+               * */
+              var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+              var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+              var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+              var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+              var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year+"-"+month+"-"+day;
+            }
         },
         {
           value: 'offlineTime',
-          label: '下线时间'
+          label: '下线时间',
+          formatter:function (row) {
+            var time=row.offlineTime
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date=new Date(time);
+            var year=date.getFullYear();
+            /* 在日期格式中，月份是从0开始的，因此要加0
+             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+             * */
+            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            return year+"-"+month+"-"+day;
+          }
         },
         {
           value: 'hostName',
@@ -298,26 +317,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        postName: '所属单位',
-        departmentName: '所属部门',
-        equipmentTypeName: '设备类型',
-        equipmentName: '设备名',
-        brandName: '设备品牌',
-        businessSystemName: '业务系统',
-        machineRoomName: '安装位置',
-        cabinetName: '机柜编号',
-        onlineTime: '上线时间',
-        hostName: '主机名',
-        equipmentAdminName: '设备管理员',
-        equipmentAdminPhone: '设备管理员电话',
-        appAdminName: '应用管理员',
-        appAdminPhone: '应用管理员电话',
-        brandModelName: '型号',
-        serialNumber: '序列号',
-        guaranteePeriod: '保修期',
-        offlineTime: '下线时间'
-      }
     }
   },
   created() {
@@ -375,23 +374,33 @@ export default {
     },
     handleDelete(row) {
       console.log(row)
-      delEquipment(row.equipmentId).then((response) => {
-        this.active = 0
-        this.$alert(response.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          // this.$router.go(0)
+      this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        delEquipment(row.equipmentId).then((response) => {
+          this.active = 0
+          this.$alert(response.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.fetchData()
+          })
         })
-      })
-      this.dialogVisible = false
-      console.log(row.equipmentId)
-      // this.reload()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       const params = {
@@ -538,8 +547,5 @@ export default {
   display:inline-block;
   height:2rem;
   width:100%;
-}
-.el-button--primary {
-  height: 40px;
 }
 </style>

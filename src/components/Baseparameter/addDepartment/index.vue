@@ -6,10 +6,9 @@
     <div class="source">
       <el-row>
         <el-form ref="departmentForm" :model="departmentForm = department" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
-          <el-form-item>
-            <el-col :span="5" :offset="1">
-              <div class="selectLabel">单位</div>
-              <el-select v-model="departmentForm.postName" placeholder="请选择">
+          <el-form-item label="所属单位" prop="postName">
+            <el-col :span="10">
+              <el-select v-model="departmentForm.postName" @change="changePost">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -39,7 +38,7 @@
 
 <script>
 import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
-import {getDepartment, getPost} from "@/api/select";
+import {getPost} from "@/api/select";
 
 export default {
   name: 'AddDepartment',
@@ -57,37 +56,39 @@ export default {
     })
   },
   data() {
-    var checkName = (rule, value, callback) => {
+    var checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('部门不能为空'))
       } else {
-        this.getNameRules()
+        await this.getNameRules()
         if (!this.nameRules) {
           callback(new Error('部门已存在，请重新输入'))
           // this.department.departmentName = ''
-        } else {
+          } else {
           callback()
-        }
+          }
       }
       callback()
     }
-    var checkCode = (rule, value, callback) => {
+    var checkCode = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('部门代码不能为空'))
       } else {
-        this.getCodeRules()
+        await this.getCodeRules()
         if (!this.codeRules) {
           callback(new Error('部门代码已存在，请重新输入'))
           // this.department.departmentCode = ''
-        } else {
+          } else {
           callback()
-        }
+          }
       }
       callback()
     }
+
     return {
       nameRules: false,
       codeRules: false,
+      postRules:false,
       postAll: [],
       department: {
         departmentName: '',
@@ -96,6 +97,9 @@ export default {
         postName:''
       },
       rules: {
+        postName: [
+          {required:true,message: '请选择单位',trigger:'blur'},
+        ],
         departmentName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
           {
@@ -125,7 +129,7 @@ export default {
               type: 'info',
               showClose: false
             }).then(() => {
-              this.$router.go(0)
+              this.$emit('ifUpdateChange', false)
             })
             console.log(res)
           }).catch(err => {
@@ -138,11 +142,9 @@ export default {
       });
     },
     // 验证用户名是否存在
-    getNameRules() {
-      const params = {
-        departmentName: this.department.departmentName
-      }
-      checkDepartmentName(params).then((res) => {
+    async getNameRules() {
+      const department = { ...this.department }
+      await checkDepartmentName(department).then((res) => {
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
@@ -150,15 +152,20 @@ export default {
         }
       })
     },
-    getCodeRules() {
-      const params = {
-        departmentCode: this.department.departmentCode
-      }
-      checkDepartmentCode(params).then((res) => {
+    async getCodeRules() {
+      const department = { ...this.department }
+      await checkDepartmentCode(department).then((res) => {
         if (res.data.valid === true) {
           this.codeRules = true
         } else {
           this.codeRules = false
+        }
+      })
+    },
+    changePost(val) {
+      this.postAll.forEach(element => {
+        if (element.postName === val) {
+          this.department.postId=element.postId
         }
       })
     },

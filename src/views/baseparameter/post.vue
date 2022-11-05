@@ -100,10 +100,14 @@
           stripe
         >
           <el-table-column align="center" type="index" />
-          <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
-            <template slot-scope="scope">
-              {{ scope.row[key] }}
-            </template>
+          <el-table-column
+            v-for="(item,index) in basicvalue"
+            :key="index"
+            :label="item.label"
+            :prop="item.value"
+            :formatter="item.formatter"
+            align="center"
+          >
           </el-table-column>
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
@@ -183,10 +187,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        postName: '单位名称',
-        postCode: '单位代码'
-      }
     }
   },
   created() {
@@ -227,26 +227,33 @@ export default {
       console.log(index, row)
     },
     handleDelete(index, row) {
-      this.$alert(response.data, '提示', {
+      this.$alert("是否永久删除该单位", '提示', {
         confirmButtonText: '确定',
+        cancelButtonText: '取消',
         type: 'info',
-      }).then(()=>{
-        delPost(row.postId).then((response) => {
-          this.$alert(response.data, '提示', {
-            confirmButtonText: '确定',
-            type: 'info',
-            showClose: false
-          }).then(() => {
-            this.$router.go(0)
-          })
-        })
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delPost(row.postId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.fetchData()
+              })
+            })
+          }
+        }
       })
     },
     updateIfupdate(e) {
       this.ifUpdate = e
+      this.fetchData()
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       const params = {

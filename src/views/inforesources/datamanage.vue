@@ -124,7 +124,6 @@ export default {
   methods: {
     // 选择文件
     handleChange(file) {
-      debugger
       const types = file.name.split('.')[1]
       this.fileTemp = file.raw
       if (this.fileTemp) {

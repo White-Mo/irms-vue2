@@ -116,7 +116,6 @@ export default {
     // 发送请求
     uploadFunc() {
       console.log(this.$store.state['user']['role_id'])
-      debugger
       this.excelData.total = this.excelData.equipments.length
       this.dialogFormVisible = false
       this.loading = true

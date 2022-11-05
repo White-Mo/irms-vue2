@@ -175,7 +175,6 @@ function getBaseinfo(outdata,postName) {
   const {status:offlineTime, readStatus: readStatus15} = underfindTrans(Object.values(outdata[8])[7] + Object.values(outdata[8])[8], '下线时间',readStatus14) // 下线时间
   equipmentBaseInfo.offlineTime =  offlineTime
   console.log(equipmentBaseInfo)
-  debugger
   return {equipmentBaseInfo, readStatus: readStatus15}
 }
 
@@ -297,16 +296,16 @@ function appSoftwareFir(outdata, excelIndex) {
             softwarePort: '', // 端口
             softwareOnlineTime: '', // 上线时间
             softwareDevelopCompany: '', // 研发单位
-            softwareLiaisonName: '', // 联系人
-            softwareLiaisonNum: '', // 联系人电话号码
+            softwareLiaison: '', // 联系人
+            softwareLiaisonPhone: '', // 联系人电话号码
           }
           appSoftwareData.softwareName = Object.values(outdata[index])[0]
           appSoftwareData.softwareEdition = Object.values(outdata[index])[3]
           appSoftwareData.softwarePort = Object.values(outdata[index])[4]
           appSoftwareData.softwareOnlineTime = Object.values(outdata[index])[5]
           appSoftwareData.softwareDevelopCompany = Object.values(outdata[index])[6]
-          appSoftwareData.softwareLiaisonName = Object.values(outdata[index])[4]
-          appSoftwareData.softwareLiaisonNum = Object.values(outdata[index])[8]
+          appSoftwareData.softwareLiaison = Object.values(outdata[index])[4]
+          appSoftwareData.softwareLiaisonPhone = Object.values(outdata[index])[8]
           appSoftwares.push(appSoftwareData)
         } else {
           break

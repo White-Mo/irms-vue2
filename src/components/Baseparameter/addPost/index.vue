@@ -31,28 +31,26 @@ import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
 export default {
   name: 'AddPost',
   data() {
-    var checkName = (rule, value, callback) => {
+    var checkName =async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('单位不能为空'))
       } else {
-        this.getNameRules()
+        await this.getNameRules()
         if (!this.nameRules) {
           callback(new Error('单位已存在，请重新输入'))
-          this.post.postName = ''
         } else {
           callback()
         }
       }
       callback()
     }
-    var checkCode = (rule, value, callback) => {
+    var checkCode =async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('单位代码不能为空'))
       } else {
-        this.getCodeRules()
+        await this.getCodeRules()
         if (!this.codeRules) {
           callback(new Error('单位代码已存在，请重新输入'))
-          this.post.postCode = ''
         } else {
           callback()
         }
@@ -91,13 +89,13 @@ export default {
         if (valid) {
           const post = { ...this.post }
           createPost(post).then(res => {
-            // this.$router.go(0)
             this.$alert(res.data, '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false
             }).then(() => {
-              this.$router.go(0)
+              this.$emit('ifUpdateChange', false)
+              this.fetchData()
             })
             console.log(res)
           }).catch(err => {
@@ -110,11 +108,11 @@ export default {
       });
     },
     // 验证用户名是否存在
-    getNameRules() {
+    async getNameRules() {
       const params = {
         postName: this.post.postName
       }
-      checkPostName(params).then((res) => {
+      await checkPostName(params).then((res) => {
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
@@ -122,11 +120,11 @@ export default {
         }
       })
     },
-    getCodeRules() {
+    async getCodeRules() {
       const params = {
         postCode: this.post.postCode
       }
-      checkPostCode(params).then((res) => {
+      await checkPostCode(params).then((res) => {
         if (res.data.valid === true) {
           this.codeRules = true
         } else {

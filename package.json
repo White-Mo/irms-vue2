@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "af-table-column": "^1.0.3",
+    "async-validator": "^4.2.5",
     "axios": "0.18.1",
     "core-js": "3.6.5",
     "echarts": "^5.4.0",
@@ -27,8 +28,8 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
-    "vue-i18n": "^6.1.3",
     "vue-baidu-map": "^0.21.22",
+    "vue-i18n": "^6.1.3",
     "vue-router": "3.0.6",
     "vuex": "3.1.0",
     "xlsx": "^0.18.5"
