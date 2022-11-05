@@ -12,7 +12,7 @@
         </div>
         <el-row :gutter="20" style="margin-bottom: 2vh">
           <el-col :span="2"><el-button type="primary" size="large" @click="dialogFormVisible = true">导入Excel文件</el-button></el-col>
-          <el-col :span="4"><el-button type="success" size="large" @click="downloadFile()">下载模板</el-button></el-col>
+          <el-col :span="4" :offset="0.5"><el-button type="success" size="large" @click="downloadFile()">下载模板</el-button></el-col>
         </el-row>
         <el-table
           :data="tableData"
@@ -124,7 +124,6 @@ export default {
   methods: {
     // 选择文件
     handleChange(file) {
-      debugger
       const types = file.name.split('.')[1]
       this.fileTemp = file.raw
       if (this.fileTemp) {
@@ -156,7 +155,8 @@ export default {
           const outdata = await importfile(this.fileList[index], this.value)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
-          if(readStatus == 22) {
+          console.log(readStatus)
+          if(readStatus === 22 || readStatus === 20) {
             this.excelData.equipments.push(equipment)
           }
         }
@@ -185,6 +185,10 @@ export default {
           this.loading = false
         })
       }else{
+        this.$message({
+          message: '数据读取错误',
+          type: 'error'
+        })
         this.loading = false
         this.fileList = []
         this.excelData = {

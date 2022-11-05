@@ -51,9 +51,7 @@ export const constantRoutes = [
  */
 export let asyncRoutes = [
   {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
+    path: '/computerRoom',
     name: 'Nested',
     meta: {
       title: 'Nested',
@@ -167,7 +165,7 @@ export function getRouter(permission) {
           icon: permission.meta.icon,
           breadcrumb: false
         }
-      }]
+      },],
     }
   } else { // 子菜单
     return {
@@ -207,10 +205,17 @@ export function initRoute(permission) { // 封装路由
 export function filterAsyncRoutes(routes) {
   const accessedRoutes = []
   routes.forEach(permission => {
-    console.log(permission)
+    // console.log(permission)
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })
+  accessedRoutes.push(
+      {
+        path: '/computerRoom',
+        name: 'computerRoom',
+        component: () => import('@/views/inforesources/computer_room')
+      }
+    )
   const firstRouteNode =
     {
       path: '/',

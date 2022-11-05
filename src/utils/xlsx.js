@@ -58,7 +58,6 @@ export function getEquipment(outdata,postName) {
   equipment.appSoftware = appSoftwares
   equipment.appStore = appStores
   excelIndex = softwareFirIndex
-
   const { appLinksInfo, appAccessRights } = appSoftwareSeLi(outdata, excelIndex)
 
   equipment.appLinksInfo = appLinksInfo
@@ -153,14 +152,15 @@ function getBaseinfo(outdata,postName) {
   var cabinetName = Object.values(outdata[6])[7] + Object.values(outdata[6])[8]
   const data = cabinetName.split('-')
   if(data.length != 3){
-    Message({
-      type:'error',
-      message:"机柜号格式错误"
-    })
+    // Message({
+    //   type:'error',
+    //   message:"机柜号格式错误"
+    // })
+    equipmentBaseInfo.cabinetName = cabinetName
   }else{
     equipmentBaseInfo.cabinetUStart = data[1]
     equipmentBaseInfo.cabinetUEnd = data[2]
-    equipmentBaseInfo.cabinetName = cabinetName = data[0]
+    equipmentBaseInfo.cabinetName  = data[0]
   }
 
   const {status:serialNumber, readStatus: readStatus12} = underfindTrans(Object.values(outdata[8])[0] + Object.values(outdata[8])[1], '序列号',readStatus11 + data.length) // 序列号
@@ -174,8 +174,8 @@ function getBaseinfo(outdata,postName) {
 
   const {status:offlineTime, readStatus: readStatus15} = underfindTrans(Object.values(outdata[8])[7] + Object.values(outdata[8])[8], '下线时间',readStatus14) // 下线时间
   equipmentBaseInfo.offlineTime =  offlineTime
-  console.log(equipmentBaseInfo)
-  debugger
+  // console.log(equipmentBaseInfo)
+  // debugger
   return {equipmentBaseInfo, readStatus: readStatus15}
 }
 
@@ -217,6 +217,8 @@ function getConfig(outdata, excelIndex) {
       break
     }
   }
+  // console.log(softwares)
+  // console.log(configs)
   return {
     softwares,
     configs,
@@ -265,6 +267,7 @@ function getPortagreement(outdata, excelIndex) {
       break
     }
   }
+  // console.log(networks, protocolPorts)
   return {
     networks,
     protocolPorts,
@@ -406,6 +409,12 @@ function appSoftwareFir(outdata, excelIndex) {
     }
     index += 1
   }
+  // console.log(appSoftwares,
+  //   appSystemUsers,
+  //   appBusinesses,
+  //   appStores,
+  //   appNativeStore,
+  //   softwareFirIndex)
   return {
     appSoftwares,
     appSystemUsers,
@@ -416,26 +425,34 @@ function appSoftwareFir(outdata, excelIndex) {
   }
 }
 // 业务应用信息 右一列
-function appSoftwareSeLi(outdata, excelIndex) {
+function appSoftwareSeLi(outdata, rightIndex) {
   const appAccessRights = {}
   const appLinksInfo = []
-  var index = excelIndex
-  // console.log(Object.values(outdata[index]))
+  let index = rightIndex
+  // console.log(index)
+  // console.log(outdata)
   // debugger
   while (index < outdata.length) {
     if (Object.values(outdata[index])[5] === '访问权限') {
-      index = index + 2
-      // console.log(Object.values(outdata[index]))
-      // debugger
-      appAccessRights.intranet = Object.values(outdata[index])[5]
-      appAccessRights.industryNetwork = Object.values(outdata[index])[6]
-      appAccessRights.internet = Object.values(outdata[index])[7]
-      appAccessRights.other = Object.values(outdata[index])[8]
+      for (;index < outdata.length; index++) {
+        if (Object.values(outdata[index])[5] !== '服务用户信息') {
+          // console.log(Object.values(outdata[index]))
+          // debugger
+          appAccessRights.intranet = Object.values(outdata[index])[5]
+          appAccessRights.industryNetwork = Object.values(outdata[index])[6]
+          appAccessRights.internet = Object.values(outdata[index])[7]
+          appAccessRights.other = Object.values(outdata[index])[8]
+        }
+        else {
+          break
+        }
+      }
+      // console.log(index)
     }
+    // console.log(outdata)
+    // console.log(Object.values(outdata[index]))
     if (Object.values(outdata[index])[5] === '服务用户信息') {
       index = index + 2
-      // console.log(Object.values(outdata[index]))
-      // debugger
       for (;index < outdata.length; index++) {
         if (Object.values(outdata[index])[5] !== '') {
           var appLinksData = {
@@ -450,15 +467,17 @@ function appSoftwareSeLi(outdata, excelIndex) {
           appLinksData.other = Object.values(outdata[index])[8]
           // console.log(appLinksData)
           appLinksInfo.push(appLinksData)
+        }else {
+          break
         }
       }
-      // console.log(appLinksInfo)
-      // debugger
     }
     index += 1
+    // console.log(index)
+    // console.log(outdata.length)
   }
-  // console.log('访问权限', this.appAccessRights)
-  // console.log('服务用户信息', this.appLinksInfo)
+  // console.log('访问权限', appAccessRights)
+  // console.log('服务用户信息', appLinksInfo)
   return {
     appAccessRights,
     appLinksInfo
