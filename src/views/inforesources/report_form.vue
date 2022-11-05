@@ -39,7 +39,7 @@
               icon="el-icon-search"
               size="medium"
               clearable="true"
-              @click="fetchData()"
+              @click="get_data2()"
             >搜索</el-button>
           </el-col>
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
@@ -71,6 +71,7 @@
               header-align="center"
               align="center"
               style="width: 100%"
+              show-overflow-tooltip
               :width="flexColumnWidth(item.value, item.label)"
             />
           </el-table>
@@ -267,9 +268,6 @@ export default {
     'ClientHeight':function(curVal,oldVal){
       console.log(curVal,oldVal,'----------------------')
       console.log(this.tableData.length , this.totalCount)
-
-      // this.tableData = this.tableData.concat(this.tableData)
-      // this.get_data()
       if (this.DataName === 'all' || this.DataName.length === 0) {
         console.log(this.DataName)
         this.initname = ['111']
@@ -279,24 +277,28 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
-        start: this.tableData.length ? 0: this.tableData.length,
-        limit: 15,
+        start: this.tableData.length ? this.tableData.length : 0,
+        limit: this.totalCount < this.tableData.length + 3 ? this.totalCount - this.tableData.length : 3,
         status: ''
       }
-      getList(params).then((response) => {
-        this.isflag = false
-        console.log(response)
-        if(this.tableData.length < this.totalCount){
-          let num = this.tableData.length
-          for(let i of response.data.items){
-            i["num"] = num
-            num++
-          }
-          this.tableData = this.tableData.concat(response.data.items)
-          // this.totalCount = response.data.total
-          }
+      console.log(this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15)
+      if(this.tableData.length < this.totalCount){
+        console.log("提交请求",params)
+        getList(params).then((response) => {
+          this.isflag = false
+          console.log(response)
+          if(this.tableData.length < this.totalCount){
+            let num = this.tableData.length + 1
+            for(let i of response.data.items){
+              i["num"] = num
+              num++
+            }
+            this.tableData = this.tableData.concat(response.data.items)
+            // this.totalCount = response.data.total
+            }
+        })
+      }
 
-      })
     }
   },
   methods: {
@@ -310,8 +312,8 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
-        start: this.tableData.length ? 0: this.tableData.length,
-        limit: 15,
+        start: this.tableData.length ? this.tableData.length : 0,
+        limit: 6,
         status: ''
       }
       const numparams = {
@@ -322,9 +324,48 @@ export default {
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
       })
+      console.log("提交请求",params)
+
       getList(params).then((response) => {
         console.log(response)
-        let num = this.tableData.length
+        let num = this.tableData.length + 1
+        for(let i of response.data.items){
+          i["num"] = num
+          num++
+        }
+        this.tableData = this.tableData.concat(response.data.items)
+        // this.totalCount = response.data.total
+      })
+
+    },
+    get_data2() {
+      this.tableData = []
+      if (this.DataName === 'all' || this.DataName.length === 0) {
+        console.log(this.DataName)
+        this.initname = ['111']
+      } else {
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
+      }
+      const params = {
+        dataName: this.initdata,
+        dataValue: this.inputValue,
+        start: this.tableData.length ? this.tableData.length : 0,
+        limit: 6,
+        status: ''
+      }
+      const numparams = {
+        dataName: this.initname,
+        dataValue: this.inputValue,
+        status: ''
+      }
+      getdataCount(numparams).then((response) => {
+        this.totalCount = response.data.total
+      })
+      console.log("提交请求2",params)
+
+      getList(params).then((response) => {
+        console.log(response)
+        let num = this.tableData.length + 1
         for(let i of response.data.items){
           i["num"] = num
           num++
@@ -337,15 +378,24 @@ export default {
     load (e) {
       if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
         console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
-        if(this.tableData.length >= this.totalCount){
+        if(this.ClientHeight == e.target.scrollHeight){
           this.isMore = true
           setTimeout(()=>{
             this.isMore = false
           },1000)
-        }else{
-          this.isflag = true
-          this.ClientHeight = e.target.scrollHeight
         }
+        this.ClientHeight = e.target.scrollHeight
+        // if(this.tableData.length >= this.totalCount){
+        //   this.isMore = true
+        //   setTimeout(()=>{
+        //     this.isMore = false
+        //   },1000)
+        // }else{
+        //   console.log("----------",this.ClientHeight,e.target.scrollHeight)
+        //   this.isflag = true
+        //   this.ClientHeight = e.target.scrollHeight
+
+        // }
       }
     },
     getStatisticsExcel() {
@@ -566,7 +616,7 @@ export default {
 }
 .form_table_class{
   overflow-y: scroll;
-  height: 50rem;
+  height: 20rem;
 }
 .tabListPage h3 {
     padding-top: 0.1rem;
