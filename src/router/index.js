@@ -213,7 +213,7 @@ export function filterAsyncRoutes(routes) {
       {
         path: '/computerRoom',
         name: 'computerRoom',
-        component: () => import('@/views/inforesources/computer_room')
+        component: () => import('@/views/inforesources/computerRoom/index')
       }
     )
   const firstRouteNode =

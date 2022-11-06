@@ -172,7 +172,6 @@ export default {
     this.draw_Chart();
   },
   mounted() {
-
     this.drawChart();
     this.drawChart2();
     this.drawChart3();
