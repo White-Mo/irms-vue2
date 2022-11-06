@@ -46,21 +46,8 @@
         </el-table>
       </el-card>
     </el-col>
-    <el-dialog title=" 数据导入详情" :visible.sync="dialogFormVisible">
+    <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
       <el-form :model="dialogForm">
-        <!--        <el-form-item label="数据来源" :label-width="formLabelWidth">-->
-        <!--          <el-cascader :props="props" placeholder="请选择单位和部门" style="width: 50%" />-->
-        <!--        </el-form-item>-->
-        <!--        <el-form-item label="文件类型" :label-width="formLabelWidth">-->
-        <!--          <el-select v-model="value" placeholder="请选择文件类型" style="width: 30%">-->
-        <!--            <el-option-->
-        <!--              v-for="item in fileTaypes"-->
-        <!--              :key="item.value"-->
-        <!--              :label="item.label"-->
-        <!--              :value="item.value"-->
-        <!--            />-->
-        <!--          </el-select>-->
-        <!--        </el-form-item>-->
       </el-form>
       <div class="uploadCard">
         <el-upload
@@ -74,13 +61,18 @@
           :file-list="fileList"
           :auto-upload="false"
         >
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5个。</div>
+          <el-button slot="trigger" size="larger" type="primary">选取文件</el-button>
+          <el-button style="margin-left: 10px;" size="larger" type="success" @click="submitUpload">上传文件</el-button>
+          <div slot="tip" style="font-size: 18px">
+            <p>注意事项：</p>
+            <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
+            <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
+            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>
+          </div>
         </el-upload>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="closeDialog()">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -127,8 +119,7 @@ export default {
       const types = file.name.split('.')[1]
       this.fileTemp = file.raw
       if (this.fileTemp) {
-        if ((types === 'xlsx') || (types === 'xlc') || (types === 'xlm') || (types === 'xls') || (types === 'xlt') || (types ===
-          'xlw') || (types === 'csv')) {
+        if ((types === 'xlsx') || (types === 'xls') || (types === 'csv')) {
           this.fileList.push(file.raw)
         } else {
           this.$message({
@@ -204,6 +195,10 @@ export default {
     // 数量限制
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 5 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.fileList = []
+    },
+    closeDialog() {
+      this.dialogFormVisible = false
       this.fileList = []
     },
     downloadFile() {
