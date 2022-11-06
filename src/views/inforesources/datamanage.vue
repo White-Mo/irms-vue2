@@ -51,7 +51,7 @@
       </el-form>
       <div class="uploadCard">
         <el-upload
-          :limit="5"
+          :limit="10"
           :on-exceed="handleExceed"
           class="upload-demo"
           action=""
@@ -146,7 +146,7 @@ export default {
           const outdata = await importfile(this.fileList[index], this.value)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
-          console.log(readStatus)
+          // console.log(readStatus)
           if(readStatus === 22 || readStatus === 20) {
             this.excelData.equipments.push(equipment)
           }
@@ -194,7 +194,7 @@ export default {
     },
     // 数量限制
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 5 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.$message.warning(`当前限制选择 10 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       this.fileList = []
     },
     closeDialog() {
