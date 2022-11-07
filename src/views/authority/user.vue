@@ -12,36 +12,68 @@
         </el-row>
         <el-row :gutter="10" class="bg-condition">
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
-            <span>查询条件：</span>
+            <span>
+              <h3 style="margin-top:0.1rem">
+                查询条件
+              </h3>
+            </span>
           </el-col>
-          <!-- <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-            <el-select
-              v-model="DataName"
-              placeholder="详细字段查询"
-              multiple
-              size="medium"
-            >
-              <el-option
-                v-for="(item, index) in dataname"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                class="searchInput"
-              />
-            </el-select>
-          </el-col> -->
-          <!-- <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-            <el-input size="medium" v-model="inputValue" placeholder="输入查询内容" clearable />
+          <el-col :span="4">
+            用户姓名
+            <el-autocomplete
+              class="inline-input"
+              v-model="user_input.state1"
+              :fetch-suggestions="querySearchName"
+              placeholder="请输入姓名"
+              @select="handleSelect"
+              style="width: 10rem;"
+            ></el-autocomplete>
           </el-col>
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :span="4">
+            登录帐号
+            <el-input v-model="user_input.state2" placeholder="请输入帐号" style="width: 10rem;"></el-input>
+          </el-col>
+          <el-col :span="3">
+            单位
+            <el-autocomplete
+              class="inline-input"
+              v-model="user_input.state3"
+              :fetch-suggestions="querySearchPost"
+              placeholder="请输入单位"
+              @select="handleSelect"
+              style="width: 8rem;"
+            ></el-autocomplete>
+          </el-col>
+          <el-col :span="3">
+            角色
+            <el-autocomplete
+              class="inline-input"
+              v-model="user_input.state4"
+              :fetch-suggestions="querySearchFosGroup"
+              placeholder="请输入角色"
+              @select="handleSelect"
+              style="width: 8rem;"
+            ></el-autocomplete>
+          </el-col>
+          <el-col :span="3">
+            状态
+            <el-autocomplete
+              class="inline-input"
+              v-model="user_input.state5"
+              :fetch-suggestions="querySearchState"
+              placeholder="请输入状态"
+              @select="handleSelect"
+              style="width: 8rem;"
+            ></el-autocomplete>
+          </el-col>
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2" >
             <el-button
+              size="medium"
               type="primary"
               icon="el-icon-search"
-              size="medium"
               clearable="true"
-              @click="fetchData()"
             >搜索</el-button>
-          </el-col> -->
+          </el-col>
         </el-row>
       </div>
     </div>
@@ -61,6 +93,21 @@ export default {
   },
   data() {
     return {
+      user_input:{
+        state1:"",
+        state2:"",
+        state3:"",
+        state4:"",
+        state5:"",
+      },
+      RealnameAll:[],
+      PostAll:[],
+      FosGroupAll:[],
+      stateAll:[
+        {"id":"000",'value':"全部"},
+        {"id":"001",'value':"冻结"},
+        {"id":"002",'value':"激活"}
+      ],
 
     }
   },
@@ -68,14 +115,57 @@ export default {
     console.log(this.realname)
     for (let i of ['getRealnameAll','getPostAll','getFosGroupAll']){
       getQComSelect(i).then(res => {
-      console.log(res)
+        if(i == 'getRealnameAll'){
+          this.RealnameAll = [{"id":"000",'realname':"全部"}].concat(res)
+        }else if(i == 'getPostAll'){
+          this.PostAll = [{"id":"000",'postName':"全部"}].concat(res)
+        }else{
+          this.FosGroupAll = [{"id":"000",'name':"全部"}].concat(res)
+        }
     })
     }
   },
   destroyed() {
   },
   methods: {
-
+    querySearchName(queryString, cb){
+      return this.querySearch(this.RealnameAll,0,queryString,cb)
+    },
+    querySearchPost(queryString, cb){
+      return this.querySearch(this.PostAll ,1,queryString,cb)
+    },
+    querySearchFosGroup(queryString, cb){
+      return this.querySearch(this.FosGroupAll ,2,queryString,cb)
+    },
+    querySearchState(queryString, cb){
+      return this.querySearch(this.stateAll ,3,queryString,cb)
+    },
+    querySearch(restaurants,type,queryString, cb) {
+      var results = queryString ? restaurants.filter(this.createFilter(queryString,type)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      let item = []
+      for(let i of results){
+        item.push({"id":i['id'],"value":i[type == 0?'realname':type == 1?"postName":type == 2?"name":"value"]})
+      }
+      cb(item);
+    },
+    createFilter(queryString,type) {
+      return (restaurant) => {
+        if(type == 0){
+          return (restaurant['realname'].toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        }else if(type == 1){
+          return (restaurant['postName'].toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        }else if(type == 2){
+          return (restaurant['name'].toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        }else{
+          return (restaurant['value'].toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        }
+        
+      };
+    },
+    handleSelect(item) {
+      console.log('handleSelect',item);
+    }
   },
 }
 </script>

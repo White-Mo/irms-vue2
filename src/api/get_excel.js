@@ -1,5 +1,6 @@
 const ExcelJS = require('exceljs');
 import { getbasic } from '@/api/table'
+import Store from "@/store"
 export async function getExcelDemo1(data){
     console.log(data)
     //创建工作簿↓
@@ -134,6 +135,7 @@ export async function getExcelDemo1(data){
 }
 
 export async function getExcelDemo2(data_list, data_num = 1){
+    let progress_item_num = 0
     let data_len = data_list.length
     let file_list = []
     let data_index = 0
@@ -141,6 +143,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
         file_list.push(data_num)
     }
     if (data_len % data_num) file_list.push(data_len % data_num)
+    let progress_list = []
+    for(let i in file_list){
+        progress_list.push(0)
+    }
     //样式
     const content_row = { vertical: 'middle', horizontal: 'center' };
     const table_header = {
@@ -200,7 +206,6 @@ export async function getExcelDemo2(data_list, data_num = 1){
     const red = { style: 'thick', color: { argb: 'ff0000' } }
     const white = { style: 'thin', color: { argb: 'ffffff' } }
     // 生成表
-    // file_list = [5,5,5]
     for (let file_num of file_list){
         let workbook = new ExcelJS.Workbook();
         //设置工作簿属性↓
@@ -237,7 +242,6 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // basicInfoNetwork_list 网络信息
             // basicInfoProtocolPort_list 协议端口信息
             // basicInfoSoftware_list 通用软件信息
-            console.log(basic_data, item_data)
             let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
             let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
             let z = basic_data['basicInfoAppSystemUser_list'].length // z是系统用户信息中信息的最大条数
@@ -279,8 +283,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C3.alignment = content_row;
             C3.font = table_header
             C3.fill = table_fill1
-        
-        
+
+
             sheet.mergeCells('E3:F3');
             let E3 = sheet.getCell("E3")
             E3.alignment = content_row
@@ -293,8 +297,8 @@ export async function getExcelDemo2(data_list, data_num = 1){
             G3.alignment = content_row;
             G3.font = table_header
             G3.fill = table_fill1
-        
-        
+
+
             sheet.mergeCells('I3:J3');
             let I3 = sheet.getCell("I3")
             I3.alignment = content_row
@@ -307,37 +311,37 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C4.alignment = content_row
             C4.font = table_header2
             C4.fill = table_fill2
-        
+
             sheet.mergeCells('D4:E4');
             let D4 = sheet.getCell("D4")
             D4.alignment = content_row
             D4.font = table_header3
             D4.fill = table_fill2
-        
-        
+
+
             let F4 = sheet.getCell('F4')
             F4.value = "部  门"
             F4.alignment = content_row
             F4.font = table_header2
             F4.fill = table_fill2
-        
+
             sheet.mergeCells('G4:H4');
             let G4 = sheet.getCell("G4")
             G4.alignment = content_row
             G4.font = table_header3
             G4.fill = table_fill2
-        
+
             let I4 = sheet.getCell('I4')
             I4.value = "编  号"
             I4.alignment = content_row
             I4.font = table_header2
             I4.fill = table_fill2
-        
+
             let J4 = sheet.getCell("J4")
             J4.alignment = content_row
             J4.font = table_header3
             J4.fill = table_fill2
-        
+
             // 第五行
             sheet.getRow(5).height = 30
             let C5 = sheet.getCell('C5')
@@ -345,96 +349,96 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C5.alignment = content_row
             C5.font = table_header2
             C5.fill = table_fill2
-        
+
             let D5 = sheet.getCell("D5")
             D5.alignment = content_row
             D5.font = table_header3
             D5.fill = table_fill2
-        
+
             let E5 = sheet.getCell('E5')
             E5.value = "电  话"
             E5.alignment = content_row
             E5.font = table_header2
             E5.fill = table_fill2
-        
+
             let F5 = sheet.getCell("F5")
             F5.alignment = content_row
             F5.font = table_header3
             F5.fill = table_fill2
-        
+
             let G5 = sheet.getCell('G5')
             G5.value = "应用管理员"
             G5.alignment = content_row
             G5.font = table_header2
             G5.fill = table_fill2
-        
+
             let H5 = sheet.getCell("H5")
             H5.alignment = content_row
             H5.font = table_header3
             H5.fill = table_fill2
-        
+
             let I5 = sheet.getCell('I5')
             I5.value = "电  话"
             I5.alignment = content_row
             I5.font = table_header2
             I5.fill = table_fill2
-        
+
             let J5 = sheet.getCell("J5")
             J5.alignment = content_row
             J5.font = table_header3
             J5.fill = table_fill2
-        
+
             // 第六行
             sheet.getRow(6).height = 42.75
                 // 垂直左右居中加上自动换行
             let content_row_item = { vertical: 'middle', horizontal: 'center', wrapText: true};
-        
+
             let C6 = sheet.getCell('C6')
             C6.value = "业  务  机\r\n实  验  机"
             C6.alignment = content_row_item
             C6.font = table_header2
             C6.fill = table_fill2
-        
+
             let D6 = sheet.getCell("D6")
             D6.alignment = content_row_item
             D6.font = table_header3
             D6.fill = table_fill2
-        
+
             let E6 = sheet.getCell('E6')
             E6.value = "主  机\n备  机"
             E6.alignment = content_row_item
             E6.font = table_header2
             E6.fill = table_fill2
-        
+
             let F6 = sheet.getCell("F6")
             F6.alignment = content_row_item
             // F6.value = '√\n□'
             F6.font = table_header3
             F6.fill = table_fill2
-        
+
             let G6 = sheet.getCell('G6')
             G6.value = "实  体  机\n虚  拟  机"
             G6.alignment = content_row_item
             G6.font = table_header2
             G6.fill = table_fill2
-        
+
             let H6 = sheet.getCell("H6")
             H6.alignment = content_row_item
             H6.font = table_header3
             H6.fill = table_fill2
-        
+
             let I6 = sheet.getCell('I6')
             I6.alignment = content_row_item
             I6.font = table_header2
             I6.fill = table_fill2
             I6.value = "是    否\n可迁移"
-        
-        
+
+
             let J6 = sheet.getCell("J6")
             J6.alignment = content_row_item
             J6.font = table_header3
             J6.fill = table_fill2
-        
+
             // 第七行
             sheet.getRow(7).height = 22.5
             sheet.mergeCells('C7:J7');
@@ -445,28 +449,28 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C7.fill = table_fill1
             // 第八行
             sheet.getRow(8).height = 22.5
-        
+
             sheet.mergeCells('C8:D8');
             let C8 = sheet.getCell('C8')
             C8.value = "品  牌"
             C8.alignment = content_row
             C8.font = table_header2
             C8.fill = table_fill2
-        
+
             sheet.mergeCells('E8:F8');
             let E8 = sheet.getCell('E8')
             E8.value = "型  号"
             E8.alignment = content_row
             E8.font = table_header2
             E8.fill = table_fill2
-        
+
             sheet.mergeCells('G8:H8');
             let G8 = sheet.getCell('G8')
             G8.value = "安装位置"
             G8.alignment = content_row
             G8.font = table_header2
             G8.fill = table_fill2
-        
+
             sheet.mergeCells('I8:J8');
             let I8 = sheet.getCell('I8')
             I8.value = "机柜号"
@@ -475,25 +479,25 @@ export async function getExcelDemo2(data_list, data_num = 1){
             I8.fill = table_fill2
             // 第九行
             sheet.getRow(9).height = 19.5
-        
+
             sheet.mergeCells('C9:D9');
             let C9 = sheet.getCell('C9')
             C9.alignment = content_row
             C9.font = table_header2
             C9.fill = table_fill3
-        
+
             sheet.mergeCells('E9:F9');
             let E9 = sheet.getCell('E9')
             E9.alignment = content_row
             E9.font = table_header2
             E9.fill = table_fill3
-        
+
             sheet.mergeCells('G9:H9');
             let G9 = sheet.getCell('G9')
             G9.alignment = content_row
             G9.font = table_header2
             G9.fill = table_fill3
-        
+
             sheet.mergeCells('I9:J9');
             let I9 = sheet.getCell('I9')
             I9.alignment = content_row
@@ -501,28 +505,28 @@ export async function getExcelDemo2(data_list, data_num = 1){
             I9.fill = table_fill3
             // 第十行
             sheet.getRow(10).height = 22.5
-        
+
             sheet.mergeCells('C10:D10');
             let C10 = sheet.getCell('C10')
             C10.value = "序列号"
             C10.alignment = content_row
             C10.font = table_header2
             C10.fill = table_fill2
-        
+
             sheet.mergeCells('E10:F10');
             let E10 = sheet.getCell('E10')
             E10.value = "保修期"
             E10.alignment = content_row
             E10.font = table_header2
             E10.fill = table_fill2
-        
+
             sheet.mergeCells('G10:H10');
             let G10 = sheet.getCell('G10')
             G10.value = "上线时间"
             G10.alignment = content_row
             G10.font = table_header2
             G10.fill = table_fill2
-        
+
             sheet.mergeCells('I10:J10');
             let I10 = sheet.getCell('I10')
             I10.value = "下线时间"
@@ -531,31 +535,31 @@ export async function getExcelDemo2(data_list, data_num = 1){
             I10.fill = table_fill2
             // 第十一行
             sheet.getRow(11).height = 19.5
-        
+
             sheet.mergeCells('C11:D11');
             let C11 = sheet.getCell('C11')
             C11.alignment = content_row
             C11.font = table_header2
             C11.fill = table_fill3
-        
+
             sheet.mergeCells('E11:F11');
             let E11 = sheet.getCell('E11')
             E11.alignment = content_row
             E11.font = table_header2
             E11.fill = table_fill3
-        
+
             sheet.mergeCells('G11:H11');
             let G11 = sheet.getCell('G11')
             G11.alignment = content_row
             G11.font = table_header2
             G11.fill = table_fill3
-        
+
             sheet.mergeCells('I11:J11');
             let I11 = sheet.getCell('I11')
             I11.alignment = content_row
             I11.font = table_header2
             I11.fill = table_fill3
-        
+
             // 绘制边框
                 //里面的
             let inside = [D4,F4,G4,I4,
@@ -646,13 +650,13 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 bottom: red,
                 right: red,
             }
-        
+
             // 第十二行
             sheet.getRow(12).height = 5.25
             sheet.mergeCells('C12:J12');
             let C12 = sheet.getCell("C12")
             C12.fill = table_fill3
-        
+
             // 第十三行
             sheet.getRow(13).height = 22.5
             sheet.mergeCells('C13:F13');
@@ -661,14 +665,14 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C13.alignment = content_row;
             C13.font = table_header
             C13.fill = table_fill1
-        
+
             sheet.mergeCells('G13:J13');
             let G13 = sheet.getCell("G13")
             G13.value = "通用软件信息"
             G13.alignment = content_row;
             G13.font = table_header
             G13.fill = table_fill1
-        
+
             // 第十四行
             sheet.getRow(14).height = 15.75 // 15.25
             let C14 = sheet.getCell("C14")
@@ -676,49 +680,49 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C14.alignment = content_row;
             C14.font = table_header2
             C14.fill = table_fill4
-        
+
             let D14 = sheet.getCell("D14")
             D14.value = "频率"
             D14.alignment = content_row;
             D14.font = table_header2
             D14.fill = table_fill4
-        
+
             let E14 = sheet.getCell("E14")
             E14.value = "通用软件信息"
             E14.alignment = content_row;
             E14.font = table_header2
             E14.fill = table_fill4
-        
+
             let F14 = sheet.getCell("F14")
             F14.value = "核数/容量"
             F14.alignment = content_row;
             F14.font = table_header2
             F14.fill = table_fill4
-        
+
             let G14 = sheet.getCell("G14")
             G14.value = "项  目"
             G14.alignment = content_row;
             G14.font = table_header2
             G14.fill = table_fill4
-        
+
             let H14 = sheet.getCell("H14")
             H14.value = "名称"
             H14.alignment = content_row;
             H14.font = table_header2
             H14.fill = table_fill4
-        
+
             let I14 = sheet.getCell("I14")
             I14.value = "版本"
             I14.alignment = content_row;
             I14.font = table_header2
             I14.fill = table_fill4
-        
+
             let J14 = sheet.getCell("J14")
             J14.value = "类型"
             J14.alignment = content_row;
             J14.font = table_header2
             J14.fill = table_fill4
-        
+
             // 第15到第15+n-1行
             // let n = 5 // n是配置信息或者通用软件信息中的信息最大条数
             let cols = 'CDEFGHIJ'
@@ -739,7 +743,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
                 C15.push(item_row)
             }
-        
+
             // 第16+n-1行
             let num = 16+n-1
             sheet.getRow(num).height = 18.75
@@ -755,7 +759,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             }
             C16[0].value = '网络信息'
             C16[1].value = '协议端口信息'
-        
+
             // 第17+n-1行
             num = 17+n-1
             let C17 = []
@@ -797,7 +801,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             }
             C18[0][0].value = 1
             C18[1][0].value = 2
-        
+
             // 第20+n-1行
             num = 20+n-1
             sheet.getRow(num).height = 14.25
@@ -822,7 +826,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for (let i in tables){
                 C20[i].value = tables[i]
             }
-        
+
             // 第21～23 +n-1行
             num = 21+n-1
             let C21 = []
@@ -848,7 +852,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C21[0][0].value = 1
             C21[1][0].value = 2
             C21[2][0].value = 'HBA卡'
-        
+
             // 绘制边框
                 //里面的
             inside = [
@@ -952,13 +956,13 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 bottom: black,
                 right: black,
             }
-        
+
             // 第24 +n-1行
             num = 24+n-1
             sheet.getRow(num).height = 5.25
             sheet.mergeCells('C' + num + ':' + 'J' + num );
             sheet.getCell('C' + num).fill = table_fill3
-        
+
             // 第25 +n-1行
             num = 25+n-1
             sheet.getRow(num).height = 24.75
@@ -978,7 +982,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 pattern: 'solid',
                 fgColor: { argb: '5b9bd5' },
             };
-        
+
             // 第26 +n-1行
             num = 26+n-1
             sheet.getRow(num).height = 21.75
@@ -988,7 +992,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C26.alignment = content_row
             C26.font = table_header2
             C26.fill = table_fill4
-        
+
             // 第27 +n-1到27 +n-1 + x-1行
             num = 27+n-1
             // let x = 1 + 2 // x是专用软件信息中信息最大条数 第一行是表头
@@ -1020,7 +1024,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for (let i in tables){
                 C27[0][i].value = tables[i]
             }
-        
+
             // 第28 +n-1 + x-1行
             num = 28 +n-1 + x-1
             sheet.getRow(num).height = 21.75
@@ -1030,7 +1034,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C28.alignment = content_row
             C28.font = table_header2
             C28.fill = table_fill4
-        
+
             // 第29 ～ 30 +n-1 + x-1行
             num = 29 +n-1 + x-1
             let C29 = []
@@ -1063,7 +1067,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C29.push(item_cell)
             }
-        
+
             // 第31 +n-1 + x-1到31 +n-1 + x-1 + z-1行
             num = 31 +n-1 + x-1
             // let z = 4 // z是系统用户信息中信息的最大条数
@@ -1082,7 +1086,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C31.push(item_list)
                 num++
             }
-        
+
             // 第32 +n-1 + x-1 + z-1行
             num = 32 +n-1 + x-1 + z-1
             let C32 = []
@@ -1099,7 +1103,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill4
                 C32.push(item_cell)
             }
-        
+
             // 第33 +n-1 + x-1 + z-1行
             num = 33 +n-1 + x-1 + z-1
             let C33 = []
@@ -1124,7 +1128,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C33.push(item_cell)
             }
-        
+
             // 第34 +n-1 + x-1 + z-1行
             num = 34 +n-1 + x-1 + z-1
             let C34 = []
@@ -1135,7 +1139,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C34.push(item_cell)
             }
-        
+
             // 第35 +n-1 + x-1 + z-1行
             num = 35 +n-1 + x-1 + z-1
             sheet.getRow(num).height = 14.25
@@ -1232,7 +1236,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill5
                 C43.push(item_cell)
             }
-        
+
             // 第44 +n-1 + x + z-1 + a-1 - 4到44 +n-1 + x-1 + z-1 + a-1 - 4 + c-1行
             num = 44 +n-1 + x-1 + z-1 + a-1 - 4
             // let c = 5 // c是’存储’信息中的最大条数
@@ -1344,7 +1348,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                     num++
                 }
             }
-        
+
             // 绘制边框
                 //里面的
             inside = [
@@ -1762,8 +1766,11 @@ export async function getExcelDemo2(data_list, data_num = 1){
                     C47[i][j].value = c2_list[i][j]
                 }
             }
-            
+
             data_index ++
+            progress_list[progress_item_num] ++
+            console.log(progress_list)
+            window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString()) 
         }
         //导出下载
         let buffer = await workbook.xlsx.writeBuffer();
@@ -1774,7 +1781,12 @@ export async function getExcelDemo2(data_list, data_num = 1){
         link.download = "详细报表.xlsx";
         link.click();
         document.body.removeChild(link);
+
+        progress_item_num ++ 
     }
+    setTimeout(()=>{
+        window.localStorage.setItem("report_form_info","")
+    },200)
     return
 }
 

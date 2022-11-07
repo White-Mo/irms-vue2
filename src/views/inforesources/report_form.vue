@@ -61,6 +61,7 @@
             height="750"
             border
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
+            @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
           >
             <el-table-column label="" width="40" type="selection" />
@@ -139,6 +140,7 @@ import { mapGetters } from 'vuex'
 import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
 import { getStatisticsData } from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
+import Progress from "@/components/progress"
 export default {
   data() {
     return {
@@ -292,11 +294,16 @@ export default {
       DataName: 'all',
       ClientHeight:0,
       // 统计数据
-      StatisticsData: []
+      StatisticsData: [],
+      // 全选事件
+      is_select_all:false
     }
   },
+  components:{
+    Progress
+  },
   computed: {
-    ...mapGetters(['name', 'roles'])
+    ...mapGetters(['name', 'roles']),
   },
 
   mounted() {
@@ -438,7 +445,6 @@ export default {
         if (this.StatisticsData.length > 5) {
           console.log('ok')
           getExcelDemo3(this.StatisticsData)
-          // getExcelDemo2()
         }
       }
       for (const i of item_list) {
@@ -456,13 +462,28 @@ export default {
     handleSelectionChange(val) {
       this.selectData = val
     },
-    exportEscel(model) {
+    selectAllFun(){
+      this.is_select_all = true
+    },
+    async exportEscel(model) {
       if (model === 0) {
+        if (this.DataName === 'all' || this.DataName.length === 0) {
+          console.log(this.DataName)
+          this.initname = ['111']
+        } else {
+          this.initname = JSON.parse(JSON.stringify(this.DataName))
+        }
+        const numparams = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          status: ''
+        }
+        let item_count = (await getdataCount(numparams)).data.total
         const params = {
-          dataName: ['111'],
-          dataValue: '',
+          dataName: this.initname,
+          dataValue: this.inputValue,
           start: 0,
-          limit: this.totalCount,
+          limit: item_count,
           status: ''
         }
         getList(params).then((response) => {
@@ -483,7 +504,7 @@ export default {
         this.getStatisticsExcel()
       }
     },
-    getExcel2() {
+    async getExcel2() {
       // eslint-disable-next-line eqeqeq
       let data_num = 0
       if (this.select_teble_radio != -1 || this.select_teble_type != -1 || this.select_teble_type2 != '') {
@@ -503,17 +524,59 @@ export default {
           }
         }
         if (data_num !== 0) {
-          console.log(data_num == -2 ? this.selectData.length : data_num )
-          getExcelDemo2(this.selectData, data_num == -2 ? this.selectData.length : data_num > this.selectData.length ? this.selectData.length : data_num )
+          let item = this.selectData
+          if(this.is_select_all){ // 表格全选
+            if (this.DataName === 'all' || this.DataName.length === 0) {
+              this.initname = ['111']
+            } else {
+              this.initname = JSON.parse(JSON.stringify(this.DataName))
+            }
+            const numparams = {
+              dataName: this.initname,
+              dataValue: this.inputValue,
+              status: ''
+            }
+            let item_count = (await getdataCount(numparams)).data.total
+            const params = {
+              dataName: this.initname,
+              dataValue: this.inputValue,
+              start: 0,
+              limit: item_count,
+              status: ''
+            }
+            item = (await getList(params)).data.items
+            
+            
+          }
+          this.is_select_all = false
+          const h = this.$createElement
+          let notify = this.$notify({
+              title: '正在导出',
+              dangerouslyUseHTMLString: true,
+              message: h('Progress',{
+              style:{
+                  width:"15rem"
+              }
+              }),
+              type: 'success',
+              offset: 100,  // 向下偏移100
+              duration: 0  // 设置不会自动关闭
+          })
+          // console.log("退出弹窗")
+          this.centerDialogVisible = false
+          this.select_teble_radio = -1
+          this.select_teble_type = -1
+          this.select_teble_type2 = ''
+          // 取消表格选择
+          this.$refs.multipleTable.clearSelection();
+          getExcelDemo2(item, data_num == -2 ? item.length : data_num > item.length ? item.length : data_num ).then((res=>{
+            setTimeout(()=>{
+              notify.close()
+            },2000)
+          }))
         }
-        this.centerDialogVisible = false
-        this.select_teble_radio = -1
-        this.select_teble_type = -1
-        this.select_teble_type2 = ''
-        // 取消表格选择
-        this.$refs.multipleTable.clearSelection();
+
       }
-      // getExcelDemo2()
     },
     /**
      * el-table-column 自适应列宽
@@ -605,12 +668,6 @@ export default {
 //   position: relative;
 // }
 
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
-}
 .el-col {
   border-radius: 4px;
 }
