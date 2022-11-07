@@ -28,11 +28,12 @@
               </el-col>
               <el-col :span="6">
                   <el-tag
+                    size="small"
                     :type="item.status === '施工中' ? 'danger' : 'success'"
                     disable-transitions>{{item.status}}</el-tag>
               </el-col>
               <el-col :span="8">
-                <el-button type="primary" size="small" @click="CheckComputerRoom(index)">进入机房</el-button>
+                <el-button type="primary" size="large" @click="CheckComputerRoom(index)">进入机房</el-button>
               </el-col>
             </el-row>
           </div>
@@ -43,10 +44,13 @@
 </template>
 
 <script>
+import screenfull from "screenfull";
+
 export default {
   name: 'digtal_computer_room',
   data() {
     return{
+      isFull: 0,
       ComputerRoomCard:[
         {
           unit: '中国地震局台网中心',
@@ -87,10 +91,14 @@ export default {
       ],
     };
   },
-  created(){
-
+  mounted() {
+    // this.full()
   },
   methods:{
+    full () {
+      // console.log(this.$store.state.machineRoom.department)
+      screenfull.toggle()
+    },
     CheckComputerRoom(index){
       var unit = this.ComputerRoomCard[index].unit
       var department =this.ComputerRoomCard[index].department
@@ -127,7 +135,7 @@ export default {
 }
 .roomCard{
   width: 18rem;
-  height: 10rem;
+  height: 11rem;
   margin-left: 2rem;
   margin-top: 1rem;
 }

@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import screenfull from 'screenfull'
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -132,6 +133,9 @@ export default {
       controls:null
     };
   },
+  created() {
+    this.full()
+  },
   mounted() {
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
@@ -141,12 +145,16 @@ export default {
     var that = this
     setTimeout(function () {
       that.echartsDraw()
+      that.init();
+      that.animate();
+      that.loadGltf()
     }, 200);
-    this.init();
-    this.animate();
-    this.loadGltf()
   },
   methods: {
+    full () {
+      // console.log(this.$store.state.machineRoom.department)
+      screenfull.toggle()
+    },
     //初始化
     init: function() {
       //  创建场景对象Scene
@@ -214,7 +222,7 @@ export default {
       let self = this;
       let loader = new GLTFLoader();
       //本地模型路径：public/static/mod/Xbot.glb
-      loader.load("static/01.glb", function (gltf) {
+      loader.load("static/c.glb", function (gltf) {
         console.log(gltf)
         self.isLoading = false;//关闭载入中效果
         self.mesh = gltf.scene;
@@ -226,6 +234,7 @@ export default {
     },
     backPage(){
       this.$router.push({ path:'/inforesources/digital_computer_room'})
+      this.full()
     },
     handchangedatacardstate(){
       this.datacard = !this.datacard
@@ -318,6 +327,7 @@ export default {
 
 <style>
 .main{
+  cursor: pointer;
   position:absolute;
   left:0;
   width: 100%;
