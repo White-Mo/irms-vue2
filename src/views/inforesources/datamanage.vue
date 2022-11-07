@@ -2,9 +2,7 @@
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
     <div class="app-container" v-loading="loading">
-      <div
-        class="show"
-      >
+      <div class="show">
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">信息数据导入</div>
@@ -38,7 +36,7 @@
             :lg="2"
             :xl="2"
           >
-          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">上传文件</el-button>
+          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">一键上传文件</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -111,7 +109,6 @@
             </template>
           </el-table-column>
         </el-table>
-
       </div>
     </div>
     <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
@@ -177,7 +174,7 @@ export default {
       repaly:[],
     }
   },
-  methods: {
+  methods:  {
     // 选择文件
     handleChange(file) {
       const types = file.name.split('.')[1]
@@ -189,6 +186,7 @@ export default {
             value:file.raw
           }
           this.fileList.push(obj)
+          console.log(this.fileList)
         } else {
           this.$message({
             type: 'warning',
@@ -213,7 +211,7 @@ export default {
       this.fileList = []
     },
     // 上传文件
-    async submitUpload(fileList) {
+    async submitUpload() {
       if (this.checkList.length === 0) {
         this.$message({
           type: 'error',
@@ -222,6 +220,7 @@ export default {
       } else {
         for(let index = 0;index < this.checkList.length;index++){
           const outdata = await importfile(this.checkList[index].value, this.value)
+          console.log(outdata)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
           console.log(equipment)
