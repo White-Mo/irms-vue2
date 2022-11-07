@@ -241,13 +241,11 @@ export default {
     uploadFunc(index,data) {
       this.dialogFormVisible = false
       this.loading = true
-      var equipment  = []
       var importData = {
         equipments: [],
         total:1,
       }
-      equipment.push(data)
-      importData.equipments.push(equipment)
+      importData.equipments.push(data)
       // console.log(importData)
       importExcel(importData).then((res) => {
         this.loading = false
