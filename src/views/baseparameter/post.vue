@@ -3,7 +3,7 @@
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
       <div
-        v-show="!ifUpdate"
+        v-show="ifUpdate === '0'"
         class="show"
       >
         <el-row>
@@ -137,20 +137,25 @@
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <AddPost @ifUpdateChange="updateIfupdate" />
+      <div v-if="ifUpdate === '1'">
+        <addPost @ifUpdateChange="updateIfupdate" />
+      </div>
+      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
+        <updatePost :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {delPost, delPostDepartment, getPostByPage} from '@/api/baseparameter'
-import AddPost from '@/components/Baseparameter/addPost'
+import {delPost, getPostByPage} from '@/api/baseparameter'
+import addPost from '@/components/Baseparameter/post/addPost'
+import updatePost from '@/components/Baseparameter/post/updatePost'
 
 export default {
   components: {
-    AddPost
+    addPost,
+    updatePost
   },
   filters: {
     statusFilter(status) {
@@ -166,14 +171,13 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage1: 5,
+      currentPage: 0,
+      limit:10,
       basicValue: '',
       initdata: ['123'],
-      department: '',
       inputValue: '',
       postname: '',
-      input3: '',
-      ifUpdate: false,
+      ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       basicvalue: [
@@ -206,8 +210,8 @@ export default {
       const params = {
         dataName: this.initdata,
         dataValue: this.inputValue,
-        start: 0,
-        limit: 10
+        start: this.currentPage,
+        limit: this.limit
       }
       // console.log(this.initdata)
       getPostByPage(params).then((response) => {
@@ -218,13 +222,15 @@ export default {
     },
 
     addPost() {
-      this.ifUpdate = !this.ifUpdate
+      this.ifUpdate ='1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='2'
+      this.row = row
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='3'
+      this.row = row
     },
     handleDelete(index, row) {
       this.$alert("是否永久删除该单位", '提示', {
@@ -267,6 +273,9 @@ export default {
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
     }
   }
 }

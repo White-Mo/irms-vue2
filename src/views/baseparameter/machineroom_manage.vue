@@ -142,7 +142,7 @@
 
 <script>
 import { getPostByPage } from '@/api/baseparameter'
-import AddPost from '@/components/Baseparameter/addPost'
+import AddPost from '@/components/Baseparameter/post/addPost'
 
 export default {
   components: {

@@ -155,10 +155,10 @@
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addinfo @changeDiv="changeDiv" />
+        <addInfo @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updataInfo :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+        <updateInfo :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -166,15 +166,16 @@
 
 <script>
 import { getList, getdataCount, delEquipment } from '@/api/table'
-import Addinfo from '@/components/Infomanage/addInfo'
-import UpdataInfo from '@/components/Infomanage/updateInfo'
+import addInfo from '@/components/Infomanage/addInfo'
+import updateInfo from '@/components/Infomanage/updateInfo'
+import {delPost} from "@/api/baseparameter";
 
 export default {
   // 引用vue reload方法
   inject: ['reload'],
   components: {
-    Addinfo,
-    UpdataInfo
+    addInfo,
+    updateInfo
   },
   filters: {
     statusFilter(status) {
@@ -374,28 +375,46 @@ export default {
     },
     handleDelete(row) {
       console.log(row)
-      this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+      this.$alert("是否永久删除该设备", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
-        center: true
-      }).then(() => {
-        delEquipment(row.equipmentId).then((response) => {
-          this.active = 0
-          this.$alert(response.data, '提示', {
-            confirmButtonText: '确定',
-            type: 'info',
-            showClose: false
-          }).then(() => {
-            this.fetchData()
-          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+        type: 'info',
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delEquipment(row.equipmentId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.fetchData()
+              })
+            })
+          }
+        }
+      })
+      // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning',
+      //   center: true
+      // }).then(() => {
+      //   delEquipment(row.equipmentId).then((response) => {
+      //     this.active = 0
+      //     this.$alert(response.data, '提示', {
+      //       confirmButtonText: '确定',
+      //       type: 'info',
+      //       showClose: false
+      //     }).then(() => {
+      //       this.fetchData()
+      //     })
+      //   })
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消删除'
+      //   });
+      // });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

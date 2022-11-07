@@ -29,7 +29,17 @@
 import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
 
 export default {
-  name: 'AddPost',
+  name: 'addPost',
+  props: {
+    row: {
+      type: Object,
+      required: true
+    },
+    currentShow: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     var checkName =async (rule, value, callback) => {
       if (!value) {
@@ -80,9 +90,13 @@ export default {
       }
     }
   },
+  created() {
+    console.log(this.row)
+    console.log(this.currentShow)
+  },
   methods: {
     back() {
-      this.$emit('ifUpdateChange', false)
+      this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
