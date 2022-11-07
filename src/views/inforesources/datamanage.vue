@@ -1,7 +1,7 @@
 <template>
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
-    <div class="app-container">
+    <div class="app-container" v-loading="loading">
       <div
         class="show"
       >
@@ -22,6 +22,15 @@
             :xl="2"
           >
             <el-button type="primary" size="large" @click="dialogFormVisible = true">导入Excel文件</el-button>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+          <el-button type="primary" size="large" @click="downloadFile()">下载模板</el-button>
           </el-col><el-col
             :xs="2"
             :sm="2"
@@ -29,72 +38,109 @@
             :lg="2"
             :xl="2"
           >
-          <el-button type="success" size="large" @click="downloadFile()">下载模板</el-button>
+          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">上传文件</el-button>
           </el-col>
         </el-row>
-<!--        <el-table-->
-<!--          v-loading="listLoading"-->
-<!--          :diisable="true"-->
-<!--          :data="list"-->
-<!--          element-loading-text="Loading"-->
-<!--          border-->
-<!--          highlight-current-row-->
-<!--          stripe-->
-<!--        >-->
-<!--          <el-table-column type="index" />-->
-<!--          <af-table-column-->
-<!--            v-for="(value,key,index) in labels"-->
-<!--            :key="index"-->
-<!--            align="center"-->
-<!--            :label="value"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              {{ scope.row[key] }}-->
-<!--            </template>-->
-<!--          </af-table-column>-->
-<!--          <el-table-column-->
-<!--            align="center"-->
-<!--            label="操作"-->
-<!--            width="250px"-->
-<!--          >-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleDetail(scope.$index, scope.row)"-->
-<!--              >详情</el-button>-->
-<!--              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                type="danger"-->
-<!--                text-->
-<!--                @click="handleDelete(scope.row)"-->
-<!--              >删除</el-button>-->
-<!--              &lt;!&ndash;              <el-dialog&ndash;&gt;-->
-<!--              &lt;!&ndash;                :append-to-body="true"&ndash;&gt;-->
-<!--              &lt;!&ndash;                title="删除提示"&ndash;&gt;-->
-<!--              &lt;!&ndash;                :visible.sync="dialogVisible"&ndash;&gt;-->
-<!--              &lt;!&ndash;                width="30%"&ndash;&gt;-->
-<!--              &lt;!&ndash;              >&ndash;&gt;-->
-<!--              &lt;!&ndash;                <span>&ndash;&gt;-->
-<!--              &lt;!&ndash;                  你确定要永久删除这条数据吗？&ndash;&gt;-->
-<!--              &lt;!&ndash;                </span>&ndash;&gt;-->
-<!--              &lt;!&ndash;                <template #footer>&ndash;&gt;-->
-<!--              &lt;!&ndash;                  <span class="dialog-footer">&ndash;&gt;-->
-<!--              &lt;!&ndash;                    <el-button @click="dialogVisible = false">Cancel</el-button>&ndash;&gt;-->
-<!--              &lt;!&ndash;                    <el-button&ndash;&gt;-->
-<!--              &lt;!&ndash;                      type="primary"&ndash;&gt;-->
-<!--              &lt;!&ndash;                      @click="handleDelete(scope.row)"&ndash;&gt;-->
-<!--              &lt;!&ndash;                    >&ndash;&gt;-->
-<!--              &lt;!&ndash;                      确认&ndash;&gt;-->
-<!--              &lt;!&ndash;                    </el-button>&ndash;&gt;-->
-<!--              &lt;!&ndash;                  </span>&ndash;&gt;-->
-<!--              &lt;!&ndash;                </template>&ndash;&gt;-->
-<!--              &lt;!&ndash;              </el-dialog>&ndash;&gt;-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--        </el-table>-->
+        <el-table
+          :data="tableData"
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="文件名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="data"
+            label="设备名称"
+            width="180">
+            <template slot-scope="scope">
+              <el-tag
+                type="primary"
+                disable-transitions>{{scope.row.data.equipmentBaseInfo.equipmentName}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="data"
+            label="设备编号"
+            width="180">
+            <template slot-scope="scope">
+              <el-tag
+                type="primary"
+                disable-transitions>{{scope.row.data.equipmentBaseInfo.basicInfoId}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="data"
+            label="部门"
+            width="180">
+            <template slot-scope="scope">
+              <el-tag
+                type="primary"
+                disable-transitions>{{scope.row.data.equipmentBaseInfo.departmentName}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="文件状态"
+            width="180">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.status === '读取失败' ? 'primary' : 'success'"
+              disable-transitions>{{scope.row.status}}</el-tag>
+          </template>
+          </el-table-column>
+          <el-table-column
+            prop="uploadStatus"
+            label="上传状态"
+            width="180">
+            <template slot-scope="scope">
+              <el-tag
+                :type="scope.row.uploadStatus === '待上传' ? 'warning' : (scope.row.uploadStatus === '上传成功' ?'success': 'danger')"
+                disable-transitions>{{scope.row.uploadStatus}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click="handupload(scope.$index, scope.row)">上传</el-button>
+              <el-button
+                type="danger"
+                @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button
+                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
       </div>
     </div>
+    <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
+      <div class="uploadCard">
+        <el-upload
+          :limit="10"
+          :on-exceed="handleExceed"
+          class="upload-demo"
+          action=""
+          :multiple="true"
+          :on-change="handleChange"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="larger" type="primary">选取文件</el-button>
+          <div slot="tip" style="font-size: 18px">
+            <p>注意事项：</p>
+            <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
+            <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
+            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>
+          </div>
+        </el-upload>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="checkoutFile()">确 定</el-button>
+        <el-button @click="closeDialog()">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -104,7 +150,6 @@ import {
   importfile
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
-import {mapGetters} from "vuex";
 export default {
   name: 'Dashboard',
   data() {
@@ -120,17 +165,16 @@ export default {
       // }],
       name: '',
       dialogFormVisible: false,
-      tableData: [{
-        date: '1',
-        name: 'irms'
-      }],
       dialogForm: {},
       formLabelWidth: '120px',
       fileList: [],
+      checkList:[],
       excelData: {
         total: 0,
         equipments: []
-      }
+      },
+      tableData: [],
+      repaly:[],
     }
   },
   methods: {
@@ -140,7 +184,11 @@ export default {
       this.fileTemp = file.raw
       if (this.fileTemp) {
         if ((types === 'xlsx') || (types === 'xls') || (types === 'csv')) {
-          this.fileList.push(file.raw)
+          var obj = {
+            name:file.name,
+            value:file.raw
+          }
+          this.fileList.push(obj)
         } else {
           this.$message({
             type: 'warning',
@@ -154,59 +202,67 @@ export default {
         })
       }
     },
+    // 确认文件
+    checkoutFile() {
+      this.dialogFormVisible = false
+      this.checkList = this.fileList
+      this.submitUpload()
+      console.log(this.excelData)
+      this.tableData = this.excelData.equipments
+      console.log(this.tableData)
+      this.fileList = []
+    },
     // 上传文件
     async submitUpload(fileList) {
-      if (this.fileList.length === 0) {
+      if (this.checkList.length === 0) {
         this.$message({
           type: 'error',
           message: '请选择文件！'
         })
       } else {
-        for(let index = 0;index < this.fileList.length;index++){
-          const outdata = await importfile(this.fileList[index], this.value)
+        for(let index = 0;index < this.checkList.length;index++){
+          const outdata = await importfile(this.checkList[index].value, this.value)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
-          // console.log(readStatus)
+          console.log(equipment)
           if(readStatus === 22 || readStatus === 20) {
-            this.excelData.equipments.push(equipment)
+            var obj = {
+              name:this.checkList[index].name,
+              data: equipment,
+              status:'读取成功',
+              uploadStatus:'待上传',
+            }
+            this.excelData.equipments.push(obj)
           }
         }
       }
-      this.uploadFunc()
+      // this.uploadFunc()
     },
     // 发送请求
-    uploadFunc() {
-      this.excelData.total = this.excelData.equipments.length
+    uploadFunc(index,data) {
       this.dialogFormVisible = false
       this.loading = true
-      // console.log(this.excelData)
-      if(this.excelData.equipments.length > 0) {
-        importExcel(this.excelData).then((res) => {
-          this.loading = false
-          this.$message({
-            message: '文件上传成功！',
-            type: 'success'
-          })
-        }).finally(() =>{
-          this.excelData = {
-            total: 0,
-            equipments: []
-          }
-          this.fileList = []
-          this.loading = false
-        })
-      }else{
-        this.$message({
-          message: '数据读取错误',
-          type: 'error'
-        })
-        this.loading = false
-        this.fileList = []
-        this.excelData = {
-          total: 0,
-          equipments: []
-        }
+      var equipment  = []
+      var importData = {
+        equipments: [],
+        total:1,
       }
+      equipment.push(data)
+      importData.equipments.push(equipment)
+      // console.log(importData)
+      importExcel(importData).then((res) => {
+        this.loading = false
+        this.$message({
+          message: '文件上传成功！',
+          type: 'success'
+        })
+        this.tableData[index].uploadStatus = "上传成功"
+        this.repaly[index] = res.data
+      }).catch((error) => {
+        this.tableData[index].uploadStatus = "上传失败"
+      }).finally(() =>{
+        this.loading = false
+      })
     },
     // 手动移除
     handleRemove(fileList) {
@@ -230,7 +286,47 @@ export default {
       document.body.appendChild(a)
       a.click()
       a.remove()
-    }
+    },
+    // 单个文件上传
+    handupload(index, row) {
+      this.uploadFunc(index,row.data)
+    },
+    // 上传 table data
+    upLoadTableData() {
+      if(this.tableData.length !== 0) {
+        for(var i = 0; i < this.tableData.length; i++){
+          if(this.tableData[i].uploadStatus !== "上传成功"){
+            this.tableData[i].uploadStatus = "上传中"
+            this.uploadFunc(i,this.tableData[i].data)
+          }
+        }
+      } else {
+        this.$message({
+          type:'error',
+          message:'暂无文件可上传'
+        })
+      }
+    },
+    // 查看反馈信息
+    checkReplay(index) {
+      if (this.repaly[index] === undefined){
+        this.$message({
+          type:'error',
+          message:'暂无反馈信息'
+        })
+      }
+      console.log(this.repaly[index])
+    },
+    // 删除
+    handleDelete(index) {
+      Array.prototype.remove = function(from, to) {
+        var rest = this.slice((to || from) + 1 || this.length);
+        this.length = from < 0 ? this.length + from : from;
+        return this.push.apply(this, rest);
+      };
+      this.tableData.remove(index)
+      console.log(this.tableData)
+    },
   }
 }
 </script>

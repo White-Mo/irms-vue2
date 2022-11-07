@@ -1,5 +1,6 @@
 <template>
   <div class = "main">
+    <dv-loading>Loading...</dv-loading>
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
         <el-row :gutter="20" style="height: 5rem;display: flex">
@@ -16,6 +17,7 @@
         <dv-decoration-10 style="width:100%;height:5px; position: relative;bottom:1rem" />
       </el-header>
     </div>
+
     <div id="container"></div>
     <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background: #142437" v-show="datacard">
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
