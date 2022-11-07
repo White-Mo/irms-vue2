@@ -146,7 +146,7 @@
 
 <script>
 import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
-import addDepartment from '@/components/Baseparameter/addDepartment'
+import addDepartment from '@/components/Baseparameter/department/addDepartment'
 
 export default {
   components: {
@@ -341,20 +341,15 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+<style  lang="less">
+//覆盖样式
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
 .el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 5px 20px 20px 5px;
   height: auto;
   width: 600px;
   display: flex;
@@ -364,8 +359,11 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+.el-select-dropdown__wrap{
+  max-height: none;
+}
 .el-scrollbar {
-  height: 380px;
+  height: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -380,10 +378,21 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
+.el-button--primary {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
 </style>
