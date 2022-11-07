@@ -64,9 +64,9 @@ export default {
         if (!this.nameRules) {
           callback(new Error('部门已存在，请重新输入'))
           // this.department.departmentName = ''
-          } else {
+        } else {
           callback()
-          }
+        }
       }
       callback()
     }
@@ -78,9 +78,9 @@ export default {
         if (!this.codeRules) {
           callback(new Error('部门代码已存在，请重新输入'))
           // this.department.departmentCode = ''
-          } else {
+        } else {
           callback()
-          }
+        }
       }
       callback()
     }

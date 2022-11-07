@@ -24,12 +24,31 @@ export function createPost(data) {
     responseType: 'json'
   })
 }
+//修改单位
+export function updatePostAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
 
 //新增部门
 export function createDepartment(data) {
   return request({
     params: data,
     url: '/home/baseparameter/createPostDepartment',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//修改部门
+export function updatePostDepartmentAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostDepartmentAction',
     method: 'post',
     responseType: 'json'
   })

@@ -138,7 +138,7 @@
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addPost @ifUpdateChange="updateIfupdate" />
+        <addPost @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updatePost :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
@@ -195,6 +195,7 @@ export default {
   },
   created() {
     this.fetchData()
+
   },
   methods: {
     // 综合数据管理展示与查询--lry
@@ -252,10 +253,6 @@ export default {
         }
       })
     },
-    updateIfupdate(e) {
-      this.ifUpdate = e
-      this.fetchData()
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.limit=val
@@ -276,6 +273,7 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+      this.fetchData()
     }
   }
 }

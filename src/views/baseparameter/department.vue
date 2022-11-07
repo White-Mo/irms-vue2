@@ -137,8 +137,11 @@
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <addDepartment @ifUpdateChange="updateIfupdate" />
+      <div v-if="ifUpdate === '1'">
+        <addDpartment @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
+        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -147,10 +150,12 @@
 <script>
 import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
 import addDepartment from '@/components/Baseparameter/department/addDepartment'
+import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
 
 export default {
   components: {
-    addDepartment
+    addDepartment,
+    updateDepartment
   },
   filters: {
     statusFilter(status) {
@@ -174,7 +179,7 @@ export default {
       inputValue: '',
       postname: '',
       input3: '',
-      ifUpdate: false,
+      ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       basicvalue: [
