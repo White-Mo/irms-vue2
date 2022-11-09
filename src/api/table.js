@@ -71,3 +71,11 @@ export function changeStatus(eq) {
   })
 }
 
+export function getQComSelect(model) {
+  return request({
+    url: 'home/authority/' + model,
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
