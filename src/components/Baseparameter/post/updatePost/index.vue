@@ -16,7 +16,7 @@
               <el-input v-model="postForm.postCode" />
             </el-col>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-show="currentShow === '3'">
             <el-button type="primary" @click="onSubmit('postForm')">添加单位</el-button>
           </el-form-item>
         </el-form>

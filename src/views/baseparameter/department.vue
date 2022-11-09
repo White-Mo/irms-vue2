@@ -2,8 +2,7 @@
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
-      <div
-        v-show="!ifUpdate"
+      <div v-show="ifUpdate === '0'"
         class="show"
       >
         <el-row>
@@ -92,7 +91,11 @@
           </el-col>
         </el-row>
         <el-table
+          height="70vh"
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px'}"
           v-loading="listLoading"
+          :disable="true"
           :data="list"
           element-loading-text="Loading"
           border
@@ -138,7 +141,7 @@
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addDpartment @changeDiv="changeDiv" />
+        <addDepartment @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
@@ -197,11 +200,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        departmentName: '部门名称',
-        departmentCode: '部门代码',
-        postName:'所属单位'
-      }
     }
   },
   created() {
@@ -233,13 +231,15 @@ export default {
     },
 
     addDepartment() {
-      this.ifUpdate = !this.ifUpdate
+      this.ifUpdate ='1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='2'
+      this.row = row
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='3'
+      this.row = row
     },
     handleDelete(index, row) {
       this.$alert("是否永久删除该部门", '提示', {
@@ -261,10 +261,6 @@ export default {
         }
       })
     },
-    updateIfupdate(e) {
-      this.ifUpdate = e
-      this.fetchData()
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.limit=val
@@ -283,6 +279,10 @@ export default {
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
+      this.fetchData()
     }
   }
 }
