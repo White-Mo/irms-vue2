@@ -109,7 +109,7 @@ function getBaseinfo(outdata,postName) {
   const {status:businessSyste,readStatus:readStatus2 }  = underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统',readStatus1)// 所属系统
   equipmentBaseInfo.businessSyste = businessSyste
 
-  const {status:hostName,readStatus:readStatus3} = underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[1], '主机名',readStatus2) // 主机名
+  const {status:hostName,readStatus:readStatus3} = underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[2], '主机名',readStatus2) // 主机名
   equipmentBaseInfo.hostName = hostName
 
   const {status:departmentName,readStatus:readStatus4} = underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门',readStatus3) // 部门
@@ -401,7 +401,7 @@ function appSoftwareFir(outdata, excelIndex) {
       // console.log(outdata.length)
       // debugger
       if (outdata[index] !== undefined) {
-        for (;index <= outdata.length; index++) {
+        for (;index < outdata.length; index++) {
           if (outdata[index] !== undefined) {
             // console.log(Object.values(outdata[index])[0])
             if (Object.values(outdata[index])[0] !== '') {
