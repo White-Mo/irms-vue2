@@ -1,7 +1,7 @@
 <template>
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
-    <div class="app-container" v-loading="loading">
+    <div class="app-container">
       <div class="show">
         <el-row>
           <el-col :span="24">
@@ -40,6 +40,8 @@
           </el-col>
         </el-row>
         <el-table
+          :header-cell-style="headStyle"
+          :cell-style="headStyle"
           :data="tableData"
           style="width: 100%">
           <el-table-column
@@ -49,10 +51,11 @@
           </el-table-column>
           <el-table-column
             prop="data"
-            label="设备名称"
-            width="180">
+            label="设备名称">
             <template slot-scope="scope">
               <el-tag
+                class="statusTg"
+                size="medium"
                 type="primary"
                 disable-transitions>{{scope.row.data.equipmentBaseInfo.equipmentName}}</el-tag>
             </template>
@@ -63,6 +66,7 @@
             width="180">
             <template slot-scope="scope">
               <el-tag
+                class="statusTg"
                 type="primary"
                 disable-transitions>{{scope.row.data.equipmentBaseInfo.basicInfoId}}</el-tag>
             </template>
@@ -73,6 +77,7 @@
             width="180">
             <template slot-scope="scope">
               <el-tag
+                class="statusTg"
                 type="primary"
                 disable-transitions>{{scope.row.data.equipmentBaseInfo.departmentName}}</el-tag>
             </template>
@@ -83,6 +88,7 @@
             width="180">
           <template slot-scope="scope">
             <el-tag
+              class="statusTg"
               :type="scope.row.status === '读取失败' ? 'primary' : 'success'"
               disable-transitions>{{scope.row.status}}</el-tag>
           </template>
@@ -93,19 +99,20 @@
             width="180">
             <template slot-scope="scope">
               <el-tag
-                :type="scope.row.uploadStatus === '待上传' ? 'warning' : (scope.row.uploadStatus === '上传成功' ?'success': 'danger')"
+                class="statusTg"
+                :type="scope.row.uploadStatus === '待上传' ? 'warning' : (scope.row.uploadStatus === '上传成功' ?'success': (scope.row.uploadStatus === '上传中' ?'primary': 'danger'))"
                 disable-transitions>{{scope.row.uploadStatus}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button
-                @click="handupload(scope.$index, scope.row)">上传</el-button>
+                @click="handupload(scope.$index, scope.row)" :disabled = 'disabled'>上传</el-button>
               <el-button
                 type="danger"
-                @click="handleDelete(scope.$index)">删除</el-button>
-              <el-button
-                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>
+                @click="handleDelete(scope.$index)" :disabled = 'disabled'>删除</el-button>
+<!--              <el-button-->
+<!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -138,11 +145,23 @@
         <el-button @click="closeDialog()">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
+      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">
+        <el-descriptions-item v-for="items in item">
+          <template slot="label">
+            {{items.key}}
+          </template>
+          {{items.value}}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import {
+  analysisReply,
   getEquipment,
   importfile
 } from '@/utils/xlsx'
@@ -152,7 +171,6 @@ export default {
   data() {
     return {
       value: '信息资产基础信息表',
-      loading: false,
       // fileTaypes: [{
       //   value: '信息资产基础信息表',
       //   label: '资产信息表'
@@ -160,8 +178,10 @@ export default {
       //   value: '汇总表',
       //   label: '汇总表'
       // }],
+      disabled:false,
       name: '',
       dialogFormVisible: false,
+      backinfoDialog:false,
       dialogForm: {},
       formLabelWidth: '120px',
       fileList: [],
@@ -171,10 +191,14 @@ export default {
         equipments: []
       },
       tableData: [],
-      repaly:[],
+      repalyInfo:[],
+      repalyData:[]
     }
   },
   methods:  {
+    headStyle(){
+      return "text-align:center;font-size:16px;color:black"
+    },
     // 选择文件
     handleChange(file) {
       const types = file.name.split('.')[1]
@@ -186,7 +210,7 @@ export default {
             value:file.raw
           }
           this.fileList.push(obj)
-          console.log(this.fileList)
+          // console.log(this.fileList)
         } else {
           this.$message({
             type: 'warning',
@@ -205,9 +229,9 @@ export default {
       this.dialogFormVisible = false
       this.checkList = this.fileList
       this.submitUpload()
-      console.log(this.excelData)
+      // console.log(this.excelData)
       this.tableData = this.excelData.equipments
-      console.log(this.tableData)
+      // console.log(this.tableData)
       this.fileList = []
     },
     // 上传文件
@@ -220,10 +244,10 @@ export default {
       } else {
         for(let index = 0;index < this.checkList.length;index++){
           const outdata = await importfile(this.checkList[index].value, this.value)
-          console.log(outdata)
+          // console.log(outdata)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
-          console.log(equipment)
+          // console.log(equipment)
           if(readStatus === 22 || readStatus === 20) {
             var obj = {
               name:this.checkList[index].name,
@@ -240,7 +264,7 @@ export default {
     // 发送请求
     uploadFunc(index,data) {
       this.dialogFormVisible = false
-      this.loading = true
+      this.disabled = true
       var importData = {
         equipments: [],
         total:1,
@@ -249,16 +273,18 @@ export default {
       // console.log(importData)
       importExcel(importData).then((res) => {
         this.loading = false
-        this.$message({
-          message: '文件上传成功！',
-          type: 'success'
-        })
-        this.tableData[index].uploadStatus = "上传成功"
-        this.repaly[index] = res.data
+        if(res.status === 200) {
+          this.$message({
+            message: '文件上传成功！',
+            type: 'success'
+          })
+          this.tableData[index].uploadStatus = "上传成功"
+          this.repalyInfo[index] = res.data
+        }
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
       }).finally(() =>{
-        this.loading = false
+        this.disabled = false
       })
     },
     // 手动移除
@@ -286,7 +312,15 @@ export default {
     },
     // 单个文件上传
     handupload(index, row) {
-      this.uploadFunc(index,row.data)
+      if (row.uploadStatus === "上传成功") {
+        this.$message({
+          type:'warning',
+          message:'该文件已上传'
+        })
+      } else {
+        row.uploadStatus = '上传中'
+        this.uploadFunc(index,row.data)
+      }
     },
     // 上传 table data
     upLoadTableData() {
@@ -306,13 +340,19 @@ export default {
     },
     // 查看反馈信息
     checkReplay(index) {
-      if (this.repaly[index] === undefined){
+      // console.log(index)
+      // console.log(this.repalyInfo)
+      console.log(this.repalyInfo[index])
+      if (this.repalyInfo[index] === undefined){
         this.$message({
           type:'error',
           message:'暂无反馈信息'
         })
+      } else {
+        this.repalyData =  analysisReply(this.repalyInfo[index])
+        console.log(this.repalyData)
+        this.backinfoDialog  = true
       }
-      console.log(this.repaly[index])
     },
     // 删除
     handleDelete(index) {
@@ -329,7 +369,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.statusTg{
+  font-size: 16px;
+}
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
@@ -342,12 +384,6 @@ export default {
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
-}
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
 }
 .el-col {
   border-radius: 4px;
