@@ -44,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (typeof (res) === 'number') return res // 为了调取以前的接口
+    if (typeof (res) === 'number' || (response.status == 200 && typeof res == "object")) return res // 为了调取以前的接口
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       if (res.code === 20001 || res.code === 20002) {

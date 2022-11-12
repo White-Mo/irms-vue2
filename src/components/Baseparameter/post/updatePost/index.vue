@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="update_detail">
     <div class="source">
       <el-page-header content="添加单位" @back="back" />
     </div>
     <div class="source">
       <el-row>
-        <el-form ref="postForm" :model="postForm = post" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
+        <el-form ref="postForm" :model="postForm = this.post" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
           <el-form-item label="单位名称" prop="postName">
             <el-col :span="10">
               <el-input v-model="postForm.postName" />
@@ -16,7 +16,7 @@
               <el-input v-model="postForm.postCode" />
             </el-col>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-show="currentShow === '3'">
             <el-button type="primary" @click="onSubmit('postForm')">添加单位</el-button>
           </el-form-item>
         </el-form>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
+import { checkPostName, checkPostCode, updatePostAction} from '@/api/baseparameter'
 
 export default {
   name: 'addPost',
@@ -71,7 +71,8 @@ export default {
       nameRules: false,
       codeRules: false,
       post: {
-        postName: '',
+        postId:'',
+        postName:'',
         postCode: ''
       },
       rules: {
@@ -93,6 +94,25 @@ export default {
   created() {
     console.log(this.row)
     console.log(this.currentShow)
+    this.initPostData()
+  },
+  mounted() {
+    console.log(this.currentShow+"---------------------------------")
+    const list = document.getElementsByClassName('update_detail')[0]
+    const inputDom = list.getElementsByTagName('input')
+    if (this.currentShow === '2') {
+      inputDom.forEach(e => {
+        const parentNode = e.parentNode
+        e.disabled = true
+        parentNode.classList.add('is-disabled')
+      })
+    } else {
+      inputDom.forEach(e => {
+        const parentNode = e.parentNode
+        e.disabled = false
+        parentNode.classList.remove('is-disabled')
+      })
+    }
   },
   methods: {
     back() {
@@ -102,16 +122,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const post = { ...this.post }
-          createPost(post).then(res => {
+          updatePostAction(post).then(res => {
             this.$alert(res.data, '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false
             }).then(() => {
-              this.$emit('ifUpdateChange', false)
-              this.fetchData()
+              this.back()
             })
-            console.log(res)
           }).catch(err => {
             console.log(err)
           })
@@ -124,7 +142,9 @@ export default {
     // 验证用户名是否存在
     async getNameRules() {
       const params = {
-        postName: this.post.postName
+        postId:this.post.postId,
+        postName: this.post.postName,
+        action:"update"
       }
       await checkPostName(params).then((res) => {
         if (res.data.valid === true) {
@@ -136,7 +156,9 @@ export default {
     },
     async getCodeRules() {
       const params = {
-        postCode: this.post.postCode
+        postId:this.post.postId,
+        postCode: this.post.postCode,
+        action:"update"
       }
       await checkPostCode(params).then((res) => {
         if (res.data.valid === true) {
@@ -145,6 +167,9 @@ export default {
           this.codeRules = false
         }
       })
+    },
+    initPostData(){
+      this.post=this.row
     }
   }
 }

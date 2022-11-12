@@ -103,47 +103,58 @@
           </el-col>
         </el-row>
         <el-table
-          v-loading="listLoading"
-          :disable="true"
-          :data="list"
-          element-loading-text="Loading"
-          border
-          highlight-current-row
-          stripe
-        >
-          <el-table-column type="index" />
-          <af-table-column
-            v-for="(item,index) in dataname"
-            :key="index"
-            :label="item.label"
-            :prop="item.value"
-            :formatter="item.formatter"
-            align="center"
+            height="70vh"
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px'}"
+            v-loading="listLoading"
+            :disable="true"
+            :data="list"
+            element-loading-text="Loading"
+            border
+            highlight-current-row
+            stripe
+            @cell-dblclick="tbCellDoubleClick"
           >
-          </af-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            width="250px"
-          >
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                text
-                @click=handleDelete(scope.row)
-              >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column
+              type="index"
+              align="center"
+            />
+            <el-table-column
+              v-for="(item,index) in dataname"
+              :key="index"
+              :label="item.label"
+              :prop="item.value"
+              :formatter="item.formatter"
+              :width="item.width"
+              align="center"
+              show-overflow-tooltip
+            >
+
+            </el-table-column>
+            <el-table-column
+              align="center"
+              fixed="right"
+              label="操作"
+              width="250px"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="handleDetail(scope.$index, scope.row)"
+                >详情</el-button>
+                <el-button
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)"
+                >编辑</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  text
+                  @click=handleDelete(scope.row)
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -168,7 +179,6 @@
 import { getList, getdataCount, delEquipment } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
-import {delPost} from "@/api/baseparameter";
 
 export default {
   // 引用vue reload方法
@@ -208,39 +218,48 @@ export default {
       dataname: [
         {
           value: 'basicInfoId',
-          label: '设备编号'
+          label: '设备编号',
+          width: '200px'
         },
         {
           value: 'postName',
-          label: '所属单位'
+          label: '所属单位',
+          width: '200px'
         },
         {
           value: 'departmentName',
-          label: '所属部门'
+          label: '所属部门',
+          width: '200px'
         },
         {
           value: 'equipmentName',
-          label: '设备名'
+          label: '设备名',
+          width: '200px'
         },
         {
           value: 'brandName',
-          label: '设备品牌'
+          label: '设备品牌',
+          width: '200px'
         },
         {
           value: 'equipmentTypeName',
-          label: '设备类型'
+          label: '设备类型',
+          width: '200px'
         },
         {
           value: 'businessSystemName',
-          label: '业务系统'
+          label: '业务系统',
+          width: '200px'
         },
         {
           value: 'machineRoomName',
-          label: '安装位置'
+          label: '安装位置',
+          width: '200px'
         },
         {
           value: 'cabinetName',
-          label: '机柜编号'
+          label: '机柜编号',
+          width: '200px'
         },
         {
           value: 'onlineTime',
@@ -260,8 +279,10 @@ export default {
               var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
               // 拼接
               // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              row.onlineTime=year+"-"+month+"-"+day;
               return year+"-"+month+"-"+day;
-            }
+            },
+          width: '200px'
         },
         {
           value: 'offlineTime',
@@ -281,40 +302,50 @@ export default {
             var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
             // 拼接
             // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            row.offlineTime=year+"-"+month+"-"+day;
             return year+"-"+month+"-"+day;
-          }
+          },
+          width: '200px'
         },
         {
           value: 'hostName',
-          label: '主机名'
+          label: '主机名',
+          width: '200px'
         },
         {
           value: 'equipmentAdminName',
-          label: '设备管理员'
+          label: '设备管理员',
+          width: '200px'
         },
         {
           value: 'equipmentAdminPhone',
-          label: '设备管理员电话'
+          label: '设备管理员电话',
+          width: '200px'
         },
         {
           value: 'appAdminName',
-          label: '应用管理员'
+          label: '应用管理员',
+          width: '200px'
         },
         {
           value: 'appAdminPhone',
-          label: '应用管理员电话'
+          label: '应用管理员电话',
+          width: '200px'
         },
         {
           value: 'brandModelName',
-          label: '型号'
+          label: '型号',
+          width: '200px'
         },
         {
           value: 'serialNumber',
-          label: '序列号'
+          label: '序列号',
+          width: '200px'
         },
         {
           value: 'guaranteePeriod',
-          label: '保修期'
+          label: '保修期',
+          width: '200px'
         }
       ],
       value: '',
@@ -324,6 +355,13 @@ export default {
     this.fetchData()
   },
   methods: {
+    tbCellDoubleClick(row, column, cell, event){
+      console.log(cell)
+      this.$alert(row[column.property], '单元格值', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+      })
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
@@ -444,7 +482,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
@@ -457,15 +494,6 @@ export default {
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
-}
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
-}
-.el-col {
-  border-radius: 4px;
 }
 .bg-purple-dark {
   background: #99a9bf;
@@ -511,20 +539,16 @@ export default {
   text-align: center;
 }
 </style>
+
 <style  lang="less">
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+//覆盖样式
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
 .el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 5px 20px 20px 5px;
   height: auto;
   width: 600px;
   display: flex;
@@ -534,37 +558,12 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
-.el-scrollbar {
-  height: 380px;
-  overflow: hidden;
-  position: relative;
+.el-select-dropdown__wrap{
+  max-height: none;
 }
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
-  height: 100%;
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #1d1e1f;
-  background-color: #d2d2d2;
-}
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
-}
-
 .el-button--primary {
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
-}
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-.radio_class{
-  display:inline-block;
-  height:2rem;
-  width:100%;
 }
 </style>

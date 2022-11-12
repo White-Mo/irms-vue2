@@ -29,7 +29,7 @@
 import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
 
 export default {
-  name: 'AddPost',
+  name: 'addPost',
   data() {
     var checkName =async (rule, value, callback) => {
       if (!value) {
@@ -60,6 +60,8 @@ export default {
     return {
       nameRules: false,
       codeRules: false,
+      nameRulesMessage:'',
+      codeRulesMessage:'',
       post: {
         postName: '',
         postCode: ''
@@ -110,25 +112,31 @@ export default {
     // 验证用户名是否存在
     async getNameRules() {
       const params = {
-        postName: this.post.postName
+        postId:'',
+        postName: this.post.postName,
+        action:"add"
       }
       await checkPostName(params).then((res) => {
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
           this.nameRules = false
+          this.nameRulesMessage = res.data.message
         }
       })
     },
     async getCodeRules() {
       const params = {
-        postCode: this.post.postCode
+        postId:'',
+        postCode: this.post.postCode,
+        action:"add"
       }
       await checkPostCode(params).then((res) => {
         if (res.data.valid === true) {
           this.codeRules = true
         } else {
           this.codeRules = false
+          this.codeRulesMessage = res.data.message
         }
       })
     }

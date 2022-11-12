@@ -1,5 +1,6 @@
 import {Message} from  "element-ui"
 import { status } from "nprogress"
+import logdepthbuf_fragmentGlsl from "three/src/renderers/shaders/ShaderChunk/logdepthbuf_fragment.glsl";
 
 export function importfile(obj, head) {
   return new Promise((resolve, reject) => {
@@ -108,7 +109,7 @@ function getBaseinfo(outdata,postName) {
   const {status:businessSyste,readStatus:readStatus2 }  = underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统',readStatus1)// 所属系统
   equipmentBaseInfo.businessSyste = businessSyste
 
-  const {status:hostName,readStatus:readStatus3} = underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[1], '主机名',readStatus2) // 主机名
+  const {status:hostName,readStatus:readStatus3} = underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[2], '主机名',readStatus2) // 主机名
   equipmentBaseInfo.hostName = hostName
 
   const {status:departmentName,readStatus:readStatus4} = underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门',readStatus3) // 部门
@@ -359,8 +360,8 @@ function appSoftwareFir(outdata, excelIndex) {
             domainName: '', // HTTP/FTP
             businessName: '' // 域名地址
           }
-          appBusinessData.domainName = Object.values(outdata[index])[0]
-          appBusinessData.businessName = Object.values(outdata[index])[1]
+          appBusinessData.businessName = Object.values(outdata[index])[0]
+          appBusinessData.domainName = Object.values(outdata[index])[1]
           appBusinessData.userScope = Object.values(outdata[index])[3]
           appBusinessData.ICPNum = Object.values(outdata[index])[4]
           appBusinesses.push(appBusinessData)
@@ -395,14 +396,21 @@ function appSoftwareFir(outdata, excelIndex) {
     }
     if (Object.values(outdata[index])[0] === '本  机  存  储') {
       index = index + 2
-      for (;index < outdata.length; index++) {
-        if (outdata[index] !== undefined) {
-          if (Object.values(outdata[index])[0] !== '') {
-            var NativeStoredata = Object.values(outdata[index])
-            appNativeStore.totalCapacity = NativeStoredata[0]
-            appNativeStore.usedSpace = NativeStoredata[1]
-            appNativeStore.unusedSpace = NativeStoredata[4]
-            appNativeStore.annualGrowthSpace = NativeStoredata[5]
+      // console.log(index)
+      // console.log(outdata[index])
+      // console.log(outdata.length)
+      // debugger
+      if (outdata[index] !== undefined) {
+        for (;index < outdata.length; index++) {
+          if (outdata[index] !== undefined) {
+            // console.log(Object.values(outdata[index])[0])
+            if (Object.values(outdata[index])[0] !== '') {
+              var NativeStoredata = Object.values(outdata[index])
+              appNativeStore.totalCapacity = NativeStoredata[0]
+              appNativeStore.usedSpace = NativeStoredata[1]
+              appNativeStore.unusedSpace = NativeStoredata[4]
+              appNativeStore.annualGrowthSpace = NativeStoredata[5]
+            }
           }
         }
       }
@@ -483,7 +491,6 @@ function appSoftwareSeLi(outdata, rightIndex) {
     appLinksInfo
   }
 }
-
 // 解析判断状态
 function statusTrans(status) {
   status = Array.from(status)
@@ -504,5 +511,45 @@ function underfindTrans(status, part,readStatus) {
   } else {
     readStatus += 1
     return {status,readStatus}
+  }
+}
+
+export function analysisReply(data) {
+  console.log(data)
+  var analysisData = []
+  analysisData.push(getReplayData(data.AddAppAccessRights))
+  analysisData.push(getReplayData(data.AddAppBusiness))
+  analysisData.push(getReplayData(data.AddAppLinksInfo))
+  analysisData.push(getReplayData(data.AddAppStore))
+  analysisData.push(getReplayData(data.AddAppSystemUser))
+  analysisData.push(getReplayData(data.AddConfig))
+  analysisData.push(getReplayData(data.AddNetWork))
+  analysisData.push(getReplayData(data.AddPortocolPort))
+  analysisData.push(getReplayData(data.AddNativeStore))
+  analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
+  analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
+  analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
+  return analysisData
+}
+function getReplayData(data){
+  console.log(data)
+  if(data !== undefined) {
+    const keys = Object.keys(data)
+    const values = Object.values(data)
+    let backdata = []
+    if (keys !== undefined) {
+      for (var i = 0; i < keys.length; i++) {
+        const obj = {
+          key: keys[i],
+          value: values[i]
+        }
+        backdata.push(obj)
+        return backdata
+      }
+    } else {
+      return backdata
+    }
+  } else {
+    return []
   }
 }

@@ -2,8 +2,7 @@
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
-      <div
-        v-show="!ifUpdate"
+      <div v-show="ifUpdate === '0'"
         class="show"
       >
         <el-row>
@@ -92,7 +91,11 @@
           </el-col>
         </el-row>
         <el-table
+          height="70vh"
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px'}"
           v-loading="listLoading"
+          :disable="true"
           :data="list"
           element-loading-text="Loading"
           border
@@ -137,8 +140,11 @@
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <addDepartment @ifUpdateChange="updateIfupdate" />
+      <div v-if="ifUpdate === '1'">
+        <addDepartment @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
+        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -146,11 +152,13 @@
 
 <script>
 import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
-import addDepartment from '@/components/Baseparameter/addDepartment'
+import addDepartment from '@/components/Baseparameter/department/addDepartment'
+import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
 
 export default {
   components: {
-    addDepartment
+    addDepartment,
+    updateDepartment
   },
   filters: {
     statusFilter(status) {
@@ -174,7 +182,7 @@ export default {
       inputValue: '',
       postname: '',
       input3: '',
-      ifUpdate: false,
+      ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       basicvalue: [
@@ -192,11 +200,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        departmentName: '部门名称',
-        departmentCode: '部门代码',
-        postName:'所属单位'
-      }
     }
   },
   created() {
@@ -228,13 +231,15 @@ export default {
     },
 
     addDepartment() {
-      this.ifUpdate = !this.ifUpdate
+      this.ifUpdate ='1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='2'
+      this.row = row
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='3'
+      this.row = row
     },
     handleDelete(index, row) {
       this.$alert("是否永久删除该部门", '提示', {
@@ -256,10 +261,6 @@ export default {
         }
       })
     },
-    updateIfupdate(e) {
-      this.ifUpdate = e
-      this.fetchData()
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.limit=val
@@ -278,6 +279,10 @@ export default {
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
+      this.fetchData()
     }
   }
 }
@@ -341,20 +346,15 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+<style  lang="less">
+//覆盖样式
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
 .el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 5px 20px 20px 5px;
   height: auto;
   width: 600px;
   display: flex;
@@ -364,8 +364,11 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+.el-select-dropdown__wrap{
+  max-height: none;
+}
 .el-scrollbar {
-  height: 380px;
+  height: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -380,10 +383,21 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
+.el-button--primary {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
 </style>

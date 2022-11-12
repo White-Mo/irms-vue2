@@ -41,7 +41,7 @@ import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/ap
 import {getPost} from "@/api/select";
 
 export default {
-  name: 'AddDepartment',
+  name: 'addDepartment',
   created() {
     getPost().then(response => {
       console.log(response)
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     back() {
-      this.$emit('ifUpdateChange', false)
+      this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
