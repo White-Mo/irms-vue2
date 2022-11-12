@@ -22,6 +22,7 @@
             :lg="2"
             :xl="2"
           >
+
             <span>查询条件：</span>
           </el-col>
           <el-col
@@ -32,6 +33,7 @@
             :xl="3"
           >
             <el-select
+              @change="handleSelectChange"
               v-model="DataName"
               placeholder="详细字段查询"
               multiple
@@ -53,13 +55,33 @@
             :lg="4"
             :xl="4"
           >
-            <el-input
+          <el-autocomplete
+          autosize
+          type="text"
+      class="inline-input"
+      v-model="inputValue"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入内容"
+      @select="handleSelect"
+    ></el-autocomplete>
+            <!-- <el-input
+
               v-model="inputValue"
-              placeholder="输入查询内容"
+              placeholder="输入式查询"
               clearable
               size="medium"
-            />
+            /> -->
+
           </el-col>
+          <el-col
+            :xs="4"
+            :sm="4"
+            :md="4"
+            :lg="4"
+            :xl="4"
+          >
+
+        </el-col>
           <el-col
             :xs="2"
             :sm="2"
@@ -132,34 +154,37 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 text
                 @click="handleDelete(scope.row)"
               >删除</el-button>
-<!--              <el-dialog-->
-<!--                :append-to-body="true"-->
-<!--                title="删除提示"-->
-<!--                :visible.sync="dialogVisible"-->
-<!--                width="30%"-->
-<!--              >-->
-<!--                <span>-->
-<!--                  你确定要永久删除这条数据吗？-->
-<!--                </span>-->
-<!--                <template #footer>-->
-<!--                  <span class="dialog-footer">-->
-<!--                    <el-button @click="dialogVisible = false">Cancel</el-button>-->
-<!--                    <el-button-->
-<!--                      type="primary"-->
-<!--                      @click="handleDelete(scope.row)"-->
-<!--                    >-->
-<!--                      确认-->
-<!--                    </el-button>-->
-<!--                  </span>-->
-<!--                </template>-->
-<!--              </el-dialog>-->
+              <!--              <el-dialog-->
+              <!--                :append-to-body="true"-->
+              <!--                title="删除提示"-->
+              <!--                :visible.sync="dialogVisible"-->
+              <!--                width="30%"-->
+              <!--              >-->
+              <!--                <span>-->
+              <!--                  你确定要永久删除这条数据吗？-->
+              <!--                </span>-->
+              <!--                <template #footer>-->
+              <!--                  <span class="dialog-footer">-->
+              <!--                    <el-button @click="dialogVisible = false">Cancel</el-button>-->
+              <!--                    <el-button-->
+              <!--                      type="primary"-->
+              <!--                      @click="handleDelete(scope.row)"-->
+              <!--                    >-->
+              <!--                      确认-->
+              <!--                    </el-button>-->
+              <!--                  </span>-->
+              <!--                </template>-->
+              <!--              </el-dialog>-->
             </template>
           </el-table-column>
         </el-table>
@@ -177,16 +202,21 @@
         <addinfo @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updataInfo :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+        <updataInfo
+          :row="row"
+          :current-show="ifUpdate"
+          @changeDiv="changeDiv"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getList, getdataCount, delEquipment } from '@/api/table'
+import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import Addinfo from '@/components/Infomanage/addInfo'
 import UpdataInfo from '@/components/Infomanage/updateInfo'
+import { all } from 'q'
 
 export default {
   // 引用vue reload方法
@@ -207,12 +237,19 @@ export default {
   },
   data() {
     return {
+      type:0,
+    edition:0,
+    guaranteePeriod:0,
+      restaurants: [],
+     foad:[],
+      cpu_middle_guar: 'all',
+      initdata: [],
       dialogVisible: false,
       row: {},
       list: null,
       total: 0,
       start: 0,
-      limit:10,
+      limit: 10,
       DataName: 'all',
       keyname: [],
       initname: ['123'],
@@ -223,6 +260,7 @@ export default {
       ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
+      initval: [],
       dataname: [
         {
           value: 'postName',
@@ -295,6 +333,14 @@ export default {
         {
           value: 'guaranteePeriod',
           label: '保修期'
+        },
+        {
+          value: 'type',
+          label: 'CPU类型'
+        },
+        {
+          value: 'edition',
+          label: '中间件版本'
         }
       ],
       value: '',
@@ -321,9 +367,63 @@ export default {
     }
   },
   created() {
+    console.log(this.initname)
     this.fetchData()
+    // this.getInitValue(this.initdata)
   },
+  mounted() {
+      this.restaurants = this.loadAll();
+      // console.log(this.initval);
+    },
   methods: {
+    querySearch(queryString, cb) {
+
+        var restaurants = this.restaurants;
+        console.log(restaurants);
+        console.log(queryString);
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        console.log(queryString);
+        return (restaurant) => {
+          console.log(restaurant);
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return this.foad;
+      },
+
+      handleSelect(item) {
+        console.log(item);
+      },
+    // change的处理事件
+
+    handleSelectChange(val) {
+      console.log(val);
+      var key = 0
+
+      for (key = 0; key < val.length; key++) {
+        if (val[key] == 'type'&& this.type==0) {
+          this.getInitValue('type')
+          this.type=1
+        }else if(val[key] == 'edition'&& this.edition==0){
+          this.getInitValue('edition')
+          this.edition=1
+        }else if(val[key] == 'guaranteePeriod'&& this.guaranteePeriod==0){
+          this.getInitValue('guarantee_period')
+          this.guaranteePeriod=1
+        }
+        //         if (val[key]=='project_name'||val[key]=='project'||val[key]=='guaranteePeriod') {
+        // this.eInput=false;
+        // this.eselect=true
+        //         }
+        console.log(val[key])
+      }
+      console.log(val.length)
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
@@ -334,6 +434,9 @@ export default {
         this.initname = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.DataName)))
+        if (this.eselect ==true) {
+          this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
+        }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
@@ -341,7 +444,7 @@ export default {
         dataValue: this.inputValue,
         status: '',
         start: this.start,
-        limit: this.limit,
+        limit: this.limit
       }
       const numparams = {
         dataName: this.initname,
@@ -357,6 +460,17 @@ export default {
       getList(params).then((response) => {
         this.list = response.data.items
         console.log(this.list)
+        this.listLoading = false
+      })
+    },
+    getInitValue(initdatas) {
+      InitValue(initdatas).then((response) => {
+        this.initval = response.data.items
+
+        for (let i = 0; i < this.initval.length; i++) {
+            this.foad.push({"value":this.initval[i]})
+
+          }
         this.listLoading = false
       })
     },
@@ -391,7 +505,7 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
-      this.limit=val
+      this.limit = val
     },
     handleCurrentChange(val) {
       const params = {
@@ -399,8 +513,8 @@ export default {
         dataValue: this.inputValue,
         // status: "this.t",
         status: '',
-        start: (val-1)*this.limit,
-        limit: this.limit,
+        start: (val - 1) * this.limit,
+        limit: this.limit
       }
       getList(params).then((response) => {
         this.list = response.data.items
@@ -416,12 +530,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-.tile-content{
+.tile-content {
   padding: 9px;
   margin-bottom: 20px;
 }
-.shadows{
+.shadows {
   box-shadow: 0 0 4px #0000004d !important;
 }
 .searchInput {
@@ -430,6 +543,13 @@ export default {
   color: #0b0c10;
   background-color: #deecff;
 }
+
+// .searchSelect {
+//   height: 40px;
+//   text-align: center;
+//   color: #0b0c10;
+//   background-color: #deecff;
+// }
 .el-row {
   //margin-bottom: 20px;
   /* &:last-child {
@@ -507,14 +627,20 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
-  overflow: hidden;
+  //  height: 420px;
+  //  overflow: hidden;
+  overflow-y: scroll;
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
+// .el-scrollbar .el-scrollbar__wrap {
+//   overflow-y: scroll;
+//     overflow: auto;
+//     height: 100%;
+// }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
   background-color: #d2d2d2;
@@ -534,10 +660,10 @@ export default {
   margin-left: 0px !important;
   margin-right: 0px !important;
 }
-.radio_class{
-  display:inline-block;
-  height:2rem;
-  width:100%;
+.radio_class {
+  display: inline-block;
+  height: 2rem;
+  width: 100%;
 }
 .el-button--primary {
   height: 40px;
