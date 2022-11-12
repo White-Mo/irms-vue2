@@ -24,12 +24,31 @@ export function createPost(data) {
     responseType: 'json'
   })
 }
+//修改单位
+export function updatePostAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
 
 //新增部门
 export function createDepartment(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/createDepartment',
+    url: '/home/baseparameter/createPostDepartment',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//修改部门
+export function updatePostDepartmentAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostDepartmentAction',
     method: 'post',
     responseType: 'json'
   })
@@ -57,7 +76,7 @@ export function checkPostCode(data) {
 export function checkDepartmentName(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/checkDepartmentName',
+    url: '/home/baseparameter/checkPostDepartmentName',
     method: 'post',
     responseType: 'json'
   })
@@ -66,7 +85,7 @@ export function checkDepartmentName(data) {
 export function checkDepartmentCode(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/checkDepartmentCode',
+    url: '/home/baseparameter/checkPostDepartmentCode',
     method: 'post',
     responseType: 'json'
   })

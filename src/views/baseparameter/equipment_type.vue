@@ -142,7 +142,7 @@
 
 <script>
 import { getPostByPage } from '@/api/baseparameter'
-import AddPost from '@/components/Baseparameter/addPost'
+import AddPost from '@/components/Baseparameter/post/addPost'
 
 export default {
   components: {
@@ -234,6 +234,8 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       const params = {

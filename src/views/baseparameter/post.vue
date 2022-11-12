@@ -3,7 +3,7 @@
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
       <div
-        v-show="!ifUpdate"
+        v-show="ifUpdate === '0'"
         class="show"
       >
         <el-row>
@@ -92,7 +92,11 @@
           </el-col>
         </el-row>
         <el-table
+          height="70vh"
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px'}"
           v-loading="listLoading"
+          :disable="true"
           :data="list"
           element-loading-text="Loading"
           border
@@ -100,10 +104,14 @@
           stripe
         >
           <el-table-column align="center" type="index" />
-          <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
-            <template slot-scope="scope">
-              {{ scope.row[key] }}
-            </template>
+          <el-table-column
+            v-for="(item,index) in basicvalue"
+            :key="index"
+            :label="item.label"
+            :prop="item.value"
+            :formatter="item.formatter"
+            align="center"
+          >
           </el-table-column>
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
@@ -133,20 +141,25 @@
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <AddPost @ifUpdateChange="updateIfupdate" />
+      <div v-if="ifUpdate === '1'">
+        <addPost @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
+        <updatePost :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {delPost, delPostDepartment, getPostByPage} from '@/api/baseparameter'
-import AddPost from '@/components/Baseparameter/addPost'
+import {delPost, getPostByPage} from '@/api/baseparameter'
+import addPost from '@/components/Baseparameter/post/addPost'
+import updatePost from '@/components/Baseparameter/post/updatePost'
 
 export default {
   components: {
-    AddPost
+    addPost,
+    updatePost
   },
   filters: {
     statusFilter(status) {
@@ -162,16 +175,14 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage1: 5,
+      currentPage: 0,
+      limit:10,
       basicValue: '',
-      initdata: ['123'],
-      department: '',
+      initName:'',
       inputValue: '',
-      postname: '',
-      input3: '',
-      ifUpdate: false,
+      dataName: 'all',
+      ifUpdate: '0',
       listLoading: true,
-      singalInfo: {},
       basicvalue: [
         {
           value: 'postName',
@@ -183,10 +194,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        postName: '单位名称',
-        postCode: '单位代码'
-      }
     }
   },
   created() {
@@ -195,21 +202,25 @@ export default {
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
+      // console.log(this.basicValue)
+      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
-      if (this.basicValue === '') {
-        this.initdata = ['111']
+      if (this.dataName === 'all' || this.dataName.length === 0) {
+        console.log(this.dataName)
+        this.initName = ['111']
       } else {
-        this.initdata = this.basicValue
+        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
-        start: 0,
-        limit: 10
+        start: this.currentPage,
+        limit: this.limit
       }
-      // console.log(this.initdata)
+      // console.log(this.initName)
       getPostByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -218,39 +229,45 @@ export default {
     },
 
     addPost() {
-      this.ifUpdate = !this.ifUpdate
+      this.ifUpdate ='1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='2'
+      this.row = row
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      this.ifUpdate ='3'
+      this.row = row
     },
     handleDelete(index, row) {
-      this.$alert(response.data, '提示', {
+      this.$alert("是否永久删除该单位", '提示', {
         confirmButtonText: '确定',
+        cancelButtonText: '取消',
         type: 'info',
-      }).then(()=>{
-        delPost(row.postId).then((response) => {
-          this.$alert(response.data, '提示', {
-            confirmButtonText: '确定',
-            type: 'info',
-            showClose: false
-          }).then(() => {
-            this.$router.go(0)
-          })
-        })
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delPost(row.postId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.dataName
+                this.fetchData()
+              })
+            })
+          }
+        }
       })
-    },
-    updateIfupdate(e) {
-      this.ifUpdate = e
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
         start: val-1,
         limit: 10
@@ -260,6 +277,10 @@ export default {
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
+      this.fetchData()
     }
   }
 }
@@ -323,20 +344,15 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+<style  lang="less">
+//覆盖样式
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
 .el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 5px 20px 20px 5px;
   height: auto;
   width: 600px;
   display: flex;
@@ -346,8 +362,11 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+.el-select-dropdown__wrap{
+  max-height: none;
+}
 .el-scrollbar {
-  height: 380px;
+  height: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -362,10 +381,21 @@ export default {
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
+.el-button--primary {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
 </style>

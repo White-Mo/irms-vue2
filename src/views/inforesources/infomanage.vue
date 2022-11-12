@@ -129,65 +129,54 @@
           :diisable="true"
           :data="list"
           element-loading-text="Loading"
-          border
-          highlight-current-row
-          stripe
-        >
-          <el-table-column type="index" />
-          <af-table-column
-            v-for="(value,key,index) in labels"
-            :key="index"
-            align="center"
-            :label="value"
+              height="70vh"
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px'}"
+            border
+            highlight-current-row
+            stripe
+            @cell-dblclick="tbCellDoubleClick"
           >
-            <template slot-scope="scope">
-              {{ scope.row[key] }}
-            </template>
-          </af-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            width="250px"
-          >
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                text
-                @click="handleDelete(scope.row)"
-              >删除</el-button>
-              <!--              <el-dialog-->
-              <!--                :append-to-body="true"-->
-              <!--                title="删除提示"-->
-              <!--                :visible.sync="dialogVisible"-->
-              <!--                width="30%"-->
-              <!--              >-->
-              <!--                <span>-->
-              <!--                  你确定要永久删除这条数据吗？-->
-              <!--                </span>-->
-              <!--                <template #footer>-->
-              <!--                  <span class="dialog-footer">-->
-              <!--                    <el-button @click="dialogVisible = false">Cancel</el-button>-->
-              <!--                    <el-button-->
-              <!--                      type="primary"-->
-              <!--                      @click="handleDelete(scope.row)"-->
-              <!--                    >-->
-              <!--                      确认-->
-              <!--                    </el-button>-->
-              <!--                  </span>-->
-              <!--                </template>-->
-              <!--              </el-dialog>-->
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column
+              type="index"
+              align="center"
+            />
+            <el-table-column
+              v-for="(item,index) in dataname"
+              :key="index"
+              :label="item.label"
+              :prop="item.value"
+              :formatter="item.formatter"
+              :width="item.width"
+              align="center"
+              show-overflow-tooltip
+            >
+
+            </el-table-column>
+            <el-table-column
+              align="center"
+              fixed="right"
+              label="操作"
+              width="250px"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="handleDetail(scope.$index, scope.row)"
+                >详情</el-button>
+                <el-button
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)"
+                >编辑</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  text
+                  @click=handleDelete(scope.row)
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -199,14 +188,10 @@
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addinfo @changeDiv="changeDiv" />
+        <addInfo @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updataInfo
-          :row="row"
-          :current-show="ifUpdate"
-          @changeDiv="changeDiv"
-        />
+        <updateInfo :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -222,8 +207,8 @@ export default {
   // 引用vue reload方法
   inject: ['reload'],
   components: {
-    Addinfo,
-    UpdataInfo
+    addInfo,
+    updateInfo
   },
   filters: {
     statusFilter(status) {
@@ -263,72 +248,130 @@ export default {
       initval: [],
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备编号',
+          width: '200px'
+        },
+        {
           value: 'postName',
-          label: '所属单位'
+          label: '所属单位',
+          width: '200px'
         },
         {
           value: 'departmentName',
-          label: '所属部门'
+          label: '所属部门',
+          width: '200px'
         },
         {
           value: 'equipmentName',
-          label: '设备名'
+          label: '设备名',
+          width: '200px'
         },
         {
           value: 'brandName',
-          label: '设备品牌'
+          label: '设备品牌',
+          width: '200px'
         },
         {
           value: 'equipmentTypeName',
-          label: '设备类型'
+          label: '设备类型',
+          width: '200px'
         },
         {
           value: 'businessSystemName',
-          label: '业务系统'
+          label: '业务系统',
+          width: '200px'
         },
         {
           value: 'machineRoomName',
-          label: '安装位置'
+          label: '安装位置',
+          width: '200px'
         },
         {
           value: 'cabinetName',
-          label: '机柜编号'
+          label: '机柜编号',
+          width: '200px'
         },
         {
           value: 'onlineTime',
-          label: '上线时间'
+          label: '上线时间',
+          formatter:function (row) {
+            var time=row.onlineTime
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date=new Date(time);
+              var year=date.getFullYear();
+              /* 在日期格式中，月份是从0开始的，因此要加0
+               * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+               * */
+              var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+              var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+              var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+              var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+              var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              row.onlineTime=year+"-"+month+"-"+day;
+              return year+"-"+month+"-"+day;
+            },
+          width: '200px'
         },
         {
           value: 'offlineTime',
-          label: '下线时间'
+          label: '下线时间',
+          formatter:function (row) {
+            var time=row.offlineTime
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date=new Date(time);
+            var year=date.getFullYear();
+            /* 在日期格式中，月份是从0开始的，因此要加0
+             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+             * */
+            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            row.offlineTime=year+"-"+month+"-"+day;
+            return year+"-"+month+"-"+day;
+          },
+          width: '200px'
         },
         {
           value: 'hostName',
-          label: '主机名'
+          label: '主机名',
+          width: '200px'
         },
         {
           value: 'equipmentAdminName',
-          label: '设备管理员'
+          label: '设备管理员',
+          width: '200px'
         },
         {
           value: 'equipmentAdminPhone',
-          label: '设备管理员电话'
+          label: '设备管理员电话',
+          width: '200px'
         },
         {
           value: 'appAdminName',
-          label: '应用管理员'
+          label: '应用管理员',
+          width: '200px'
         },
         {
           value: 'appAdminPhone',
-          label: '应用管理员电话'
+          label: '应用管理员电话',
+          width: '200px'
         },
         {
           value: 'brandModelName',
-          label: '型号'
+          label: '型号',
+          width: '200px'
         },
         {
           value: 'serialNumber',
-          label: '序列号'
+          label: '序列号',
+          width: '200px'
         },
         {
           value: 'guaranteePeriod',
@@ -344,26 +387,6 @@ export default {
         }
       ],
       value: '',
-      labels: {
-        postName: '所属单位',
-        departmentName: '所属部门',
-        equipmentTypeName: '设备类型',
-        equipmentName: '设备名',
-        brandName: '设备品牌',
-        businessSystemName: '业务系统',
-        machineRoomName: '安装位置',
-        cabinetName: '机柜编号',
-        onlineTime: '上线时间',
-        hostName: '主机名',
-        equipmentAdminName: '设备管理员',
-        equipmentAdminPhone: '设备管理员电话',
-        appAdminName: '应用管理员',
-        appAdminPhone: '应用管理员电话',
-        brandModelName: '型号',
-        serialNumber: '序列号',
-        guaranteePeriod: '保修期',
-        offlineTime: '下线时间'
-      }
     }
   },
   created() {
@@ -422,7 +445,14 @@ export default {
         //         }
         console.log(val[key])
       }
-      console.log(val.length)
+    },
+
+    tbCellDoubleClick(row, column, cell, event){
+      console.log(cell)
+      this.$alert(row[column.property], '单元格值', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+      })
     },
     // 综合数据管理展示与查询--lry
     fetchData() {
@@ -489,23 +519,51 @@ export default {
     },
     handleDelete(row) {
       console.log(row)
-      delEquipment(row.equipmentId).then((response) => {
-        this.active = 0
-        this.$alert(response.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          // this.$router.go(0)
-        })
+      this.$alert("是否永久删除该设备", '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info',
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delEquipment(row.equipmentId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.fetchData()
+              })
+            })
+          }
+        }
       })
-      this.dialogVisible = false
-      console.log(row.equipmentId)
-      // this.reload()
+      // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning',
+      //   center: true
+      // }).then(() => {
+      //   delEquipment(row.equipmentId).then((response) => {
+      //     this.active = 0
+      //     this.$alert(response.data, '提示', {
+      //       confirmButtonText: '确定',
+      //       type: 'info',
+      //       showClose: false
+      //     }).then(() => {
+      //       this.fetchData()
+      //     })
+      //   })
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消删除'
+      //   });
+      // });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
-      this.limit = val
+      this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       const params = {
@@ -530,7 +588,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tile-content {
+.tile-content{
   padding: 9px;
   margin-bottom: 20px;
 }
@@ -603,20 +661,16 @@ export default {
   text-align: center;
 }
 </style>
+
 <style  lang="less">
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+//覆盖样式
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
   margin: 10px;
 }
-
-// 必须给子元素一个上层class名才不会影响到其他页面同名组件
 .el-select-dropdown__list {
-  margin-right: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 5px 20px 20px 5px;
   height: auto;
   width: 600px;
   display: flex;
@@ -644,28 +698,12 @@ export default {
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
   background-color: #d2d2d2;
+.el-select-dropdown__wrap{
+  max-height: none;
 }
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
 }
-
 .el-button--primary {
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
 }
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-.radio_class {
-  display: inline-block;
-  height: 2rem;
-  width: 100%;
-}
-.el-button--primary {
-  height: 40px;
-}
-</style>
