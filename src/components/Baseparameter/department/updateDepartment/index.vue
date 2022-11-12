@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="update_detail">
     <div class="source">
       <el-page-header content="添加部门" @back="back" />
     </div>
     <div class="source">
       <el-row>
-        <el-form ref="departmentForm" :model="departmentForm = department" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
+        <el-form ref="departmentForm" :model="departmentForm = this.department" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
               <el-select v-model="departmentForm.postName" @change="changePost">
@@ -27,7 +27,7 @@
               <el-input v-model="departmentForm.departmentCode" />
             </el-col>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-show="currentShow === '3'">
             <el-button type="primary" @click="onSubmit('departmentForm')">添加部门</el-button>
           </el-form-item>
         </el-form>
@@ -38,21 +38,25 @@
 
 <script>
 import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
-import {getPost} from "@/api/select";
+import { getPost } from "@/api/select";
 
 export default {
   name: 'addDepartment',
+  props: {
+    row: {
+      type: Object,
+      required: true
+    },
+    currentShow: {
+      type: String,
+      required: true
+    }
+  },
   created() {
+    this.initDepartmentData()
     getPost().then(response => {
       console.log(response)
       this.postAll = response.data.items
-      this.postAll.forEach(element => {
-        if (element.postId === this.roleid) {
-          console.log(element.postName)
-          this.department.postName = element.postName
-          this.department.postId=element.postId
-        }
-      })
     })
   },
   data() {
@@ -91,6 +95,7 @@ export default {
       postRules:false,
       postAll: [],
       department: {
+        departmentId: '',
         departmentName: '',
         departmentCode: '',
         postId:'',
@@ -115,9 +120,27 @@ export default {
       }
     }
   },
+  mounted() {
+    console.log(this.currentShow+"---------------------------------")
+    const list = document.getElementsByClassName('update_detail')[0]
+    const inputDom = list.getElementsByTagName('input')
+    if (this.currentShow === '2') {
+      inputDom.forEach(e => {
+        const parentNode = e.parentNode
+        e.disabled = true
+        parentNode.classList.add('is-disabled')
+      })
+    } else {
+      inputDom.forEach(e => {
+        const parentNode = e.parentNode
+        e.disabled = false
+        parentNode.classList.remove('is-disabled')
+      })
+    }
+  },
   methods: {
     back() {
-      this.$emit('ifUpdateChange', false)
+      this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -169,6 +192,9 @@ export default {
         }
       })
     },
+    initDepartmentData(){
+      this.department=this.row
+    }
   }
 }
 </script>

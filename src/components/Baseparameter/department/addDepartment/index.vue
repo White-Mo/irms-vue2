@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     back() {
-      this.$emit('ifUpdateChange', false)
+      this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {

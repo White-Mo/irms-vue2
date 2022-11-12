@@ -92,7 +92,11 @@
           </el-col>
         </el-row>
         <el-table
+          height="70vh"
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px'}"
           v-loading="listLoading"
+          :disable="true"
           :data="list"
           element-loading-text="Loading"
           border

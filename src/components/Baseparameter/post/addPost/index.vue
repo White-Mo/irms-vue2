@@ -29,7 +29,7 @@
 import { createPost, checkPostName, checkPostCode } from '@/api/baseparameter'
 
 export default {
-  name: 'AddPost',
+  name: 'addPost',
   data() {
     var checkName =async (rule, value, callback) => {
       if (!value) {
