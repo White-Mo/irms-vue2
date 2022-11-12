@@ -248,6 +248,8 @@ export default {
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
           // console.log(equipment)
+          // console.log(readStatus)
+          // debugger
           if(readStatus === 22 || readStatus === 20) {
             var obj = {
               name:this.checkList[index].name,
@@ -256,6 +258,11 @@ export default {
               uploadStatus:'待上传',
             }
             this.excelData.equipments.push(obj)
+          } else {
+            this.$message({
+              type:'error',
+              message:'基础表信息读取错误'
+            })
           }
         }
       }
@@ -280,6 +287,14 @@ export default {
           })
           this.tableData[index].uploadStatus = "上传成功"
           this.repalyInfo[index] = res.data
+        } else {
+          this.tableData[index].uploadStatus = "上传失败"
+          this.repalyInfo[index] = res.data
+          this.$message({
+            type:'error',
+            message:res.message
+            }
+          )
         }
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
