@@ -1,3 +1,5 @@
+// author:wr
+// time:2022/10/10
 <template>
   <div class="update_detail">
     <el-row class="tile-content shadows">
@@ -309,7 +311,6 @@ export default {
     console.log(this.currentShow)
   },
   mounted() {
-    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {

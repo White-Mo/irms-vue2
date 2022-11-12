@@ -143,10 +143,9 @@
         </el-tabs>
         <div class="block">
           <el-pagination
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
+            :page-size="limit"
+            layout="total, prev, pager, next, jumper"
             :total="total"
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
         </div>
@@ -173,6 +172,8 @@ export default {
   mixins: [hunhe1],
   data() {
     return {
+      start:0,
+      limit:5,
       tab_name: '0',
       list: null,
       total: 0,
@@ -207,52 +208,8 @@ export default {
           label: '设备类型'
         },
         {
-          value: 'businessSystemName',
-          label: '业务系统'
-        },
-        {
           value: 'machineRoomName',
           label: '安装位置'
-        },
-        {
-          value: 'cabinetName',
-          label: '机柜编号'
-        },
-        {
-          value: 'onlineTime',
-          label: '上线时间'
-        },
-        {
-          value: 'offlineTime',
-          label: '下线时间'
-        },
-        {
-          value: 'hostName',
-          label: '主机名'
-        },
-        {
-          value: 'equipmentAdminName',
-          label: '设备管理员'
-        },
-        {
-          value: 'equipmentAdminPhone',
-          label: '设备管理员电话'
-        },
-        {
-          value: 'appAdminName',
-          label: '应用管理员'
-        },
-        {
-          value: 'appAdminPhone',
-          label: '应用管理员电话'
-        },
-        {
-          value: 'brandModelName',
-          label: '型号'
-        },
-        {
-          value: 'serialNumber',
-          label: '序列号'
         },
         {
           value: 'guaranteePeriod',
@@ -266,19 +223,10 @@ export default {
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
         brandName: '设备品牌',
-        businessSystemName: '业务系统',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
         onlineTime: '上线时间',
-        hostName: '主机名',
-        equipmentAdminName: '设备管理员',
-        equipmentAdminPhone: '设备管理员电话',
-        appAdminName: '应用管理员',
-        appAdminPhone: '应用管理员电话',
-        brandModelName: '型号',
-        serialNumber: '序列号',
         guaranteePeriod: '保修期',
-        offlineTime: '下线时间'
       }
     }
   },
@@ -318,6 +266,7 @@ export default {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
+      this.start = (val-1)*this.limit
       this.fetchData()
     },
     changeTab(name) {

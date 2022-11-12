@@ -244,10 +244,10 @@ export default {
           value: 'equipmentTypeName',
           label: '设备类型'
         },
-        {
-          value: 'businessSystemName',
-          label: '业务系统'
-        },
+        // {
+        //   value: 'businessSystemName',
+        //   label: '业务系统'
+        // },
         {
           value: 'machineRoomName',
           label: '安装位置'
@@ -304,7 +304,7 @@ export default {
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
         brandName: '设备品牌',
-        businessSystemName: '业务系统',
+        // businessSystemName: '业务系统',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
         onlineTime: '上线时间',
