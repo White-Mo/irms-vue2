@@ -106,8 +106,8 @@ function getBaseinfo(outdata,postName) {
   const {status:equipmentName,readStatus:readStatus1} = underfindTrans(Object.values(outdata[0])[2] + Object.values(outdata[0])[3], '设备名称',0)// 设备名称
   equipmentBaseInfo.equipmentName = equipmentName
 
-  const {status:businessSyste,readStatus:readStatus2 }  = underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统',readStatus1)// 所属系统
-  equipmentBaseInfo.businessSyste = businessSyste
+  const {status:businessSystem,readStatus:readStatus2 }  = underfindTrans(Object.values(outdata[0])[6] + Object.values(outdata[0])[7], '所属系统',readStatus1)// 所属系统
+  equipmentBaseInfo.businessSystem = businessSystem
 
   const {status:hostName,readStatus:readStatus3} = underfindTrans(Object.values(outdata[1])[1] + Object.values(outdata[1])[2], '主机名',readStatus2) // 主机名
   equipmentBaseInfo.hostName = hostName

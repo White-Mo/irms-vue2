@@ -178,12 +178,11 @@ export default {
       currentPage: 0,
       limit:10,
       basicValue: '',
-      initdata: ['123'],
+      initName:'',
       inputValue: '',
-      postname: '',
+      dataName: 'all',
       ifUpdate: '0',
       listLoading: true,
-      singalInfo: {},
       basicvalue: [
         {
           value: 'postName',
@@ -199,26 +198,29 @@ export default {
   },
   created() {
     this.fetchData()
-
   },
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
+      // console.log(this.basicValue)
+      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
-      if (this.basicValue === '') {
-        this.initdata = ['111']
+      if (this.dataName === 'all' || this.dataName.length === 0) {
+        console.log(this.dataName)
+        this.initName = ['111']
       } else {
-        this.initdata = this.basicValue
+        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
         start: this.currentPage,
         limit: this.limit
       }
-      // console.log(this.initdata)
+      // console.log(this.initName)
       getPostByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -250,6 +252,7 @@ export default {
                 type: 'info',
                 showClose: false
               }).then(() => {
+                this.dataName
                 this.fetchData()
               })
             })
@@ -264,7 +267,7 @@ export default {
     },
     handleCurrentChange(val) {
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
         start: val-1,
         limit: 10
