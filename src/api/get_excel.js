@@ -2,7 +2,6 @@ const ExcelJS = require('exceljs');
 import { getbasic } from '@/api/table'
 import Store from "@/store"
 export async function getExcelDemo1(data){
-    console.log(data)
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
@@ -1769,7 +1768,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
 
             data_index ++
             progress_list[progress_item_num] ++
-            console.log(progress_list)
+            // console.log(progress_list)
             window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString()) 
         }
         //导出下载

@@ -39,3 +39,43 @@ export function getMoveRoute() {
     responseType: 'json'
   })
 }
+
+export function getQComSelect(model) {
+  return request({
+    url: 'home/authority/' + model,
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function getFosUserByPage(params) {
+  return request({
+    params,
+    url: '/home/authority/getFosUserByPage',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+export function getFosUserCount(params) {
+  return request({
+    params,
+    url: '/home/authority/getFosUserCount',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+export function isdeleteFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/isdelFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function deleteFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/delFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
