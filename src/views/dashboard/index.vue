@@ -11,6 +11,8 @@
         </el-col>
         <el-col :span="7"></el-col>
       </el-row>
+
+
       <el-row class="total_line">
         <el-col :span="8" class="count_box">
           <div class="content_count_box left">
@@ -19,7 +21,7 @@
             </div>
             <div :span="8" class="child_count_box_p">
               <p class="mainfont">总设备数据量(台)</p>
-              <p id="equipmentAll">2</p>
+              <p id="equipmentAll">{{allEquipmentNumber}}</p>
             </div>
           </div>
           <div :span="8" class="content_count_box right">
@@ -28,7 +30,7 @@
             </div>
             <div class="child_count_box_p">
               <p class="mainfont">设备类型数量(种)</p>
-              <p id="equipmentTypeAll">5</p>
+              <p id="equipmentTypeAll">{{equipmentTypeNumber}}</p>
             </div>
           </div>
         </el-col>
@@ -39,7 +41,7 @@
             </div>
             <div class="child_count_box_p">
               <p class="mainfont">保修期内设备数量(台)</p>
-              <p id="equipmentAllIndate">2</p>
+              <p id="equipmentAllIndate">{{periodEquipmentNumber}}</p>
             </div>
           </div>
 
@@ -49,7 +51,7 @@
             </div>
             <div class="child_count_box_p">
               <p class="mainfont">总应用系统数量(个)</p>
-              <p id="systemWareAll">5</p>
+              <p id="systemWareAll">{{allApplicationSystemNumber}}</p>
             </div>
           </div>
         </el-col>
@@ -60,7 +62,7 @@
             </div>
             <div class="child_count_box_p">
               <p class="mainfont">应用管理员数量(个)</p>
-              <p id="applicationtUser">1</p>
+              <p id="applicationtUser">{{applicationUserNumber}}</p>
             </div>
           </div>
 
@@ -70,7 +72,7 @@
             </div>
             <div class="child_count_box_p">
               <p class="mainfont">设备管理员数量(个)</p>
-              <p id="equipmentUser">1</p>
+              <p id="equipmentUser">{{equipmentUserNumber}}</p>
             </div>
           </div>
         </el-col>
@@ -159,6 +161,12 @@
 import { mapGetters } from 'vuex'
 import "@/../node_modules/echarts/extension/bmap/bmap";
 import BMap from "BMap";
+import {
+  getApplicationUserCount,
+  getEquipmentCount, getEquipmentTypeCount, getEquipmentUserCount,
+  getGuaranteePeriodCount,
+  getSystemWareCount
+} from "@/api/cockpit_data";
 
 export default {
   name: 'Dashboard',
@@ -166,22 +174,64 @@ export default {
     return{
       chart1Count: 0,
       postIndex: 0,
+
+      allEquipmentNumber:'',
+      equipmentTypeNumber:'',
+      periodEquipmentNumber:'',
+      allApplicationSystemNumber:'',
+      applicationUserNumber:'',
+      equipmentUserNumber:''
+
     }
   },
+
+
   created() {
     this.draw_Chart();
   },
   mounted() {
-
     this.drawChart();
     this.drawChart2();
     this.drawChart3();
     this.drawChart4();
     this.drawLine();
+
+    this.RenderingData() //调用渲染设备概况数据函数
     // this.initEquipmentCount()
   },
 
   methods:{
+    //----------------赵长开-------------
+    //----------------渲染设备概况数据开始-----------------------------
+    RenderingData(){
+      const that = this
+      getEquipmentCount().then(function (res){
+        console.log("************总设备数据量:"+ res +"*********************")
+        that.allEquipmentNumber = res;
+      }),
+        getEquipmentTypeCount().then(function (res){
+          console.log("************设备类型数据量:"+ res.data +"*********************")
+          that.equipmentTypeNumber = res.data;
+        }),
+      getGuaranteePeriodCount().then(function (res){
+        console.log("************保修期内设备数据量:"+ res +"*********************")
+        that.periodEquipmentNumber = res;
+      }),
+      getSystemWareCount().then(function (res){
+        console.log("************总应用系统数量:"+ res +"*********************")
+        that.allApplicationSystemNumber = res;
+      }),
+        getApplicationUserCount().then(function (res){
+        console.log("************应用管理员数量:"+ res +"*********************")
+          that.applicationUserNumber = res;
+      }),
+        getEquipmentUserCount().then(function (res){
+          console.log("************设备管理员数量:"+ res +"*********************")
+          that.equipmentUserNumber = res;
+        })
+    },
+    //---------------------渲染设备概况数据结束--------------------------------------------
+
     draw_Chart() {
       // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
       let myChart = this.$echarts.init(document.getElementById("main"));
@@ -279,6 +329,10 @@ export default {
       myChart.setOption(option);
       myChart1.setOption(option1);
     },
+
+
+
+    //----------------------------信息分布地图开始-------------------------------------------------
     drawLine() {
       // this.drawChart();
       // 基于准备好的dom，初始化echarts实例
@@ -1639,11 +1693,15 @@ export default {
 
       bmap.setMapStyleV2({styleJson:styleJson});
     },
+    //----------------------------信息分布地图结束-------------------------------------------------
+
     changeMood(){
       $(".close").click(function(event) {
         $("#el-dialog").css('display','none');
       });
     },
+
+    //----------------------------各单位设备数据量-饼图开始---------------------------------------------------
     drawChart() {
       let myChart = this.$echarts.init(document.getElementById("pieChart1"));
       // 指定图表的配置项和数据
@@ -1701,13 +1759,15 @@ export default {
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
-
-
     },
+    //----------------------------各单位设备数据量-饼图结束---------------------------------------------------
 
+
+    //--------------------------------各部门设备类型-堆叠条形图开始----------------------------------
     drawChart2() {
       let myChart = this.$echarts.init(document.getElementById("histogramChart"));
       // 指定图表的配置项和数据
+
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -1796,6 +1856,10 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
+    //--------------------------------各部门设备类型-堆叠条形图结束----------------------------------
+
+
+    //-------------------------------设备上线时间统计-折线图开始-------------------------------
     drawChart3() {
       let myChart = this.$echarts.init(document.getElementById("lineChart"));
       // 指定图表的配置项和数据
@@ -1817,6 +1881,10 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
+    //-------------------------------设备上线时间统计-折线图结束-------------------------------
+
+
+    //------------------保修期内设备数量-柱形图开始----------------------------------------------------
     drawChart4() {
       let myChart = this.$echarts.init(document.getElementById("lineChart2"));
       // 指定图表的配置项和数据
@@ -1838,6 +1906,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
+    //------------------保修期内设备数量-柱形图结束----------------------------------------------------
 
   },
   computed: {
