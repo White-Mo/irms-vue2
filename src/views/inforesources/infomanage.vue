@@ -444,7 +444,7 @@ export default {
           this.getInitValue("保修期:",'guarantee_period')
           this.guaranteePeriod=1
         }
-      
+
         console.log(val[key])
       }
     },
@@ -702,6 +702,7 @@ export default {
   overflow: auto;
   height: 100%;
 }
+
 // .el-scrollbar .el-scrollbar__wrap {
 //   overflow-y: scroll;
 //     overflow: auto;
