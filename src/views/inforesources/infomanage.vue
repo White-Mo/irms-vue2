@@ -32,6 +32,7 @@
             :lg="3"
             :xl="3"
           >
+
             <el-select
               @change="handleSelectChange"
               v-model="DataName"
@@ -47,6 +48,7 @@
                 class="searchInput"
               />
             </el-select>
+
           </el-col>
           <el-col
             :xs="4"
@@ -55,15 +57,18 @@
             :lg="4"
             :xl="4"
           >
+
           <el-autocomplete
+          style="width: 240px;"
           autosize
           type="text"
-      class="inline-input"
-      v-model="inputValue"
-      :fetch-suggestions="querySearch"
-      placeholder="请输入内容"
-      @select="handleSelect"
+          class="inline-input"
+          v-model="inputValue"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入内容"
+          @select="handleSelect"
     ></el-autocomplete>
+
             <!-- <el-input
 
               v-model="inputValue"
@@ -199,8 +204,8 @@
 
 <script>
 import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
-import Addinfo from '@/components/Infomanage/addInfo'
-import UpdataInfo from '@/components/Infomanage/updateInfo'
+import addInfo from '@/components/Infomanage/addInfo'
+import updateInfo from '@/components/Infomanage/updateInfo'
 import { all } from 'q'
 
 export default {
@@ -277,10 +282,11 @@ export default {
           label: '设备类型',
           width: '200px'
         },
-        // {
-        //   value: 'businessSystemName',
-        //   label: '业务系统'
-        // },
+        {
+          value: 'businessSystemName',
+          label: '业务系统',
+          width: '200px'
+        },
         {
           value: 'machineRoomName',
           label: '安装位置',
@@ -403,14 +409,14 @@ export default {
         var restaurants = this.restaurants;
         console.log(restaurants);
         console.log(queryString);
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        var results = queryString ?restaurants.filter(this.createFilter(queryString)) :restaurants;
         // 调用 callback 返回建议列表的数据
+        console.log(results);
         cb(results);
       },
       createFilter(queryString) {
         console.log(queryString);
         return (restaurant) => {
-          console.log(restaurant);
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };
       },
@@ -426,22 +432,19 @@ export default {
     handleSelectChange(val) {
       console.log(val);
       var key = 0
-
+//  此处的":"必须是英文状态下的才可以被后台解析，否则会出错
       for (key = 0; key < val.length; key++) {
         if (val[key] == 'type'&& this.type==0) {
-          this.getInitValue('type')
+          this.getInitValue("CPU类型:",'type')
           this.type=1
         }else if(val[key] == 'edition'&& this.edition==0){
-          this.getInitValue('edition')
+          this.getInitValue("中间件版本:",'edition')
           this.edition=1
         }else if(val[key] == 'guaranteePeriod'&& this.guaranteePeriod==0){
-          this.getInitValue('guarantee_period')
+          this.getInitValue("保修期:",'guarantee_period')
           this.guaranteePeriod=1
         }
-        //         if (val[key]=='project_name'||val[key]=='project'||val[key]=='guaranteePeriod') {
-        // this.eInput=false;
-        // this.eselect=true
-        //         }
+      
         console.log(val[key])
       }
     },
@@ -492,12 +495,12 @@ export default {
         this.listLoading = false
       })
     },
-    getInitValue(initdatas) {
+    getInitValue(name,initdatas) {
       InitValue(initdatas).then((response) => {
         this.initval = response.data.items
 
         for (let i = 0; i < this.initval.length; i++) {
-            this.foad.push({"value":this.initval[i]})
+            this.foad.push({"value":name+this.initval[i]})
 
           }
         this.listLoading = false
@@ -587,6 +590,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-select-dropdown .el-scrollbar {
+   height: 420px;
+   overflow: hidden;
+   position: relative;
+}
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
@@ -663,6 +671,16 @@ export default {
 
 <style  lang="less">
 //覆盖样式
+
+
+
+
+.el-autocomplete-suggestion.el-scrollbar {
+  //  height: 420px;
+  //  overflow: hidden;
+  overflow-y: scroll;
+  position: relative;
+}
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -679,12 +697,7 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
-.el-scrollbar {
-  //  height: 420px;
-  //  overflow: hidden;
-  overflow-y: scroll;
-  position: relative;
-}
+
 .el-scrollbar .el-scrollbar__wrap {
   overflow: auto;
   height: 100%;
@@ -706,3 +719,4 @@ export default {
   background-color: #409eff;
   border-color: #409eff;
 }
+</style>
