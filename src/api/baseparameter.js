@@ -15,6 +15,22 @@ export function getPostDepartmentByPage(data) {
     params: data
   })
 }
+//通过页码获取一级设备类型
+export function getEquipmentFirstTypeByPage(data) {
+  return request({
+    url: '/home/baseparameter/getEquipmentFirstTypeByPage',
+    method: 'get',
+    params: data
+  })
+}
+//通过页码获取二级设备类型
+export function getEquipmentTypeByPage(data) {
+  return request({
+    url: '/home/baseparameter/getEquipmentTypeByPage',
+    method: 'get',
+    params: data
+  })
+}
 //新增单位
 export function createPost(data) {
   return request({
@@ -29,7 +45,27 @@ export function createPost(data) {
 export function createDepartment(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/createDepartment',
+    url: '/home/baseparameter/createPostDepartment',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//修改单位
+export function updatePostAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//修改部门
+export function updatePostDepartmentAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updatePostDepartmentAction',
     method: 'post',
     responseType: 'json'
   })
@@ -53,20 +89,20 @@ export function checkPostCode(data) {
   })
 }
 
-//检查单位名称是否重复
+//检查部门名称是否重复
 export function checkDepartmentName(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/checkDepartmentName',
+    url: '/home/baseparameter/checkPostDepartmentName',
     method: 'post',
     responseType: 'json'
   })
 }
-//检查单位代码是否重复
+//检查部门代码是否重复
 export function checkDepartmentCode(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/checkDepartmentCode',
+    url: '/home/baseparameter/checkPostDepartmentCode',
     method: 'post',
     responseType: 'json'
   })
@@ -87,5 +123,13 @@ export function delPostDepartment(data) {
     url: '/home/baseparameter/delPostDepartment',
     method: 'delete',
     params: {departmentId : data}
+  })
+}
+//删除二级设备类型
+export function delEquipmentType(data) {
+  return request({
+    url: '/home/baseparameter/delEquipmentType',
+    method: 'delete',
+    params: {equipmentTypeId : data}
   })
 }

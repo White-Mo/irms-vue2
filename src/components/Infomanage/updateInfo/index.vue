@@ -1,3 +1,5 @@
+// author:wr
+// time:2022/10/10
 <template>
   <div class="update_detail">
     <el-row class="tile-content shadows">
@@ -136,9 +138,9 @@
                     <el-col :span="2"><div class="label-style">保修期</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                     <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-input v-model="form.onlineTime" size="medium" /></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
                     <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-input v-model="form.offlineTime" size="medium" /></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
                   </el-row>
                 </el-form>
                 <el-row :gutter="20">
@@ -309,7 +311,6 @@ export default {
     console.log(this.currentShow)
   },
   mounted() {
-    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -321,7 +322,6 @@ export default {
     } else {
       inputDom.forEach(e => {
         const parentNode = e.parentNode
-        e.disabled = false
         parentNode.classList.remove('is-disabled')
       })
     }

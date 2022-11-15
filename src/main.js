@@ -16,8 +16,12 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import AFTableColumn from 'af-table-column'
-
 Vue.use(AFTableColumn)
+
+import dataV from '@jiaminghi/data-view'
+Vue.use(dataV)
+
+
 
 import BaiduMap from 'vue-baidu-map'
 Vue.prototype.$echarts = echarts

@@ -1,3 +1,9 @@
+/*
+ * @Description: 获取数据
+ * @Author:  王瑞
+ * @Date: 2022-10-20 00:38:12
+ * @LastEditTime: 2022-11-04 17:55:33
+ */
 import { getList, getdataCount } from '@/api/table'
 export const hunhe1 = {
   methods: {
@@ -14,8 +20,8 @@ export const hunhe1 = {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: this.tab_name,
-        start: 0,
-        limit: 5
+        start: this.start,
+        limit: this.limit
       }
       const numparams = {
         dataName: this.initname,
@@ -28,6 +34,10 @@ export const hunhe1 = {
         this.listLoading = false
       })
       getList(params).then((response) => {
+        
+        response.data.items.forEach(element => {
+          element.isEdit = false;
+        });
         this.list = response.data.items
         this.listLoading = false
       })
