@@ -145,41 +145,41 @@
               <el-input v-model="updata_data.account " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
             </div>
             <div>
-                密码
-              <el-input v-model="updata_data.password " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
+              密码
+              <el-input v-model="updata_data.password " placeholder="请输入帐号" style="width: 20rem;left:2.8rem;" show-password></el-input>
             </div>
             <div>
               单位
-              <el-autocomplete
-                class="inline-input"
-                v-model="updata_data.Unit"
-                :fetch-suggestions="querySearchPost"
-                placeholder="请输入单位"
-                @select="handleSelectUnit"
-                style="width: 8rem;"
-              ></el-autocomplete>
+              <el-select v-model="updata_data.Unit" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="item in PostAll"
+                  :key="item.postId"
+                  :label="item.postName"
+                  :value="item.postId">
+                </el-option>
+              </el-select>
             </div>
             <div>
                 角色
-              <el-autocomplete
-                class="inline-input"
-                v-model="updata_data.Roles"
-                :fetch-suggestions="querySearchFosGroup"
-                placeholder="请输入角色"
-                @select="handleSelectRoles"
-                style="width: 8rem;"
-              ></el-autocomplete>
+              <el-select v-model="updata_data.Roles" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="item in FosGroupAll"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
             </div>
             <div>
                 状态
-              <el-autocomplete
-                class="inline-input"
-                v-model="updata_data.Status"
-                :fetch-suggestions="querySearchState"
-                placeholder="请输入状态"
-                @select="handleSelectStatus"
-                style="width: 8rem;"
-              ></el-autocomplete>
+              <el-select v-model="updata_data.Status" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="item in [{'id':'1','value':'冻结'},{'id':'0','value':'激活'}]"
+                  :key="item.id"
+                  :label="item.value"
+                  :value="item.id">
+                </el-option>
+              </el-select>
             </div>
             <div>
               
@@ -209,7 +209,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQComSelect, getFosUserByPage, getFosUserCount, deleteFosUser,isdeleteFosUser } from '@/api/user'
+import { getQComSelect, getFosUserByPage, getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
 export default {
   name: 'Dashboard',
   computed: {
@@ -282,9 +282,9 @@ export default {
         Unit:"",
         Roles:"",
         Status:"",
-
-      }
-
+        row:{},
+      },
+      AllData:[]
     }
   },
   mounted() {
@@ -436,9 +436,74 @@ export default {
     updataUser(row){
       this.userDialogDisplay = true
       this.headInfo = "更新用户信息"
+      this.updata_data.username = row.realname
+      this.updata_data.account = row.username
+      this.updata_data.password = row.password
+      this.updata_data.Unit = row.role
+      this.updata_data.Roles = row.roles
+      this.updata_data.Status = row.status
+      this.updata_data.row = row
+      console.log(row)
     },
-    updataUserPlus(){
-      
+    async updataUserPlus(){
+
+      // 愚蠢的逻辑 源于后端接口的不完整 用于获取修改后的部门id，还有当前用户的id 而且在极端情况：突然新增部门但是没有体现在user表中就找不到这个id
+      if(!this.AllData){
+        let params = { 
+            realname:this.user_input.username == "" ? "all" : this.user_input.username_id,
+            username:this.user_input.account,
+            use_post:this.user_input.Unit == "" ? "all" : this.user_input.Unit_id,
+            groupid:this.user_input.Roles == "" ? "all" : this.user_input.Roles_id,
+            isdel:this.user_input.Status == "" ? "all" : this.user_input.Status_id
+        };
+        params["start"] = 0
+        params["limit"] = this.totalCount 
+        this.AllData = await getFosUserByPage(params)
+      }
+      const get_insertuserid = (post,data) =>{
+        let id = ""
+        for(let i of data){
+          if(i.id == post){
+            id = i.id
+            break
+          }
+        }
+        if(! id){
+          alert("报错了，很遗憾，这里的逻辑确实很烂")
+          debugger
+        }else{
+          return id
+        }
+      }
+      // 愚蠢的逻辑到此结束
+      // get_insertuserid(0)
+      params = {
+        uid:this.updata_data.row.id,
+        ucontrolid:"",
+        uuse_post:this.updata_data.row.roleDepartmentId,
+        ugroupid:this.updata_data.row.groupid,
+        upassword:this.updata_data.password,
+        utelephone:this.updata_data.row.telephone,
+        urealname:this.updata_data.username,
+        uusername:this.updata_data.account,
+        userid:this.updata_data.row.insertuserid,
+        uisdel:'0'
+      }
+      let params2 = {
+        id:this.updata_data.row.id,
+        controlid:"",
+        use_post:this.updata_data.row.roleDepartmentId,
+        groupid:this.updata_data.row.groupid,
+        password:this.updata_data.password,
+        telephone:this.updata_data.row.telephone,
+        username:this.updata_data.username,
+        realname:this.updata_data.account,
+        userid:this.updata_data.row.insertuserid,
+        isdel:'0'
+      }
+      updateFosUserAction(params).then(res=>{
+        console.log(res)
+      })
     },
   },
 }

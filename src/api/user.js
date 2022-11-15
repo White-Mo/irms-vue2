@@ -79,3 +79,11 @@ export function deleteFosUser(params) {
     responseType: 'json'
   })
 }
+export function updateFosUserAction(params) {
+  return request({
+    params,
+    url: '/home/authority/updateFosUserAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
