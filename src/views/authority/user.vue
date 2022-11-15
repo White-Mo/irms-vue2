@@ -337,7 +337,7 @@ export default {
         }else{
           return (restaurant['value'].toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         }
-        
+
       };
     },
     handleSelectUsername(item) {

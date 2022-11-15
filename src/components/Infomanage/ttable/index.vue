@@ -38,8 +38,6 @@
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button type="primary" icon="el-icon-search">搜索</el-button>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="4" :lg="4" :xl="5">
-            <el-button type="primary" icon="el-icon-download">导出</el-button></el-col>
           <el-col :xs="1" :sm="1" :md="1" :lg="3" :xl="1"><el-button type="info" @click="addInfo()">添加设备信息</el-button></el-col>
         </el-row>
         <el-table
@@ -163,6 +161,8 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)

@@ -273,7 +273,6 @@ export default {
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
-          // this.$router.go(0)
           this.active = 0
           this.$alert(res.data, '提示', {
             confirmButtonText: '确定',

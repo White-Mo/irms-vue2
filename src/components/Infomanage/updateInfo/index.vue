@@ -1,3 +1,5 @@
+// author:wr
+// time:2022/10/10
 <template>
   <div class="update_detail">
     <el-row class="tile-content shadows">
@@ -136,9 +138,9 @@
                     <el-col :span="2"><div class="label-style">保修期</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                     <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-input v-model="form.onlineTime" size="medium" /></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
                     <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-input v-model="form.offlineTime" size="medium" /></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
                   </el-row>
                 </el-form>
                 <el-row :gutter="20">
@@ -220,9 +222,9 @@ export default {
         software: [{ project: '', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareliaison: '' }],
-        appSystemUser: [{ userName: '', endUser: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
-        appBusiness: [{ businessName: '', domainName: '', userScope: '', icpNum: '' }],
+        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
+        appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
+        appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
@@ -232,9 +234,9 @@ export default {
       // softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
       // networkLable: { network_card_name: '网卡', ip_address: 'IP地址', switch_info: '端口', network_card_port: '交换机', mAC_address: 'MAC地址' },
       // protocolPortLable: { protocol_name: '协议', app_name: '应用名称', network_card_port: '端口' },
-      // appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
-      // appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
-      // appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
+      // appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
+      // appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      // appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
       // appAccessRightsLable: { lan_intranet: '内网', industry_network: '行内网', intranet: '互联网', other: '其他' },
       // appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       // appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
@@ -243,9 +245,9 @@ export default {
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
       networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
-      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareliaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', endUser: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
-      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', icpNum: '用户范围' },
+      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
+      appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
       appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
@@ -255,9 +257,9 @@ export default {
       //   software: ['project', 'projectame', 'edition', 'type'],
       //   network: ['network_card_name', 'ip_address', 'switch_info', 'network_card_port', 'mAC_address'],
       //   protocolPort: ['protocol_name', 'app_name', 'network_card_port' ],
-      //   appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareliaison'],
-      //   appSystemUser: ['userName', 'endUser', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other' ],
-      //   appBusiness: ['businessName', 'domainName', 'userScope', 'icpNum'],
+      //   appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
+      //   appSystemUser: ['userName', 'realName', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other' ],
+      //   appBusiness: ['businessName', 'domainName', 'userScope', 'ICPNum'],
       //   appAccessRights: ['lan_intranet', 'industry_network', 'intranet', 'other' ],
       //   appLinksInfo: ['company', 'userName', 'IPAddress', 'other'],
       //   appStore: ['volume', 'SAN_NAS', 'capacity'],
@@ -268,9 +270,9 @@ export default {
         software: ['project', 'projectName', 'edition', 'type'],
         network: ['networkCardName', 'ipAddress', 'switchInfo', 'networkCardPort', 'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
-        appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareliaison'],
-        appSystemUser: ['userName', 'endUser', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other'],
-        appBusiness: ['businessName', 'domainName', 'userScope', 'icpNum'],
+        appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
+        appSystemUser: ['userName', 'realName', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other'],
+        appBusiness: ['businessName', 'domainName', 'userScope', 'ICPNum'],
         appAccessRights: ['lanIntranet', 'industryNetwork', 'intranet', 'other'],
         appLinksInfo: ['company', 'userName', 'IPAddress', 'other'],
         appStore: ['volume', 'SAN_NAS', 'capacity'],
@@ -309,7 +311,6 @@ export default {
     console.log(this.currentShow)
   },
   mounted() {
-    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -321,7 +322,6 @@ export default {
     } else {
       inputDom.forEach(e => {
         const parentNode = e.parentNode
-        e.disabled = false
         parentNode.classList.remove('is-disabled')
       })
     }
@@ -373,10 +373,12 @@ export default {
       equipments.push(equip)
       console.log(equipments)
       addEquipment({ equipments: equipments }).then(res => {
-        // this.$router.go(0)
-        this.$message({
-          message: '修改成功',
-          type: 'success'
+        this.$alert(res.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.$router.go(0)
         })
         console.log(res)
       }).catch(err => {
