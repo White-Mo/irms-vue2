@@ -31,6 +31,16 @@ export function getEquipmentTypeByPage(data) {
     params: data
   })
 }
+
+//通过页码获取机房
+export function getMachineRoomByPage(data) {
+  return request({
+    url: '/home/baseparameter/getMachineRoomByPage',
+    method: 'get',
+    params: data
+  })
+}
+
 //新增单位
 export function createPost(data) {
   return request({
@@ -129,6 +139,14 @@ export function delPostDepartment(data) {
 export function delEquipmentType(data) {
   return request({
     url: '/home/baseparameter/delEquipmentType',
+    method: 'delete',
+    params: {equipmentTypeId : data}
+  })
+}
+//删除机房
+export function delMachineRoom(data) {
+  return request({
+    url: '/home/baseparameter/delMachineRoom',
     method: 'delete',
     params: {equipmentTypeId : data}
   })

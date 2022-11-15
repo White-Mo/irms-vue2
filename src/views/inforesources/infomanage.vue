@@ -282,11 +282,11 @@ export default {
           label: '设备类型',
           width: '200px'
         },
-        {
-          value: 'businessSystemName',
-          label: '业务系统',
-          width: '200px'
-        },
+        // {
+        //   value: 'businessSystemName',
+        //   label: '业务系统',
+        //   width: '200px'
+        // },
         {
           value: 'machineRoomName',
           label: '安装位置',
@@ -444,7 +444,7 @@ export default {
           this.getInitValue("保修期:",'guarantee_period')
           this.guaranteePeriod=1
         }
-      
+
         console.log(val[key])
       }
     },

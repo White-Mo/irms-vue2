@@ -34,7 +34,7 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
@@ -177,7 +177,6 @@ export default {
       total: 0,
       currentPage: 0,
       limit:10,
-      basicValue: '',
       initName:'',
       inputValue: '',
       dataName: 'all',
