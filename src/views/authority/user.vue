@@ -138,7 +138,7 @@
           <div style="width:100%;text-align:center" class="updata_class">
             <div>
                 用户姓名
-              <el-input v-model="updata_data.username " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
+              <el-input v-model="updata_data.username " placeholder="请输入用户姓名" style="width: 20rem;left:2rem;"></el-input>
             </div>
             <div>
                 登录帐号
@@ -146,7 +146,7 @@
             </div>
             <div>
               密码
-              <el-input v-model="updata_data.password " placeholder="请输入帐号" style="width: 20rem;left:2.8rem;" show-password></el-input>
+              <el-input v-model="updata_data.password " placeholder="请输入密码" style="width: 20rem;left:2.8rem;" show-password></el-input>
             </div>
             <div>
               单位
@@ -159,6 +159,17 @@
                 </el-option>
               </el-select>
             </div>
+            <!-- <div>
+              部门
+              <el-select v-model="updata_data.department" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="item in PostAll"
+                  :key="item.postId"
+                  :label="item.postName"
+                  :value="item.postId">
+                </el-option>
+              </el-select>
+            </div> -->
             <div>
                 角色
               <el-select v-model="updata_data.Roles" placeholder="请选择" style="width: 20rem;left:2.8rem;">
@@ -209,13 +220,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQComSelect, getFosUserByPage, getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
+import { getQComSelect, getFosUserByPage, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
 export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
       'realname',
-      'roles'
+      'roles',
+      'userid'
     ])
   },
   data() {
@@ -280,6 +292,7 @@ export default {
         account:"",
         password:"",
         Unit:"",
+        department:"",
         Roles:"",
         Status:"",
         row:{},
@@ -288,15 +301,14 @@ export default {
     }
   },
   mounted() {
-    console.log(this.realname)
     for (let i of ['getRealnameAll','getPostAll','getFosGroupAll']){
       getQComSelect(i).then(res => {
         if(i == 'getRealnameAll'){
-          this.RealnameAll = res
+          this.RealnameAll = res.data.items
         }else if(i == 'getPostAll'){
-          this.PostAll = res
+          this.PostAll = res.data.items
         }else{
-          this.FosGroupAll = res
+          this.FosGroupAll = res.data.items
         }
     })
     }
@@ -358,7 +370,6 @@ export default {
     },
     async get_user(){
       // console.log(this.FosGroupAll)
-      console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
       const get_roles = (id) => {
         let item = ''
         for(let i of this.FosGroupAll){
@@ -378,15 +389,15 @@ export default {
 					isdel:this.user_input.Status == "" ? "all" : this.user_input.Status_id
 			};
       console.log(params)
-      this.totalCount = await getFosUserCount(params)
+      this.totalCount = (await getFosUserCount(params)).data
       params["start"] = this.currentPage - 1
       params["limit"] = this.PageSize 
       getFosUserByPage(params).then(res =>{
-        for(let i of res){
+        for(let i of res.data.items){
           i.roles = get_roles(i.groupid)
           i.status = i.isdel == "0" ? "激活" : "冻结"
         }
-        this.tableData = res
+        this.tableData = res.data.items
         console.log(res)
       })
     },
@@ -434,74 +445,71 @@ export default {
       })
     },
     updataUser(row){
+      let temp = row.role.split("/")
       this.userDialogDisplay = true
       this.headInfo = "更新用户信息"
       this.updata_data.username = row.realname
       this.updata_data.account = row.username
       this.updata_data.password = row.password
-      this.updata_data.Unit = row.role
+      this.updata_data.Unit = temp[0]
+      this.updata_data.department = temp[1]
       this.updata_data.Roles = row.roles
       this.updata_data.Status = row.status
       this.updata_data.row = row
       console.log(row)
+      console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
+
     },
     async updataUserPlus(){
+      console.log(process.env.VUE_APP_BASE_API.split(":"))
+      let params = {}
+      // test
+      const getDepartmentId = (Unit) =>{
+        let DepartmentId = ""
 
-      // 愚蠢的逻辑 源于后端接口的不完整 用于获取修改后的部门id，还有当前用户的id 而且在极端情况：突然新增部门但是没有体现在user表中就找不到这个id
-      if(!this.AllData){
-        let params = { 
-            realname:this.user_input.username == "" ? "all" : this.user_input.username_id,
-            username:this.user_input.account,
-            use_post:this.user_input.Unit == "" ? "all" : this.user_input.Unit_id,
-            groupid:this.user_input.Roles == "" ? "all" : this.user_input.Roles_id,
-            isdel:this.user_input.Status == "" ? "all" : this.user_input.Status_id
-        };
-        params["start"] = 0
-        params["limit"] = this.totalCount 
-        this.AllData = await getFosUserByPage(params)
-      }
-      const get_insertuserid = (post,data) =>{
-        let id = ""
-        for(let i of data){
-          if(i.id == post){
-            id = i.id
+        for(let i of this.PostAll){
+          if(i.postName == Unit){
+            DepartmentId = i.postId
             break
           }
         }
-        if(! id){
-          alert("报错了，很遗憾，这里的逻辑确实很烂")
-          debugger
-        }else{
-          return id
+        return DepartmentId
+      }
+      const getGroupid = (Roles) =>{
+        let Groupid = ""
+
+        for(let i of this.FosGroupAll){
+          if(i.name == Roles){
+            Groupid = i.id
+            break
+          }else{
+            // console.log(Roles ,i.name)
+          }
         }
+        return Groupid
       }
-      // 愚蠢的逻辑到此结束
-      // get_insertuserid(0)
+      // end
+      console.log("单位",this.updata_data.Unit,this.updata_data.row.roleDepartmentId,getDepartmentId(this.updata_data.Unit))
       params = {
-        uid:this.updata_data.row.id,
-        ucontrolid:"",
-        uuse_post:this.updata_data.row.roleDepartmentId,
-        ugroupid:this.updata_data.row.groupid,
-        upassword:this.updata_data.password,
-        utelephone:this.updata_data.row.telephone,
-        urealname:this.updata_data.username,
-        uusername:this.updata_data.account,
-        userid:this.updata_data.row.insertuserid,
-        uisdel:'0'
+        id:this.updata_data.row.id, // 被修改的账户的id
+        // insertuserid:this.userid,   // 修改者的id
+        userid:this.userid,   // 修改者的id
+        // role:this.updata_data.Unit + '/' + this.updata_data.department,// 单位和部门拼接的字符串
+        // roleid:"", // 单位的id
+        // use_post:getDepartmentId(this.updata_data.Unit), // 单位的id
+        // use_post:this.updata_data.row.roleid, // 单位的id
+        use_post:"2c90a15e5ffb2ae9015ffb3a19a50035", // 单位的id
+        // roleDepartmentId:"", // 部门的id
+        // roles:"", // 权限的汉字名称
+        groupid:getGroupid(this.updata_data.Roles), // 权限对应的id
+        telephone:"", // 电话 暂时为空
+        isdel: this.updata_data.Status == "冻结" ? "1" : "0", // 帐号状态
+        username:this.updata_data.account, // 登录帐号
+        realname:this.updata_data.username, // 用户姓名
+        password:this.updata_data.password, // 
+        controlid:"", // 暂时为空的字段
       }
-      let params2 = {
-        id:this.updata_data.row.id,
-        controlid:"",
-        use_post:this.updata_data.row.roleDepartmentId,
-        groupid:this.updata_data.row.groupid,
-        password:this.updata_data.password,
-        telephone:this.updata_data.row.telephone,
-        username:this.updata_data.username,
-        realname:this.updata_data.account,
-        userid:this.updata_data.row.insertuserid,
-        isdel:'0'
-      }
-      updateFosUserAction(params).then(res=>{
+      updateFosUserAction(params).then((res)=>{
         console.log(res)
       })
     },

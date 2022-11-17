@@ -87,3 +87,11 @@ export function updateFosUserAction(params) {
     responseType: 'json'
   })
 }
+export function createFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/createFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
