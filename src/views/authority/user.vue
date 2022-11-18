@@ -81,6 +81,7 @@
               type="primary"
               icon="el-icon-plus"
               clearable="true"
+              @click="add_user()"
             >添加用户</el-button>
           </el-col>
         </el-row>
@@ -110,7 +111,7 @@
               width="400"
               >
               <template slot-scope="scope" >
-                <el-button @click="updataUser(scope.row)" type="info" size="small" icon="el-icon-edit">修改</el-button>
+                <el-button @click="updateUser(scope.row)" type="info" size="small" icon="el-icon-edit">修改</el-button>
                 <el-button @click="deleteUser(scope.row)" type="danger" size="small" icon="el-icon-delete">删除</el-button>
                 <el-button @click="isdeleteUser(scope.row)" type="warning" size="small" icon="el-icon-video-play" v-if="isActivation(scope.row.isdel)" >激活</el-button>
                 <el-button @click="isdeleteUser(scope.row)" type="warning" size="small" icon="el-icon-video-pause" v-else>冻结</el-button>
@@ -132,36 +133,26 @@
         <el-dialog
             :title="headInfo"
             :visible.sync="userDialogDisplay"
+            @close='closeDialog'
             width="30%"
             center
           >
-          <div style="width:100%;text-align:center" class="updata_class">
+          <div style="width:100%;text-align:center" class="update_class">
             <div>
                 用户姓名
-              <el-input v-model="updata_data.username " placeholder="请输入用户姓名" style="width: 20rem;left:2rem;"></el-input>
+              <el-input v-model="update_data.username " placeholder="请输入用户姓名" style="width: 20rem;left:2rem;"></el-input>
             </div>
             <div>
                 登录帐号
-              <el-input v-model="updata_data.account " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
+              <el-input v-model="update_data.account " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
             </div>
             <div>
               密码
-              <el-input v-model="updata_data.password " placeholder="请输入密码" style="width: 20rem;left:2.8rem;" show-password></el-input>
-            </div>
-            <div>
-              单位
-              <el-select v-model="updata_data.Unit" placeholder="请选择" style="width: 20rem;left:2.8rem;">
-                <el-option
-                  v-for="item in PostAll"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId">
-                </el-option>
-              </el-select>
+              <el-input v-model="update_data.password " placeholder="请输入密码" style="width: 20rem;left:2.8rem;" show-password></el-input>
             </div>
             <!-- <div>
-              部门
-              <el-select v-model="updata_data.department" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+              单位
+              <el-select v-model="update_data.Unit" placeholder="请选择" style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in PostAll"
                   :key="item.postId"
@@ -172,7 +163,7 @@
             </div> -->
             <div>
                 角色
-              <el-select v-model="updata_data.Roles" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+              <el-select v-model="update_data.Roles" placeholder="请选择" @change="changeGroupID" style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in FosGroupAll"
                   :key="item.id"
@@ -182,8 +173,19 @@
               </el-select>
             </div>
             <div>
+              部门
+              <el-select v-model="update_data.department" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="item in departmentAll"
+                  :key="item.departmentId"
+                  :label="item.postAnddepartment"
+                  :value="item.departmentId">
+                </el-option>
+              </el-select>
+            </div>
+            <div>
                 状态
-              <el-select v-model="updata_data.Status" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+              <el-select v-model="update_data.Status" placeholder="请选择" style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in [{'id':'1','value':'冻结'},{'id':'0','value':'激活'}]"
                   :key="item.id"
@@ -198,7 +200,8 @@
           </div>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="userDialogDisplay = false">返回</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="updataUserPlus">更新</el-button>
+              <el-button type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
+              <el-button type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
             </span>
         </el-dialog>
         <div class="tabListPage" style="text-align: center">
@@ -220,7 +223,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQComSelect, getFosUserByPage, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
+import { getQComSelect, getFosUserByPage, getPostDepartmentAll, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
+import { getPost, getDepartment, getEquipmentType } from '@/api/select'
 export default {
   name: 'Dashboard',
   computed: {
@@ -287,7 +291,7 @@ export default {
       deleteUseRparams:{},
       userDialogDisplay:false,
       headInfo:"",
-      updata_data:{
+      update_data:{
         username:"",
         account:"",
         password:"",
@@ -297,7 +301,8 @@ export default {
         Status:"",
         row:{},
       },
-      AllData:[]
+      departmentAll: [],
+      updateOrAdd:false,
     }
   },
   mounted() {
@@ -398,7 +403,6 @@ export default {
           i.status = i.isdel == "0" ? "激活" : "冻结"
         }
         this.tableData = res.data.items
-        console.log(res)
       })
     },
     handleSizeChange(val) {
@@ -444,73 +448,111 @@ export default {
         _this.get_user()
       })
     },
-    updataUser(row){
+    async updateUser(row){
       let temp = row.role.split("/")
       this.userDialogDisplay = true
+      this.updateOrAdd = true
       this.headInfo = "更新用户信息"
-      this.updata_data.username = row.realname
-      this.updata_data.account = row.username
-      this.updata_data.password = row.password
-      this.updata_data.Unit = temp[0]
-      this.updata_data.department = temp[1]
-      this.updata_data.Roles = row.roles
-      this.updata_data.Status = row.status
-      this.updata_data.row = row
+      this.update_data.username = row.realname
+      this.update_data.account = row.username
+      this.update_data.password = row.password
+      this.update_data.Unit = temp[0]
+      this.update_data.department = ""
+      this.update_data.Roles = ""
+      this.update_data.Status = ""
+      this.update_data.row = row
       console.log(row)
       console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
-
+      // this.departmentAll = (await getDepartment(row.roleid)).data.items
+      getPostDepartmentAll({groupid:row.groupid}).then(res=>{
+        console.log(res)
+      })
     },
-    async updataUserPlus(){
-      console.log(process.env.VUE_APP_BASE_API.split(":"))
-      let params = {}
-      // test
-      const getDepartmentId = (Unit) =>{
-        let DepartmentId = ""
-
-        for(let i of this.PostAll){
-          if(i.postName == Unit){
-            DepartmentId = i.postId
-            break
-          }
+    changeGroupID(groupid){
+      console.log(groupid)
+      this.update_data.department = ""
+      let _this = this
+      getPostDepartmentAll({groupid:groupid}).then(res=>{
+        for(let i of res.data.items){
+          i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
-        return DepartmentId
-      }
-      const getGroupid = (Roles) =>{
-        let Groupid = ""
-
-        for(let i of this.FosGroupAll){
-          if(i.name == Roles){
-            Groupid = i.id
-            break
-          }else{
-            // console.log(Roles ,i.name)
-          }
-        }
-        return Groupid
-      }
-      // end
-      console.log("单位",this.updata_data.Unit,this.updata_data.row.roleDepartmentId,getDepartmentId(this.updata_data.Unit))
-      params = {
-        id:this.updata_data.row.id, // 被修改的账户的id
+        _this.departmentAll = res.data.items
+      })
+    },
+    closeDialog(){
+      this.departmentAll = []
+    },
+    async updateUserPlus(){
+      let params = {
+        id:this.update_data.row.id, // 被修改的账户的id
         // insertuserid:this.userid,   // 修改者的id
         userid:this.userid,   // 修改者的id
-        // role:this.updata_data.Unit + '/' + this.updata_data.department,// 单位和部门拼接的字符串
+        // role:this.update_data.Unit + '/' + this.update_data.department,// 单位和部门拼接的字符串
         // roleid:"", // 单位的id
-        // use_post:getDepartmentId(this.updata_data.Unit), // 单位的id
-        // use_post:this.updata_data.row.roleid, // 单位的id
-        use_post:"2c90a15e5ffb2ae9015ffb3a19a50035", // 单位的id
+        // use_post:getDepartmentId(this.update_data.Unit), // 单位的id
+        // use_post:this.update_data.row.roleid, // 单位的id
+        use_post:this.update_data.department == "" ? this.update_data.row.roleDepartmentId : this.update_data.department, // 单位的id
         // roleDepartmentId:"", // 部门的id
         // roles:"", // 权限的汉字名称
-        groupid:getGroupid(this.updata_data.Roles), // 权限对应的id
+        groupid:this.update_data.Roles == "" ? this.update_data.row.groupid : this.update_data.Roles, // 权限对应的id
         telephone:"", // 电话 暂时为空
-        isdel: this.updata_data.Status == "冻结" ? "1" : "0", // 帐号状态
-        username:this.updata_data.account, // 登录帐号
-        realname:this.updata_data.username, // 用户姓名
-        password:this.updata_data.password, // 
+        isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
+        username:this.update_data.account, // 登录帐号
+        realname:this.update_data.username, // 用户姓名
+        password:this.update_data.password, // 
         controlid:"", // 暂时为空的字段
       }
+      console.log(params)
+      let _this = this
       updateFosUserAction(params).then((res)=>{
         console.log(res)
+        _this.$message({
+          message: '更改成功',
+          type: 'success'
+        });
+        _this.get_user()
+        _this.userDialogDisplay = false
+      }).catch((err)=>{
+        console.log(err)
+        _this.$message.error('更改失败');
+      })
+    },
+    add_user(){
+      this.userDialogDisplay = true
+      this.updateOrAdd = false
+      this.headInfo = "添加新用户"
+      this.update_data.username = ""
+      this.update_data.account = ""
+      this.update_data.password = ""
+      this.update_data.department = ""
+      this.update_data.Roles = ""
+      this.update_data.Status = ""
+    },
+    addUserPlus(){
+      let params = {
+        userid:this.userid,   // 修改者的id
+        use_post:this.update_data.department, // 单位的id
+        groupid:this.update_data.Roles, // 权限对应的id
+        telephone:"", // 电话 暂时为空
+        isdel: this.update_data.Status, // 帐号状态
+        username:this.update_data.account, // 登录帐号
+        realname:this.update_data.username, // 用户姓名
+        password:this.update_data.password, // 
+        controlid:"", // 暂时为空的字段
+      }
+      console.log(params)
+      let _this = this
+      createFosUser(params).then((res)=>{
+        console.log(res)
+        _this.$message({
+          message: '添加成功',
+          type: 'success'
+        });
+        _this.get_user()
+        _this.userDialogDisplay = false
+      }).catch((err)=>{
+        console.log(err)
+        _this.$message.error('添加失败');
       })
     },
   },
@@ -549,7 +591,7 @@ export default {
   margin: 0px !important;
   background: #d3dce6;
 }
-.updata_class div{
+.update_class div{
   margin-top:0.3rem;
 }
 </style>

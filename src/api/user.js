@@ -95,3 +95,11 @@ export function createFosUser(params) {
     responseType: 'json'
   })
 }
+export function getPostDepartmentAll(params) {
+  return request({
+    params,
+    url: '/home/authority/getPostDepartmentAll',
+    method: 'post',
+    responseType: 'json'
+  })
+}
