@@ -433,6 +433,10 @@ export default {
       let _this = this
       isdeleteFosUser(params).then(()=>{
         _this.get_user()
+        _this.$message({
+          message: '修改成功',
+          type: 'success'
+        });
       })
     },
     deleteUser(row){
@@ -446,6 +450,10 @@ export default {
       deleteFosUser(this.deleteUseRparams).then(()=>{
         _this.centerDialogVisible = false
         _this.get_user()
+        _this.$message({
+          message: '删除成功',
+          type: 'success'
+        });
       })
     },
     async updateUser(row){
