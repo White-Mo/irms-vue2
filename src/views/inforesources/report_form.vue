@@ -58,7 +58,9 @@
             ref="multipleTable"
             :data="tableData"
             stripe
-            height="750"
+            height="70vh"
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px'}"
             border
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             @select-all="selectAllFun"
@@ -545,8 +547,8 @@ export default {
               status: ''
             }
             item = (await getList(params)).data.items
-            
-            
+
+
           }
           this.is_select_all = false
           const h = this.$createElement

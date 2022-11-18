@@ -301,11 +301,11 @@ export default {
           label: '设备类型',
           width: '200px'
         },
-        {
-          value: 'businessSystemName',
-          label: '业务系统',
-          width: '200px'
-        },
+        // {
+        //   value: 'businessSystemName',
+        //   label: '业务系统',
+        //   width: '200px'
+        // },
         {
           value: 'machineRoomName',
           label: '安装位置',
@@ -787,7 +787,7 @@ export default {
   border-color: #409eff;
 }
 .searchInput[data-v-35ac1005] {
-   
+
     background-color: #d3dce6;
 }
 </style>

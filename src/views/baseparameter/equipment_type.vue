@@ -252,7 +252,7 @@ export default {
                 type: 'info',
                 showClose: false
               }).then(() => {
-                this.dataName
+                this.dataName="all"
                 this.fetchData()
               })
             })
