@@ -36,7 +36,7 @@
             :lg="2"
             :xl="2"
           >
-          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">一键上传文件</el-button>
+          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">上传所有文件</el-button>
           </el-col>
         </el-row>
         <el-table
