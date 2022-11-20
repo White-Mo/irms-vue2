@@ -41,6 +41,15 @@ export function getMachineRoomByPage(data) {
   })
 }
 
+//通过页码获取业务系统
+export function getBusinessSystemByPage(data) {
+  return request({
+    url: '/home/baseparameter/getBusinessSystemByPage',
+    method: 'get',
+    params: data
+  })
+}
+
 //新增单位
 export function createPost(data) {
   return request({
@@ -147,6 +156,15 @@ export function delEquipmentType(data) {
 export function delMachineRoom(data) {
   return request({
     url: '/home/baseparameter/delMachineRoom',
+    method: 'delete',
+    params: {equipmentTypeId : data}
+  })
+}
+
+//删除业务系统
+export function delBusinessSystem(data) {
+  return request({
+    url: '/home/baseparameter/delBusinessSystem',
     method: 'delete',
     params: {equipmentTypeId : data}
   })

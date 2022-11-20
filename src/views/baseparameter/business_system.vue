@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
+import {delPostDepartment, getBusinessSystemByPage, getPostDepartmentByPage} from '@/api/baseparameter'
 import addDepartment from '@/components/Baseparameter/department/addDepartment'
 import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
 
@@ -221,10 +221,11 @@ export default {
         dataName: this.initName,
         dataValue: this.inputValue,
         start: this.currentPage,
-        limit: this.limit
+        limit: this.limit,
+        status:"0"
       }
       // console.log(this.initdata)
-      getPostDepartmentByPage(params).then((response) => {
+      getBusinessSystemByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
