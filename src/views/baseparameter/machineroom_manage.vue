@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import {delMachineRoom,getMachineRoomByPage} from '@/api/baseparameter'
+import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal} from '@/api/baseparameter'
 import addMachineRoom from '@/components/Baseparameter/machineRoom/addMachineRoom'
 import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
 
@@ -234,13 +234,21 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
+        status:"",
         start: this.currentPage,
         limit: this.limit
       }
+      const numparams = {
+        dataName: this.initName,
+        dataValue: this.inputValue,
+        status: ""
+      }
+      getMachineRoomTotal(numparams).then((response) => {
+        this.total = response.data
+      })
       // console.log(this.initName)
       getMachineRoomByPage(params).then((response) => {
         this.list = response.data.items
-        this.total = response.data.total
         this.listLoading = false
       })
     },
@@ -286,6 +294,7 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
+        status:"",
         start: val-1,
         limit: 10
       }
