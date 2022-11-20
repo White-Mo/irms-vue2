@@ -115,11 +115,10 @@
                              type="text"></div>
                         <img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数
                       </div>
-                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：0<span id="IP_total"
-                                                                                                        :style="{fontsize:'17px'}"></span>
+                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：{{IPtotal}}
                       </div>
                       <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
-                      <p id="main1" style="width: 900px; height: 460px"></p>
+                      <p id="IPCount" style="width: 100%; height: 90%"></p>
                     </div>
 
                   </div>
@@ -132,7 +131,7 @@
                         设备类型
                       </div>
                       <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
-                      <p id="main" class="pieCHart" style="width: 771px; height: 416px;left:-66px"></p>
+                      <p id="equipmentType" class="pieCHart" style="width: 100%; height: 100%;text-align: center"></p>
                     </div>
 
                   </div>
@@ -168,7 +167,7 @@
 import {mapGetters} from 'vuex'
 import "@/../node_modules/echarts/extension/bmap/bmap";
 import BMap from "BMap";
-import { getDepartmentAllCountData, getEquipmentAllCountData } from '@/api/dashboard'
+import { getDepartmentAllCountData, getEquipmentAllCountData,getIPAddressCountData} from '@/api/dashboard'
 
 export default {
   name: 'Dashboard',
@@ -177,6 +176,8 @@ export default {
     return {
       chart1Count: 0,
       postIndex: 0,
+      IPtotal: 0,
+
     }
   },
   created() {
@@ -186,8 +187,9 @@ export default {
     this.currentRole();
     this.equipmentType();
 
-    this.draw_Chart();
+    // this.draw_Chart();
     this.drawLine();
+    this.mapChartType();
 
   },
   computed: {
@@ -239,6 +241,7 @@ export default {
     // 各部门设备类型 堆叠条形图
     async equipmentType(){
       let colData = await this.handleEquipmentAllCountData();// 堆叠条形图所需所有数据
+      console.log(colData)
       let chartLabel = this.handleChartLable(colData); // 图例
       let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴设备类型
       let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData); // 各部门的各设备类型数据
@@ -629,10 +632,10 @@ export default {
         histogramChart.resize();
       });
     },
-    draw_Chart() {
+    draw_Chart(postId) {
       // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
-      let myChart = this.$echarts.init(document.getElementById("main"));
-      let myChart1 = this.$echarts.init(document.getElementById("main1"));
+      let myChart = this.$echarts.init(document.getElementById("equipmentType"));
+      let myChart1 = this.$echarts.init(document.getElementById("IPCount"));
 
       var markpointData = [];
 
@@ -731,15 +734,15 @@ export default {
       // this.drawChart();
       // 基于准备好的dom，初始化echarts实例
       let params = [
-        [116.344516, 39.917558, '中国地震局台网中心', '2c9f40818022f3e1018022f66fdc0001'],
+        [116.344516, 39.917558, '中国地震局台网中心', '2c90a15e5ffb2ae9015ffb3a19a50035'],
         // [116.297235,39.914195, '信息技术保障部'],
         // [116.313699,39.985729, '北京市地震局'],
         [116.297235, 39.914195, '中国地震局', '2c90a15e5ffb2ae9015ffb3a19a50000'],
-        [116.808554, 39.969103, '防灾科技学院', '2c9f40818022f3e1018022f6922c0003'],
-        [108.989465, 34.231801, '中国地震局第二监测中心', '2c9f40818022f3e1018022fce15d000b'],
-        [102.746056, 25.082943, '云南省地震局', '2c9f40818022f3e1018022fc4a510009'],
-        [104.073864, 30.642951, '四川省地震局', '2c9f40818022f3e1018022fc2e4e0007'],
-        [103.863986, 36.056004, '甘肃省地震局', '2c9f40818022f3e1018022fd13be000d']
+        [116.808554, 39.969103, '防灾科技学院', '2c90a15e5ffb2ae9015ffb3a19a50041'],
+        [108.989465, 34.231801, '中国地震局第二监测中心', '2c90a15e5ffb2ae9015ffb3a19a50040'],
+        [102.746056, 25.082943, '云南省地震局', '2c90a15e5ffb2ae9015ffb3a19a50025'],
+        [104.073864, 30.642951, '四川省地震局', '2c90a15e5ffb2ae9015ffb3a19a50023'],
+        [103.863986, 36.056004, '甘肃省地震局', '2c90a15e5ffb2ae9015ffb3a19a50029']
 
       ];
       let myChart = this.$echarts.init(document.getElementById("myChart"));
@@ -779,7 +782,9 @@ export default {
         // $("#el-dialog").removeClass('hide');
         $("#el-dialog").css('display', 'block');
         $("#reportTitle").html(params.value[2]);
-        this.draw_Chart();
+        // this.draw_Chart(params.value[3]);
+        this.drawMapChartType(params.value[3]);
+        this.drawMapChartIP(params.value[3]);
       });
 
       var bmap = myChart.getModel().getComponent('bmap').getBMap()
@@ -2093,6 +2098,157 @@ export default {
       });
     },
 
+    async mapChartIP(postId){
+      let list=[];
+      let XAxis = [];
+      let YAxis = [];
+      let markpointData = [];
+
+
+      return XAxis,YAxis,markpointData;
+    },
+    async drawMapChartIP(postId){
+      let XAxis=[];
+      let YAxis=[];
+      let markpointData = [];
+      let list = [];
+      let sum = 0;
+      let params = {postId:postId};
+      await getIPAddressCountData(params).then((response) => {
+        list = response.data.items
+      })
+      for(let i = 0; i < list.length; i++){
+        XAxis.push(list[i].departmentName);
+        YAxis.push(list[i].count);
+        sum += list[i].count;
+      }
+      this.IPtotal = sum;
+      for (let i = 0; i < YAxis.length; i++) {
+        markpointData.push({value: YAxis[i], xAxis: XAxis[i], yAxis: YAxis[i]});
+      }
+      let myChart1 = this.$echarts.init(document.getElementById("IPCount"));
+      let option1 = {
+        color: ["#87cefa"],
+        xAxis: {
+          axisLabel: {
+            color: '#FFFFFF',
+            margin: 10,
+            fontSize: 16,
+            interval: 0
+          },
+          type: 'category',
+          data: XAxis
+        },
+        yAxis: {
+
+          axisLabel: {
+            color: '#FFFFFF',
+            margin: 30,
+            fontSize: 16
+          },
+          type: 'value'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'none'
+          },
+
+        },
+        series: [
+          {
+            radius: '50%',
+            data: YAxis,
+            type: 'bar',
+
+            showBackground: true,
+            markPoint: {
+              barWidth: '25%',
+              label: {
+                show: true,
+                color: '#000000',//气泡中字体颜色
+                fontSize: 16
+              },
+              data: markpointData,
+            },
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.0)'
+            }
+          }
+        ]
+      };
+      myChart1.setOption(option1);
+      // window.addEventListener("resize",function (){
+      //   myChart1.resize();
+      // });
+      // $("#sidebar-collapse").click(function(){
+      //   myChart1.resize();
+      // });
+    },
+    // 地图弹窗中设备类型表的数据处理
+    async mapChartType(postId){
+      let eqData = await this.handleEquipmentAllCountData(postId);
+      let result = [];
+      let lableData = this.handleEquipmentTypeLable(eqData);
+      for(let i = 0; i < lableData.length; i++){
+        let count = 0;
+        for(let j = 0; j < eqData.length; j++){
+          if(eqData[j].equipmentTypeName === lableData[i]){
+            count += eqData[j].count;
+          }
+        }
+        result.push({value: count,name:lableData[i]})
+      }
+      return result;
+    },
+    async drawMapChartType(postId){
+      let chartData = await this.mapChartType(postId);
+      let myChart = this.$echarts.init(document.getElementById("equipmentType"));
+      let option={
+        color: ["#32cd32", "#ff7f50", "#87cefa", "#FD6C88", "#4b5cc4", "#faff72"],
+        tooltip: {
+          trigger: 'item',
+        },
+
+        calculable: true,
+        series: [
+          {
+            name: '设备类型',
+            type: 'pie',
+            radius: '50%' ,
+            label: {
+              formatter: '{name|{b}}\n{value|{c}台}',
+              minMargin: 5,
+              edgeDistance: 10,
+              lineHeight: 20,
+              rich: {
+                value: {
+                  fontSize: 16,
+                }
+              },
+              textStyle: {
+                fontSize: 17
+              }
+            },
+            data: chartData,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+      // window.addEventListener("resize",function (){
+      //   myChart.resize();
+      // });
+      // $("#sidebar-collapse").click(function(){
+      //   myChart.resize();
+      // });
+    },
 
   },
 
