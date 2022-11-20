@@ -32,6 +32,15 @@ export function getEquipmentTypeByPage(data) {
   })
 }
 
+//获取机房数量wr
+export function getMachineRoomTotal(data) {
+  return request({
+    url: '/home/baseparameter/getMachineRoomTotal',
+    method: 'get',
+    params: data
+  })
+}
+
 //通过页码获取机房
 export function getMachineRoomByPage(data) {
   return request({
@@ -47,6 +56,17 @@ export function getBusinessSystemByPage(data) {
     url: '/home/baseparameter/getBusinessSystemByPage',
     method: 'get',
     params: data
+  })
+}
+
+//改变机房状态wr
+export function changeStatus(eq) {
+  var params = JSON.parse(JSON.stringify(eq))
+  return request({
+    params,
+    url: '/home/baseparameter/changeRoomStatus',
+    method: 'post',
+    responseType: 'json'
   })
 }
 
