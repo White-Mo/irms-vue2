@@ -66,7 +66,6 @@ export function delEquipment(equipmentId) {
   })
 }
 export function getbasic(equipmentId) {
-  console.log(equipmentId)
   return request({
     params: { equipmentId: equipmentId },
     url: '/home/inforesources/getBasicInfoById',
@@ -88,14 +87,6 @@ console.log(initdata);
   return request({
     params: { initValue: initdata },
     url: '/home/inforesources/getInitDataAll',
-    method: 'post',
-    responseType: 'json'
-  })
-}
-
-export function getQComSelect(model) {
-  return request({
-    url: 'home/authority/' + model,
     method: 'post',
     responseType: 'json'
   })

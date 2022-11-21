@@ -39,3 +39,67 @@ export function getMoveRoute() {
     responseType: 'json'
   })
 }
+
+export function getQComSelect(model) {
+  return request({
+    url: 'home/authority/' + model,
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function getFosUserByPage(params) {
+  return request({
+    params,
+    url: '/home/authority/getFosUserByPage',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+export function getFosUserCount(params) {
+  return request({
+    params,
+    url: '/home/authority/getFosUserCount',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+export function isdeleteFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/isdelFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function deleteFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/delFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function updateFosUserAction(params) {
+  return request({
+    params,
+    url: '/home/authority/updateFosUserAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function createFosUser(params) {
+  return request({
+    params,
+    url: '/home/authority/createFosUser',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function getPostDepartmentAll(params) {
+  return request({
+    params,
+    url: '/home/authority/getPostDepartmentAll',
+    method: 'post',
+    responseType: 'json'
+  })
+}

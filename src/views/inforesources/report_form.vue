@@ -458,6 +458,9 @@ export default {
           } else {
             trigger_fun(res)
           }
+        }).catch(err=>{ // 如果接口失效则添加零
+          console.log(err)
+          trigger_fun(0)
         })
       }
     },
