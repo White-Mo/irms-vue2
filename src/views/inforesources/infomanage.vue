@@ -246,11 +246,10 @@ export default {
           label: '设备类型',
           width: '200px'
         },
-        {
-          value: 'businessSystemName',
-          label: '业务系统',
-          width: '200px'
-        },
+        // {
+        //   value: 'businessSystemName',
+        //   label: '业务系统'
+        // },
         {
           value: 'machineRoomName',
           label: '安装位置',

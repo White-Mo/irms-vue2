@@ -20,24 +20,25 @@
               :lg="2"
               :xl="2"
             >
-              <el-button type="primary" size="large" @click="addDialog = true">添加角色</el-button>
+              <el-button type="primary" size="large" @click="addDialog = true" icon="el-icon-plus">添加角色</el-button>
             </el-col>
           </el-row>
           <el-table
             :data="tableData"
             style="width: 100%">
             <el-table-column
-              prop=""
-              label="日期"
+              prop="name"
+              label="名字"
               width="180">
               <template slot-scope="scope">
-                <i class="el-icon-time"></i>
                 <span style="margin-left: 10px">{{ scope.row.date }}</span>
               </template>
             </el-table-column>
             <el-table-column
+              prep="isdel"
               label="状态"
               width="180">
+              <tag></tag>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
@@ -76,7 +77,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {getAuthorData} from "@/api/Sys_info_manage";
+import {getAutherCount} from "@/api/Sys_info_manage";
 
 export default {
   name: 'Dashboard',
@@ -88,24 +90,21 @@ export default {
         name: '',
         status:''
       },
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      tableData: []
     }
+  },
+  mounted() {
+    getAutherCount().then((res) => {
+      console.log(res)
+    })
+    var data = {
+      start:0,
+      limit:20
+    }
+    getAuthorData(data).then((res)=> {
+      console.log(res)
+      this.tableData = res
+    })
   }
 }
 </script>
