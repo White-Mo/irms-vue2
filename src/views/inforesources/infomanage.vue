@@ -418,9 +418,14 @@ export default {
           value: 'serialNumber',
           label: '序列号',
           width: '200px'
+        },
+        {
+          value: 'guaranteePeriod',
+          label: '保修期',
+          width: '200px'
         }
       ],
-      value: ''
+      value: '',
     }
   },
   created() {

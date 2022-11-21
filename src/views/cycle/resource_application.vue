@@ -1,100 +1,20 @@
 <template>
-<div>
-  <el-button   v-show="getmessage_button" type="primary" @click="sendmessage" style="margin-top: 10px;float: left; margin-left: 10px;margin-bottom: 25px;"><i class="el-icon-s-platform">  IP管理</i></el-button>
-
-
-  <div class="infobody" v-show="getmessage">
-    <div class="grid-content bg-purple"><i class="el-icon-s-platform" /><span>  IP资源申请</span>
-      <el-button
-        size="small"
-        type="primary"
-        icon="el-icon-back"
-        clearable="true"
-        style ="float:right;margin-top: -8px;"
-        @click="backmessage()"
-      >返回</el-button>
+  <div class="infobody">
+    <div class="grid-content bg-purple">
+      <i class="el-icon-s-order" /><span>全生命周期管理</span>
     </div>
     <div class="app-container">
-      <div
-        v-show="!ifUpdate"
-        class="show"
-      >
+      <div class="show">
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark">IP资源管理</div>
+            <div class="grid-content bg-purple-dark">IP 资源申请</div>
           </el-col>
         </el-row>
-        <el-row
-          :gutter="10"
-          class="bg-condition"
-        >
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
+        <el-row :gutter="10" class="bg-condition">
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <span>查询条件：</span>
           </el-col>
-          <!-- <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          > -->
-          <!-- el-select里面的v-model必须是对象（A），与el-option里面的:value的值（B）配合使用，A用来初始化在选择框里，B用来结合A间接传值给后台 -->
-          <!-- <div class="grid-content bg-purple-light">
-              <span>单位</span>
-              <el-select
-                v-model="postname"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="(item,index) in options"
-                  :key="index"
-                  :value="item.value"
-                  :label="item.label"
-                />
-              </el-select>
-            </div>
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <div class="grid-content bg-purple">
-              <span>部门</span>
-              <el-select
-                v-model="department"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="(item,index) in departments"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select> -->
-          <!-- </div>
-          </el-col> -->
-          <!-- <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="4">
-            <div class="grid-content bg-purple-light">
-              <span>详情查询</span>
-              <el-cascader :options="options" :show-all-levels="false" placeholder="详情字段查询" />
-            </div>
-          </el-col> -->
-          <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
-          >
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-select
               v-model="DataName"
               placeholder="详细字段查询"
@@ -102,7 +22,7 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in dataname"
+                v-for="(item, index) in dataname"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -110,13 +30,7 @@
               />
             </el-select>
           </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
+          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
             <el-input
               v-model="inputValue"
               placeholder="输入查询内容"
@@ -124,26 +38,20 @@
               size="medium"
             />
           </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button
               size="medium"
               type="primary"
               icon="el-icon-search"
               clearable="true"
               @click="fetchData()"
-            >搜索</el-button>
+            >搜索</el-button
+            >
           </el-col>
-
         </el-row>
         <el-table
           v-loading="listLoading"
-          :data="list"
+          :data="list_network"
           element-loading-text="Loading"
           border
           highlight-current-row
@@ -151,87 +59,67 @@
         >
           <el-table-column type="index" />
           <af-table-column
-            v-for="(value,key,index) in labels"
+            v-for="(value, key, index) in labels"
             :key="index"
             align="center"
             :label="value"
           >
             <template slot-scope="scope">
-              {{ scope.row[key] }}
+<!--              <el-select v-if="scope.row.isEdit && key ==='ip_address'" @change="changeRoom(scope.row)" v-model="scope.row[key]" placeholder="请选择">-->
+<!--                <el-option-->
+<!--                  v-for="item in machineRoomAll"-->
+<!--                  :key="item.value"-->
+<!--                  :value="item.ip_address"-->
+<!--                />-->
+<!--              </el-select>-->
+<!--              <el-select v-else-if="scope.row.isEdit && key ==='mAC_address'" v-model="scope.row[key]" placeholder="请选择">-->
+<!--&lt;!&ndash;                <el-option&ndash;&gt;-->
+<!--&lt;!&ndash;                  v-for="item in cabinetAll"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :key="item.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :value="item.cabinetName"&ndash;&gt;-->
+<!--&lt;!&ndash;                />&ndash;&gt;-->
+<!--              </el-select>-->
+              <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
+              </el-input>
+              <span v-else>{{ scope.row[key] }}</span>
             </template>
           </af-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            width="250px"
-          >
+          <el-table-column align="center" label="操作" width="200px"  fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                :style="{ display: scope.row.isEdit==false?'none':'' }"
                 @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
-              <el-button size="mini">编辑</el-button>
+              >{{scope.row.isEdit ? '取消' : '详情'}}</el-button
+              >
               <el-button
                 size="mini"
-                type="danger"
-                text
-                @click="dialogVisible = true"
-              >删除</el-button>
-              <el-dialog
-                :append-to-body="true"
-                title="删除提示"
-                :visible.sync="dialogVisible"
-                width="30%"
+                @click="handleMove(scope.$index, scope.row)"
+              >{{scope.row.isEdit ? '提交' : '申请'}}</el-button
               >
-                <span>
-                  你确定要永久删除这条数据吗？
-                </span>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">Cancel</el-button>
-                    <el-button
-                      type="primary"
-                      @click="handleDelete(scope.row)"
-                    >
-                      确认
-                    </el-button>
-                  </span>
-                </template>
-              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
         <div class="block">
           <el-pagination
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
+            :page-size="limit"
+            layout="total, prev, pager, next, jumper"
+            :total="total_N"
             @current-change="handleCurrentChange"
           />
         </div>
       </div>
-      <div v-show="ifUpdate">
-        <addinfo @ifUpdateChange="updateIfupdate" />
-      </div>
     </div>
   </div>
-
-
-</div>
 </template>
 
-
 <script>
-import { getList } from '@/api/IP_address'
-import Addinfo from '@/components/Infomanage/addInfo'
+import { hunhe1 } from '@/layout/mixin/IP_address_Mix'
+import { updateBasicInfoNetwork } from '@/api/IP_address'
+import user from '@/store/modules/user'
+import { getMachineRoom,getCabinet } from '@/api/select'
 
 export default {
-  // 引用vue reload方法
-  inject: ['reload'],
-  components: {
-    Addinfo
-  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -242,22 +130,28 @@ export default {
       return statusMap[status]
     }
   },
+  mixins: [hunhe1],
   data() {
     return {
-      getmessage_button:true,
-      getmessage:false,
-      dialogVisible: false,
+      roleid: user.state.roleid,
+      visiblePublish:false,
+      machineRoomAll: [],
+      cabinetAll: [],
+      start:0,
+      limit:10,
+      isEdit:false,
+      tab_name: '0',
       list: null,
+      list_network:null,
       total: 0,
-      currentPage1: 5,
+      total_N:0,
+      currentPage1: 10,
       DataName: 'all',
-      keyname: [],
       initname: ['123'],
       department: '',
       inputValue: '',
       postname: '',
       input3: '',
-      ifUpdate: false,
       listLoading: true,
       singalInfo: {},
       dataname: [
@@ -274,16 +168,21 @@ export default {
           label: '设备名'
         },
         {
+          value: 'equipmentName',
+          label: '设备名'
+        },
+        {
           value: 'brandName',
           label: '设备品牌'
         },
+
         {
-          value: 'equipmentTypeName',
-          label: '设备类型'
+          value: 'ip_address',
+          label: 'IP 地址'
         },
         {
-          value: 'businessSystemName',
-          label: '业务系统'
+          value: 'mAC_address',
+          label: 'MAC 地址'
         },
         {
           value: 'machineRoomName',
@@ -298,37 +197,13 @@ export default {
           label: '上线时间'
         },
         {
-          value: 'offlineTime',
-          label: '下线时间'
-        },
-        {
           value: 'hostName',
           label: '主机名'
         },
         {
-          value: 'NetworkadminName',
-          label: '网络管理员'
-        },
-        {
-          value: 'IP_address',
-          label: 'IP地址'
-        },
-        {
-          value: 'MAC_address',
-          label: 'MAC地址'
-        },
-        {
-          value: 'brandModelName',
-          label: '型号'
-        },
-        {
-          value: 'serialNumber',
-          label: '序列号'
-        },
-        {
           value: 'guaranteePeriod',
           label: '保修期'
-        }
+        },
       ],
       value: '',
       labels: {
@@ -337,110 +212,121 @@ export default {
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
         brandName: '设备品牌',
-        businessSystemName: '业务系统',
-        machineRoomName: '安装位置',
-        cabinetName: '机柜编号',
         onlineTime: '上线时间',
         hostName: '主机名',
-        IP_address:'IP地址',
-        MAC_address:'MAC地址',
-        brandModelName: '型号',
-        serialNumber: '序列号',
         guaranteePeriod: '保修期',
-        offlineTime: '下线时间',
-        NetworkadminName:'网络管理员'
+        ip_address: 'ip 地址',
+        switch_info: 'MAC 地址',
+        machineRoomName: '安装位置',
+        cabinetName: '机柜编号',
+
+
+
       }
     }
   },
-  created() {
+  async created() {
     this.fetchData()
+    let a = 0
+    a = await this.handleAsync(a)
+    // console.log(a);
+    // console.log(this.list_network)
+    // console.log(this.list)
   },
   methods: {
-    // 综合数据管理展示与查询--lry
-    //弹框
-    backmessage(){
-      this.getmessage = false,
-        this.getmessage_button=true
-    },
-    sendmessage(){
-      this.getmessage = true,
-        this.getmessage_button=false
-    },
-    fetchData() {
-      this.listLoading = true
-      // console.log(this.basicValue)
-      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
-        this.initname = ['111']
-      } else {
-        // console.log(JSON.parse(JSON.stringify(this.DataName)))
-        this.initname = JSON.parse(JSON.stringify(this.DataName))
-      }
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        start: 0,
-        limit: 5,
-        status:''
-      }
-      const numparams = {
-        dataName: this.initname,
-        dataValue: this.inputValue
-      }
-      // getdataCount(numparams).then((response) => {
-      //   this.total = response.data.total
-      //   console.log(this.total)
-      //   this.listLoading = false
-      // })
-      // console.log(this.initdata)
-      getList(params).then((response) => {
-        this.list = response.data.items
-        console.log(this.list)
-        this.listLoading = false
+    async handleAsync(val){
+      return new Promise((resolve,reject)=>{
+        let arr = [1,2,3]
+        for (let i = 0; i < arr.length; i++) {
+          const e = arr[i];
+          setTimeout(() => {
+            if (e == 2) {
+              val = e;
+              console.log(val);
+              resolve(val)
+            }
+
+          }, 1000);
+        }
       })
-    },
-    addInfo() {
-      // this.ifUpdate = !this.ifUpdate
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      this.visiblePublish=false
+      console.log(row.isEdit)
+      if (row.isEdit) {
+        row.isEdit = !row.isEdit;
+      }
     },
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(row) {
-      // delEquipment(row.equipmentId).then((response) => {
-      // })
-      // this.dialogVisible = false
-      // console.log(row.equipmentId)
-      // this.reload()
-    },
-    updateIfupdate(e) {
-      // this.ifUpdate = e
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
-      this.limit=val
-      this.fetchData()
+    handleMove(index, row) {
+      this.visiblePublish=true
+      row.isEdit = !row.isEdit;
+      console.log(row.isEdit)
+      if (!row.isEdit) {
+        // let machineRoomId = ''
+        // let cabinetId = ''
+        // this.machineRoomAll.forEach(element => {
+        //   if (element.machineRoomName === row.machineRoomName) {
+        //     machineRoomId = element.machineRoomId;
+        //   }
+        // })
+        // this.cabinetAll.forEach(element => {
+        //   if (element.cabinetName === row.cabinetName) {
+        //     cabinetId = element.cabinetId;
+        //   }
+        // })
+        // console.log(machineRoomId,cabinetId);
+        const params = {
+          equipmentId: row.equipmentId,
+          ip_address:row.ip_address,
+          switch_info: row.switch_info,
+          cabinetUStart: row.cabinetUStart,
+          cabinetUEnd: row.cabinetUEnd
+        }
+        updateBasicInfoNetwork(params).then( res=>{
+          console.log(res);
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        } )
+      }else{
+        //
+        // getMachineRoom(row.postId).then(response => {
+        //   this.machineRoomAll = response.data.items
+        //   this.fetchCabinet(row.machineRoomName)
+        // })
+
+      }
     },
     handleCurrentChange(val) {
-      const params = {
-        dataName: this.initdata,
-        dataValue: this.inputValue,
-        start: val,
-        limit: 10,
-        status:''
-      }
-      getList(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
+      this.start = (val-1)*this.limit
+      this.fetchData()
+    },
+    async changeRoom(row) {
+      // let val = row.machineRoomName
+      // await this.fetchCabinet(val)
+      // console.log(this.cabinetAll[0].cabinetName);
+      // row.cabinetName = this.cabinetAll[0].cabinetName
+    },
+    async fetchCabinet(val) {
+      return new Promise((resolve,reject) => {
+        this.machineRoomAll.forEach(element => {
+          if (element.machineRoomName === val) {
+            getCabinet(element.machineRoomId).then(response => {
+              this.cabinetAll = response.data.items
+              console.log(this.cabinetAll[0].cabinetName);
+              resolve()
+            })
+          }
+        })
       })
+
+
     }
   }
 }
 </script>
+
 <style lang="less" scoped>
 //*{
 //  font-size: 18px;
@@ -510,7 +396,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {

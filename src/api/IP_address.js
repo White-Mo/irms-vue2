@@ -12,6 +12,32 @@ export function getList(obj) {
     responseType: 'json'
   })
 }
+//IP 地址数据获取
+export function getNetWorkList(obj) {
+  // 将有数组和字符串的对象转为符合JSON格式的对象
+  var params = JSON.parse(JSON.stringify(obj))
+  console.log(params)
+  // console.log(typeof (params))
+  return request({
+    params,
+    url: '/home/IPaddress/getBasicInfoNetworkByPage1',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+//IP 地址数据获取
+export function updateBasicInfoNetwork(obj) {
+  // 将有数组和字符串的对象转为符合JSON格式的对象
+  var params = JSON.parse(JSON.stringify(obj))
+  console.log(params)
+  // console.log(typeof (params))
+  return request({
+    params,
+    url: '/home/IPaddress/updateIPaddressAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
 export function getdataCount(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
@@ -19,7 +45,7 @@ export function getdataCount(obj) {
   // console.log(typeof (params))
   return request({
     params,
-    url: '/home/inforesources/getCompreDataCount',
+    url: '/home/IPaddress/getBasicInfoNetworkCount1',
     method: 'get',
     responseType: 'json'
   })
@@ -52,3 +78,30 @@ export function delEquipment(equipmentId) {
     responseType: 'json'
   })
 }
+export function getbasic(equipmentId) {
+  console.log(equipmentId)
+  return request({
+    params: { equipmentId: equipmentId },
+    url: '/home/inforesources/getBasicInfoById',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function changeStatus(eq) {
+  var params = JSON.parse(JSON.stringify(eq))
+  return request({
+    params,
+    url: '/home/inforesources/changeEquipStatus',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function getQComSelect(model) {
+  return request({
+    url: 'home/authority/' + model,
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
