@@ -7,7 +7,7 @@ export const getEquipmentCount= () => {
 
 //总设备数据量
 export const getEquipmentTypeCount= () => {
-  return request.get( '/home/baseparameter/getEquipmentCount')
+  return request.get( '/home/baseparameter/getEquipmentTypeCount')
 }
 
 //保修期内设备数据量
