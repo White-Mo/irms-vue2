@@ -436,7 +436,7 @@ export default {
     getStatisticsExcel() {
       const item_list = [
         'getEquipmentCount',
-        '../baseparameter/getEquipmentCount',
+        '../baseparameter/getEquipmentTypeCount',
         'getGuaranteePeriodCount',
         'getSystemWareCount',
         'getApplicationUserCount?qapp_user=all',

@@ -14,7 +14,7 @@
 
 
       <el-row class="total_line">
-        <el-col :span="8" class="count_box">
+        <el-col :span="12" class="count_box">
           <div class="content_count_box left">
             <div class="child_count_box_icon">
               <img src="../../assets/dashboard_imgs/info_1.png">
@@ -34,7 +34,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="8" class="count_box">
+        <el-col :span="12" class="count_box">
           <div class="content_count_box left">
             <div class="child_count_box_icon">
               <img src="../../assets/dashboard_imgs/title_1.png">
@@ -55,27 +55,27 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="8" class="count_box">
-          <div class="content_count_box left">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_5.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">应用管理员数量(个)</p>
-              <p id="applicationtUser">{{applicationUserNumber}}</p>
-            </div>
-          </div>
+<!--        <el-col :span="8" class="count_box">-->
+<!--          <div class="content_count_box left">-->
+<!--            <div class="child_count_box_icon">-->
+<!--              <img src="../../assets/dashboard_imgs/title_5.png">-->
+<!--            </div>-->
+<!--            <div class="child_count_box_p">-->
+<!--              <p class="mainfont">应用管理员数量(个)</p>-->
+<!--              <p id="applicationtUser">{{applicationUserNumber}}</p>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="content_count_box right">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_4.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">设备管理员数量(个)</p>
-              <p id="equipmentUser">{{equipmentUserNumber}}</p>
-            </div>
-          </div>
-        </el-col>
+<!--          <div class="content_count_box right">-->
+<!--            <div class="child_count_box_icon">-->
+<!--              <img src="../../assets/dashboard_imgs/title_4.png">-->
+<!--            </div>-->
+<!--            <div class="child_count_box_p">-->
+<!--              <p class="mainfont">设备管理员数量(个)</p>-->
+<!--              <p id="equipmentUser">{{equipmentUserNumber}}</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </el-col>-->
       </el-row>
       <el-row class="charts_line">
         <el-col :span="6" class="left col_charts">
@@ -206,8 +206,8 @@ export default {
     RenderingData(){
       const that = this
       getEquipmentCount().then(function (res){
-        console.log("************总设备数据量:"+ res +"*********************")
-        that.allEquipmentNumber = res;
+        console.log("************总设备数据量:"+ res.data.total +"*********************")
+        that.allEquipmentNumber = res.data.total;
       }),
         getEquipmentTypeCount().then(function (res){
           console.log("************设备类型数据量:"+ res.data +"*********************")
@@ -1985,18 +1985,20 @@ export default {
 }
 .child_count_box_p{
   margin-top: 15px;
-  margin-left: 5%;
+  width: 80%;
   text-align: center;
   line-height: 35px;
   float: left;
 }
 .child_count_box_p p:nth-child(1){
   font-size: 18px !important;
+  text-align: center;
 }
 .child_count_box_p p:nth-child(2){
   font-size: 28px;
   color: #ffff43;
   font-weight: 600;
+  text-align: center;
 }
 .left{
   float: left;

@@ -559,14 +559,14 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: '',
+        status: "0",
         start: this.start,
         limit: this.limit
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: ''
+        status: "0"
       }
       getdataCount(numparams).then((response) => {
         this.total = response.data.total
@@ -646,8 +646,7 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        // status: "this.t",
-        status: '',
+        status: "0",
         start: (val - 1) * this.limit,
         limit: this.limit
       }
