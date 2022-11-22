@@ -346,7 +346,7 @@ export default {
 
         for (let j=0;j<chart2Count[i].length;j++){
           if(chart2Count[i][j]==0){
-            chart2Count[i][j]="null"
+            chart2Count[i][j]="无"
             console.log(chart2Count[i][j])
           }
         }
@@ -631,104 +631,6 @@ export default {
       $("#sidebar-collapse").click(function(){
         histogramChart.resize();
       });
-    },
-    draw_Chart(postId) {
-      // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
-      let myChart = this.$echarts.init(document.getElementById("equipmentType"));
-      let myChart1 = this.$echarts.init(document.getElementById("IPCount"));
-
-      var markpointData = [];
-
-      var xdata = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; //横轴值数组
-
-      var ydata = [120, 200, 150, 80, 70, 110, 130]; //纵轴值数组
-
-      for (var i = 0; i < ydata.length; i++) {
-        markpointData.push({value: ydata[i], xAxis: xdata[i], yAxis: ydata[i]});
-      }
-
-      let department_Data_Array1 = [120, 200, 150, 80, 70, 110, 130];
-      let option1 = {
-        color: ["#87cefa"],
-        xAxis: {
-          axisLabel: {
-            color: '#FFFFFF',
-            margin: 10,
-            fontSize: 16,
-            interval: 0
-          },
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-
-          axisLabel: {
-            color: '#FFFFFF',
-            margin: 30,
-            fontSize: 16
-          },
-          type: 'value'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'none'
-          },
-
-        },
-        series: [
-          {
-            radius: '50%',
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'bar',
-
-            showBackground: true,
-            markPoint: {
-              barWidth: '25%',
-              label: {
-                show: true,
-                color: '#000000',//气泡中字体颜色
-                fontSize: 16
-              },
-              data: markpointData,
-            },
-            backgroundStyle: {
-              color: 'rgba(180, 180, 180, 0.0)'
-            }
-          }
-        ]
-      };
-      // 指定图表的配置项和数据
-      let option = {
-
-        tooltip: {
-          trigger: 'item'
-        },
-        series: [
-          {
-            name: 'Access From',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              {value: 1048, name: 'Search Engine'},
-              {value: 735, name: 'Direct'},
-              {value: 580, name: 'Email'},
-              {value: 484, name: 'Union Ads'},
-              {value: 300, name: 'Video Ads'}
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-      myChart1.setOption(option1);
     },
     drawLine() {
       // this.drawChart();
@@ -2098,15 +2000,6 @@ export default {
       });
     },
 
-    async mapChartIP(postId){
-      let list=[];
-      let XAxis = [];
-      let YAxis = [];
-      let markpointData = [];
-
-
-      return XAxis,YAxis,markpointData;
-    },
     async drawMapChartIP(postId){
       let XAxis=[];
       let YAxis=[];
@@ -2205,7 +2098,7 @@ export default {
       let chartData = await this.mapChartType(postId);
       let myChart = this.$echarts.init(document.getElementById("equipmentType"));
       let option={
-        color: ["#32cd32", "#ff7f50", "#87cefa", "#FD6C88", "#4b5cc4", "#faff72"],
+        color: ["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd"],
         tooltip: {
           trigger: 'item',
         },
