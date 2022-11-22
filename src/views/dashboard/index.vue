@@ -1,186 +1,1061 @@
 <template>
   <div class="bg-main">
-      <el-row>
-        <el-col :span="7" class="nav2">
-          <ul>
-            <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size: 16px">设备概况</a> </li>
-          </ul>
-        </el-col>
-        <el-col :span="7" class="header_center" >
-          <h2><strong>智能可视化展示平台</strong></h2>
-        </el-col>
-        <el-col :span="7"></el-col>
-      </el-row>
-      <el-row class="total_line">
-        <el-col :span="8" class="count_box">
-          <div class="content_count_box left">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/info_1.png">
-            </div>
-            <div :span="8" class="child_count_box_p">
-              <p class="mainfont">总设备数据量(台)</p>
-              <p id="equipmentAll">2</p>
-            </div>
+    <el-row>
+      <el-col :span="8" class="nav2">
+        <ul>
+          <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size: 16px">设备概况</a></li>
+        </ul>
+      </el-col>
+      <el-col :span="8" class="header_center" >
+        <h2><strong>智能可视化展示平台</strong></h2>
+      </el-col>
+      <el-col :span="8"></el-col>
+    </el-row>
+    <el-row class="total_line">
+      <el-col :span="8" class="count_box">
+        <div class="content_count_box left">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/info_1.png">
           </div>
-          <div :span="8" class="content_count_box right">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/info_2.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">设备类型数量(种)</p>
-              <p id="equipmentTypeAll">5</p>
-            </div>
+          <div :span="8" class="child_count_box_p">
+            <p class="mainfont">总设备数据量(台)</p>
+            <p id="equipmentAll">2</p>
           </div>
-        </el-col>
-        <el-col :span="8" class="count_box">
-          <div class="content_count_box left">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_1.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">保修期内设备数量(台)</p>
-              <p id="equipmentAllIndate">2</p>
-            </div>
+        </div>
+        <div :span="8" class="content_count_box right">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/info_2.png">
           </div>
+          <div class="child_count_box_p">
+            <p class="mainfont">设备类型数量(种)</p>
+            <p id="equipmentTypeAll">5</p>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8" class="count_box">
+        <div class="content_count_box left">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/title_1.png">
+          </div>
+          <div class="child_count_box_p">
+            <p class="mainfont">保修期内设备数量(台)</p>
+            <p id="equipmentAllIndate">2</p>
+          </div>
+        </div>
 
-          <div class="content_count_box right">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_3.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">总应用系统数量(个)</p>
-              <p id="systemWareAll">5</p>
-            </div>
+        <div class="content_count_box right">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/title_3.png">
           </div>
-        </el-col>
-        <el-col :span="8" class="count_box">
-          <div class="content_count_box left">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_5.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">应用管理员数量(个)</p>
-              <p id="applicationtUser">1</p>
-            </div>
+          <div class="child_count_box_p">
+            <p class="mainfont">总应用系统数量(个)</p>
+            <p id="systemWareAll">5</p>
           </div>
+        </div>
+      </el-col>
+      <el-col :span="8" class="count_box">
+        <div class="content_count_box left">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/title_5.png">
+          </div>
+          <div class="child_count_box_p">
+            <p class="mainfont">应用管理员数量(个)</p>
+            <p id="applicationtUser">1</p>
+          </div>
+        </div>
 
-          <div class="content_count_box right">
-            <div class="child_count_box_icon">
-              <img src="../../assets/dashboard_imgs/title_4.png">
-            </div>
-            <div class="child_count_box_p">
-              <p class="mainfont">设备管理员数量(个)</p>
-              <p id="equipmentUser">1</p>
-            </div>
+        <div class="content_count_box right">
+          <div class="child_count_box_icon">
+            <img src="../../assets/dashboard_imgs/title_4.png">
           </div>
-        </el-col>
-      </el-row>
-      <el-row class="charts_line">
-        <el-col :span="6" class="left col_charts">
-          <el-row class="child_charts">
-            <div class="chart_title">
-              <img src="../../assets/dashboard_imgs/title_1.png">
-              <span id="chart1Data">各单位设备数据量</span>
-            </div>
-            <p class="p_chart" id="pieChart1"></p>
-          </el-row>
-          <el-row class="child_charts">
-            <div class="chart_title">
-              <img src="../../assets/dashboard_imgs/title_2.png">
-              <span>各部门设备类型</span>
-            </div>
-            <p class="p_chart" id="histogramChart"></p>
-          </el-row>
-        </el-col>
-        <el-col :span="12" class="center col_charts">
-          <div class="map_height child_charts">
-            <div class="map_width chart_title">
-              <img src="../../assets/dashboard_imgs/title_0.png">
-              <span>信息分布图</span>
-            </div>
-            <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%'}"></div>
-            <div id="el-dialog" class="dialog">
-              <div class="xc_layer"></div>
-              <div class="popBox" id="printView" :style="{height:'68%'}">
-                <div class="ttBox"><span class="tt" id="reportTitle"></span>
-                  <img src="../../assets/dashboard_imgs/close.png" :style="{width:'30px',float: 'right',cursor:'pointer'}" title="关闭弹窗" class="close" @click="changeMood"/>
-                </div>
-                <div class="txtBox" id="el-dialog_body">
-                  <div :style="{height:'100%',width: '98%',marginLeft: '2%'}">
-                    <div class="left div_any01" :style="{width:'64%'}">
-                      <div class="div_any_child_tanchu">
-                        <div class="div_any_title"><div type="text" class="demo-input" id="date1" :style="{display: 'inline-block',cursor: 'pointer',marginRight: '16px'}"></div><img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数</div>
-                        <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：0<span id="IP_total" :style="{fontsize:'17px'}"></span></div>
-                        <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
-                        <p id="main1"  style="width: 900px; height: 460px"></p>
+          <div class="child_count_box_p">
+            <p class="mainfont">设备管理员数量(个)</p>
+            <p id="equipmentUser">1</p>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="charts_line">
+      <el-col :span="6" class="left col_charts">
+        <el-row class="child_charts">
+          <div class="chart_title">
+            <img src="../../assets/dashboard_imgs/title_1.png">
+            <span id="chart1Data">各单位设备数据量</span>
+          </div>
+          <p id="pieChart1" class="p_chart"></p>
+        </el-row>
+        <el-row class="child_charts">
+          <div class="chart_title">
+            <img src="../../assets/dashboard_imgs/title_2.png">
+            <span>各部门设备类型</span>
+          </div>
+          <p id="histogramChart" class="p_chart"></p>
+        </el-row>
+      </el-col>
+      <el-col :span="12" class="center col_charts">
+        <div class="map_height child_charts">
+          <div class="map_width chart_title">
+            <img src="../../assets/dashboard_imgs/title_0.png">
+            <span>信息分布图</span>
+          </div>
+          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%'}"></div>
+          <div id="el-dialog" class="dialog">
+            <div class="xc_layer"></div>
+            <div id="printView" :style="{height:'68%'}" class="popBox">
+              <div class="ttBox"><span id="reportTitle" class="tt"></span>
+                <img :style="{width:'30px',float: 'right',cursor:'pointer'}" class="close"
+                     src="../../assets/dashboard_imgs/close.png" title="关闭弹窗" @click="changeMood"/>
+              </div>
+              <div id="el-dialog_body" class="txtBox">
+                <div :style="{height:'100%',width: '98%',marginLeft: '2%'}">
+                  <div :style="{width:'64%'}" class="left div_any01">
+                    <div class="div_any_child_tanchu">
+                      <div class="div_any_title">
+                        <div id="date1" :style="{display: 'inline-block',cursor: 'pointer',marginRight: '16px'}" class="demo-input"
+                             type="text"></div>
+                        <img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数
                       </div>
-
-                    </div>
-                    <div class="left div_any01"  :style="{width: '32%',}">
-                      <div class="div_any_child_tanchu">
-                        <div class="div_any_title"><div type="text" class="demo-input" id="date3" :style="{display:'inline-block' ,cursor:'pointer' ,marginRight: '16px'}"></div>
-                          <img src="../../assets/dashboard_imgs/title_18.png">
-                          设备类型
-                        </div>
-                        <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
-                        <p id="main"  style="width: 771px; height: 416px;left:-66px" class="pieCHart"></p>
+                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：0<span id="IP_total"
+                                                                                                        :style="{fontsize:'17px'}"></span>
                       </div>
-
+                      <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
+                      <p id="main1" style="width: 900px; height: 460px"></p>
                     </div>
 
                   </div>
+                  <div :style="{width: '32%',}" class="left div_any01">
+                    <div class="div_any_child_tanchu">
+                      <div class="div_any_title">
+                        <div id="date3" :style="{display:'inline-block' ,cursor:'pointer' ,marginRight: '16px'}" class="demo-input"
+                             type="text"></div>
+                        <img src="../../assets/dashboard_imgs/title_18.png">
+                        设备类型
+                      </div>
+                      <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
+                      <p id="main" class="pieCHart" style="width: 771px; height: 416px;left:-66px"></p>
+                    </div>
+
+                  </div>
+
                 </div>
               </div>
             </div>
-
           </div>
-        </el-col>
-        <el-col :span="6" class="right col_charts">
-          <el-row class="child_charts">
-            <div class="chart_title">
-              <img src="../../assets/dashboard_imgs/title_3.png">
-              <span>设备上线时间统计</span>
-            </div>
-            <p class="p_chart" id="lineChart"></p>
-          </el-row>
-          <el-row class="child_charts">
-            <div class="chart_title">
-              <img src="../../assets/dashboard_imgs/title_4.png">
-              <span>保修期内设备数量</span>
-            </div>
-            <p class="p_chart" id="lineChart2"></p>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
+
+        </div>
+      </el-col>
+      <el-col :span="6" class="right col_charts">
+        <el-row class="child_charts">
+          <div class="chart_title">
+            <img src="../../assets/dashboard_imgs/title_3.png">
+            <span id="chart2Data">各单位机房统计</span>
+          </div>
+          <p id="pieChart2" class="p_chart"></p>
+        </el-row>
+        <el-row class="child_charts">
+          <div class="chart_title">
+            <img src="../../assets/dashboard_imgs/title_4.png">
+            <span>各机房内机柜数量</span>
+          </div>
+          <p id="histogramChart2" class="p_chart"></p>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import "@/../node_modules/echarts/extension/bmap/bmap";
 import BMap from "BMap";
+import { getDepartmentAllCountData, getEquipmentAllCountData,
+  getMachineRoomAllCountData,getCabinetAllCountData} from '@/api/dashboard'
 
 export default {
   name: 'Dashboard',
-  data(){
-    return{
+
+  data() {
+    return {
       chart1Count: 0,
       postIndex: 0,
+      chart01Count: 0,
+      post01Index: 0,
     }
   },
   created() {
-    this.draw_Chart();
+    // this.draw_Chart();
   },
   mounted() {
-    this.drawChart();
-    this.drawChart2();
-    this.drawChart3();
-    this.drawChart4();
-    this.drawLine();
-    // this.initEquipmentCount()
-  },
+    this.currentRole();
+    this.equipmentType();
+    this.cabinet();
 
-  methods:{
+    this.draw_Chart();
+    this.drawLine();
+
+  },
+  computed: {
+    ...mapGetters([
+      'roleid',
+      'role_department_id',
+      'role_name',
+      'roles'
+    ])
+  },
+  methods: {
+
+    // 判断该用户是否为super
+    async currentRole() {
+      let endIndex = this.role_name.indexOf('/');
+      let currentPost = this.role_name.substring(0, endIndex);
+      // console.log(currentPost)
+      if (this.roles[0] === '超级管理员') {
+
+        $('#chart1Data').html("各单位设备数据量");
+
+        let chart1Count = await this.handleDepartmentAllCountData();
+        console.log(chart1Count)
+        // console.log(chart01Count)
+        let postIndex = 0;
+        for (let i = 0; i < chart1Count.length; i++) {
+          console.log(chart1Count[i].name)
+          if (chart1Count[i].name == currentPost) {
+            postIndex = i;
+            break;
+          }
+        }
+        this.initEquipmentCount(chart1Count,postIndex);
+        // console.log("设备数据"+postIndex)
+        // this.initEquipmentCount(chart01Count,post01Index);
+        // this.drawChart();
+        // this.drawChart2();
+        // this.drawChart3();
+        // this.drawChart4();
+        // this.drawLine();
+        $('#chart2Data').html("各单位机房数据量");
+        let chart01Count = await this.handleMachineRoomAllCountData();
+        let post01Index = 0;
+        for (let i = 0; i < chart1Count.length; i++) {
+          console.log(chart01Count[i].name)
+          if (chart01Count[i].name == currentPost) {
+            post01Index = i;
+            break;
+          }
+        }
+        this.initEquipmentCount01(chart01Count,post01Index);
+        // console.log("机房数据"+post01Index)
+
+      } else {
+        // 用户不是超级管理员
+        $('#chart1Data').html("各部门设备数据量");
+        let chart1Count=await this.handleDepartmentAllCountData();
+        let chartLabel = this.getDepartmentEqLabData(chart1Count);
+        this.initEquipmentCount2(chartLabel,chart1Count);
+        console.log("NO")
+        $('#chart01Data').html("各部门机房数据量");
+        let chart01Count=await this.handleMachineRoomAllCountData();
+        let chartLabel1 = this.getMachineRoomEqLabData(chart01Count);
+        this.initEquipmentCount02(chartLabel1,chart01Count);
+        console.log("NO")
+      }
+    },
+
+    // 各部门设备类型 堆叠条形图
+    async equipmentType(){
+      let colData = await this.handleEquipmentAllCountData();// 堆叠条形图所需所有数据
+      let chartLabel = this.handleChartLable(colData); // 图例
+      let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴设备类型
+      let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData); // 各部门的各设备类型数据
+      let series=this.seriesArr(chartLabel,chart2Count)
+      this.initEquipmentType(chartLabel,series,chart2YAxis);
+      console.log('设备类型++++++'+series)
+    },
+
+    // 把各单位的设备总数处理为饼状图所需要的格式
+    async handleDepartmentAllCountData() {
+      let list=[];
+      let result = [];
+      await getDepartmentAllCountData().then((response) => {
+        list = response.data.items
+        // console.log(this.equipmentCount)
+      })
+      for (let i = 0; i < list.length; i++) {
+        //console.log(list[i].id)
+        result.push({id: list[i].id, value: list[i].total, name: list[i].name});
+      }
+
+      return result;
+    },
+
+    // 饼状图图例
+    getDepartmentEqLabData(chart1Count){
+      let lab=[];
+      for(let i= 0;i<chart1Count.length;i++){
+        lab.push(chart1Count[i].name);
+      }
+      return lab;
+    },
+
+    // 获取当前单位的所有部门的各自的所有种类设备统计
+    async handleEquipmentAllCountData(postId){
+      let result = []
+      let data ;
+      if(postId){
+        data = {postId:postId};
+      }else {
+        data = {postId: "null"};
+      }
+      await getEquipmentAllCountData(data).then((response) => {
+        result = response.data.items
+        // console.log(this.equipmentCount)
+      })
+      // for (let i = 0; i < temp.length; i++) {
+      //   result.push({post_id: temp[i].postId,department_id:temp[i].departmentId,department_name:temp[i].departmentName,equipment_id:temp[i][3],equipment_name:temp[i][4],count:temp[i][5]});
+      // }
+      return result;
+    },
+    // 堆叠条形图图例
+    handleChartLable(colData){
+      let temp = [];
+      for(let i = 0; i < colData.length; i++){
+        temp.push(colData[i].departmentName)
+      }
+      let result = temp.filter(function(item,index){
+        return temp.indexOf(item) === index;  // 因为indexOf 只能查找到第一个
+      });
+      return result;
+    },
+    // 堆叠条形图Y轴设备类型
+    handleEquipmentTypeLable(colData){
+      let temp = [];
+      for(let i = 0; i < colData.length; i++){
+        temp.push(colData[i].equipmentTypeName)
+      }
+      let result = temp.filter(function(item,index){
+        return temp.indexOf(item) === index;
+      });
+      console.log(result)
+      return result;
+    },
+    // 堆叠条形图 各部门的各设备数量 处理为二维数组
+    handleEquipmentCountData(chartLabel,chart2YAxis,colData){
+      let result=[];
+      for (let i = 0; i < chartLabel.length; i++) {
+        let temp = [];
+        for (let j = 0; j < chart2YAxis.length; j++) {
+          let k = 0;
+          let flag = false;
+          for (k = 0; k < colData.length; k++) {
+            if(colData[k].departmentName === chartLabel[i] && colData[k].equipmentTypeName === chart2YAxis[j]){
+              temp.push(colData[k].count);
+              flag = true;
+              break;
+            }
+          }
+          if(!flag){
+            temp.push(0);
+          }
+        }
+        result.push(temp)
+      }
+      return result;
+    },
+
+    //把以上数据处理成堆叠条形图需要的series值
+    seriesArr(chartLabel,chart2Count){
+      let series=[];
+      for(let i=0;i<chartLabel.length;i++){
+
+        for (let j=0;j<chart2Count[i].length;j++){
+          if(chart2Count[i][j]==0){
+            chart2Count[i][j]="null"
+            console.log(chart2Count[i][j])
+          }
+        }
+        let item={
+          name:chartLabel[i],
+          type:'bar',
+          stack: '总量',
+          itemStyle : { normal: {label : {show: true}}},
+          data:chart2Count[i]
+        };
+        series.push(item);
+      }
+      return series;
+    },
+
+
+// 点击饼状图，重新加载其他图表
+    clickFunc(data){
+      this.$echarts.init(document.getElementById('histogramChart')).clear();  //清空重画
+      // console.log(data);
+      let colData = this.handleEquipmentAllCountData(data.id);// 柱状图所需所有数据
+      // console.log(colData)
+      let chartLabel = this.handleChartLable(colData); // 图例
+      let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴
+      let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData);
+      let series=this.seriesArr(chartLabel,chart2Count)
+      this.initEquipmentType(chartLabel,series,chart2YAxis);
+
+
+    },
+
+
+    // 把各单位的机房总数处理为饼状图所需要的格式
+    async handleMachineRoomAllCountData() {
+      let list=[];
+      let result = [];
+      await getMachineRoomAllCountData().then((response) => {
+        list = response.data.items
+        // console.log(this.equipmentCount)
+      })
+      for (let i = 0; i < list.length; i++) {
+        console.log(list[i].id)
+        result.push({id: list[i].id, value: list[i].total, name: list[i].name});
+      }
+
+      return result;
+    },
+
+    // 饼状图图例
+    getMachineRoomEqLabData(chart01Count){
+      let lab=[];
+      for(let i= 0;i<chart01Count.length;i++){
+        lab.push(chart01Count[i].name);
+        console.log(lab)
+      }
+      return lab;
+    },
+
+    // 获取当前单位的所有部门的各自的所有种类设备统计
+    async handleCabinetAllCountData(machineRoomId){
+      let result = []
+      let data ;
+      if(machineRoomId){
+        data = {postId:postId};
+      }else {
+        data = {postId: "null"};
+      }
+      await getCabinetAllCountData(data).then((response) => {
+        result = response.data.items
+      })
+
+      return result;
+    },
+
+    // 堆叠条形图图例
+    handleCabinetChartLable(colData){
+      let temp = [];
+      for(let i = 0; i < colData.length; i++){
+        temp.push(colData[i].machineRoomId)
+      }
+      let result = temp.filter(function(item,index){
+        return temp.indexOf(item) === index;  // 因为indexOf 只能查找到第一个
+      });
+      return result;
+    },
+    // 堆叠条形图X轴设备类型
+    handleCabinetLable(colData){
+      let temp = [];
+      for(let i = 0; i < colData.length; i++){
+        temp.push(colData[i].machineRoomName)
+      }
+      console.log(temp)
+      return temp;
+    },
+    // 堆叠条形图 各部门的各设备数量 处理为二维数组
+    handleCabinetCountData(chartLabel,chart2YAxis,colData){
+      let result=[];
+      for (let i = 0; i < chartLabel.length; i++) {
+        let temp = [];
+        for (let j = 0; j < chart2YAxis.length; j++) {
+          let k = 0;
+          let flag = false;
+          for (k = 0; k < colData.length; k++) {
+            if(colData[k].machineRoomId === chartLabel[i]){
+              temp.push(colData[k].count);
+              flag = true;
+              break;
+            }
+          }
+          if(!flag){
+            temp.push(0);
+          }
+        }
+        result.push(temp)
+      }
+      return result;
+    },
+
+    // 各机房机柜总量统计 堆叠条形图
+    async cabinet(){
+      let colData = await this.handleCabinetAllCountData();// 堆叠条形图所需所有数据
+      let chartLabel = this.handleCabinetChartLable(colData); // 图例
+      let chart2YAxis = this.handleCabinetLable(colData); // X轴设备类型
+      let chart2Count= this.handleCabinetCountData(chartLabel,chart2YAxis,colData); // 各部门的各设备类型数据
+      let series=this.cabinetseriesArr(chartLabel,chart2Count)
+      this.initCabinet(chartLabel,series,chart2YAxis);
+      // console.log("机柜========"+colData)
+      // console.log("机柜////////",chartLabel)
+      // console.log("机柜++++++++"+chart2YAxis)
+      // console.log("机柜********"+chart2Count)
+      // console.log("机柜--------",series)
+    },
+
+    // 点击饼状图，重新加载其他图表
+    clickCabinetFunc(data){
+      this.$echarts.init(document.getElementById('histogramChart2')).clear();  //清空重画
+      // console.log(data);
+      let colData = this.handleCabinetAllCountData(data.id);// 柱状图所需所有数据
+      // console.log(colData)
+      let chartLabel = this.handleCabinetChartLable(colData); // 图例
+      let chart2YAxis = this.handleCabinetLable(colData); // Y轴
+      let chart2Count= this.handleCabinetCountData(chartLabel,chart2YAxis,colData);
+      let series=this.cabinetseriesArr(chartLabel,chart2Count)
+      this.initCabinet(chartLabel,series,chart2YAxis);
+
+    },
+
+    //把以上数据处理成堆叠条形图需要的series值
+    cabinetseriesArr(chartLabel,chart2Count){
+
+      let nums = [];
+      for (let i = 0; i < chart2Count.length; i++) {
+        console.log(chart2Count[i])
+        nums.push(chart2Count[i][0])
+      }
+      let series=[];
+        let item={
+          name:chartLabel,
+          type:'bar',
+          stack: '总量',
+          itemStyle : { normal: {label : {show: true}}},
+          data:nums
+        };
+        series.push(item);
+      return series;
+    },
+
+    // 超级管理员
+    initEquipmentCount(chart1Count, postIndex) {
+      let pieChart = this.$echarts.init(document.getElementById('pieChart1'));
+
+      pieChart.setOption({
+        color: ["#87cefa", "#ff7f50", "#32cd32", "#da70d6", "#f1adbe", "#defa2d", "#fd0329", "#6c7ffd",],
+        tooltip: {
+          trigger: 'item',
+          formatter: "{b}<br/>{c}台 ({d}%)"
+        },
+        // calculable : false,
+        series: [
+          {
+            name: '设备数据量',
+            type: 'pie',
+            radius: ['48%', '89%'],
+            avoidLabelOverlap: false,
+            center: ['50%', '52%'],
+
+            itemStyle: {
+              normal: {
+                label: {
+                  formatter: ' {b}\n{c}台\n{d}%',
+                  lineHeight: 22,
+                  show: false,
+                  position: 'center',
+                  rich: {
+                    a: {
+                      fontSize: 16,
+                    }
+                  },
+
+                },
+                labelLine: {
+                  show: false
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '16',
+                    fontWeight: 'bold'
+                  }
+                }
+              }
+            },
+            data: chart1Count,
+          }
+        ]
+      });
+      let index = postIndex;
+      pieChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: 0,
+        dataIndex: index,//默认选中第一个
+      });
+      pieChart.off('click')
+      pieChart.on('mouseover', function (e) {
+        if (e.dataIndex !== index) {
+          pieChart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: e.dataIndex,
+          });
+        }
+      });
+      pieChart.on('mouseout', function (e) {
+        // index = e.dataIndex;
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index,
+        });
+      });
+      pieChart.on("click", function clickF(params) {
+        // console.log(params.data)
+        this.clickFunc(params.data);
+        if (params.dataIndex !== index) {
+          //没用选中的取消高亮
+          pieChart.dispatchAction({type: 'downplay', seriesIndex: 0, dataIndex: index});
+        }
+        //选中某一条高亮
+        index = params.dataIndex;
+        pieChart.dispatchAction({type: 'highlight', seriesIndex: 0, dataIndex: index});
+        console.log(index);
+      });
+
+      window.addEventListener("resize", function () {
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index,//默认选中第一个
+        });
+      });
+      $("#sidebar-collapse").click(function () {
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index,//默认选中第一个
+        });
+      });
+    },
+
+    // 超级管理员 机房
+    initEquipmentCount01(chart01Count, post01Index) {
+      //   机房总量设备设备显示
+      let pieChart = this.$echarts.init(document.getElementById('pieChart2'));
+      pieChart.setOption({
+        color: ["#87cefa", "#ff7f50", "#32cd32", "#da70d6", "#f1adbe", "#defa2d", "#fd0329", "#6c7ffd",],
+        tooltip: {
+          trigger: 'item',
+          formatter: "{b}<br/>{c}台 ({d}%)"
+        },
+        // calculable : false,
+        series: [
+          {
+            name: '机房数据量',
+            type: 'pie',
+            radius: ['48%', '89%'],
+            avoidLabelOverlap: false,
+            center: ['50%', '52%'],
+
+            itemStyle: {
+              normal: {
+                label: {
+                  formatter: ' {b}\n{c}台\n{d}%',
+                  lineHeight: 22,
+                  show: false,
+                  position: 'center',
+                  rich: {
+                    a: {
+                      fontSize: 16,
+                    }
+                  },
+
+                },
+                labelLine: {
+                  show: false
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '16',
+                    fontWeight: 'bold'
+                  }
+                }
+              }
+            },
+            data: chart01Count,
+          }
+        ]
+      });
+      let index01 = post01Index;
+      pieChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: 0,
+        dataIndex: index01,//默认选中第一个
+      });
+
+      pieChart.off('click')
+      pieChart.on('mouseover', function (e) {
+        if (e.dataIndex !== index01) {
+          pieChart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: e.dataIndex,
+          });
+        }
+      });
+      pieChart.on('mouseout', function (e) {
+        // index = e.dataIndex;
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index,
+        });
+      });
+      pieChart.on("click", function clickF(params) {
+        // console.log(params.data)
+        this.clickCabinetFunc(params.data);
+        if (params.dataIndex !== index01) {
+          //没用选中的取消高亮
+          pieChart.dispatchAction({type: 'downplay', seriesIndex: 0, dataIndex: index01});
+        }
+        //选中某一条高亮
+        index01 = params.dataIndex;
+        pieChart.dispatchAction({type: 'highlight', seriesIndex: 0, dataIndex: index01});
+        console.log(index01);
+      });
+
+      window.addEventListener("resize", function () {
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index01,//默认选中第一个
+        });
+      });
+      $("#sidebar-collapse").click(function () {
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index01,//默认选中第一个
+        });
+      });
+    },
+    // 非超级管理员
+    initEquipmentCount2(chartLabel,chart1Count){
+
+      let pieChart = this.$echarts.init(document.getElementById('pieChart1'));
+
+      pieChart.setOption({
+        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
+        legend: {
+          y : '235',
+          x : 'center',
+          textStyle : {
+            color : '#ffffff',
+            fontSize:13
+          },
+          data : chartLabel,
+        },
+        tooltip : {
+          trigger: 'item',
+          formatter: "{a}<br/>{b}<br/>{c}台 ({d}%)"
+        },
+        calculable : false,
+        series : [
+          {
+            name:'设备数据量',
+            type:'pie',
+            radius : ['36%', '70%'],
+            // avoidLabelOverlap: false,
+            center : ['50%', '45%'],
+
+            itemStyle : {
+              normal : {
+                label : {
+                  show : false,
+                  position : 'center',
+                },
+                labelLine : {
+                  show : false
+                }
+              },
+              emphasis : {
+                label : {
+                  show : false,
+                  textStyle : {
+                    fontSize : '20',
+                    fontWeight : 'bold'
+                  }
+                }
+              }
+            },
+            data:chart1Count
+          }
+        ]
+      });
+      window.addEventListener("resize",function (){
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          //dataIndex: index,//默认选中第一个
+        });
+      });
+      $("#sidebar-collapse").click(function(){
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          //dataIndex: index,//默认选中第一个
+        });
+      });
+
+    },
+
+    // 非超级管理员 机房
+    initEquipmentCount02(chartLabel1,chart01Count){
+
+      let pieChart = this.$echarts.init(document.getElementById('pieChart2'));
+
+      pieChart.setOption({
+        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
+        legend: {
+          y : '235',
+          x : 'center',
+          textStyle : {
+            color : '#ffffff',
+            fontSize:13
+          },
+          data : chartLabel1,
+        },
+        tooltip : {
+          trigger: 'item',
+          formatter: "{a}<br/>{b}<br/>{c}台 ({d}%)"
+        },
+        calculable : false,
+        series : [
+          {
+            name:'机房数据量',
+            type:'pie',
+            radius : ['36%', '70%'],
+            // avoidLabelOverlap: false,
+            center : ['50%', '45%'],
+
+            itemStyle : {
+              normal : {
+                label : {
+                  show : false,
+                  position : 'center',
+                },
+                labelLine : {
+                  show : false
+                }
+              },
+              emphasis : {
+                label : {
+                  show : false,
+                  textStyle : {
+                    fontSize : '20',
+                    fontWeight : 'bold'
+                  }
+                }
+              }
+            },
+            data:chart01Count
+          }
+        ]
+      });
+      window.addEventListener("resize",function (){
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          //dataIndex: index,//默认选中第一个
+        });
+      });
+      $("#sidebar-collapse").click(function(){
+        pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          //dataIndex: index,//默认选中第一个
+        });
+      });
+
+    },
+
+    //各机房机柜总量柱状图
+    initEquipmentType(chartLabel,series,chart2YAxis){
+      let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
+      histogramChart.setOption({
+
+        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
+        legend: {
+          y : '235',
+          x : 'center',
+          data:chartLabel,
+          textStyle : {
+            color : '#ffffff',
+            fontSize: 13,
+          }
+        },
+
+        calculable :false,
+        grid:{
+          left: '5%',
+          right: '5%',
+          bottom: '20%',
+          containLabel: true
+        },
+
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {
+            type : 'shadow'
+          }
+        },
+
+        xAxis : [
+          {
+            type : 'value',
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
+            },
+            splitLine:{
+              lineStyle:{
+                color:['#f2f2f2'],
+                width:0,
+                type:'solid'
+              }
+            }
+
+          }
+        ],
+
+        yAxis : [
+          {
+            type : 'category',
+            data : chart2YAxis,
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
+            },
+            splitLine:{
+              lineStyle:{
+                width:0,
+                type:'solid'
+              }
+            }
+          }
+        ],
+
+        series : series
+      });
+      window.addEventListener("resize",function (){
+        histogramChart.resize();
+      });
+      $("#sidebar-collapse").click(function(){
+        histogramChart.resize();
+      });
+    },
+
+    //各部门设备类型柱状图
+    initCabinet(chartLabel,series,chart2YAxis,colData){
+      let histogramChart2 = this.$echarts.init(document.getElementById('histogramChart2'));
+      histogramChart2.setOption({
+
+        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
+
+        legend: {
+          y : '235',
+          x : 'center',
+          data:chartLabel,
+          textStyle : {
+            color : '#ffffff',
+            fontSize: 13,
+          }
+        },
+
+        calculable :false,
+        grid:{
+          left: '5%',
+          right: '5%',
+          bottom: '20%',
+          containLabel: true
+        },
+
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {
+            type : 'shadow'
+          }
+        },
+        xAxis : [
+          {
+            type : 'category',
+            data : chart2YAxis,
+            axisLabel: {
+              show: false,
+              textStyle: {
+                color: '#fff'
+              },
+              // interval: 0,
+              // formatter: function(data) {
+              //   return data.split('').join('\n')
+              // }
+            },
+            splitLine:{
+              lineStyle:{
+                color:['#f2f2f2'],
+                width:0,
+                type:'solid'
+              }
+            }
+
+          }
+        ],
+
+        yAxis : [
+          {
+            type : 'value',
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
+            },
+            // splitLine:{
+            //   lineStyle:{
+            //     width:0,
+            //     type:'solid'
+            //   }
+            // }
+          }
+        ],
+
+        series : series
+      });
+      window.addEventListener("resize",function (){
+        histogramChart2.resize();
+      });
+      $("#sidebar-collapse").click(function(){
+        histogramChart2.resize();
+      });
+    },
+
     draw_Chart() {
       // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
       let myChart = this.$echarts.init(document.getElementById("main"));
@@ -190,20 +1065,20 @@ export default {
 
       var xdata = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; //横轴值数组
 
-      var ydata =[120, 200, 150, 80, 70, 110, 130]; //纵轴值数组
+      var ydata = [120, 200, 150, 80, 70, 110, 130]; //纵轴值数组
 
-      for(var i = 0;i<ydata.length;i++){
-        markpointData.push({value:ydata[i], xAxis: xdata[i], yAxis:ydata[i] });
+      for (var i = 0; i < ydata.length; i++) {
+        markpointData.push({value: ydata[i], xAxis: xdata[i], yAxis: ydata[i]});
       }
 
-      let department_Data_Array1=[120, 200, 150, 80, 70, 110, 130];
+      let department_Data_Array1 = [120, 200, 150, 80, 70, 110, 130];
       let option1 = {
         color: ["#87cefa"],
         xAxis: {
           axisLabel: {
             color: '#FFFFFF',
             margin: 10,
-            fontSize:16,
+            fontSize: 16,
             interval: 0
           },
           type: 'category',
@@ -214,7 +1089,7 @@ export default {
           axisLabel: {
             color: '#FFFFFF',
             margin: 30,
-            fontSize:16
+            fontSize: 16
           },
           type: 'value'
         },
@@ -226,19 +1101,20 @@ export default {
 
         },
         series: [
-          {radius: '50%',
+          {
+            radius: '50%',
             data: [120, 200, 150, 80, 70, 110, 130],
             type: 'bar',
 
             showBackground: true,
             markPoint: {
               barWidth: '25%',
-              label:{
+              label: {
                 show: true,
                 color: '#000000',//气泡中字体颜色
-                fontSize:16
+                fontSize: 16
               },
-              data:markpointData,
+              data: markpointData,
             },
             backgroundStyle: {
               color: 'rgba(180, 180, 180, 0.0)'
@@ -258,11 +1134,11 @@ export default {
             type: 'pie',
             radius: '50%',
             data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
+              {value: 1048, name: 'Search Engine'},
+              {value: 735, name: 'Direct'},
+              {value: 580, name: 'Email'},
+              {value: 484, name: 'Union Ads'},
+              {value: 300, name: 'Video Ads'}
             ],
             emphasis: {
               itemStyle: {
@@ -281,60 +1157,60 @@ export default {
     drawLine() {
       // this.drawChart();
       // 基于准备好的dom，初始化echarts实例
-      let params=[
-        [116.344516,39.917558, '中国地震局台网中心','2c9f40818022f3e1018022f66fdc0001'] ,
+      let params = [
+        [116.344516, 39.917558, '中国地震局台网中心', '2c9f40818022f3e1018022f66fdc0001'],
         // [116.297235,39.914195, '信息技术保障部'],
         // [116.313699,39.985729, '北京市地震局'],
-        [116.297235,39.914195, '中国地震局','2c90a15e5ffb2ae9015ffb3a19a50000'],
-        [116.808554,39.969103, '防灾科技学院','2c9f40818022f3e1018022f6922c0003'],
-        [108.989465,34.231801, '中国地震局第二监测中心','2c9f40818022f3e1018022fce15d000b'],
-        [102.746056,25.082943, '云南省地震局','2c9f40818022f3e1018022fc4a510009'],
-        [104.073864,30.642951, '四川省地震局','2c9f40818022f3e1018022fc2e4e0007'],
-        [103.863986,36.056004, '甘肃省地震局','2c9f40818022f3e1018022fd13be000d']
+        [116.297235, 39.914195, '中国地震局', '2c90a15e5ffb2ae9015ffb3a19a50000'],
+        [116.808554, 39.969103, '防灾科技学院', '2c9f40818022f3e1018022f6922c0003'],
+        [108.989465, 34.231801, '中国地震局第二监测中心', '2c9f40818022f3e1018022fce15d000b'],
+        [102.746056, 25.082943, '云南省地震局', '2c9f40818022f3e1018022fc4a510009'],
+        [104.073864, 30.642951, '四川省地震局', '2c9f40818022f3e1018022fc2e4e0007'],
+        [103.863986, 36.056004, '甘肃省地震局', '2c9f40818022f3e1018022fd13be000d']
 
       ];
       let myChart = this.$echarts.init(document.getElementById("myChart"));
       // 绘制图表
       myChart.setOption({
         bmap: {
-          center: [105,38],
+          center: [105, 38],
           zoom: 5,
           roam: true,
         },
-        tooltip : {
+        tooltip: {
           trigger: 'item',
           backgroundColor: " rgba(0, 0, 0, 0.5)", //设置背景图片 rgba格式
           color: "black",
           borderWidth: "1", //边框宽度设置1
           borderColor: "rgba(0, 0, 0, 0.5)", //设置边框颜色
           textStyle: {
-            fontsize:12,
+            fontsize: 12,
             color: "white" //设置文字颜色
           },
-          formatter:function(params, ticket, callback){
+          formatter: function (params, ticket, callback) {
             return params.value[2]
           }
         },
         series: [{
           type: 'scatter',
           coordinateSystem: 'bmap',
-          itemStyle : {
-            normal : {
-              color:'#FF0000'
+          itemStyle: {
+            normal: {
+              color: '#FF0000'
             }
           },
           data: params
         }]
       });
-      myChart.on('click',  (params)=> {
+      myChart.on('click', (params) => {
         // $("#el-dialog").removeClass('hide');
-        $("#el-dialog").css('display','block');
+        $("#el-dialog").css('display', 'block');
         $("#reportTitle").html(params.value[2]);
         this.draw_Chart();
       });
 
       var bmap = myChart.getModel().getComponent('bmap').getBMap()
-      bmap.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_SATELLITE_MAP ]}));
+      bmap.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP]}));
       var styleJson = [
         {
           "featureType": "land",
@@ -1636,215 +2512,17 @@ export default {
           }
         }];
 
-      bmap.setMapStyleV2({styleJson:styleJson});
+      bmap.setMapStyleV2({styleJson: styleJson});
     },
-    changeMood(){
-      $(".close").click(function(event) {
-        $("#el-dialog").css('display','none');
+    changeMood() {
+      $(".close").click(function (event) {
+        $("#el-dialog").css('display', 'none');
       });
     },
-    drawChart() {
-      let myChart = this.$echarts.init(document.getElementById("pieChart1"));
-      // 指定图表的配置项和数据
-      let option = {
-        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
-        tooltip : {
-          trigger: 'item',
-          formatter: "{b}<br/>{c}台 ({d}%)"
-        },
 
-        series: [
-          {
-            name:'设备数据量',
-            type:'pie',
-            radius : ['48%', '89%'],
-            avoidLabelOverlap: false,
-            center : ['50%', '52%'],
-            itemStyle : {
-              normal : {
-                label : {
-                  formatter:' {b}\n{c}台\n{d}%',
-                  lineHeight: 22,
-                  show : false,
-                  position : 'center',
-                  rich: {
-                    a: {
-                      fontSize: 16,
-                    }
-                  },
-
-                },
-                labelLine : {
-                  show : false
-                }
-              },
-              emphasis : {
-                label : {
-                  show : true,
-                  textStyle : {
-                    fontSize : '16',
-                    fontWeight : 'bold'
-                  }
-                }
-              }
-            },
-            data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
-            ]
-          }
-        ]
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-
-
-    },
-
-    drawChart2() {
-      let myChart = this.$echarts.init(document.getElementById("histogramChart"));
-      // 指定图表的配置项和数据
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // Use axis to trigger tooltip
-            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-          }
-        },
-        legend: {},
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value'
-        },
-        yAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        series: [
-          {
-            name: 'Direct',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [320, 302, 301, 334, 390, 330, 320]
-          },
-          {
-            name: 'Mail Ad',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: 'Affiliate Ad',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: 'Video Ad',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [150, 212, 201, 154, 190, 330, 410]
-          },
-          {
-            name: 'Search Engine',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [820, 832, 901, 934, 1290, 1330, 1320]
-          }
-        ]
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    },
-    drawChart3() {
-      let myChart = this.$echarts.init(document.getElementById("lineChart"));
-      // 指定图表的配置项和数据
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: 'line'
-          }
-        ]
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    },
-    drawChart4() {
-      let myChart = this.$echarts.init(document.getElementById("lineChart2"));
-      // 指定图表的配置项和数据
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'bar'
-          }
-        ]
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    },
 
   },
-  computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
-  }
+
 }
 </script>
 
@@ -1856,18 +2534,21 @@ export default {
   text-decoration: none;
   list-style: none;
 }
+
 .bg-main {
   background-color: #081832;
   color: white;
   text-align: center;
-  padding-top: 20px;
+  //padding-top: 20px;
   height: calc(100vh - 50px);
 }
-.nav_active{
+
+.nav_active {
   border-bottom: 4px solid #4b8df8;
-  box-shadow: -10px 0px 15px #034c6a inset,  0px -10px 15px #034c6a inset, 10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
+  box-shadow: -10px 0px 15px #034c6a inset, 0px -10px 15px #034c6a inset, 10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
 }
-.nav2>ul>li {
+
+.nav2 > ul > li {
   display: inline-block;
   width: 120px;
   text-align: center;
@@ -1879,6 +2560,7 @@ export default {
   border-radius: 5px;
   float: left;
 }
+
 .header_center {
   width: 30%;
   margin: 0px auto;
@@ -1888,72 +2570,90 @@ export default {
   background-image: url(../../assets/dashboard_imgs/logoBg.png);
   background-size: 100% 100%;
 }
-.total_line{
+.header_center h2 {
+  padding-top: 20px;
+}
+
+.total_line {
   height: 10vh;
+  margin-top: 20px;
   margin-bottom: 25px;
   margin-left: 5px;
 }
-.count_box{
+
+.count_box {
   height: 100%;
   background-color: #034c6a;
 }
-.content_count_box{
+
+.content_count_box {
   width: 50%;
   height: 100%;
 }
-.child_count_box{
+
+.child_count_box {
   float: left;
 }
-.child_count_box_icon{
+
+.child_count_box_icon {
   margin-left: 5%;
   margin-top: 35px;
   float: left;
 }
-.child_count_box_icon img{
+
+.child_count_box_icon img {
   width: 40px;
   height: 40px;
 }
-.child_count_box_p{
+
+.child_count_box_p {
   margin-top: 15px;
   margin-left: 5%;
   text-align: center;
   line-height: 35px;
   float: left;
 }
-.child_count_box_p p:nth-child(1){
+
+.child_count_box_p p:nth-child(1) {
   font-size: 18px !important;
 }
-.child_count_box_p p:nth-child(2){
+
+.child_count_box_p p:nth-child(2) {
   font-size: 28px;
   color: #ffff43;
   font-weight: 600;
 }
-.left{
+
+.left {
   float: left;
 }
-.right{
+
+.right {
   float: right;
 }
 
-.charts_line{
+.charts_line {
   height: 100%;
   margin-bottom: 25px;
   margin-left: 5px;
 }
-.col_charts{
+
+.col_charts {
   padding-right: 25px;
 }
-.child_charts{
+
+.child_charts {
   width: 100%;
   height: calc(32vh);
   margin-top: 25px;
-  box-shadow: -10px 0px 15px #034c6a inset, 0px -10px 15px #034c6a inset,10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
+  box-shadow: -10px 0px 15px #034c6a inset, 0px -10px 15px #034c6a inset, 10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
   border: 1px solid #034c6a;
   box-sizing: border-box;
   position: relative;
 
 }
-.chart_title{
+
+.chart_title {
   background-color: #034c6a;
   border-radius: 18px;
   position: absolute;
@@ -1967,64 +2667,114 @@ export default {
   line-height: 35px;
   text-align: center;
 }
-.chart_title img{
+
+.chart_title img {
   width: 18px;
   height: 18px;
   position: relative;
   top: 2px;
   margin-right: 5px;
 }
+
 //图表样式
 .p_chart {
   height: 288px;
   padding: 5px 10px;
   margin-top: 15px;
 }
-.map_height{
+
+.map_height {
   height: calc(66vh);
 }
-.map_width{
+
+.map_width {
   width: 30% !important;
   left: 35% !important;
 }
-.dialog{
+
+.dialog {
   display: none;
 }
+
 .dashboard {
   &-container {
     margin: 30px;
   }
+
   &-text {
     font-size: 30px;
     line-height: 46px;
   }
 }
-.dynamic{
+
+.dynamic {
   display: flex;
   position: relative;
 }
-.map{
+
+.map {
   width: 50%;
   height: 330px;
   transition: 0.5s;
 }
-.mapBig{
+
+.mapBig {
   position: absolute;
   width: 100%;
-  height:536px;
+  height: 536px;
   z-index: 3;
   transition: 0.5s;
   top: -218px;
 }
-.information{
+
+.information {
   width: 30%;
 }
-.popBox{position: fixed; left: 45%; top: 10%; background-color: #081832; z-index: 1001; width: 90%; max-height: 84%; margin-left: -40%; border-radius: 5px; font-weight: bold; color: #ffffff;height: 100%;}
-.xc_layer{position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #666666; opacity: 0.5; z-index: 1000;}
-.popBox .ttBox{height: 30px; line-height: 30px; padding: 14px 30px; border-bottom: solid 1px #eef0f1;text-align: center;-webkit-box-sizing: content-box;  -moz-box-sizing: content-box;box-sizing: content-box;}
-.popBox .ttBox .tt{font-size: 20px; display: inline-block;  height: 30px;}
 
-.div_any_child_tanchu{
+.popBox {
+  position: fixed;
+  left: 45%;
+  top: 10%;
+  background-color: #081832;
+  z-index: 1001;
+  width: 90%;
+  max-height: 84%;
+  margin-left: -40%;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #ffffff;
+  height: 100%;
+}
+
+.xc_layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #666666;
+  opacity: 0.5;
+  z-index: 1000;
+}
+
+.popBox .ttBox {
+  height: 30px;
+  line-height: 30px;
+  padding: 14px 30px;
+  border-bottom: solid 1px #eef0f1;
+  text-align: center;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.popBox .ttBox .tt {
+  font-size: 20px;
+  display: inline-block;
+  height: 30px;
+}
+
+.div_any_child_tanchu {
   width: 97%;
   height: 480px;
   box-shadow: -10px 0px 15px #034c6a inset, /*氓路娄猫戮鹿茅藴麓氓陆卤*/
@@ -2036,13 +2786,14 @@ export default {
   position: relative;
   margin-top: 25px;
 }
-.div_any_title{
+
+.div_any_title {
   background-color: #034c6a;
   border-radius: 18px;
   position: absolute;
   height: 35px;
   width: 60%;
-  top:-15px;
+  top: -15px;
   color: #ffffff;
   font-weight: bold;
   font-size: 16px;
@@ -2050,13 +2801,15 @@ export default {
   line-height: 35px;
   text-align: center;
 }
-.div_any_title img{
+
+.div_any_title img {
   width: 18px;
   height: 18px;
   position: relative;
-  top:2px;
+  top: 2px;
   margin-right: 5px;
 }
+
 .BMap_cpyCtrl {
   display: none;
 }
