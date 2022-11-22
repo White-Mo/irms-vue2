@@ -183,13 +183,18 @@ export default {
       ifUpdate: '0',
       listLoading: true,
       basicvalue: [
+
         {
-          value: 'departmentName',
-          label: '部门名称',
+          value: 'businessSystemName',
+          label: '业务系统名称',
         },
         {
-          value: 'departmentCode',
-          label: '部门代码'
+          value: 'businessSystemLevel',
+          label: '业务系统等级',
+        },
+        {
+          value: 'departmentName',
+          label: '所属部门',
         },
         {
           value: 'postName',

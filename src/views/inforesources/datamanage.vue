@@ -89,7 +89,7 @@
           <template slot-scope="scope">
             <el-tag
               class="statusTg"
-              :type="scope.row.status === '读取失败' ? 'primary' : 'success'"
+              :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
               disable-transitions>{{scope.row.status}}</el-tag>
           </template>
           </el-table-column>
@@ -121,7 +121,7 @@
     <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
       <div class="uploadCard">
         <el-upload
-          :limit="10"
+          :limit="999"
           :on-exceed="handleExceed"
           class="upload-demo"
           action=""
@@ -263,6 +263,13 @@ export default {
               type:'error',
               message:'基础表信息读取错误'
             })
+            var obj = {
+              name:this.checkList[index].name,
+              data: equipment,
+              status:'读取失败',
+              uploadStatus:'读取失败',
+            }
+            this.excelData.equipments.push(obj)
           }
         }
       }
@@ -308,8 +315,8 @@ export default {
     },
     // 数量限制
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 10 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-      this.fileList = []
+      // this.$message.warning(`当前限制选择 10 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      // this.fileList = []
     },
     closeDialog() {
       this.dialogFormVisible = false
@@ -341,7 +348,7 @@ export default {
     upLoadTableData() {
       if(this.tableData.length !== 0) {
         for(var i = 0; i < this.tableData.length; i++){
-          if(this.tableData[i].uploadStatus !== "上传成功"){
+          if(this.tableData[i].uploadStatus !== "上传成功"&&this.tableData[i].uploadStatus !=="读取失败"){
             this.tableData[i].uploadStatus = "上传中"
             this.uploadFunc(i,this.tableData[i].data)
           }

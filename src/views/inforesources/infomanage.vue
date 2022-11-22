@@ -261,15 +261,18 @@ export default {
       dataname: [
         {
           value: 'guaranteePeriod',
-          label: '保修期'
+          label: '保修期',
+          width: '200px'
         },
         {
           value: 'type',
-          label: 'CPU类型'
+          label: 'CPU类型',
+          width: '200px'
         },
         {
           value: 'edition',
-          label: '中间件版本'
+          label: '中间件版本',
+          width: '200px'
         },
         {
           value: 'basicInfoId',
@@ -321,32 +324,36 @@ export default {
           label: '上线时间',
           formatter: function (row) {
             var time = row.onlineTime
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
-             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-             * */
-            var month =
-              date.getMonth() + 1 < 10
-                ? '0' + (date.getMonth() + 1)
-                : date.getMonth() + 1
-            var day =
-              date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours =
-              date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes =
-              date.getMinutes() < 10
-                ? '0' + date.getMinutes()
-                : date.getMinutes()
-            var seconds =
-              date.getSeconds() < 10
-                ? '0' + date.getSeconds()
-                : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            row.onlineTime = year + '-' + month + '-' + day
-            return year + '-' + month + '-' + day
+            if(time == null){
+              return "无"
+            }else{
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
+               * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+               * */
+              var month =
+                date.getMonth() + 1 < 10
+                  ? '0' + (date.getMonth() + 1)
+                  : date.getMonth() + 1
+              var day =
+                date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours =
+                date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes =
+                date.getMinutes() < 10
+                  ? '0' + date.getMinutes()
+                  : date.getMinutes()
+              var seconds =
+                date.getSeconds() < 10
+                  ? '0' + date.getSeconds()
+                  : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              row.onlineTime = year + '-' + month + '-' + day
+              return year + '-' + month + '-' + day
+            }
           },
           width: '200px'
         },
@@ -355,32 +362,36 @@ export default {
           label: '下线时间',
           formatter: function (row) {
             var time = row.offlineTime
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
+            if(time == null){
+              return "无"
+            }else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month =
-              date.getMonth() + 1 < 10
-                ? '0' + (date.getMonth() + 1)
-                : date.getMonth() + 1
-            var day =
-              date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours =
-              date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes =
-              date.getMinutes() < 10
-                ? '0' + date.getMinutes()
-                : date.getMinutes()
-            var seconds =
-              date.getSeconds() < 10
-                ? '0' + date.getSeconds()
-                : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            row.offlineTime = year + '-' + month + '-' + day
-            return year + '-' + month + '-' + day
+              var month =
+                date.getMonth() + 1 < 10
+                  ? '0' + (date.getMonth() + 1)
+                  : date.getMonth() + 1
+              var day =
+                date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours =
+                date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes =
+                date.getMinutes() < 10
+                  ? '0' + date.getMinutes()
+                  : date.getMinutes()
+              var seconds =
+                date.getSeconds() < 10
+                  ? '0' + date.getSeconds()
+                  : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              row.offlineTime = year + '-' + month + '-' + day
+              return year + '-' + month + '-' + day
+            }
           },
           width: '200px'
         },
@@ -417,11 +428,6 @@ export default {
         {
           value: 'serialNumber',
           label: '序列号',
-          width: '200px'
-        },
-        {
-          value: 'guaranteePeriod',
-          label: '保修期',
           width: '200px'
         }
       ],
