@@ -147,26 +147,6 @@
         <el-row class="child_charts">
           <div class="chart_title">
             <img src="../../assets/dashboard_imgs/title_3.png">
-            <span>设备上线时间统计</span>
-          </div>
-          <p id="lineChart" class="p_chart"></p>
-        </el-row>
-        <el-row class="child_charts">
-          <div class="chart_title">
-            <img src="../../assets/dashboard_imgs/title_4.png">
-            <span>保修期内设备数量</span>
-          </div>
-          <p id="lineChart2" class="p_chart"></p>
-        </el-row>
-      </el-col>
-    </el-row>
-  </div>
-        </div>
-      </el-col>
-      <el-col :span="6" class="right col_charts">
-        <el-row class="child_charts">
-          <div class="chart_title">
-            <img src="../../assets/dashboard_imgs/title_3.png">
             <span id="chart2Data">各单位机房统计</span>
           </div>
           <p id="pieChart2" class="p_chart"></p>
@@ -306,7 +286,6 @@ export default {
         this.initEquipmentCount01(chart01Count,post01Index);
         // console.log("机房数据"+post01Index)
 
-
       } else {
         // 用户不是超级管理员
         $('#chart1Data').html("各部门设备数据量");
@@ -371,9 +350,7 @@ export default {
         result = response.data.items
         // console.log(this.equipmentCount)
       })
-      // for (let i = 0; i < temp.length; i++) {
-      //   result.push({post_id: temp[i].postId,department_id:temp[i].departmentId,department_name:temp[i].departmentName,equipment_id:temp[i][3],equipment_name:temp[i][4],count:temp[i][5]});
-      // }
+
       return result;
     },
     // 堆叠条形图图例
@@ -458,6 +435,15 @@ export default {
       let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData);
       let series=this.seriesArr(chartLabel,chart2Count)
       this.initEquipmentType(chartLabel,series,chart2YAxis);
+
+      // 机房机柜
+      this.$echarts.init(document.getElementById('histogramChart2')).clear();  //清空重画
+      let colData2 = this.handleCabinetAllCountData(data.id);// 柱状图所需所有数据
+      let chartLabel2 = this.handleCabinetChartLable(colData2); // 图例
+      let chart2YAxis2 = this.handleCabinetLable(colData2); // Y轴
+      let chart2Count2= this.handleCabinetCountData(chartLabel2,chart2YAxis2,colData2);
+      let series2=this.cabinetseriesArr(chartLabel2,chart2Count2)
+      this.initCabinet(chartLabel2,series2,chart2YAxis2);
 
     },
 
@@ -555,11 +541,7 @@ export default {
       let chart2Count= this.handleCabinetCountData(chartLabel,chart2YAxis,colData); // 各部门的各设备类型数据
       let series=this.cabinetseriesArr(chartLabel,chart2Count)
       this.initCabinet(chartLabel,series,chart2YAxis);
-      // console.log("机柜========"+colData)
-      // console.log("机柜////////",chartLabel)
-      // console.log("机柜++++++++"+chart2YAxis)
-      // console.log("机柜********"+chart2Count)
-      // console.log("机柜--------",series)
+
     },
 
     // 点击饼状图，重新加载其他图表
@@ -932,7 +914,8 @@ export default {
       });
       pieChart.on("click", function clickF(params) {
         // console.log(params.data)
-        this.clickCabinetFunc(params.data);
+        // this.clickCabinetFunc(params.data);
+        this.clickFunc(params.data);
         if (params.dataIndex !== index01) {
           //没用选中的取消高亮
           pieChart.dispatchAction({type: 'downplay', seriesIndex: 0, dataIndex: index01});
@@ -1033,84 +1016,84 @@ export default {
     },
 
     //各机房机柜总量柱状图
-    initEquipmentType(chartLabel,series,chart2YAxis){
-      let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
-      histogramChart.setOption({
-
-        color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
-        legend: {
-          y : '235',
-          x : 'center',
-          data:chartLabel,
-          textStyle : {
-            color : '#ffffff',
-            fontSize: 13,
-          }
-        },
-
-        calculable :false,
-        grid:{
-          left: '5%',
-          right: '5%',
-          bottom: '20%',
-          containLabel: true
-        },
-
-        tooltip : {
-          trigger: 'axis',
-          axisPointer : {
-            type : 'shadow'
-          }
-        },
-
-        xAxis : [
-          {
-            type : 'value',
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#fff'
-              }
-            },
-            splitLine:{
-              lineStyle:{
-                color:['#f2f2f2'],
-                width:0,
-                type:'solid'
-              }
-            }
-
-          }
-        ],
-
-        yAxis : [
-          {
-            type : 'category',
-            data : chart2YAxis,
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#fff'
-              }
-            },
-            splitLine:{
-              lineStyle:{
-                width:0,
-                type:'solid'
-              }
-            }
-          }
-        ],
-
-        series : series
-      });
-      window.addEventListener("resize",function (){
-        histogramChart.resize();
-      });
-      $("#sidebar-collapse").click(function(){
-        histogramChart.resize();
-      });
-    },
+    // initEquipmentType(chartLabel,series,chart2YAxis){
+    //   let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
+    //   histogramChart.setOption({
+    //
+    //     color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
+    //     legend: {
+    //       y : '235',
+    //       x : 'center',
+    //       data:chartLabel,
+    //       textStyle : {
+    //         color : '#ffffff',
+    //         fontSize: 13,
+    //       }
+    //     },
+    //
+    //     calculable :false,
+    //     grid:{
+    //       left: '5%',
+    //       right: '5%',
+    //       bottom: '20%',
+    //       containLabel: true
+    //     },
+    //
+    //     tooltip : {
+    //       trigger: 'axis',
+    //       axisPointer : {
+    //         type : 'shadow'
+    //       }
+    //     },
+    //
+    //     xAxis : [
+    //       {
+    //         type : 'value',
+    //         axisLabel: {
+    //           show: true,
+    //           textStyle: {
+    //             color: '#fff'
+    //           }
+    //         },
+    //         splitLine:{
+    //           lineStyle:{
+    //             color:['#f2f2f2'],
+    //             width:0,
+    //             type:'solid'
+    //           }
+    //         }
+    //
+    //       }
+    //     ],
+    //
+    //     yAxis : [
+    //       {
+    //         type : 'category',
+    //         data : chart2YAxis,
+    //         axisLabel: {
+    //           show: true,
+    //           textStyle: {
+    //             color: '#fff'
+    //           }
+    //         },
+    //         splitLine:{
+    //           lineStyle:{
+    //             width:0,
+    //             type:'solid'
+    //           }
+    //         }
+    //       }
+    //     ],
+    //
+    //     series : series
+    //   });
+    //   window.addEventListener("resize",function (){
+    //     histogramChart.resize();
+    //   });
+    //   $("#sidebar-collapse").click(function(){
+    //     histogramChart.resize();
+    //   });
+    // },
     //各部门设备类型柱状图
     initCabinet(chartLabel,series,chart2YAxis,colData){
       let histogramChart2 = this.$echarts.init(document.getElementById('histogramChart2'));
@@ -1194,11 +1177,6 @@ export default {
         histogramChart2.resize();
       });
     },
-
-
-
-
-
 
 
     drawLine() {
