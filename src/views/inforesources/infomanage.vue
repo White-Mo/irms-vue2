@@ -41,7 +41,7 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in dataname"
+                v-for="(item,index) in dataname_option"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -259,21 +259,7 @@ export default {
       singalInfo: {},
       initval: [],
       dataname: [
-        {
-          value: 'guaranteePeriod',
-          label: '保修期',
-          width: '200px'
-        },
-        {
-          value: 'type',
-          label: 'CPU类型',
-          width: '200px'
-        },
-        {
-          value: 'edition',
-          label: '中间件版本',
-          width: '200px'
-        },
+
         {
           value: 'basicInfoId',
           label: '设备编号',
@@ -393,6 +379,125 @@ export default {
               return year + '-' + month + '-' + day
             }
           },
+          width: '200px'
+        },
+        {
+          value: 'hostName',
+          label: '主机名',
+          width: '200px'
+        },
+        {
+          value: 'equipmentAdminName',
+          label: '设备管理员',
+          width: '200px'
+        },
+        {
+          value: 'equipmentAdminPhone',
+          label: '设备管理员电话',
+          width: '200px'
+        },
+        {
+          value: 'appAdminName',
+          label: '应用管理员',
+          width: '200px'
+        },
+        {
+          value: 'appAdminPhone',
+          label: '应用管理员电话',
+          width: '200px'
+        },
+        {
+          value: 'brandModelName',
+          label: '型号',
+          width: '200px'
+        },
+        {
+          value: 'serialNumber',
+          label: '序列号',
+          width: '200px'
+        },  {
+          value: 'guaranteePeriod',
+          label: '保修期',
+          width: '200px'
+        },
+        {
+          value: 'type',
+          label: 'CPU类型',
+          width: '200px'
+        },
+        {
+          value: 'edition',
+          label: '中间件版本',
+          width: '200px'
+        },
+      ],
+      // 解决下拉框的部分字段数据顺序和表格中不一致的需求
+      dataname_option: [
+        {
+          value: 'guaranteePeriod',
+          label: '保修期',
+          width: '200px'
+        },
+        {
+          value: 'type',
+          label: 'CPU类型',
+          width: '200px'
+        },
+        {
+          value: 'edition',
+          label: '中间件版本',
+          width: '200px'
+        },
+        {
+          value: 'basicInfoId',
+          label: '设备编号',
+          width: '200px'
+        },
+        {
+          value: 'postName',
+          label: '所属单位',
+          width: '200px'
+        },
+        {
+          value: 'departmentName',
+          label: '所属部门',
+          width: '200px'
+        },
+        {
+          value: 'equipmentName',
+          label: '设备名',
+          width: '200px'
+        },
+        {
+          value: 'brandName',
+          label: '设备品牌',
+          width: '200px'
+        },
+        {
+          value: 'equipmentTypeName',
+          label: '设备类型',
+          width: '200px'
+        },
+
+        {
+          value: 'machineRoomName',
+          label: '安装位置',
+          width: '200px'
+        },
+        {
+          value: 'cabinetName',
+          label: '机柜编号',
+          width: '200px'
+        },
+        {
+          value: 'onlineTime',
+          label: '上线时间',
+          width: '200px'
+        },
+        {
+          value: 'offlineTime',
+          label: '下线时间',
+
           width: '200px'
         },
         {
@@ -582,6 +687,7 @@ export default {
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
+        console.log("List---------");
         console.log(this.list)
         this.listLoading = false
       })
