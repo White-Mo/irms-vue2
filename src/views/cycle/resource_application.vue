@@ -84,7 +84,7 @@
               <span v-else>{{ scope.row[key] }}</span>
             </template>
           </af-table-column>
-          <el-table-column align="center" label="操作" width="200px"  fixed="right">
+          <el-table-column align="center" label="操作" width="250px"  fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -164,6 +164,10 @@ export default {
           label: '所属部门'
         },
         {
+          value: 'basic_info_id',
+          label: '设备编号'
+        },
+        {
           value: 'equipmentName',
           label: '设备名'
         },
@@ -176,6 +180,10 @@ export default {
           label: '设备品牌'
         },
 
+        {
+          value: 'network_card_name',
+          label: '网卡名'
+        },
         {
           value: 'ip_address',
           label: 'IP 地址'
@@ -209,16 +217,19 @@ export default {
       labels: {
         postName: '所属单位',
         departmentName: '所属部门',
+        basic_info_id:'设备编号',
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
         brandName: '设备品牌',
         onlineTime: '上线时间',
         hostName: '主机名',
         guaranteePeriod: '保修期',
+        network_card_name:'网卡名',
         ip_address: 'ip 地址',
         switch_info: 'MAC 地址',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
+
 
 
 

@@ -156,6 +156,7 @@ export default {
       ],
       value: '',
       labels: {
+        basicInfoId: '设备编号',
         postName: '所属单位',
         departmentName: '所属部门',
         equipmentTypeName: '设备类型',
@@ -163,6 +164,7 @@ export default {
         // brandName: '设备品牌',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
+
         // onlineTime: '上线时间',
         // hostName: '主机名',
         // guaranteePeriod: '保修期',
