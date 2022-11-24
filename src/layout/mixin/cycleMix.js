@@ -2,7 +2,7 @@
  * @Description: 获取数据
  * @Author:  王瑞
  * @Date: 2022-10-20 00:38:12
- * @LastEditTime: 2022-11-04 17:55:33
+ * @LastEditTime: 2022-11-24 18:34:01
  */
 import { getList, getdataCount } from '@/api/table'
 export const hunhe1 = {
@@ -38,6 +38,15 @@ export const hunhe1 = {
         response.data.items.forEach(element => {
           element.isEdit = false;
         });
+        //数据的空值处理，有需要就用吧
+        // for (let i = 0; i < response.data.items.length; i++) {
+        //   if (response.data.items[i] == null) {
+        //     response.data.items.splice(i,1);
+        //   }else{
+        //     response.data.items[i]["isEdit"] = false;
+        //   }
+          
+        // }
         this.list = response.data.items
         this.listLoading = false
       })

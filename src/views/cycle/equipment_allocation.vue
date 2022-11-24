@@ -7,7 +7,7 @@
       <div class="show">
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark">设备移动</div>
+            <div class="grid-content bg-purple-dark">设备调拨</div>
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
