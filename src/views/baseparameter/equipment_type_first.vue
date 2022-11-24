@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">二级设备类型管理</span>
+              <span style="color: #ffffff">一级设备类型管理</span>
             </div>
           </el-col>
         </el-row>
@@ -88,7 +88,7 @@
               size="medium"
               type="info"
               @click="addEquipmentType()"
-            >添加二级设备类型</el-button>
+            >添加一级设备类型</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import {delEquipmentType, getEquipmentTypeByPage} from '@/api/baseparameter'
+import {delEquipmentType, getEquipmentFirstTypeByPage, getEquipmentTypeByPage} from '@/api/baseparameter'
 import addEquipmentType from '@/components/Baseparameter/equipmentType/addEquipmentType'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
@@ -185,16 +185,12 @@ export default {
       listLoading: true,
       basicvalue: [
         {
-          value: 'equipmentTypeName',
-          label: '二级设备类型名称'
-        },
-        {
-          value: 'equipmentTypeCode',
-          label: '二级设备类型代码'
-        },
-        {
           value: 'equipmentFirstTypeName',
-          label: '所属一级设备类型'
+          label: '一级设备类型名称'
+        },
+        {
+          value: 'equipmentFirstTypeCode',
+          label: '一级设备类型代码'
         }
       ],
       value: '',
@@ -206,7 +202,11 @@ export default {
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
+      // console.log(this.basicValue)
+      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
+      // console.log(this.basicValue)
+      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
         console.log(this.dataName)
         this.initName = ['111']
@@ -221,7 +221,7 @@ export default {
         limit: this.limit
       }
       // console.log(this.initName)
-      getEquipmentTypeByPage(params).then((response) => {
+      getEquipmentFirstTypeByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -240,7 +240,7 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该二级设备类型", '提示', {
+      this.$alert("是否永久删除该一级设备类型", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',

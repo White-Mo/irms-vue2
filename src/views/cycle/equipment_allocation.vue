@@ -126,7 +126,7 @@ export default {
       roleid: user.state.roleid,
       departmentAll: [],
       start:0,
-      limit:5,
+      limit:10,
       isEdit:false,
       tab_name: '0',
       list: null,

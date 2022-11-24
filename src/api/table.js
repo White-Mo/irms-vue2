@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  // console.log(params)
+  console.log(params)
   // console.log(typeof (params))
   return request({
     params,
@@ -66,6 +66,15 @@ export function changeStatus(eq) {
   return request({
     params,
     url: '/home/inforesources/changeEquipStatus',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function InitValue(initdata) {
+console.log(initdata);
+  return request({
+    params: { initValue: initdata },
+    url: '/home/inforesources/getInitDataAll',
     method: 'post',
     responseType: 'json'
   })

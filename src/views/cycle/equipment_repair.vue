@@ -173,7 +173,7 @@ export default {
   data() {
     return {
       start:0,
-      limit:5,
+      limit:10,
       tab_name: '0',
       list: null,
       total: 0,

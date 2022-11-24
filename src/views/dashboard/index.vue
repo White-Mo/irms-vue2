@@ -19,7 +19,7 @@
           </div>
           <div :span="8" class="child_count_box_p">
             <p class="mainfont">总设备数据量(台)</p>
-            <p id="equipmentAll">2</p>
+            <p id="equipmentAll">{{allEquipmentNumber}}</p>
           </div>
         </div>
         <div :span="8" class="content_count_box right">
@@ -28,7 +28,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">设备类型数量(种)</p>
-            <p id="equipmentTypeAll">5</p>
+            <p id="equipmentTypeAll">{{equipmentTypeNumber}}</p>
           </div>
         </div>
       </el-col>
@@ -39,7 +39,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">保修期内设备数量(台)</p>
-            <p id="equipmentAllIndate">2</p>
+            <p id="equipmentAllIndate">{{periodEquipmentNumber}}</p>
           </div>
         </div>
 
@@ -49,7 +49,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">总应用系统数量(个)</p>
-            <p id="systemWareAll">5</p>
+            <p id="systemWareAll">{{allApplicationSystemNumber}}</p>
           </div>
         </div>
       </el-col>
@@ -60,7 +60,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">应用管理员数量(个)</p>
-            <p id="applicationtUser">1</p>
+            <p id="applicationtUser">{{applicationUserNumber}}</p>
           </div>
         </div>
 
@@ -70,7 +70,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">设备管理员数量(个)</p>
-            <p id="equipmentUser">1</p>
+            <p id="equipmentUser">{{equipmentUserNumber}}</p>
           </div>
         </div>
       </el-col>
@@ -168,7 +168,12 @@ import {mapGetters} from 'vuex'
 import "@/../node_modules/echarts/extension/bmap/bmap";
 import BMap from "BMap";
 import { getDepartmentAllCountData, getEquipmentAllCountData,getIPAddressCountData} from '@/api/dashboard'
-
+import {
+  getApplicationUserCount,
+  getEquipmentCount, getEquipmentTypeCount, getEquipmentUserCount,
+  getGuaranteePeriodCount,
+  getSystemWareCount
+} from "@/api/cockpit_data";
 export default {
   name: 'Dashboard',
 
@@ -177,6 +182,12 @@ export default {
       chart1Count: 0,
       postIndex: 0,
       IPtotal: 0,
+      allEquipmentNumber:'',
+      equipmentTypeNumber:'',
+      periodEquipmentNumber:'',
+      allApplicationSystemNumber:'',
+      applicationUserNumber:'',
+      equipmentUserNumber:''
 
     }
   },
@@ -191,6 +202,7 @@ export default {
     this.drawLine();
     this.mapChartType();
 
+    this.RenderingData() //调用渲染设备概况数据函数
   },
   computed: {
     ...mapGetters([
@@ -201,6 +213,37 @@ export default {
     ])
   },
   methods: {
+    //----------------赵长开-------------
+    //----------------渲染设备概况数据开始-----------------------------
+    RenderingData(){
+      const that = this
+      getEquipmentCount().then(function (res){
+        console.log("************总设备数据量:"+ res +"*********************")
+        that.allEquipmentNumber = res;
+      }),
+        getEquipmentTypeCount().then(function (res){
+          console.log("************设备类型数据量:"+ res.data +"*********************")
+          that.equipmentTypeNumber = res.data;
+        }),
+        getGuaranteePeriodCount().then(function (res){
+          console.log("************保修期内设备数据量:"+ res +"*********************")
+          that.periodEquipmentNumber = res;
+        }),
+        getSystemWareCount().then(function (res){
+          console.log("************总应用系统数量:"+ res +"*********************")
+          that.allApplicationSystemNumber = res;
+        }),
+        getApplicationUserCount().then(function (res){
+          console.log("************应用管理员数量:"+ res +"*********************")
+          that.applicationUserNumber = res;
+        }),
+        getEquipmentUserCount().then(function (res){
+          console.log("************设备管理员数量:"+ res +"*********************")
+          that.equipmentUserNumber = res;
+        })
+    },
+    //---------------------渲染设备概况数据结束--------------------------------------------
+
 
     // 判断该用户是否为super
     async currentRole() {

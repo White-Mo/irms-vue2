@@ -136,7 +136,7 @@ export default {
       machineRoomAll: [],
       cabinetAll: [],
       start:0,
-      limit:5,
+      limit:10,
       isEdit:false,
       tab_name: '0',
       list: null,
@@ -208,7 +208,7 @@ export default {
               console.log(val);
               resolve(val)
             }
-            
+
           }, 1000);
         }
       })
@@ -250,7 +250,7 @@ export default {
           this.machineRoomAll = response.data.items
           this.fetchCabinet(row.machineRoomName)
         })
-        
+
       }
     },
     handleCurrentChange(val) {
@@ -273,10 +273,10 @@ export default {
               resolve()
             })
           }
-        }) 
+        })
       })
-                    
-      
+
+
     }
   }
 }

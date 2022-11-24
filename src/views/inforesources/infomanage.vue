@@ -22,6 +22,7 @@
             :lg="2"
             :xl="2"
           >
+
             <span>查询条件：</span>
           </el-col>
           <el-col
@@ -31,7 +32,9 @@
             :lg="3"
             :xl="3"
           >
+
             <el-select
+              @change="handleSelectChange"
               v-model="DataName"
               placeholder="详细字段查询"
               multiple
@@ -45,6 +48,7 @@
                 class="searchInput"
               />
             </el-select>
+
           </el-col>
           <el-col
             :xs="4"
@@ -53,13 +57,36 @@
             :lg="4"
             :xl="4"
           >
-            <el-input
+
+          <el-autocomplete
+          style="width: 240px;"
+          autosize
+          type="text"
+          class="inline-input"
+          v-model="inputValue"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入内容"
+          @select="handleSelect"
+    ></el-autocomplete>
+
+            <!-- <el-input
+
               v-model="inputValue"
-              placeholder="输入查询内容"
+              placeholder="输入式查询"
               clearable
               size="medium"
-            />
+            /> -->
+
           </el-col>
+          <el-col
+            :xs="4"
+            :sm="4"
+            :md="4"
+            :lg="4"
+            :xl="4"
+          >
+
+        </el-col>
           <el-col
             :xs="2"
             :sm="2"
@@ -103,13 +130,13 @@
           </el-col>
         </el-row>
         <el-table
-            height="70vh"
+          v-loading="listLoading"
+          :diisable="true"
+          :data="list"
+          element-loading-text="Loading"
+              height="70vh"
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px'}"
-            v-loading="listLoading"
-            :disable="true"
-            :data="list"
-            element-loading-text="Loading"
             border
             highlight-current-row
             stripe
@@ -176,9 +203,10 @@
 </template>
 
 <script>
-import { getList, getdataCount, delEquipment } from '@/api/table'
+import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
+import { all } from 'q'
 
 export default {
   // 引用vue reload方法
@@ -199,12 +227,19 @@ export default {
   },
   data() {
     return {
+      type:0,
+    edition:0,
+    guaranteePeriod:0,
+      restaurants: [],
+     foad:[],
+      cpu_middle_guar: 'all',
+      initdata: [],
       dialogVisible: false,
       row: {},
       list: null,
       total: 0,
       start: 0,
-      limit:10,
+      limit: 10,
       DataName: 'all',
       keyname: [],
       initname: ['123'],
@@ -215,6 +250,7 @@ export default {
       ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
+      initval: [],
       dataname: [
         {
           value: 'basicInfoId',
@@ -246,10 +282,11 @@ export default {
           label: '设备类型',
           width: '200px'
         },
-        // {
-        //   value: 'businessSystemName',
-        //   label: '业务系统'
-        // },
+        {
+          value: 'businessSystemName',
+          label: '业务系统',
+          width: '200px'
+        },
         {
           value: 'machineRoomName',
           label: '安装位置',
@@ -343,17 +380,75 @@ export default {
         },
         {
           value: 'guaranteePeriod',
-          label: '保修期',
-          width: '200px'
+          label: '保修期'
+        },
+        {
+          value: 'type',
+          label: 'CPU类型'
+        },
+        {
+          value: 'edition',
+          label: '中间件版本'
         }
       ],
       value: '',
     }
   },
   created() {
+    console.log(this.initname)
     this.fetchData()
+    // this.getInitValue(this.initdata)
   },
+  mounted() {
+      this.restaurants = this.loadAll();
+      // console.log(this.initval);
+    },
   methods: {
+    querySearch(queryString, cb) {
+
+        var restaurants = this.restaurants;
+        console.log(restaurants);
+        console.log(queryString);
+        var results = queryString ?restaurants.filter(this.createFilter(queryString)) :restaurants;
+        // 调用 callback 返回建议列表的数据
+        console.log(results);
+        cb(results);
+      },
+      createFilter(queryString) {
+        console.log(queryString);
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return this.foad;
+      },
+
+      handleSelect(item) {
+        console.log(item);
+      },
+    // change的处理事件
+
+    handleSelectChange(val) {
+      console.log(val);
+      var key = 0
+//  此处的":"必须是英文状态下的才可以被后台解析，否则会出错
+      for (key = 0; key < val.length; key++) {
+        if (val[key] == 'type'&& this.type==0) {
+          this.getInitValue("CPU类型:",'type')
+          this.type=1
+        }else if(val[key] == 'edition'&& this.edition==0){
+          this.getInitValue("中间件版本:",'edition')
+          this.edition=1
+        }else if(val[key] == 'guaranteePeriod'&& this.guaranteePeriod==0){
+          this.getInitValue("保修期:",'guarantee_period')
+          this.guaranteePeriod=1
+        }
+      
+        console.log(val[key])
+      }
+    },
+
     tbCellDoubleClick(row, column, cell, event){
       console.log(cell)
       this.$alert(row[column.property], '单元格值', {
@@ -371,6 +466,9 @@ export default {
         this.initname = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.DataName)))
+        if (this.eselect ==true) {
+          this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
+        }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       const params = {
@@ -378,7 +476,7 @@ export default {
         dataValue: this.inputValue,
         status: '',
         start: this.start,
-        limit: this.limit,
+        limit: this.limit
       }
       const numparams = {
         dataName: this.initname,
@@ -394,6 +492,17 @@ export default {
       getList(params).then((response) => {
         this.list = response.data.items
         console.log(this.list)
+        this.listLoading = false
+      })
+    },
+    getInitValue(name,initdatas) {
+      InitValue(initdatas).then((response) => {
+        this.initval = response.data.items
+
+        for (let i = 0; i < this.initval.length; i++) {
+            this.foad.push({"value":name+this.initval[i]})
+
+          }
         this.listLoading = false
       })
     },
@@ -464,8 +573,8 @@ export default {
         dataValue: this.inputValue,
         // status: "this.t",
         status: '',
-        start: (val-1)*this.limit,
-        limit: this.limit,
+        start: (val - 1) * this.limit,
+        limit: this.limit
       }
       getList(params).then((response) => {
         this.list = response.data.items
@@ -481,11 +590,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-select-dropdown .el-scrollbar {
+   height: 420px;
+   overflow: hidden;
+   position: relative;
+}
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
 }
-.shadows{
+.shadows {
   box-shadow: 0 0 4px #0000004d !important;
 }
 .searchInput {
@@ -493,6 +607,22 @@ export default {
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
+}
+
+// .searchSelect {
+//   height: 40px;
+//   text-align: center;
+//   color: #0b0c10;
+//   background-color: #deecff;
+// }
+.el-row {
+  //margin-bottom: 20px;
+  /* &:last-child {
+      margin-bottom: 0;
+    } */
+}
+.el-col {
+  border-radius: 4px;
 }
 .bg-purple-dark {
   background: #99a9bf;
@@ -541,6 +671,16 @@ export default {
 
 <style  lang="less">
 //覆盖样式
+
+
+
+
+.el-autocomplete-suggestion.el-scrollbar {
+  //  height: 420px;
+  //  overflow: hidden;
+  overflow-y: scroll;
+  position: relative;
+}
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -557,8 +697,22 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+
+.el-scrollbar .el-scrollbar__wrap {
+  overflow: auto;
+  height: 100%;
+}
+// .el-scrollbar .el-scrollbar__wrap {
+//   overflow-y: scroll;
+//     overflow: auto;
+//     height: 100%;
+// }
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+  color: #1d1e1f;
+  background-color: #d2d2d2;
 .el-select-dropdown__wrap{
   max-height: none;
+}
 }
 .el-button--primary {
   color: #fff;
