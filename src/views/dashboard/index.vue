@@ -13,7 +13,7 @@
     </el-row>
 
     <el-row class="total_line">
-      <el-col :span="8" class="count_box">
+      <el-col :span="12" class="count_box">
         <div class="content_count_box left">
           <div class="child_count_box_icon">
             <img src="../../assets/dashboard_imgs/info_1.png">
@@ -33,7 +33,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="8" class="count_box">
+      <el-col :span="12" class="count_box">
         <div class="content_count_box left">
           <div class="child_count_box_icon">
             <img src="../../assets/dashboard_imgs/title_1.png">
@@ -54,28 +54,7 @@
           </div>
         </div>
       </el-col>
-<!--      <el-col :span="8" class="count_box">-->
-<!--        <div class="content_count_box left">-->
-<!--          <div class="child_count_box_icon">-->
-<!--            <img src="../../assets/dashboard_imgs/title_5.png">-->
-<!--          </div>-->
-<!--          <div class="child_count_box_p">-->
-<!--            <p class="mainfont">应用管理员数量(个)</p>-->
-<!--            <p id="applicationtUser">{{applicationUserNumber}}</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="content_count_box right">-->
-<!--          <div class="child_count_box_icon">-->
-<!--            <img src="../../assets/dashboard_imgs/title_4.png">-->
-<!--          </div>-->
-<!--          <div class="child_count_box_p">-->
-<!--            <p class="mainfont">设备管理员数量(个)</p>-->
-<!--            <p id="equipmentUser">{{equipmentUserNumber}}</p>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </el-col>-->
-<!--    </el-row>-->
+    </el-row>
     <el-row class="charts_line">
       <el-col :span="6" class="left col_charts">
         <el-row class="child_charts">
