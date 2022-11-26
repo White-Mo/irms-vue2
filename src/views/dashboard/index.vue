@@ -247,11 +247,6 @@ export default {
           }
         }
         this.initEquipmentCount(chart1Count,postIndex);
-        // this.drawChart();
-        // this.drawChart2();
-        // this.drawChart3();
-        // this.drawChart4();
-        // this.drawLine();
         $('#chart2Data').html("各单位机房数据量");
         let chart01Count = await this.handleMachineRoomAllCountData();
         let post01Index = 0;
@@ -2552,7 +2547,7 @@ export default {
           axisLabel: {
             color: '#FFFFFF',
             margin: 10,
-            fontSize: 16,
+            fontSize: 10,
             interval: 0
           },
           type: 'category',
