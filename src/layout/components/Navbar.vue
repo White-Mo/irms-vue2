@@ -8,7 +8,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <div class="user-text">
-            <span v-for="role in roles" :key="role">{{ realname }} / {{ role }}</span>
+            <span v-for="role in roles" :key="role">{{"["+role_name+"/"+role+"]"+realname}}</span>
           </div>
           <i class="el-icon-caret-bottom" />
         </div>
@@ -41,7 +41,8 @@ export default {
     ...mapGetters([
       'sidebar',
       'realname',
-      'roles'
+      'roles',
+      'role_name'
     ])
   },
   methods: {
