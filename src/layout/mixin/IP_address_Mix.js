@@ -58,11 +58,15 @@ export const hunhe1 = {
         });
        let list_n = response.data.items
 
-       
+
         // // 数据类型转换
         let arr=[]
         console.log(this.total_N)
         for(let i=0;i<list_n.length;i++){
+          if(list_n[i][0]==null){
+            list_n[i][0]=list_n[i-1][0]
+          }
+
           list_n[i][0]["isEdit"]=false
           console.log(list_n[i][0])
          let tryss = Object.assign(list_n[i][0],list_n[i][1])
