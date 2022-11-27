@@ -76,19 +76,19 @@
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
-            <el-button
-              size="medium"
-              type="info"
-              @click="addDepartment()"
-            >添加部门</el-button>
-          </el-col>
+<!--          <el-col-->
+<!--            :xs="1"-->
+<!--            :sm="1"-->
+<!--            :md="1"-->
+<!--            :lg="1"-->
+<!--            :xl="1"-->
+<!--          >-->
+<!--            <el-button-->
+<!--              size="medium"-->
+<!--              type="info"-->
+<!--              @click="addDepartment()"-->
+<!--            >添加业务系统</el-button>-->
+<!--          </el-col>-->
         </el-row>
         <el-table
           height="70vh"
@@ -114,10 +114,10 @@
           </el-table-column>
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                @click="handleDetail(scope.$index, scope.row)"-->
+<!--              >详情</el-button>-->
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
@@ -151,7 +151,10 @@
 </template>
 
 <script>
-import {delPostDepartment, getBusinessSystemByPage, getPostDepartmentByPage} from '@/api/baseparameter'
+import {
+  delBusinessSystem,
+  getBusinessSystemByPage,
+} from '@/api/baseparameter'
 import addDepartment from '@/components/Baseparameter/department/addDepartment'
 import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
 
@@ -249,13 +252,13 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该部门", '提示', {
+      this.$alert("是否永久删除该系统", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delPostDepartment(row.departmentId).then((response) => {
+            delBusinessSystem(row.departmentId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
@@ -276,12 +279,13 @@ export default {
     handleCurrentChange(val) {
       this.currentPage=val-1
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
         start: this.currentPage,
-        limit: this.limit
+        limit: this.limit,
+        status:"0"
       }
-      getPostDepartmentByPage(params).then((response) => {
+      getBusinessSystemByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

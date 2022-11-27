@@ -115,10 +115,10 @@
           </el-table-column>
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                @click="handleDetail(scope.$index, scope.row)"-->
+<!--              >详情</el-button>-->
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
