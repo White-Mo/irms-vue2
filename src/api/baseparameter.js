@@ -31,6 +31,45 @@ export function getEquipmentTypeByPage(data) {
     params: data
   })
 }
+
+//获取机房数量wr
+export function getMachineRoomTotal(data) {
+  return request({
+    url: '/home/baseparameter/getMachineRoomTotal',
+    method: 'get',
+    params: data
+  })
+}
+
+//通过页码获取机房
+export function getMachineRoomByPage(data) {
+  return request({
+    url: '/home/baseparameter/getMachineRoomByPage',
+    method: 'get',
+    params: data
+  })
+}
+
+//通过页码获取业务系统
+export function getBusinessSystemByPage(data) {
+  return request({
+    url: '/home/baseparameter/getBusinessSystemByPage',
+    method: 'get',
+    params: data
+  })
+}
+
+//改变机房状态wr
+export function changeStatus(eq) {
+  var params = JSON.parse(JSON.stringify(eq))
+  return request({
+    params,
+    url: '/home/baseparameter/changeRoomStatus',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 //新增单位
 export function createPost(data) {
   return request({
@@ -129,6 +168,23 @@ export function delPostDepartment(data) {
 export function delEquipmentType(data) {
   return request({
     url: '/home/baseparameter/delEquipmentType',
+    method: 'delete',
+    params: {equipmentTypeId : data}
+  })
+}
+//删除机房
+export function delMachineRoom(data) {
+  return request({
+    url: '/home/baseparameter/delMachineRoom',
+    method: 'delete',
+    params: {equipmentTypeId : data}
+  })
+}
+
+//删除业务系统
+export function delBusinessSystem(data) {
+  return request({
+    url: '/home/baseparameter/delBusinessSystem',
     method: 'delete',
     params: {equipmentTypeId : data}
   })

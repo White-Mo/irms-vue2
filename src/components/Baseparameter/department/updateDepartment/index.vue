@@ -28,7 +28,7 @@
             </el-col>
           </el-form-item>
           <el-form-item v-show="currentShow === '3'">
-            <el-button type="primary" @click="onSubmit('departmentForm')">添加部门</el-button>
+            <el-button type="primary" @click="onSubmit('departmentForm')">提交修改</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
+import {updatePostDepartmentAction, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
 import { getPost } from "@/api/select";
 
 export default {
@@ -146,7 +146,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const department = { ...this.department }
-          createDepartment(department).then(res => {
+          updatePostDepartmentAction(department).then(res => {
             this.$alert(res.data, '提示', {
               confirmButtonText: '确定',
               type: 'info',

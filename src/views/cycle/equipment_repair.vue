@@ -91,7 +91,7 @@
                   {{ scope.row[key] }}
                 </template>
               </el-table-column>
-              <el-table-column prop="tag" align="center" label="标签" width="100">
+              <el-table-column prop="tag" align="center" label="状态" width="100">
                 <el-tag type="primary">正常</el-tag>
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">

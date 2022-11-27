@@ -40,7 +40,6 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar',
       'realname',
       'roles'
     ])

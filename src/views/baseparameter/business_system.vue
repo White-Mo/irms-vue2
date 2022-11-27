@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
+import {delPostDepartment, getBusinessSystemByPage, getPostDepartmentByPage} from '@/api/baseparameter'
 import addDepartment from '@/components/Baseparameter/department/addDepartment'
 import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
 
@@ -183,13 +183,18 @@ export default {
       ifUpdate: '0',
       listLoading: true,
       basicvalue: [
+
         {
-          value: 'departmentName',
-          label: '部门名称',
+          value: 'businessSystemName',
+          label: '业务系统名称',
         },
         {
-          value: 'departmentCode',
-          label: '部门代码'
+          value: 'businessSystemLevel',
+          label: '业务系统等级',
+        },
+        {
+          value: 'departmentName',
+          label: '所属部门',
         },
         {
           value: 'postName',
@@ -221,10 +226,11 @@ export default {
         dataName: this.initName,
         dataValue: this.inputValue,
         start: this.currentPage,
-        limit: this.limit
+        limit: this.limit,
+        status:"0"
       }
       // console.log(this.initdata)
-      getPostDepartmentByPage(params).then((response) => {
+      getBusinessSystemByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

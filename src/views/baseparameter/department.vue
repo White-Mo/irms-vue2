@@ -33,7 +33,7 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
@@ -176,7 +176,6 @@ export default {
       total: 0,
       currentPage: 0,
       limit:10,
-      basicValue: '',
       initName:'',
       inputValue: '',
       dataName: 'all',
@@ -270,7 +269,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage=val-1
       const params = {
-        dataName: this.initdata,
+        dataName: this.initName,
         dataValue: this.inputValue,
         start: this.currentPage,
         limit: this.limit

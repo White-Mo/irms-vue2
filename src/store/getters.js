@@ -11,6 +11,7 @@ const getters = {
   role_department_id: state => state.user.role_department_id,
   role_name: state => state.user.role_name,
 
+  userid: state => state.user.userid,
   permission_routes: state => state.permission.routes,
   unit: state => state.machineRoom.state.unit
 }
