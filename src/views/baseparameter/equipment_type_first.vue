@@ -91,6 +91,20 @@
             >添加一级设备类型</el-button>
           </el-col>
         </el-row>
+        <el-dialog title="新增一级设备类型" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="一级设备类型名称" :label-width="formLabelWidth">
+              <el-input v-model="form.equipmentFirstTypeName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="一级设备类型代码" :label-width="formLabelWidth">
+              <el-input v-model="form.equipmentFirstTypeCode" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="createEquipmentType">确 定</el-button>
+          </div>
+        </el-dialog>
         <el-table
           height="70vh"
           :row-style="{height:'6.26vh'}"
@@ -141,24 +155,22 @@
           />
         </div>
       </div>
-      <div v-if="ifUpdate === '1'">
+      <!-- <div v-if="ifUpdate === '1'">
         <addEquipmentType @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateEquipmentType :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import {delEquipmentType, getEquipmentFirstTypeByPage, getEquipmentTypeByPage} from '@/api/baseparameter'
-import addEquipmentType from '@/components/Baseparameter/equipmentType/addEquipmentType'
+import {delEquipmentType, getEquipmentFirstTypeByPage, getEquipmentTypeByPage,addEquipmentFirstType} from '@/api/baseparameter'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
 export default {
   components: {
-    addEquipmentType,
     updateEquipmentType
   },
   filters: {
@@ -173,6 +185,12 @@ export default {
   },
   data() {
     return {
+      form: {
+        equipmentFirstTypeName: '',
+        equipmentFirstTypeCode: '',
+      },
+      formLabelWidth: '150px',
+      dialogFormVisible:false,
       list: null,
       total: 0,
       currentPage: 0,
@@ -229,14 +247,30 @@ export default {
     },
 
     addEquipmentType() {
-      this.ifUpdate ='1'
+      // this.ifUpdate ='1'
+      this.dialogFormVisible = true
+    },
+    createEquipmentType(){
+      console.log(this.form);
+      addEquipmentFirstType(this.form).then(response => {
+        console.log(response)
+        this.$alert("新增成功", '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.dataName="all"
+          this.dialogFormVisible = false
+          this.fetchData()
+        })
+      })
     },
     handleDetail(index, row) {
       this.ifUpdate ='2'
       this.row = row
     },
     handleEdit(index, row) {
-      this.ifUpdate ='3'
+      // this.ifUpdate ='3'
       this.row = row
     },
     handleDelete(index, row) {

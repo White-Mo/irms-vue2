@@ -156,6 +156,7 @@ export default {
       ],
       value: '',
       labels: {
+        basicInfoId:'设备ID',
         basicInfoId: '设备编号',
         postName: '所属单位',
         departmentName: '所属部门',
@@ -205,7 +206,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.start = (val-1)*this.limit
+      this.start = val-1
       this.fetchData()
     }
   }

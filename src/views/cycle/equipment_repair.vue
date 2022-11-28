@@ -218,6 +218,7 @@ export default {
       ],
       value: '',
       labels: {
+        basicInfoId:'设备ID',
         postName: '所属单位',
         departmentName: '所属部门',
         equipmentTypeName: '设备类型',
@@ -268,7 +269,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.start = (val-1)*this.limit
+      this.start = val-1
       this.fetchData()
     },
     changeTab(name) {

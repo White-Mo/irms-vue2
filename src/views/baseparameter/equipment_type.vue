@@ -91,6 +91,30 @@
             >添加二级设备类型</el-button>
           </el-col>
         </el-row>
+        <el-dialog title="新增二级设备类型" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="二级设备类型名称" :label-width="formLabelWidth">
+              <el-input v-model="form.equipmentTypeName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="二级设备类型代码" :label-width="formLabelWidth">
+              <el-input v-model="form.equipmentTypeCode" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="所属一级设备类型" :label-width="formLabelWidth">
+              <el-select v-model="form.equipmentFirstTypeId" placeholder="请选择">
+                <el-option
+                  v-for="item in equipmentFirst"
+                  :key="item.equipmentFirstTypeCode"
+                  :label="item.equipmentFirstTypeName"
+                  :value="item.equipmentFirstTypeId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="createEquipmentType">确 定</el-button>
+          </div>
+        </el-dialog>
         <el-table
           height="70vh"
           :row-style="{height:'6.26vh'}"
@@ -141,24 +165,22 @@
           />
         </div>
       </div>
-      <div v-if="ifUpdate === '1'">
+      <!-- <div v-if="ifUpdate === '1'">
         <addEquipmentType @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateEquipmentType :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import {delEquipmentType, getEquipmentTypeByPage} from '@/api/baseparameter'
-import addEquipmentType from '@/components/Baseparameter/equipmentType/addEquipmentType'
+import {delEquipmentType, getEquipmentTypeByPage,addEquipmentType,getEquipmentFirstTypeByPage} from '@/api/baseparameter'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
 export default {
   components: {
-    addEquipmentType,
     updateEquipmentType
   },
   filters: {
@@ -173,6 +195,14 @@ export default {
   },
   data() {
     return {
+      form: {
+        equipmentTypeName: '',
+        equipmentTypeCode: '',
+        equipmentFirstTypeId: '',
+      },
+      formLabelWidth: '150px',
+      dialogFormVisible:false,
+      equipmentFirst:[],
       list: null,
       total: 0,
       currentPage: 0,
@@ -229,7 +259,32 @@ export default {
     },
 
     addEquipmentType() {
-      this.ifUpdate ='1'
+      // this.ifUpdate ='1'
+      this.dialogFormVisible = true
+      const params = {
+        dataName: ['111'],
+        dataValue: "",
+        start: this.currentPage,
+        limit: 100
+      }
+      getEquipmentFirstTypeByPage(params).then((response) => {
+        this.equipmentFirst = response.data.items
+      })
+    },
+    createEquipmentType(){
+      console.log(this.form);
+      addEquipmentType(this.form).then(response => {
+        console.log(response)
+        this.$alert("新增成功", '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.dataName="all"
+          this.dialogFormVisible = false
+          this.fetchData()
+        })
+      })
     },
     handleDetail(index, row) {
       this.ifUpdate ='2'

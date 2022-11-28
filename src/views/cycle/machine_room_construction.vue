@@ -2,7 +2,7 @@
  * @Description: 机房施工
  * @Author:  wr
  * @Date: 2022-10-02 17:40:04
- * @LastEditTime: 2022-11-20 11:02:29
+ * @LastEditTime: 2022-11-24 19:44:32
  * @LastEditors:  
 -->
 <template>
@@ -239,6 +239,7 @@ export default {
       ],
       value: '',
       labels: {
+        basicInfoId:'设备ID',
         postName: '所属单位',
         departmentName: '所属部门',
         equipmentTypeName: '设备类型',
@@ -347,7 +348,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.start = (val-1)*this.limit
+      this.start = val-1
       this.fetchData()
     },
     changeTab(name) {
