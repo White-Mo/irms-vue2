@@ -674,19 +674,10 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      const numparams = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: "0"
-      }
-      getdataCount(numparams).then((response) => {
-        this.total = response.data.total
-        console.log(this.total)
-        this.listLoading = false
-      })
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
+        this.total =response.data.total
         console.log("List---------");
         console.log(this.list)
         this.listLoading = false

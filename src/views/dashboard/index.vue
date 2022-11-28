@@ -39,7 +39,7 @@
             <img src="../../assets/dashboard_imgs/title_1.png">
           </div>
           <div class="child_count_box_p">
-            <p class="mainfont">保修期内设备数量(台)</p>
+            <p class="mainfont">过保设备数量</p>
             <p id="equipmentAllIndate">{{periodEquipmentNumber}}</p>
           </div>
         </div>
@@ -151,7 +151,7 @@ import {
   getApplicationUserCount,
   getEquipmentCount, getEquipmentTypeCount, getEquipmentUserCount,
   getGuaranteePeriodCount,
-  getSystemWareCount
+  getBusinessSystemCount
 } from "@/api/cockpit_data";
 export default {
   name: 'Dashboard',
@@ -200,27 +200,27 @@ export default {
     RenderingData(){
       const that = this
       getEquipmentCount().then(function (res){
-        console.log("************总设备数据量:"+ res.data.total +"*********************")
+        // console.log("************总设备数据量:"+ res.data.total +"*********************")
         that.allEquipmentNumber = res.data.total;
       }),
         getEquipmentTypeCount().then(function (res){
-          console.log("************设备类型数据量:"+ res.data +"*********************")
+          // console.log("************设备类型数据量:"+ res.data +"*********************")
           that.equipmentTypeNumber = res.data;
         }),
         getGuaranteePeriodCount().then(function (res){
-          console.log("************保修期内设备数据量:"+ res +"*********************")
+          // console.log("************过保设备数据量:"+ res +"*********************")
           that.periodEquipmentNumber = res;
         }),
-        getSystemWareCount().then(function (res){
-          console.log("************总应用系统数量:"+ res +"*********************")
-          that.allApplicationSystemNumber = res;
+        getBusinessSystemCount().then(function (res){
+          // console.log("************总应用系统数量:"+ res +"*********************")
+          that.allApplicationSystemNumber = res.data;
         }),
         getApplicationUserCount().then(function (res){
-          console.log("************应用管理员数量:"+ res +"*********************")
+          // console.log("************应用管理员数量:"+ res +"*********************")
           that.applicationUserNumber = res;
         }),
         getEquipmentUserCount().then(function (res){
-          console.log("************设备管理员数量:"+ res +"*********************")
+          // console.log("************设备管理员数量:"+ res +"*********************")
           that.equipmentUserNumber = res;
         })
     },

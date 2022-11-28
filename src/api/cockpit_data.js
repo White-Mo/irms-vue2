@@ -16,8 +16,8 @@ export const getGuaranteePeriodCount= () =>{
 }
 
 //总应用系统数量
-export const getSystemWareCount= () =>{
-  return request.get('/home/inforesources/getSystemWareCount')
+export const getBusinessSystemCount= () =>{
+  return request.get('/home/baseparameter/getBusinessSystemCount')
 }
 
 //应用管理员数量

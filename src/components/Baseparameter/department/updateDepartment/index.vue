@@ -1,7 +1,7 @@
 <template>
   <div class="update_detail">
     <div class="source">
-      <el-page-header content="添加部门" @back="back" />
+      <el-page-header content="修改部门" @back="back" />
     </div>
     <div class="source">
       <el-row>
@@ -152,7 +152,7 @@ export default {
               type: 'info',
               showClose: false
             }).then(() => {
-              this.$emit('ifUpdateChange', false)
+              this.back()
             })
             console.log(res)
           }).catch(err => {
