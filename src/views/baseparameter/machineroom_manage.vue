@@ -87,10 +87,39 @@
             <el-button
               size="medium"
               type="info"
-              @click="addMachineRoom()"
+              @click="addMachine()"
             >添加机房</el-button>
           </el-col>
         </el-row>
+        <el-dialog title="新增机房" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="机房名称" :label-width="formLabelWidth">
+              <el-input v-model="form.MachineRoomName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="单位" prop="postId" :label-width="formLabelWidth">
+              <!-- <el-select v-model="value" placeholder="请选择单位" @change="changeSelect">
+                <el-option
+                  v-for="item in options"
+                  :key="item.postId"
+                  :lable="item.name"
+                  :value="item.postId">
+                </el-option>
+              </el-select> -->
+              <el-select v-model="form.postId" placeholder="请选择">
+                <el-option
+                  v-for="item in postAll"
+                  :key="item.postId"
+                  :label="item.postName"
+                  :value="item.postId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="ceateMachineRoom()">确 定</el-button>
+          </div>
+        </el-dialog>
         <el-table
           height="70vh"
           :row-style="{height:'6.26vh'}"
@@ -141,20 +170,59 @@
           />
         </div>
       </div>
-      <div v-if="ifUpdate === '1'">
+      <!-- <div v-if="ifUpdate === '1'">
         <addMachineRoom @changeDiv="changeDiv" />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateMachineRoom :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
-      </div>
+      </div> -->
+      <el-drawer
+        direction="ttb"
+        :visible.sync="drawer"
+        :with-header="false">
+        <div>
+          <!-- <h3 style="text-align:center">机柜号</h3> -->
+          <!-- <el-divider></el-divider> -->
+          <el-table
+          v-loading="cabinetLoading"
+          :data="[{tag:0}]"
+          element-loading-text="Loading"
+          border
+        >
+        <el-table-column
+          label="机柜号"
+            align="center"
+          >
+            <template>
+            <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
+              <template slot="append">
+                <template>
+                  <el-popconfirm
+                    confirm-button-text='确认'
+                    cancel-button-text='算了'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="是否永久删除该机房"
+                    @confirm="deleteU(cabinetAll[index].cabinetId)"
+                  >
+                    <el-button slot="reference" type="danger">删除</el-button>
+                  </el-popconfirm>
+                </template>
+              </template>
+            </el-input>
+            </template>
+          </el-table-column>
+          </el-table>
+        </div>
+      </el-drawer>
     </div>
   </div>
 </template>
 
 <script>
-import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal} from '@/api/baseparameter'
-import addMachineRoom from '@/components/Baseparameter/machineRoom/addMachineRoom'
+import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal,delCabinet,addMachineRoom} from '@/api/baseparameter'
 import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
+import { getCabinet,getPost } from '@/api/select'
 
 export default {
   components: {
@@ -173,6 +241,35 @@ export default {
   },
   data() {
     return {
+      options: [{
+        postId: '选项1',
+        name: '黄金糕'
+      }, {
+        postId: '选项2',
+        name: '双皮奶'
+      }, {
+        postId: '选项3',
+        name: '蚵仔煎'
+      }, {
+        postId: '选项4',
+        name: '龙须面'
+      }, {
+        postId: '选项5',
+        name: '北京烤鸭'
+      }],
+      value: '',
+      postAll:[],
+      form: {
+        MachineRoomName:"",
+        postId: "",
+        status: ""
+      },
+      formLabelWidth: '120px',
+      dialogFormVisible:false,
+      cabinetId:"",
+      cabinetLoading:true,
+      cabinetAll:[],
+      drawer: false,
       list: null,
       total: 0,
       currentPage: 0,
@@ -253,12 +350,37 @@ export default {
       })
     },
 
-    addMachineRoom() {
-      this.ifUpdate ='1'
+    addMachine() {
+      // this.ifUpdate ='1'
+      this.dialogFormVisible = true
+      getPost().then(response => {
+        console.log(response.data.items)
+        this.postAll = response.data.items
+        console.log(this.postAll);
+        console.log(this.options);
+      })
     },
+
+    ceateMachineRoom(){
+      addMachineRoom(this.form).then(response => {
+        console.log(response)
+        this.$alert("新增成功", '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.dataName="all"
+          this.dialogFormVisible = false
+          this.fetchData()
+        })
+      })
+    },
+
     handleDetail(index, row) {
-      this.ifUpdate ='2'
-      this.row = row
+      // this.ifUpdate ='2'
+      // this.row = row
+      this.drawer = true
+      this.fetchCabinet(row)
     },
     handleEdit(index, row) {
       this.ifUpdate ='3'
@@ -307,7 +429,36 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
       this.fetchData()
-    }
+    },
+    deleteU(val){
+      // alert(val);
+      // this.cabinetId = val;
+      delCabinet(val).then((response) => {
+        this.$alert(response.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.dataName="all"
+          this.drawer = false
+        })
+      })
+    },
+    confirm(){
+      alert(this.cabinetId)
+      
+    },
+    fetchCabinet(val) {
+      this.cabinetLoading = true
+      getCabinet(val.machineRoomId).then(response => {
+        this.cabinetAll = response.data.items
+        this.cabinetLoading = false;
+      })
+    },
+    changeSelect() {
+      console.log("============");
+        this.$forceUpdate();
+      },
   }
 }
 </script>
@@ -423,5 +574,12 @@ export default {
   display:inline-block;
   height:2rem;
   width:100%;
+}
+.el-input-group{
+  width: 10%;
+  margin: 0px 0px 25px 100px;
+}
+.el-drawer.ttb{
+  height: auto !important;
 }
 </style>

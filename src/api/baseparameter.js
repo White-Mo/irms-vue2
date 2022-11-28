@@ -172,12 +172,53 @@ export function delEquipmentType(data) {
     params: {equipmentTypeId : data}
   })
 }
+
+//新增一级设备类型
+export function addEquipmentFirstType(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/addEquipmentFirstType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//新增二级设备类型
+export function addEquipmentType(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/addEquipmentType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
+//新增机房
+export function addMachineRoom(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/addMachineRoom',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 //删除机房
 export function delMachineRoom(data) {
   return request({
     url: '/home/baseparameter/delMachineRoom',
     method: 'delete',
     params: {equipmentTypeId : data}
+  })
+}
+
+//删除机柜
+export function delCabinet(data) {
+  return request({
+    url: '/home/baseparameter/delCabinet',
+    method: 'delete',
+    params: {cabinetId : data}
   })
 }
 
