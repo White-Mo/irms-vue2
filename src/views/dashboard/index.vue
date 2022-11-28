@@ -399,11 +399,11 @@ export default {
 
 
 // 点击饼状图，重新加载其他图表
-    clickFunc(data){
+    async clickFunc(data){
       this.$echarts.init(document.getElementById('histogramChart')).clear();  //清空重画
-      // console.log(data);
-      let colData = this.handleEquipmentAllCountData(data.id);// 柱状图所需所有数据
-      // console.log(colData)
+      console.log(data);
+      let colData = await this.handleEquipmentAllCountData(data.id);// 柱状图所需所有数据
+      console.log(colData)
       let chartLabel = this.handleChartLable(colData); // 图例
       let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴
       let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData);
@@ -412,7 +412,7 @@ export default {
 
       // 机房机柜
       this.$echarts.init(document.getElementById('histogramChart2')).clear();  //清空重画
-      let colData2 = this.handleCabinetAllCountData(data.id);// 柱状图所需所有数据
+      let colData2 = await this.handleCabinetAllCountData(data.id);// 柱状图所需所有数据
       let chartLabel2 = this.handleCabinetChartLable(colData2); // 图例
       let chart2YAxis2 = this.handleCabinetLable(colData2); // Y轴
       let chart2Count2= this.handleCabinetCountData(chartLabel2,chart2YAxis2,colData2);
@@ -452,7 +452,7 @@ export default {
       let result = []
       let data ;
       if(machineRoomId){
-        data = {postId:postId};
+        data = {postId:machineRoomId};
       }else {
         data = {postId: "null"};
       }
@@ -537,7 +537,7 @@ export default {
 
       let nums = [];
       for (let i = 0; i < chart2Count.length; i++) {
-        console.log(chart2Count[i])
+        // console.log(chart2Count[i])
         nums.push(chart2Count[i][0])
       }
       let series=[];
@@ -628,7 +628,7 @@ export default {
           dataIndex: index,
         });
       });
-      pieChart.on("click", function clickF(params) {
+      pieChart.on("click",(params)=> {
         // console.log(params.data)
         this.clickFunc(params.data);
         if (params.dataIndex !== index) {
@@ -886,8 +886,10 @@ export default {
           dataIndex: index,
         });
       });
-      pieChart.on("click", function clickF(params) {
-        // console.log(params.data)
+      pieChart.on("click", (params)=>{
+
+        console.log(params.data)
+
         // this.clickCabinetFunc(params.data);
         this.clickFunc(params.data);
         if (params.dataIndex !== index01) {
