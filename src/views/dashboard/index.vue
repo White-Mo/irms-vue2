@@ -95,7 +95,7 @@
                              type="text"></div>
                         <img src="../../assets/dashboard_imgs/title_4.png">各部门IP使用个数
                       </div>
-                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'17px'}">IP总数：{{IPtotal}}
+                      <div :style="{paddingLeft:'850px',paddingTop:'30px',fontsize:'1vw'}">IP总数：{{IPtotal}}
                       </div>
                       <!--                <p id="main" class="p_chart_tanchu" :style="{top: '-34px'}"></p>-->
                       <p id="IPCount" style="width: 100%; height: 90%"></p>
@@ -576,7 +576,7 @@ export default {
                   position: 'center',
                   rich: {
                     a: {
-                      fontSize: 16,
+                      fontSize: '1vw',
                     }
                   },
 
@@ -589,7 +589,7 @@ export default {
                 label: {
                   show: true,
                   textStyle: {
-                    fontSize: '16',
+                    fontSize: '1vw',
                     fontWeight: 'bold'
                   }
                 }
@@ -666,7 +666,7 @@ export default {
           x : 'center',
           textStyle : {
             color : '#ffffff',
-            fontSize:13
+            fontSize:'1vw'
           },
           data : chartLabel,
         },
@@ -697,7 +697,7 @@ export default {
                 label : {
                   show : false,
                   textStyle : {
-                    fontSize : '20',
+                    fontSize : '1vw',
                     fontWeight : 'bold'
                   }
                 }
@@ -737,7 +737,7 @@ export default {
           data:chartLabel,
           textStyle : {
             color : '#ffffff',
-            fontSize: 13,
+            fontSize: '1vw',
           }
         },
 
@@ -833,7 +833,7 @@ export default {
                   position: 'center',
                   rich: {
                     a: {
-                      fontSize: 16,
+                      fontSize: '1vw',
                     }
                   },
 
@@ -846,7 +846,7 @@ export default {
                 label: {
                   show: true,
                   textStyle: {
-                    fontSize: '16',
+                    fontSize: '1vw',
                     fontWeight: 'bold'
                   }
                 }
@@ -926,7 +926,7 @@ export default {
           x : 'center',
           textStyle : {
             color : '#ffffff',
-            fontSize:13
+            fontSize:'1vw'
           },
           data : chartLabel1,
         },
@@ -957,7 +957,7 @@ export default {
                 label : {
                   show : false,
                   textStyle : {
-                    fontSize : '20',
+                    fontSize : '1vw',
                     fontWeight : 'bold'
                   }
                 }
@@ -999,7 +999,7 @@ export default {
           data:chartLabel,
           textStyle : {
             color : '#ffffff',
-            fontSize: 13,
+            fontSize: '1vw',
           }
         },
 
@@ -1101,7 +1101,7 @@ export default {
           borderWidth: "1", //边框宽度设置1
           borderColor: "rgba(0, 0, 0, 0.5)", //设置边框颜色
           textStyle: {
-            fontsize: 12,
+            fontsize: '1vw',
             color: "white" //设置文字颜色
           },
           formatter: function (params, ticket, callback) {
@@ -1815,7 +1815,7 @@ export default {
           "featureType": "district",
           "elementType": "labels.text",
           "stylers": {
-            "fontsize": 20
+            "fontsize": '1vw'
           }
         }, {
           "featureType": "district",
@@ -1905,7 +1905,7 @@ export default {
           "featureType": "highway",
           "elementType": "labels.text",
           "stylers": {
-            "fontsize": 20
+            "fontsize": '1vw'
           }
         }, {
           "featureType": "nationalway",
@@ -1923,7 +1923,7 @@ export default {
           "featureType": "nationalway",
           "elementType": "labels.text",
           "stylers": {
-            "fontsize": 20
+            "fontsize": '1vw'
           }
         }, {
           "featureType": "provincialway",
@@ -1941,7 +1941,7 @@ export default {
           "featureType": "provincialway",
           "elementType": "labels.text",
           "stylers": {
-            "fontsize": 20
+            "fontsize": '1vw'
           }
         }, {
           "featureType": "cityhighway",
@@ -1953,7 +1953,7 @@ export default {
           "featureType": "cityhighway",
           "elementType": "labels.text",
           "stylers": {
-            "fontsize": 20
+            "fontsize": '1vw'
           }
         }, {
           "featureType": "cityhighway",
@@ -2465,7 +2465,7 @@ export default {
           axisLabel: {
             color: '#FFFFFF',
             margin: 10,
-            fontSize: 10,
+            fontSize: '1vw',
             interval: 0
           },
           type: 'category',
@@ -2476,7 +2476,7 @@ export default {
           axisLabel: {
             color: '#FFFFFF',
             margin: 30,
-            fontSize: 16
+            fontSize: '1vw'
           },
           type: 'value'
         },
@@ -2499,7 +2499,7 @@ export default {
               label: {
                 show: true,
                 color: '#000000',//气泡中字体颜色
-                fontSize: 16
+                fontSize: '1vw'
               },
               data: markpointData,
             },
@@ -2555,11 +2555,11 @@ export default {
               lineHeight: 20,
               rich: {
                 value: {
-                  fontSize: 16,
+                  fontSize: '1vw',
                 }
               },
               textStyle: {
-                fontSize: 17
+                fontSize: '1vw',
               }
             },
             data: chartData,
@@ -2601,7 +2601,7 @@ export default {
   color: white;
   text-align: center;
   //padding-top: 20px;
-  height: calc(100vh - 50px);
+  height: calc(95vh);
 }
 
 .nav_active {
@@ -2836,7 +2836,7 @@ export default {
 }
 
 .popBox .ttBox .tt {
-  font-size: 20px;
+  font-size:calc(1vw);
   display: inline-block;
   height: 30px;
 }
@@ -2863,7 +2863,7 @@ export default {
   top: -15px;
   color: #ffffff;
   font-weight: bold;
-  font-size: 16px;
+  font-size:calc(1vw);
   left: 20%;
   line-height: 35px;
   text-align: center;
