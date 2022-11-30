@@ -171,6 +171,9 @@ export default {
         {
           value: 'num',
           label: '#'
+        },{
+          value: 'basicInfoId',
+          label: '设备编号'
         },
         {
           value: 'postName',

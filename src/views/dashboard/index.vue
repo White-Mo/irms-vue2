@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="7" class="nav2">
         <ul>
-          <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size: 16px">设备概况</a> </li>
+          <li class="nav_active"><i class="nav_1"></i><a href="#" style="font-size:calc(1vw);">设备概况</a> </li>
         </ul>
       </el-col>
       <el-col :span="7" class="header_center" >
@@ -172,14 +172,10 @@ export default {
 
     }
   },
-  created() {
-    // this.draw_Chart();
-  },
   mounted() {
     this.currentRole();
     this.equipmentType();
 
-    // this.draw_Chart();
     this.drawLine();
     this.mapChartType();
 
@@ -418,7 +414,6 @@ export default {
       let chart2Count2= this.handleCabinetCountData(chartLabel2,chart2YAxis2,colData2);
       let series2=this.cabinetseriesArr(chartLabel2,chart2Count2)
       this.initCabinet(chartLabel2,series2,chart2YAxis2);
-
     },
 
     // 把各单位的机房总数处理为饼状图所需要的格式
@@ -642,12 +637,12 @@ export default {
       });
 
       window.addEventListener("resize", function () {
-        pieChart.resize();
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index,//默认选中第一个
         });
+        pieChart.resize();
       });
       $("#sidebar-collapse").click(function () {
         pieChart.resize();
@@ -832,7 +827,7 @@ export default {
             itemStyle: {
               normal: {
                 label: {
-                  formatter: ' {b}\n{c}台\n{d}%',
+                  formatter: ' {b}\n{c}个\n{d}%',
                   lineHeight: 22,
                   show: false,
                   position: 'center',
@@ -992,85 +987,6 @@ export default {
     },
 
     //各机房机柜总量柱状图
-    // initEquipmentType(chartLabel,series,chart2YAxis){
-    //   let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
-    //   histogramChart.setOption({
-    //
-    //     color:["#87cefa","#ff7f50","#32cd32","#da70d6","#f1adbe","#defa2d","#fd0329","#6c7ffd",],
-    //     legend: {
-    //       y : '235',
-    //       x : 'center',
-    //       data:chartLabel,
-    //       textStyle : {
-    //         color : '#ffffff',
-    //         fontSize: 13,
-    //       }
-    //     },
-    //
-    //     calculable :false,
-    //     grid:{
-    //       left: '5%',
-    //       right: '5%',
-    //       bottom: '20%',
-    //       containLabel: true
-    //     },
-    //
-    //     tooltip : {
-    //       trigger: 'axis',
-    //       axisPointer : {
-    //         type : 'shadow'
-    //       }
-    //     },
-    //
-    //     xAxis : [
-    //       {
-    //         type : 'value',
-    //         axisLabel: {
-    //           show: true,
-    //           textStyle: {
-    //             color: '#fff'
-    //           }
-    //         },
-    //         splitLine:{
-    //           lineStyle:{
-    //             color:['#f2f2f2'],
-    //             width:0,
-    //             type:'solid'
-    //           }
-    //         }
-    //
-    //       }
-    //     ],
-    //
-    //     yAxis : [
-    //       {
-    //         type : 'category',
-    //         data : chart2YAxis,
-    //         axisLabel: {
-    //           show: true,
-    //           textStyle: {
-    //             color: '#fff'
-    //           }
-    //         },
-    //         splitLine:{
-    //           lineStyle:{
-    //             width:0,
-    //             type:'solid'
-    //           }
-    //         }
-    //       }
-    //     ],
-    //
-    //     series : series
-    //   });
-    //   window.addEventListener("resize",function (){
-    //     histogramChart.resize();
-    //   });
-    //   $("#sidebar-collapse").click(function(){
-    //     histogramChart.resize();
-    //   });
-    // },
-    //各部门设备类型柱状图
     initCabinet(chartLabel,series,chart2YAxis,colData){
       let histogramChart2 = this.$echarts.init(document.getElementById('histogramChart2'));
       histogramChart2.setOption({
@@ -2738,36 +2654,41 @@ export default {
 
 .child_count_box {
   float: left;
+  height: 100%;
 }
 
 .child_count_box_icon {
+  width:15%;
+  height: 90%;
   margin-left: 5%;
-  margin-top: 35px;
+  margin-top: 5%;
+  margin-bottom: 5%;
   float: left;
 }
 
 .child_count_box_icon img {
-  width: 40px;
-  height: 40px;
+  width: 80%;
+  height: 80%;
 }
 
 .child_count_box_p {
-  margin-top: 15px;
+  margin-top: 4%;
+  margin-bottom: 4%;
+  height: 96%;
   width: 80%;
   text-align: center;
-  line-height: 35px;
   float: left;
 }
 
 .child_count_box_p p:nth-child(1) {
-  font-size: 18px !important;
+  font-size:calc(1vw);
   text-align: center;
 }
 
 .child_count_box_p p:nth-child(2) {
-  font-size: 28px;
+  margin-top: 2%;
+  font-size: calc(2vw);
   color: #ffff43;
-  font-weight: 600;
   text-align: center;
 }
 
@@ -2809,15 +2730,14 @@ export default {
   top: -15px;
   color: #ffffff;
   font-weight: bold;
-  font-size: 16px;
+  font-size:calc(1vw);
   left: 20%;
   line-height: 35px;
   text-align: center;
 }
 
 .chart_title img {
-  width: 18px;
-  height: 18px;
+  height: 80%;
   position: relative;
   top: 2px;
   margin-right: 5px;
@@ -2825,7 +2745,7 @@ export default {
 
 //图表样式
 .p_chart {
-  height: 288px;
+  height: 90%;
   padding: 5px 10px;
   margin-top: 15px;
 }
@@ -2849,8 +2769,8 @@ export default {
   }
 
   &-text {
-    font-size: 30px;
-    line-height: 46px;
+    font-size: 5vw;
+    line-height: 5px;
   }
 }
 
