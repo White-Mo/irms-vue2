@@ -3,7 +3,7 @@
  * @Author:  wr
  * @Date: 2022-10-02 17:40:04
  * @LastEditTime: 2022-11-24 19:44:32
- * @LastEditors:  
+ * @LastEditors:
 -->
 <template>
   <div class="infobody">
@@ -277,7 +277,7 @@ export default {
         //   // render: (h, params) => {
         //   //     return h('p',params.row.userName||'匿名')
         //   // }
-         
+
         // }
       ],
     }
@@ -457,7 +457,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {

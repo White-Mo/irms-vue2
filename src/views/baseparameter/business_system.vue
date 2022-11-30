@@ -8,7 +8,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">部门管理</span>
+              <span style="color: #ffffff">业务系统管理</span>
             </div>
           </el-col>
         </el-row>
@@ -384,7 +384,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {

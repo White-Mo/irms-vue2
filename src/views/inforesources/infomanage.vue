@@ -877,11 +877,6 @@ export default {
   overflow: auto;
   height: 100%;
 }
-// .el-scrollbar .el-scrollbar__wrap {
-//   overflow-y: scroll;
-//     overflow: auto;
-//     height: 100%;
-// }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
   background-color: #d2d2d2;

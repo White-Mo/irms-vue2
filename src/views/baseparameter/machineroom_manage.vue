@@ -446,7 +446,7 @@ export default {
     },
     confirm(){
       alert(this.cabinetId)
-      
+
     },
     fetchCabinet(val) {
       this.cabinetLoading = true
@@ -548,7 +548,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
