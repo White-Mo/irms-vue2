@@ -134,7 +134,7 @@
                   >详情</el-button>
                   <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)"
+                    @click="handleRecover(scope.$index, scope.row)"
                   >正常</el-button>
                 </template>
               </el-table-column>
