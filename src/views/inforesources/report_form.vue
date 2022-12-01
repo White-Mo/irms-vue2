@@ -504,6 +504,8 @@ export default {
           this.centerDialogVisible = true
         } else if (this.selectData.length === 1) {
           getExcelDemo2(this.selectData)
+          // 取消表格选择
+          this.$refs.multipleTable.clearSelection();
           // console.log('this')
         } else {
           this.$message.error('请选择需要导出的信息')
