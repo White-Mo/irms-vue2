@@ -2582,7 +2582,7 @@ export default {
       // });
     },
 
-  },
+  }
 
 }
 </script>
@@ -2601,7 +2601,7 @@ export default {
   color: white;
   text-align: center;
   //padding-top: 20px;
-  height: calc(95vh);
+  min-height: calc(100vh - 50px);
 }
 
 .nav_active {
@@ -2632,6 +2632,7 @@ export default {
   background-size: 100% 100%;
 }
 .header_center h2 {
+  font-size:2rem;
   padding-top: 20px;
 }
 
@@ -2702,7 +2703,6 @@ export default {
 
 .charts_line {
   height: 100%;
-  margin-bottom: 25px;
   margin-left: 5px;
 }
 
