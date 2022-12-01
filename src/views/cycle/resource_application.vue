@@ -173,10 +173,6 @@ export default {
           label: '设备名'
         },
         {
-          value: 'equipmentName',
-          label: '设备名'
-        },
-        {
           value: 'brandName',
           label: '设备品牌'
         },

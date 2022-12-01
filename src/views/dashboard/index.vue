@@ -49,7 +49,7 @@
             <img src="../../assets/dashboard_imgs/title_3.png">
           </div>
           <div class="child_count_box_p">
-            <p class="mainfont">总应用系统数量(个)</p>
+            <p class="mainfont">总业务系统数量(个)</p>
             <p id="systemWareAll">{{allApplicationSystemNumber}}</p>
           </div>
         </div>
@@ -726,7 +726,8 @@ export default {
         legend: {
           y : '235',
           x : 'center',
-          data:chartLabel,
+          // data:chartLabel,
+          data:[],
           textStyle : {
             color : '#ffffff',
             fontSize: '1vw',
