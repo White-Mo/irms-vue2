@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-main">
+  <div ref="bgMain" class="bg-main">
     <el-row>
       <el-col :span="7" class="nav2">
         <ul>
@@ -153,6 +153,7 @@ import {
   getGuaranteePeriodCount,
   getBusinessSystemCount
 } from "@/api/cockpit_data";
+import elementResizeDetectorMaker from "element-resize-detector";
 export default {
   name: 'Dashboard',
 
@@ -181,6 +182,7 @@ export default {
 
     this.RenderingData() //调用渲染设备概况数据函数
     this.cabinet();
+
   },
   computed: {
     ...mapGetters([
@@ -513,20 +515,6 @@ export default {
 
     },
 
-    // 点击饼状图，重新加载其他图表
-    clickCabinetFunc(data){
-      this.$echarts.init(document.getElementById('histogramChart2')).clear();  //清空重画
-      // console.log(data);
-      let colData = this.handleCabinetAllCountData(data.id);// 柱状图所需所有数据
-      // console.log(colData)
-      let chartLabel = this.handleCabinetChartLable(colData); // 图例
-      let chart2YAxis = this.handleCabinetLable(colData); // Y轴
-      let chart2Count= this.handleCabinetCountData(chartLabel,chart2YAxis,colData);
-      let series=this.cabinetseriesArr(chartLabel,chart2Count)
-      this.initCabinet(chartLabel,series,chart2YAxis);
-
-    },
-
     //把以上数据处理成堆叠条形图需要的series值
     cabinetseriesArr(chartLabel,chart2Count){
 
@@ -616,7 +604,7 @@ export default {
         }
       });
       pieChart.on('mouseout', function (e) {
-        // index = e.dataIndex;
+        index = e.dataIndex;
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
@@ -644,15 +632,18 @@ export default {
         });
         pieChart.resize();
       });
-      $("#sidebar-collapse").click(function () {
-        pieChart.resize();
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index,//默认选中第一个
-        });
-      });
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
 
+      myChart.listenTo(document.getElementById('pieChart1'), () => {
+          pieChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: index,//默认选中第一个
+          });
+          pieChart.resize();
+      });
+      //监听元素变化
     },
     // 非超级管理员
     initEquipmentCount2(chartLabel,chart1Count){
@@ -708,22 +699,23 @@ export default {
         ]
       });
       window.addEventListener("resize",function (){
-        pieChart.resize();
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
-          //dataIndex: index,//默认选中第一个
         });
-      });
-      $("#sidebar-collapse").click(function(){
         pieChart.resize();
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          //dataIndex: index,//默认选中第一个
-        });
       });
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
 
+      myChart.listenTo(document.getElementById('pieChart1'), () => {
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+        });
+        pieChart.resize();
+      });
+      //监听元素变化
 },
     //各部门设备类型柱状图
     initEquipmentType(chartLabel,series,chart2YAxis){
@@ -800,9 +792,13 @@ export default {
       window.addEventListener("resize",function (){
         histogramChart.resize();
       });
-      $("#sidebar-collapse").click(function(){
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
+
+      myChart.listenTo(document.getElementById('pieChart1'), () => {
         histogramChart.resize();
       });
+      //监听元素变化
     },
 
     // 超级管理员 机房
@@ -898,21 +894,26 @@ export default {
       });
 
       window.addEventListener("resize", function () {
-        pieChart.resize();
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index01,//默认选中第一个
         });
-      });
-      $("#sidebar-collapse").click(function () {
         pieChart.resize();
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index01,//默认选中第一个
-        });
       });
+
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
+
+      myChart.listenTo(document.getElementById("pieChart2"), () => {
+          pieChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: index01,//默认选中第一个
+          });
+          pieChart.resize();
+      });
+      //监听元素变化
     },
     // 非超级管理员 机房
     initEquipmentCount02(chartLabel1,chart01Count){
@@ -968,22 +969,26 @@ export default {
         ]
       });
       window.addEventListener("resize",function (){
-        pieChart.resize();
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
-          //dataIndex: index,//默认选中第一个
         });
-      });
-      $("#sidebar-collapse").click(function(){
         pieChart.resize();
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          //dataIndex: index,//默认选中第一个
-        });
       });
 
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
+
+      myChart.listenTo(document.getElementById("pieChart2"), () => {
+        this.$nextTick(() => {
+          pieChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+          });
+          pieChart.resize();
+        });
+      });
+      //监听元素变化
     },
 
     //各机房机柜总量柱状图
@@ -1065,9 +1070,15 @@ export default {
       window.addEventListener("resize",function (){
         histogramChart2.resize();
       });
-      $("#sidebar-collapse").click(function(){
-        histogramChart2.resize();
+
+      let elementResizeDetectorMaker = require("element-resize-detector");
+      let myChart = elementResizeDetectorMaker();
+      myChart.listenTo(document.getElementById("histogramChart2"), () => {
+        this.$nextTick(() => {
+          histogramChart2.resize();
+        });
       });
+      //监听元素变化
     },
 
 
@@ -2513,7 +2524,7 @@ export default {
       // window.addEventListener("resize",function (){
       //   myChart1.resize();
       // });
-      // $("#sidebar-collapse").click(function(){
+      // $("#menuHidden").click(function(){
       //   myChart1.resize();
       // });
     },
@@ -2577,7 +2588,7 @@ export default {
       // window.addEventListener("resize",function (){
       //   myChart.resize();
       // });
-      // $("#sidebar-collapse").click(function(){
+      // $("#menuHidden").click(function(){
       //   myChart.resize();
       // });
     },
@@ -2718,7 +2729,6 @@ export default {
   border: 1px solid #034c6a;
   box-sizing: border-box;
   position: relative;
-
 }
 
 .chart_title {
