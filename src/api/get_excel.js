@@ -25,7 +25,7 @@ export async function getExcelDemo1(data){
     //添加工作表
     const sheet = workbook.addWorksheet('1');
     const row = sheet.getRow(1);
-    
+
 	let header = []
 	let items = []
     let c_to_e_obj = {
@@ -230,11 +230,6 @@ export async function getExcelDemo2(data_list, data_num = 1){
             let item_data = data_list[data_index]
             let basic_data = await getbasic(item_data['equipmentId'])
             basic_data = basic_data['data']['items']
-            if(!basic_data.basicInfo){
-                console.log("恭喜你，这个接口炸了，接口名是getbasic，不信你看")
-                console.log(basic_data)
-                console.log("然后你会获得一张空表")
-            }
             // continue
             // basicInfoAppBusiness_list 业务应用
             // basicInfoAppAccessRights_list 应用访问 权限
@@ -249,21 +244,21 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // basicInfoSoftware_list 通用软件信息
             // console.log(basic_data,"-------244----",item_data['equipmentId'])
             // if(!basic_data.basicInfo) continue
-            // let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
-            // let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
-            // let z = basic_data['basicInfoAppSystemUser_list'].length // z是系统用户信息中信息的最大条数
-            // let a = basic_data['basicInfoAppBusiness_list'].length - 3 > 0 ? basic_data['basicInfoAppBusiness_list'].length - 3 : 0 // a是业务应用中数据条数超过3条的数量
-            // let c = basic_data['basicInfoAppStore_list'].length // c是’存储’信息中的最大条数
-            // let c2 = basic_data['basicInfoAppNativeStore_list'].length // c2是’本机存储’信息中的最大条数
-            // let y = basic_data['basicInfoAppLinksInfo_list'].length // y是’链接（服务）用户信息’中的最大条数
-            let n =  3
-            let n2 =  3 // n2是网络信息或端口协议信息中的最大条数0
-            let x = 3
-            let z = 3
-            let a = 3
-            let c = 3
-            let c2 =3
-            let y = 10
+            let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
+            let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
+            let z = basic_data['basicInfoAppSystemUser_list'].length // z是系统用户信息中信息的最大条数
+            let a = basic_data['basicInfoAppBusiness_list'].length - 3 > 0 ? basic_data['basicInfoAppBusiness_list'].length - 3 : 0 // a是业务应用中数据条数超过3条的数量
+            let c = basic_data['basicInfoAppStore_list'].length // c是’存储’信息中的最大条数
+            let c2 = basic_data['basicInfoAppNativeStore_list'].length // c2是’本机存储’信息中的最大条数
+            let y = basic_data['basicInfoAppLinksInfo_list'].length // y是’链接（服务）用户信息’中的最大条数
+            // let n =  3
+            let n2 =  basic_data['basicInfoNetwork_list'].length>basic_data['basicInfoProtocolPort_list'].length ?  basic_data['basicInfoNetwork_list'].length : basic_data['basicInfoProtocolPort_list'].length// n2是网络信息或端口协议信息中的最大条数0
+            // let x = 3
+            // let z = 3
+            // let a = 3
+            // let c = 3
+            // let c2 =3
+            // let y = 10
             //添加工作表
             let sheet = workbook.addWorksheet('' + sheet_num);
             //设置列宽
@@ -1488,231 +1483,223 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
             }
             // 填入数据
-            // const git_time = (s) =>{
-            //     if(!s) return ""
-            //     let date = new Date(parseInt(s));  // 参数需要毫秒数，所以这里将秒数乘于 1000
-            //     return date.getFullYear() + '/' + (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/' + date.getDate();
-            // }
-            // F3.value = item_data['equipmentName']
-            // J3.value = item_data['businessSystemName']
-            // D4.value = item_data['hostName']
-            // H4.value = item_data['departmentName']
-            // K4.value = item_data['basicInfoId']
-            // D5.value = item_data['equipmentAdminName']
-            // G5.value = item_data['equipmentAdminPhone']
-            // I5.value = item_data['appAdminName']
-            // K5.value = item_data['appAdminPhone']
-            // D6.value = item_data['businessOrExperimental'] == '0' ? '√\n□' : '□\n√'
-            // G6.value = item_data['mainOrBackup'] == '0' ? '√\n□' : '□\n√'
-            // I6.value = item_data['tureOrVirtual'] == '0' ? '√\n□' : '□\n√'
-            // K6.value = item_data['migratable'] == '0' ? '是√\n否□' : '是□\n否√'
-            // C9.value = item_data['brandName']
-            // F9.value = item_data['brandModelName']
-            // H9.value = item_data['machineRoomName']
-            // J9.value = item_data['cabinetName']
-            // C11.value = item_data['serialNumber']
-            // F11.value = item_data['guaranteePeriod']
-            // H11.value = git_time(item_data['onlineTime'])
-            // J11.value = git_time(item_data['offlineTime'])
-            // let n_list = []
-            // let x_list = []
-            // let z_list = []
-            // let a_list = []
-            // let y_list = []
-            // let c_list = []
-            // let c2_list = []
-            // // 配置信息和通用软件信息
-            // for (let i = 0;i < n;i++){
-            //     let item = []
-            //     if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
-            //         item = item.concat(['','','',''])
-            //     }else{
-            //         item.push(basic_data['basicInfoConfig_list'][i]['projectName'])
-            //         item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
-            //         item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
-            //         item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
-            //     }
-            //     if(typeof basic_data['basicInfoSoftware_list'][i] == 'undefined'){
-            //         item = item.concat(['','','',''])
-            //     }else{
-            //         item.push(basic_data['basicInfoSoftware_list'][i]['project'])
-            //         item.push(basic_data['basicInfoSoftware_list'][i]['projectName'])
-            //         item.push(basic_data['basicInfoSoftware_list'][i]['edition'])
-            //         item.push(basic_data['basicInfoSoftware_list'][i]['type'])
-            //     }
-            //     n_list.push(item)
-            // }
-            // for(let i in C15){
-            //     for(let j in C15[i]){
-            //         C15[i][j].value = n_list[i][j]
-            //     }
-            // }
-            // // 网络信息
-            // for(let i in basic_data['basicInfoNetwork_list']){
-            //     if(i > 1){
-            //         C21[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
-            //         C21[i][2].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
-            //         break
-            //     }
-            //     C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
-            //     C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['macAddress']
-            //     C21[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
-            //     C21[i][2].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
-            // }
-            // // 协议端口信息
-            // for(let i in basic_data['basicInfoProtocolPort_list']){
-            //     let item
-            //     if(i<2){
-            //         item = C18[i]
-            //     }else if(i == 2){
-            //         item = C20
-            //     }else if(i > 2){
-            //         item = C21[i-3]
-            //     }
-            //     item[3].value = basic_data['basicInfoProtocolPort_list'][i]['protocolName']
-            //     item[4].value = basic_data['basicInfoProtocolPort_list'][i]['appName']
-            //     item[5].value = basic_data['basicInfoProtocolPort_list'][i]['networkCardPort']
-            // }
-            // // 专用软件信息
-            // for (let i = 0;i < x -1;i++){
-            //     let item_field = ['softwareName','businessName','softwarePort','softwareOnlineTime','softwareDevelopCompany','softwareLiaison']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(typeof basic_data['basicInfoAppSoftware_list'][i][f] == 'undefined' ? '' :basic_data['basicInfoAppSoftware_list'][i][f])
-            //     }
-            //     x_list.push(item)
-            // }
-            // for(let i in x_list){
-            //     for(let j in C22[i]){
-            //         i = parseInt(i)
-            //         j = parseInt(j)
-            //         C22[i+1][j].value = x_list[i][j]
+            const git_time = (s) =>{
+                if(!s) return ""
+                let date = new Date(parseInt(s));  // 参数需要毫秒数，所以这里将秒数乘于 1000
+                return date.getFullYear() + '/' + (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/' + date.getDate();
+            }
+            F3.value = item_data['equipmentName']
+            J3.value = item_data['businessSystemName']
+            D4.value = item_data['hostName']
+            H4.value = item_data['departmentName']
+            K4.value = item_data['basicInfoId']
+            D5.value = item_data['equipmentAdminName']
+            G5.value = item_data['equipmentAdminPhone']
+            I5.value = item_data['appAdminName']
+            K5.value = item_data['appAdminPhone']
+            D6.value = item_data['businessOrExperimental'] == '0' ? '√\n□' : '□\n√'
+            G6.value = item_data['mainOrBackup'] == '0' ? '√\n□' : '□\n√'
+            I6.value = item_data['tureOrVirtual'] == '0' ? '√\n□' : '□\n√'
+            K6.value = item_data['migratable'] == '0' ? '是√\n否□' : '是□\n否√'
+            C9.value = item_data['brandName']
+            F9.value = item_data['brandModelName']
+            H9.value = item_data['machineRoomName']
+            J9.value = item_data['cabinetName']
+            C11.value = item_data['serialNumber']
+            F11.value = item_data['guaranteePeriod']
+            H11.value = git_time(item_data['onlineTime'])
+            J11.value = git_time(item_data['offlineTime'])
+            let n_list = []
+            let x_list = []
+            let z_list = []
+            let a_list = []
+            let y_list = []
+            let c_list = []
+            let c2_list = []
+            // 配置信息和通用软件信息
+            for (let i = 0;i < n;i++){
+                let item = []
+                if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
+                    item = item.concat(['','','',''])
+                }else{
+                    item.push(basic_data['basicInfoConfig_list'][i]['projectName'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
+                }
+                if(typeof basic_data['basicInfoSoftware_list'][i] == 'undefined'){
+                    item = item.concat(['','','',''])
+                }else{
+                    item.push(basic_data['basicInfoSoftware_list'][i]['project'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['projectName'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['edition'])
+                    item.push(basic_data['basicInfoSoftware_list'][i]['type'])
+                }
+                n_list.push(item)
+            }
+            for(let i in C15){
+                for(let j in C15[i]){
+                    C15[i][j].value = n_list[i][j]
+                }
+            }
+            // 网络信息
+            for(let i in basic_data['basicInfoNetwork_list']){
+                i = parseInt(i)
+                C18[i][0].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
+                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
+                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][3].value = basic_data['basicInfoNetwork_list'][i]['macAddress']
+                C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
+            }
+            // 协议端口信息
+          console.log(basic_data['basicInfoProtocolPort_list'])
+            for(let i in basic_data['basicInfoProtocolPort_list']){
+                i = parseInt(i)
+              console.log(C18)
+                C18[i][5].value = basic_data['basicInfoProtocolPort_list'][i]['protocolName']
+                C18[i][6].value = basic_data['basicInfoProtocolPort_list'][i]['appName']
+                C18[i][7].value = basic_data['basicInfoProtocolPort_list'][i]['networkCardPort']
+            }
+            // 专用软件信息
+            for (let i = 0;i < x -1;i++){
+                let item_field = ['softwareName','businessName','softwarePort','softwareOnlineTime','softwareDevelopCompany','softwareLiaison']
+                let item = []
+                for(let f of item_field){
+                    item.push(typeof basic_data['basicInfoAppSoftware_list'][i][f] == 'undefined' ? '' :basic_data['basicInfoAppSoftware_list'][i][f])
+                }
+                x_list.push(item)
+            }
+            for(let i in x_list){
+                for(let j in C22[i]){
+                    i = parseInt(i)
+                    j = parseInt(j)
+                    C22[i+1][j].value = x_list[i][j]
 
-            //     }
-            // }
-            // // 系统用户信息
-            // for(let i = 0;i < z;i++){
-            //     let item_field = ['userName','realName','userLevel','localAccessMode','remoteAccessMode','createDate','other']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(basic_data['basicInfoAppSystemUser_list'][i][f])
-            //     }
-            //     z_list.push(item)
-            // }
-            // for(let i in z_list){
-            //     for(let j in C26[i]){
-            //         i = parseInt(i)
-            //         j = parseInt(j)
-            //         C26[i][j].value = z_list[i][j]
+                }
+            }
+            // 系统用户信息
+            for(let i = 0;i < z;i++){
+                let item_field = ['userName','realName','userLevel','localAccessMode','remoteAccessMode','createDate','other']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppSystemUser_list'][i][f])
+                }
+                z_list.push(item)
+            }
+            for(let i in z_list){
+                for(let j in C26[i]){
+                    i = parseInt(i)
+                    j = parseInt(j)
+                    C26[i][j].value = z_list[i][j]
 
-            //     }
-            // }
-            // // 业务应用
-            // for (let i = 0;i < basic_data['basicInfoAppBusiness_list'].length;i++){
-            //     let item_field = ['businessName','domainName','ICPNum','userScope']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(basic_data['basicInfoAppBusiness_list'][i][f])
-            //     }
-            //     a_list.push(item)
-            // }
-            // for(let i in a_list){
-            //     let item
-            //     if(i < 3){
-            //         if(i == 0) item = C29
-            //         if(i == 1) item = C30
-            //         if(i == 2) item = C31
-            //     }else if (i >= 3){
-            //         item = C32[i-3]
-            //     }
-            //     for(let j in a_list[i]){
-            //         item[j].value = a_list[i][j]
-            //     }
-            // }
-            // // 访问权限
-            // C29[4].value = basic_data['basicInfoAppAccessRights_list'][0]['intranet']
-            // C29[5].value = basic_data['basicInfoAppAccessRights_list'][0]['industryNetwork']
-            // C29[6].value = basic_data['basicInfoAppAccessRights_list'][0]['internet']
-            // C29[7].value = basic_data['basicInfoAppAccessRights_list'][0]['other']
-            // // 链接用户信息
-            // for (let i = 0;i < y;i++){
-            //     let item_field = ['company','userName','ipAddress','other']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(basic_data['basicInfoAppLinksInfo_list'][i][f])
-            //     }
-            //     y_list.push(item)
-            // }
-            // for(let i in y_list){
-            //     let item
-            //     let C32_len = C32.length
-            //     if(typeof C32[i] != 'undefined'){
-            //         for(let j in y_list[i]){
-            //             C32[i][4+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i == C32_len){
-            //         for(let j in y_list[i]){
-            //             C33[1+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i == C32_len + 1){
-            //         for(let j in y_list[i]){
-            //             C34[3+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i > C32_len + 1 && i <= C32_len + 1 + c){
-            //         for(let j in y_list[i]){
-            //             C35[i - (C32_len + 1) - 1][3+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i == C32_len + 1 + c + 1){
-            //         for(let j in y_list[i]){
-            //             C36[1+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i == C32_len + 1 + c + 1 + 1){
-            //         for(let j in y_list[i]){
-            //             C37[4+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(i > C32_len + 1 + c + 1 + 1 && i <= C32_len + 1 + c + 1 + 1 + c2){
-            //         for(let j in y_list[i]){
-            //             C38[i - (C32_len + 1 + c + 1 + 1) - 1][4+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }else if(c3 > 0){
-            //         for(let j in y_list[i]){
-            //             C39[i - (C32_len + 1 + c + 1 + 1 + c2) - 1][4+parseInt(j)].value = y_list[i][j]
-            //         }
-            //     }
-            // }
-            // // 存储
-            // for (let i = 0;i < c;i++){
-            //     let item_field = ['volume','SAN_NAS','capacity']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(basic_data['basicInfoAppStore_list'][i][f])
-            //     }
-            //     c_list.push(item)
-            // }
-            // for (let i in c_list){
-            //     for(let j in c_list[i]){
-            //         C35[i][j].value = c_list[i][j]
-            //     }
-            // }
-            // // 本机存储
-            // for (let i = 0;i < c2;i++){
-            //     let item_field = ['totalCapacity','usedSpace','unusedSpace','annualGrowthSpace']
-            //     let item = []
-            //     for(let f of item_field){
-            //         item.push(basic_data['basicInfoAppNativeStore_list'][i][f])
-            //     }
-            //     c2_list.push(item)
-            // }
-            // for (let i in c2_list){
-            //     for(let j in c2_list[i]){
-            //         C38[i][j].value = c2_list[i][j]
-            //     }
-            // }
+                }
+            }
+            // 业务应用
+            for (let i = 0;i < basic_data['basicInfoAppBusiness_list'].length;i++){
+                let item_field = ['businessName','domainName','ICPNum','userScope']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppBusiness_list'][i][f])
+                }
+                a_list.push(item)
+            }
+            for(let i in a_list){
+                let item
+                if(i < 3){
+                    if(i == 0) item = C29
+                    if(i == 1) item = C30
+                    if(i == 2) item = C31
+                }else if (i >= 3){
+                    item = C32[i-3]
+                }
+                for(let j in a_list[i]){
+                    item[j].value = a_list[i][j]
+                }
+            }
+            // 访问权限
+            C29[4].value = basic_data['basicInfoAppAccessRights_list'][0]['intranet']
+            C29[5].value = basic_data['basicInfoAppAccessRights_list'][0]['industryNetwork']
+            C29[6].value = basic_data['basicInfoAppAccessRights_list'][0]['internet']
+            C29[7].value = basic_data['basicInfoAppAccessRights_list'][0]['other']
+            // 链接用户信息
+            for (let i = 0;i < y;i++){
+                let item_field = ['company','userName','ipAddress','other']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppLinksInfo_list'][i][f])
+                }
+                y_list.push(item)
+            }
+            for(let i in y_list){
+                let item
+                let C32_len = C32.length
+                if(typeof C32[i] != 'undefined'){
+                    for(let j in y_list[i]){
+                        C32[i][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C32_len){
+                    for(let j in y_list[i]){
+                        C33[1+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C32_len + 1){
+                    for(let j in y_list[i]){
+                        C34[3+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i > C32_len + 1 && i <= C32_len + 1 + c){
+                    for(let j in y_list[i]){
+                        C35[i - (C32_len + 1) - 1][3+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C32_len + 1 + c + 1){
+                    for(let j in y_list[i]){
+                        C36[1+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i == C32_len + 1 + c + 1 + 1){
+                    for(let j in y_list[i]){
+                        C37[4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(i > C32_len + 1 + c + 1 + 1 && i <= C32_len + 1 + c + 1 + 1 + c2){
+                    for(let j in y_list[i]){
+                        C38[i - (C32_len + 1 + c + 1 + 1) - 1][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }else if(c3 > 0){
+                    for(let j in y_list[i]){
+                        C39[i - (C32_len + 1 + c + 1 + 1 + c2) - 1][4+parseInt(j)].value = y_list[i][j]
+                    }
+                }
+            }
+            // 存储
+            for (let i = 0;i < c;i++){
+                let item_field = ['volume','SAN_NAS','capacity']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppStore_list'][i][f])
+                }
+                c_list.push(item)
+            }
+            for (let i in c_list){
+                for(let j in c_list[i]){
+                    C35[i][j].value = c_list[i][j]
+                }
+            }
+            // 本机存储
+            for (let i = 0;i < c2;i++){
+                let item_field = ['totalCapacity','usedSpace','unusedSpace','annualGrowthSpace']
+                let item = []
+                for(let f of item_field){
+                    item.push(basic_data['basicInfoAppNativeStore_list'][i][f])
+                }
+                c2_list.push(item)
+            }
+            for (let i in c2_list){
+                for(let j in c2_list[i]){
+                    C38[i][j].value = c2_list[i][j]
+                }
+            }
 
             data_index ++
             progress_list[progress_item_num] ++
             // console.log(progress_list)
-            window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString()) 
+            window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString())
         }
         //导出下载
         let buffer = await workbook.xlsx.writeBuffer();
@@ -1724,7 +1711,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         link.click();
         document.body.removeChild(link);
 
-        progress_item_num ++ 
+        progress_item_num ++
     }
     setTimeout(()=>{
         window.localStorage.setItem("report_form_info","")
@@ -1792,7 +1779,7 @@ export async function getExcelDemo3(StatisticsData){
     let B2 = []
     for (let i in name_list){
         let item_list = []
-        let num = 2 + parseInt(i) 
+        let num = 2 + parseInt(i)
         if(i == 0){
             sheet.getRow(num).height = 30
         }else{
@@ -1825,7 +1812,7 @@ export async function getExcelDemo3(StatisticsData){
             }
         }
         B2.push(item_list)
-        
+
     }
 
     //导出下载
