@@ -7,7 +7,7 @@
       <div class="show">
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark">设备移动</div>
+            <div class="grid-content bg-purple-dark">设备调拨</div>
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
@@ -156,6 +156,8 @@ export default {
       ],
       value: '',
       labels: {
+        basicInfoId:'设备ID',
+        basicInfoId: '设备编号',
         postName: '所属单位',
         departmentName: '所属部门',
         equipmentTypeName: '设备类型',
@@ -163,6 +165,7 @@ export default {
         // brandName: '设备品牌',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
+
         // onlineTime: '上线时间',
         // hostName: '主机名',
         // guaranteePeriod: '保修期',
@@ -203,7 +206,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.start = (val-1)*this.limit
+      this.start = val-1
       this.fetchData()
     }
   }
@@ -308,7 +311,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {

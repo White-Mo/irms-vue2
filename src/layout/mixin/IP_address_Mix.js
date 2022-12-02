@@ -2,16 +2,16 @@
  * @Description: 获取数据
  * @Author:  王瑞
  * @Date: 2022-10-20 00:38:12
- * @LastEditTime: 2022-11-24 18:34:01
+ * @LastEditTime: 2022-11-04 17:55:33
  */
-import {getList, getdataCount} from '@/api/table'
+import {getList, getdataCount, getNetWorkList} from '@/api/IP_address'
 export const hunhe1 = {
   methods: {
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {
         console.log(this.DataName)
-        this.initname = ['111']
+        this.initname = ['']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
@@ -29,16 +29,17 @@ export const hunhe1 = {
         status: this.tab_name,
         start: this.start,
         qinfo_input:'.',
-        limit: 10
+        limit: this.limit
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: this.tab_name
+        status: this.tab_name,
+        qinfo_input:'.',
       }
-      getdataCount(numparams).then((response) => {
-        this.total = response.data.total
-        console.log(this.total)
+      getdataCount(NetWork_params).then((response) => {
+        this.total_N = response.data.total
+        console.log(this.total_N)
         this.listLoading = false
       })
       getList(params).then((response) => {
@@ -46,18 +47,39 @@ export const hunhe1 = {
         response.data.items.forEach(element => {
           element.isEdit = false;
         });
-        //数据的空值处理，有需要就用吧
-        // for (let i = 0; i < response.data.items.length; i++) {
-        //   if (response.data.items[i] == null) {
-        //     response.data.items.splice(i,1);
-        //   }else{
-        //     response.data.items[i]["isEdit"] = false;
-        //   }
-
-        // }
         this.list = response.data.items
         console.log(this.list)
         this.listLoading = false
+      })
+      getNetWorkList(NetWork_params).then((response) => {
+
+        response.data.items.forEach(element => {
+          element.isEdit = false;
+        });
+       let list_n = response.data.items
+
+
+        // // 数据类型转换
+        let arr=[]
+        console.log(this.total_N)
+        for(let i=0;i<list_n.length;i++){
+          if(list_n[i][0]==null){
+            list_n[i][0]=list_n[i-1][0]
+          }
+
+          list_n[i][0]["isEdit"]=false
+          console.log(list_n[i][0])
+         let tryss = Object.assign(list_n[i][0],list_n[i][1])
+          // list_n[i][0].push(list_n[i][1])
+          arr.push(tryss)
+          // arr.push({isEdit:list_n[i].isEdit})
+          // arr1.concat(arr2);
+        }
+        console.log(arr)
+        this.list_network = arr
+
+        this.listLoading = false
+
       })
     }
   }

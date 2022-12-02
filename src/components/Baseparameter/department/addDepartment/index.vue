@@ -129,7 +129,7 @@ export default {
               type: 'info',
               showClose: false
             }).then(() => {
-              this.$emit('ifUpdateChange', false)
+              this.back()
             })
             console.log(res)
           }).catch(err => {

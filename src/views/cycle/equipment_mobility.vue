@@ -171,9 +171,14 @@ export default {
           value: 'cabinetName',
           label: '机柜编号'
         },
+        {
+          value: 'basicInfoId',
+          label: '设备ID'
+        },
       ],
       value: '',
       labels: {
+        basicInfoId:'设备ID',
         postName: '所属单位',
         departmentName: '所属部门',
         equipmentTypeName: '设备类型',
@@ -182,7 +187,7 @@ export default {
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
         cabinetUStart: '柜内U位start',
-        cabinetUEnd: '柜内U位end'
+        cabinetUEnd: '柜内U位end',
         // onlineTime: '上线时间',
         // hostName: '主机名',
         // guaranteePeriod: '保修期',
@@ -254,7 +259,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.start = (val-1)*this.limit
+      this.start = val-1
       this.fetchData()
     },
     async changeRoom(row) {
@@ -275,8 +280,6 @@ export default {
           }
         })
       })
-
-
     }
   }
 }
@@ -380,7 +383,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {

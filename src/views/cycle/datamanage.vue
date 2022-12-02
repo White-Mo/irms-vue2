@@ -28,16 +28,16 @@
             :lg="2"
             :xl="2"
           >
-          <el-button type="primary" size="large" @click="downloadFile()">下载模板</el-button>
+            <el-button type="primary" size="large" @click="downloadFile()">下载模板</el-button>
           </el-col><el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">一键上传文件</el-button>
-          </el-col>
+          :xs="2"
+          :sm="2"
+          :md="2"
+          :lg="2"
+          :xl="2"
+        >
+          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">上传所有文件</el-button>
+        </el-col>
         </el-row>
         <el-table
           :header-cell-style="headStyle"
@@ -86,12 +86,12 @@
             prop="status"
             label="文件状态"
             width="180">
-          <template slot-scope="scope">
-            <el-tag
-              class="statusTg"
-              :type="scope.row.status === '读取失败' ? 'primary' : 'success'"
-              disable-transitions>{{scope.row.status}}</el-tag>
-          </template>
+            <template slot-scope="scope">
+              <el-tag
+                class="statusTg"
+                :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
+                disable-transitions>{{scope.row.status}}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="uploadStatus"
@@ -111,8 +111,8 @@
               <el-button
                 type="danger"
                 @click="handleDelete(scope.$index)" :disabled = 'disabled'>删除</el-button>
-<!--              <el-button-->
-<!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
+              <!--              <el-button-->
+              <!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -121,7 +121,7 @@
     <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
       <div class="uploadCard">
         <el-upload
-          :limit="10"
+          :limit="999"
           :on-exceed="handleExceed"
           class="upload-demo"
           action=""
@@ -146,14 +146,14 @@
       </div>
     </el-dialog>
     <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
-<!--      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">-->
-<!--        <el-descriptions-item v-for="items in item">-->
-<!--          <template slot="label">-->
-<!--            {{items.key}}-->
-<!--          </template>-->
-<!--          {{items.value}}-->
-<!--        </el-descriptions-item>-->
-<!--      </el-descriptions>-->
+      <!--      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">-->
+      <!--        <el-descriptions-item v-for="items in item">-->
+      <!--          <template slot="label">-->
+      <!--            {{items.key}}-->
+      <!--          </template>-->
+      <!--          {{items.value}}-->
+      <!--        </el-descriptions-item>-->
+      <!--      </el-descriptions>-->
     </el-dialog>
 
   </div>
@@ -248,12 +248,26 @@ export default {
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
           // console.log(equipment)
+          // console.log(readStatus)
+          // debugger
           if(readStatus === 22 || readStatus === 20) {
             var obj = {
               name:this.checkList[index].name,
               data: equipment,
               status:'读取成功',
               uploadStatus:'待上传',
+            }
+            this.excelData.equipments.push(obj)
+          } else {
+            this.$message({
+              type:'error',
+              message:'基础表信息读取错误'
+            })
+            var obj = {
+              name:this.checkList[index].name,
+              data: equipment,
+              status:'读取失败',
+              uploadStatus:'读取失败',
             }
             this.excelData.equipments.push(obj)
           }
@@ -280,6 +294,14 @@ export default {
           })
           this.tableData[index].uploadStatus = "上传成功"
           this.repalyInfo[index] = res.data
+        } else {
+          this.tableData[index].uploadStatus = "上传失败"
+          this.repalyInfo[index] = res.data
+          this.$message({
+              type:'error',
+              message:res.message
+            }
+          )
         }
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
@@ -293,8 +315,8 @@ export default {
     },
     // 数量限制
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 10 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-      this.fileList = []
+      // this.$message.warning(`当前限制选择 10 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      // this.fileList = []
     },
     closeDialog() {
       this.dialogFormVisible = false
@@ -326,7 +348,7 @@ export default {
     upLoadTableData() {
       if(this.tableData.length !== 0) {
         for(var i = 0; i < this.tableData.length; i++){
-          if(this.tableData[i].uploadStatus !== "上传成功"){
+          if(this.tableData[i].uploadStatus !== "上传成功"&&this.tableData[i].uploadStatus !=="读取失败"){
             this.tableData[i].uploadStatus = "上传中"
             this.uploadFunc(i,this.tableData[i].data)
           }
@@ -461,7 +483,7 @@ export default {
   position: relative;
 }
 .el-scrollbar .el-scrollbar__wrap {
-  overflow: unset;
+  overflow: auto;
   height: 100%;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {

@@ -179,8 +179,8 @@ export default {
       // this.mesh = new THREE.Mesh(geometry, material);
       // this.scene.add(this.mesh);
       // 坐标轴
-      let axes = new THREE.AxesHelper(1000);
-      this.scene.add(axes);
+      // let axes = new THREE.AxesHelper(1000);
+      // this.scene.add(axes);
       /**
        * 相机设置
        */

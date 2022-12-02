@@ -6,14 +6,14 @@
           <div style="height:100%; width:90%; position:absolute;left:1rem; top:2rem">
             <el-row style="margin-bottom: 10px">
               <el-col :span="5">
-                <img src="../../../public/unitLogo/cea.png" alt="" style="width:4rem;border-radius: 4rem;position: relative;bottom: 0">
+                <img src="../../../public/unitLogo/CENC.png" alt="" style="width:4rem;border-radius: 4rem;position: relative;bottom: 0">
               </el-col>
               <el-col :span="17" :offset="2">
                 <div class="roomData">
-                  <span>{{item.unit}}</span>
+                  <span>中国地震局</span>
                 </div>
                 <div class="roomData">
-                  <span>{{item.department}}</span>
+                  <span>{{item.postName}}</span>
                 </div>
                 <div class="roomData">
                   <span class="roomName">{{item.machineRoomName}}</span>
@@ -29,8 +29,8 @@
               <el-col :span="6">
                   <el-tag
                     size="small"
-                    :type="item.status === '施工中' ? 'danger' : 'success'"
-                    disable-transitions>{{item.status}}</el-tag>
+                    :type="item.status === '0' ? 'success' : 'danger'"
+                    disable-transitions>{{item.status === "0" ? "正常" : "施工中" }}</el-tag>
               </el-col>
               <el-col :span="8">
                 <el-button type="primary" size="large" @click="CheckComputerRoom(index)">进入机房</el-button>
@@ -44,65 +44,36 @@
 </template>
 
 <script>
-import screenfull from "screenfull";
+import {getAllmachineroom} from "@/api/machineRoom";
 
 export default {
   name: 'digtal_computer_room',
   data() {
     return{
-      isFull: 0,
-      ComputerRoomCard:[
-        {
-          unit: '中国地震局台网中心',
-          department: '地球物理部',
-          machineRoomName: 'b1核心机房',
-          status: '施工中'
-        },
-        {
-          unit: '中国地震局台网中心',
-          department: '财务与规划处',
-          machineRoomName: 'b2核心机房',
-          status: '施工中'
-        },
-        {
-          unit: '中国地震局台网中心',
-          department: '应急响应部',
-          machineRoomName: 'b3核心机房',
-          status: '正常'
-        },
-        {
-          unit: '中国地震局台网中心',
-          department: '预警速报部',
-          machineRoomName: 'b1核心机房',
-          status: '施工中'
-        },
-        {
-          unit: '中国地震局台网中心',
-          department: '财务与规划处',
-          machineRoomName: 'b2核心机房',
-          status: '施工中'
-        },
-        {
-          unit: '中国地震局台网中心',
-          department: '信息技术保障部',
-          machineRoomName: 'b3核心机房',
-          status: '正常'
-        }
-      ],
+      ComputerRoomCard:[],
     };
   },
   mounted() {
-    // this.full()
+    const data = {
+      dataName:['111'],
+      dataValue:'',
+      status:'',
+      start:0,
+      limit:9999
+    }
+    getAllmachineroom(data).then((res) => {
+      console.log(111111)
+      console.log(res.data.items)
+      this.ComputerRoomCard = res.data.items
+    })
   },
   methods:{
-    full () {
-      // console.log(this.$store.state.machineRoom.department)
-      screenfull.toggle()
-    },
     CheckComputerRoom(index){
       var unit = this.ComputerRoomCard[index].unit
-      var department =this.ComputerRoomCard[index].department
+      var department =this.ComputerRoomCard[index].postName
       var installation_position = this.ComputerRoomCard[index].machineRoomName
+      console.log(unit,department)
+      console.log(this.ComputerRoomCard[index])
       this.$store.commit('machineRoom/SET_Unit',unit)
       this.$store.commit('machineRoom/SET_DEPARTMENT',department)
       this.$store.commit('machineRoom/SET_InstallPosition',installation_position)

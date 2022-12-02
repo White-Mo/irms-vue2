@@ -115,6 +115,7 @@ function getBaseinfo(outdata,postName) {
   const {status:departmentName,readStatus:readStatus4} = underfindTrans(Object.values(outdata[1])[4] + Object.values(outdata[1])[5], '部门',readStatus3) // 部门
   equipmentBaseInfo.departmentName = departmentName
 
+  // debugger;
   const Serial = Object.values(outdata[1])[8].split('-')
   if(Serial.length != 4){
     Message({
