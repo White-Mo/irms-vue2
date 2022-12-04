@@ -1,6 +1,7 @@
 const ExcelJS = require('exceljs');
 import { getbasic } from '@/api/table'
 import Store from "@/store"
+import { Message } from 'element-ui';
 export async function getExcelDemo1(data){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
@@ -225,11 +226,15 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 activeTab: 1,
                 visibility: 'visible'
             }]
+        let isGetData = false
         for(let sheet_num = 1;sheet_num < file_num + 1;sheet_num++){
             // 填充数据准备
             let item_data = data_list[data_index]
             let basic_data = await getbasic(item_data['equipmentId'])
             basic_data = basic_data['data']['items']
+            console.log(basic_data,'----233')
+            if(!basic_data.basicInfo) continue
+            isGetData = true
             // continue
             // basicInfoAppBusiness_list 业务应用
             // basicInfoAppAccessRights_list 应用访问 权限
@@ -1700,6 +1705,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             progress_list[progress_item_num] ++
             // console.log(progress_list)
             window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString())
+        }
+        if(!isGetData){
+            Message.error('数据错误，不完整的数据导致无法顺利导出表格');
+            continue
         }
         //导出下载
         let buffer = await workbook.xlsx.writeBuffer();
