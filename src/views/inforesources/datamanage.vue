@@ -111,12 +111,12 @@
           :file-list="fileList"
           :auto-upload="false"
         >
-          <el-button slot="trigger" size="larger" type="primary">选取文件</el-button>
-          <div slot="tip" style="font-size: 18px">
+          <el-button size="larger" type="primary">选取文件</el-button>
+          <div slot="tip" style="font-size: 18px;position: relative;top: 15px">
             <p>注意事项：</p>
             <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
             <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
-            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>
+<!--            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>-->
           </div>
         </el-upload>
       </div>
