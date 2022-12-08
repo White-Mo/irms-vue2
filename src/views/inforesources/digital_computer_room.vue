@@ -31,7 +31,7 @@
                   <el-tag
                     size="small"
                     :type="item.status === '0' ? 'success' : 'danger'"
-                    disable-transitions>{{item.status === "0" ? "正常" : "施工中" }}</el-tag>
+                    disable-transitions>{{item.status === "0" ? "正常" : "维修中" }}</el-tag>
               </el-col>
               <el-col :span="8">
                 <el-button type="primary" size="large" @click="CheckComputerRoom(index)">进入机房</el-button>
@@ -74,11 +74,17 @@ export default {
   },
   methods:{
     CheckComputerRoom(index){
+      console.log(this.ComputerRoomCard[index])
+      // debugger
       var unit = this.ComputerRoomCard[index].unit
       var department =this.ComputerRoomCard[index].postName
       var installation_position = this.ComputerRoomCard[index].machineRoomName
-      console.log(unit,department)
-      console.log(this.ComputerRoomCard[index])
+      var unitid = this.ComputerRoomCard[index].postId
+      var machineRoomId = this.ComputerRoomCard[index].machineRoomId
+      // console.log(unit,department)
+      // console.log(this.ComputerRoomCard[index])
+      this.$store.commit('machineRoom/SET_UnitId',unitid)
+      this.$store.commit('machineRoom/SET_MashRoomId',machineRoomId)
       this.$store.commit('machineRoom/SET_Unit',unit)
       this.$store.commit('machineRoom/SET_DEPARTMENT',department)
       this.$store.commit('machineRoom/SET_InstallPosition',installation_position)

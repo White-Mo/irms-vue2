@@ -23,30 +23,18 @@
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name === "" ? "暂无详细数据" : this.roomBasicInfo.manager_name}}</span></th>
           </tr>
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 80px">机房IP：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.equipment_ip}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.equipment_ip === "" ? "暂无详细数据" : this.roomBasicInfo.equipment_ip}}</span></th>
           </tr>
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 80px">机房地址：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.UnitDepartment}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.UnitDepartment === "" ? "暂无详细数据" : this.roomBasicInfo.UnitDepartment}}</span></th>
           </tr>
         </table>
-        <div style="height: 25%;width: 100%;position:absolute;left: 10px;top:30%">
-          <el-row>
-            <el-col :span="8" :offset="1">
-              <h4 style="position: relative;bottom: 10px;color: #0a72c7"></h4>
-            </el-col>
-            <el-col :span="7">
-              <h4 style="position:relative;bottom:20px;left: -40px;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900"></h4>
-            </el-col>
-            <el-col :span="8">
-              <img  :src=logosrc  alt="" style="width:60px;border-radius: 40px;position: relative;bottom: 10px">
-            </el-col>
-          </el-row>
-        </div>
+      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
       </dv-border-box-11>
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background: #142437" v-show="datacard">
         <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
@@ -73,30 +61,29 @@
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background: #142437" v-show="datacard">
       <el-row style="position: relative;top:5%">
         <el-col :span="12" :offset="8">
-          <h2 style="position: relative;left:15px;color: #06e1f4">机房设备</h2>
+          <h2 style="position: relative;left:15px;color: #06e1f4">机房机柜</h2>
         </el-col>
       </el-row>
-      <el-popover
-        popper-class="popoverBackB"
-        placement="top-start"
-        trigger="hover">
-        <p style="color:#0ad8ee;">点击查看详情</p>
-        <el-table
-          border
-          slot="reference"
-          highlight-current-row
-          @current-change="handleCurrentChange"
-          class="show_table"
-          :data="tableData"
-          :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-          :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-          style="position:relative;left:5%;width:90%;height:70%;top: 10%">
-          <el-table-column  type="index" label="#" width="50"></el-table-column>
-          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>
-          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>
-          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>
-        </el-table>
-      </el-popover>
+      <el-table
+        border
+        height="370"
+        class="show_table"
+        :data="tableData"
+        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
+        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
+        style="position:relative;left:5%;width:90%;top: 10%;background: #142437;">
+        <el-table-column  type="index" label="#" width="50" show-overflow-tooltip></el-table-column>
+        <!--          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>-->
+        <!--          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>-->
+        <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
+        <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
+      </el-table>
+<!--      <el-popover-->
+<!--        popper-class="popoverBackB"-->
+<!--        placement="top-start"-->
+<!--        >-->
+<!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
+<!--      </el-popover>-->
     </dv-border-box-12>
   </div>
 </template>
@@ -106,6 +93,7 @@ import screenfull from 'screenfull'
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { getCabinet } from '@/api/select'
 export default {
   name:'computerRoom',
   data() {
@@ -116,10 +104,10 @@ export default {
       showButton:false,
       loading:true,
       logosrc:'',
-      roomBasicInfo:{
-        manager_name: '黄猛',
-        equipment_ip: '10.5.103.156',
-        UnitDepartment: '防灾科技学院长庚楼502',
+      roomBasicInfo:{ // 左上角机房信息概况
+        manager_name: '',
+        equipment_ip: '',
+        UnitDepartment: '',
       } ,
       equipmentBaseInfo:{
         total:25,
@@ -132,7 +120,10 @@ export default {
       scene: null,
       renderer: null,
       mesh: null,
-      controls:null
+      controls:null,
+      unitid:'',
+      logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
+      logoImgetype:'.png'
     };
   },
   created() {
@@ -143,6 +134,12 @@ export default {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
     } else {
       this.computerTitle = this.$store.state.machineRoom.department + this.$store.state.machineRoom.installation_position
+      this.unitid = this.$store.state.machineRoom.unitid
+      var machineRoomId = this.$store.state.machineRoom.machineRoomId
+      getCabinet(machineRoomId).then((res) =>{
+        // console.log(res)
+        this.tableData = res.data.items
+      })
     }
     var that = this
     setTimeout(function () {
@@ -250,7 +247,7 @@ export default {
       var myChart = this.$echarts.init(document.getElementById('myechart'));
       const option = {
         title: {
-          text: '设备故障年趋势',
+          text: '设备故障年趋势（示例图）',
           left:"center",
           textStyle:{
             fontSize:20,

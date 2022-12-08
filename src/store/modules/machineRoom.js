@@ -7,11 +7,19 @@ const MachineData = () => {
     unit: '',
     department: '',
     installation_position: '',
+    unitid:'',
+    machineRoomId:''
   }
 }
 const state = MachineData()
 
 const mutations = {
+  SET_MashRoomId:(state,machineRoomId) => {
+    state.machineRoomId = machineRoomId
+  },
+  SET_UnitId:(state,unitid) => {
+    state.unitid = unitid
+  },
   SET_Unit: (state, unit) => {
     state.unit = unit
   },
