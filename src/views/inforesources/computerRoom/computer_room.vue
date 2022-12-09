@@ -20,7 +20,7 @@
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name }}</span></th>
           </tr>
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 80px">机房IP：</th>
