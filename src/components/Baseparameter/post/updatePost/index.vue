@@ -1,7 +1,7 @@
 <template>
   <div class="update_detail">
     <div class="source">
-      <el-page-header content="添加单位" @back="back" />
+      <el-page-header content="编辑单位" @back="back" />
     </div>
     <div class="source">
       <el-row>
@@ -17,7 +17,7 @@
             </el-col>
           </el-form-item>
           <el-form-item v-show="currentShow === '3'">
-            <el-button type="primary" @click="onSubmit('postForm')">添加单位</el-button>
+            <el-button type="primary" @click="onSubmit('postForm')">完成修改</el-button>
           </el-form-item>
         </el-form>
       </el-row>

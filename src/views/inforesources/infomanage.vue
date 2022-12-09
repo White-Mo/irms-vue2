@@ -750,8 +750,8 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: "0",
-        // start: (val - 1) * this.limit,
-        start: val - 1,
+        start: (val - 1) * this.limit,
+        // start: val - 1,
         limit: this.limit
       }
       getList(params).then((response) => {

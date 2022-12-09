@@ -12,32 +12,12 @@
           :gutter="10"
           class="bg-condition"
         >
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button type="primary" size="large" @click="dialogFormVisible = true">导入Excel文件</el-button>
-          </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button type="primary" size="large" @click="downloadFile()">下载模板</el-button>
-          </el-col><el-col
-          :xs="2"
-          :sm="2"
-          :md="2"
-          :lg="2"
-          :xl="2"
-        >
-          <el-button style="margin-left: 10px;" size="larger" type="success" @click="upLoadTableData">上传所有文件</el-button>
-        </el-col>
+          <el-button-group style='position: absolute;left: 10px;top:5px'>
+            <el-button type="primary" size="large" @click="dialogFormVisible = true" icon='el-icon-printer'>导入Excel文件</el-button>
+            <el-button type="primary" size="large" @click="downloadFile()" icon='el-icon-download'>下载模板</el-button>
+            <el-button size="larger" type="success" @click="upLoadTableData" icon='el-icon-upload el-icon--right'>上传所有文件</el-button>
+            <el-button size="larger" type="danger" @click="clearTable" icon='el-icon-s-release'>清空列表</el-button>
+          </el-button-group>
         </el-row>
         <el-table
           :header-cell-style="headStyle"
@@ -86,12 +66,12 @@
             prop="status"
             label="文件状态"
             width="180">
-            <template slot-scope="scope">
-              <el-tag
-                class="statusTg"
-                :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
-            </template>
+          <template slot-scope="scope">
+            <el-tag
+              class="statusTg"
+              :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
+              disable-transitions>{{scope.row.status}}</el-tag>
+          </template>
           </el-table-column>
           <el-table-column
             prop="uploadStatus"
@@ -111,8 +91,8 @@
               <el-button
                 type="danger"
                 @click="handleDelete(scope.$index)" :disabled = 'disabled'>删除</el-button>
-              <!--              <el-button-->
-              <!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
+<!--              <el-button-->
+<!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -131,12 +111,12 @@
           :file-list="fileList"
           :auto-upload="false"
         >
-          <el-button slot="trigger" size="larger" type="primary">选取文件</el-button>
-          <div slot="tip" style="font-size: 18px">
+          <el-button size="larger" type="primary">选取文件</el-button>
+          <div slot="tip" style="font-size: 18px;position: relative;top: 15px">
             <p>注意事项：</p>
             <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
             <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
-            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>
+<!--            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>-->
           </div>
         </el-upload>
       </div>
@@ -146,14 +126,14 @@
       </div>
     </el-dialog>
     <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
-      <!--      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">-->
-      <!--        <el-descriptions-item v-for="items in item">-->
-      <!--          <template slot="label">-->
-      <!--            {{items.key}}-->
-      <!--          </template>-->
-      <!--          {{items.value}}-->
-      <!--        </el-descriptions-item>-->
-      <!--      </el-descriptions>-->
+<!--      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">-->
+<!--        <el-descriptions-item v-for="items in item">-->
+<!--          <template slot="label">-->
+<!--            {{items.key}}-->
+<!--          </template>-->
+<!--          {{items.value}}-->
+<!--        </el-descriptions-item>-->
+<!--      </el-descriptions>-->
     </el-dialog>
 
   </div>
@@ -298,8 +278,8 @@ export default {
           this.tableData[index].uploadStatus = "上传失败"
           this.repalyInfo[index] = res.data
           this.$message({
-              type:'error',
-              message:res.message
+            type:'error',
+            message:res.message
             }
           )
         }
@@ -386,6 +366,15 @@ export default {
       this.tableData.remove(index)
       console.log(this.tableData)
     },
+    // 清空列表
+    clearTable() {
+      this.tableData = []
+      this.excelData.equipments = []
+      this.$message({
+        type:'success',
+        message:'上传列表已清空'
+      })
+    }
   }
 }
 </script>

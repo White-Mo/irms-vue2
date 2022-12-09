@@ -934,7 +934,7 @@ export default {
         },
         tooltip : {
           trigger: 'item',
-          formatter: "{a}<br/>{b}<br/>{c}台 ({d}%)"
+          formatter: "{a}<br/>{b}<br/>{c}个({d}%)"
         },
         calculable : false,
         series : [
