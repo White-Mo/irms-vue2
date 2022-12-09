@@ -81,7 +81,7 @@
             />
           </el-table>
           <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
-          <el-alert v-if="isMore" title="没有更多啦！" type="warning" center show-icon></el-alert>
+          <el-alert v-if="isMore" title="没有更多数据" type="warning" center show-icon></el-alert>
           <!-- <div class="tabListPage" style="text-align: center">
             <el-pagination
               @size-change="handleSizeChange"
@@ -470,8 +470,13 @@ export default {
     handleSelectionChange(val) {
       this.selectData = val
     },
-    selectAllFun(){
-      this.is_select_all = true
+    selectAllFun(val){
+      if(val.length!=0){
+        this.is_select_all = true;
+      }else {
+        this.is_select_all = false;
+      }
+      console.log(this.is_select_all)
     },
     async exportEscel(model) {
       if (model === 0) {
@@ -555,8 +560,6 @@ export default {
               status: ''
             }
             item = (await getList(params)).data.items
-
-
           }
           this.is_select_all = false
           const h = this.$createElement

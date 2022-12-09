@@ -1091,7 +1091,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             C30[C30.length -1].alignment = content_row
             C30[C30.length -1].font = table_header2
             C30[C30.length -1].fill = table_fill4
-            C30[C30.length -1].value = '链接（服务）用户信息'
+            C30[C30.length -1].value = '服务用户信息'
             // 第31 +n-1 +n2-1 + x-1 + z-1行
             num = 31 +n-1 +n2-1 + x-1 + z-1
             sheet.getRow(num).height = 14.25
@@ -1484,12 +1484,13 @@ export async function getExcelDemo2(data_list, data_num = 1){
             }
             // 填入数据
             const git_time = (s) =>{
-                if(!s) return ""
+                if(!s) return "无"
                 let date = new Date(parseInt(s));  // 参数需要毫秒数，所以这里将秒数乘于 1000
-                return date.getFullYear() + '/' + (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/' + date.getDate();
+                return date.getFullYear()+(date.getMonth()+1).toString().padStart(2,'0')+ date.getDate().toString().padStart(2,'0');
             }
             F3.value = item_data['equipmentName']
-            J3.value = item_data['businessSystemName']
+            // J3.value = item_data['businessSystemName']
+            J3.value = "无"
             D4.value = item_data['hostName']
             H4.value = item_data['departmentName']
             K4.value = item_data['basicInfoId']
@@ -1707,7 +1708,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         let link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
-        link.download = "详细报表.xlsx";
+        link.download = data_list[0]["basicInfoId"]+".xlsx";
         link.click();
         document.body.removeChild(link);
 

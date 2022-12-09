@@ -215,7 +215,7 @@ export default {
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
       appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
-      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
+      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行业网', internet: '互联网', other: '预警网' },
       appLinksInfoLable: { company: '单位', userName: '用户名', ipAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
