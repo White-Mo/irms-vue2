@@ -259,7 +259,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.start = val-1
+      this.start = (val - 1) * this.limit
       this.fetchData()
     },
     async changeRoom(row) {

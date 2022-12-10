@@ -224,13 +224,8 @@ export default {
         hostName: '主机名',
         guaranteePeriod: '保修期',
         network_card_name:'网卡名',
-
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
-
-
-
-
       }
     }
   },
@@ -308,7 +303,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.start = val-1
+      this.start = (val - 1) * this.limit
       this.fetchData()
     },
     async changeRoom(row) {
