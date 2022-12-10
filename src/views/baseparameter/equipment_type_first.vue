@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import {delEquipmentType, getEquipmentFirstTypeByPage, getEquipmentTypeByPage,addEquipmentFirstType} from '@/api/baseparameter'
+import { getEquipmentFirstTypeByPage, getEquipmentTypeByPage,addEquipmentFirstType } from '@/api/baseparameter'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
 export default {
@@ -280,7 +280,7 @@ export default {
         type: 'info',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delEquipmentType(row.equipmentTypeId).then((response) => {
+            delEquipmentFirstType(row.equipmentTypeId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',

@@ -164,6 +164,14 @@ export function delPostDepartment(data) {
     params: {departmentId : data}
   })
 }
+//删除一级设备类型
+export function delEquipmentFirstType(data) {
+  return request({
+    url: '/home/baseparameter/delEquipmentFirstType',
+    method: 'delete',
+    params: {EquipmentFirstType : data}
+  })
+}
 //删除二级设备类型
 export function delEquipmentType(data) {
   return request({
