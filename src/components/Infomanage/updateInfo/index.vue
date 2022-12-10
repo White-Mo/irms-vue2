@@ -373,7 +373,7 @@ export default {
       equipments.push(equip)
       console.log(equipments)
       addEquipment({ equipments: equipments }).then(res => {
-        this.$alert(res.data, '提示', {
+        this.$alert(res.message, '提示', {
           confirmButtonText: '确定',
           type: 'info',
           showClose: false

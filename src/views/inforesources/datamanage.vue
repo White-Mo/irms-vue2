@@ -229,7 +229,7 @@ export default {
           const {equipment,readStatus} = getEquipment(outdata,postName)
           console.log(equipment)
           console.log(readStatus)
-          debugger
+          // debugger
           if(readStatus === 22 || readStatus === 20) {
             var obj = {
               name:this.checkList[index].name,

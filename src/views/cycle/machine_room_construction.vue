@@ -44,7 +44,7 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in dataname"
+                v-for="(item,index) in basicvalue"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -207,49 +207,7 @@ export default {
       input3: '',
       listLoading: true,
       singalInfo: {},
-      dataname: [
-        {
-          value: 'postName',
-          label: '所属单位'
-        },
-        {
-          value: 'departmentName',
-          label: '所属部门'
-        },
-        {
-          value: 'equipmentName',
-          label: '设备名'
-        },
-        {
-          value: 'brandName',
-          label: '设备品牌'
-        },
-        {
-          value: 'equipmentTypeName',
-          label: '设备类型'
-        },
-        {
-          value: 'machineRoomName',
-          label: '安装位置'
-        },
-        {
-          value: 'guaranteePeriod',
-          label: '保修期'
-        }
-      ],
       value: '',
-      labels: {
-        basicInfoId:'设备ID',
-        postName: '所属单位',
-        departmentName: '所属部门',
-        equipmentTypeName: '设备类型',
-        equipmentName: '设备名',
-        brandName: '设备品牌',
-        machineRoomName: '安装位置',
-        cabinetName: '机柜编号',
-        onlineTime: '上线时间',
-        guaranteePeriod: '保修期',
-      },
       basicvalue: [
         {
           value: 'machineRoomName',

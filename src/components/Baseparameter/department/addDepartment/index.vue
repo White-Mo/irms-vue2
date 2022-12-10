@@ -124,7 +124,7 @@ export default {
         if (valid) {
           const department = { ...this.department }
           createDepartment(department).then(res => {
-            this.$alert(res.data, '提示', {
+            this.$alert("提交成功", '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false

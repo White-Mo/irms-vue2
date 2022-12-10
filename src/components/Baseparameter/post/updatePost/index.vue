@@ -123,7 +123,7 @@ export default {
         if (valid) {
           const post = { ...this.post }
           updatePostAction(post).then(res => {
-            this.$alert(res.data, '提示', {
+            this.$alert("修改成功", '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false

@@ -147,7 +147,7 @@ export default {
         if (valid) {
           const department = { ...this.department }
           updatePostDepartmentAction(department).then(res => {
-            this.$alert(res.data, '提示', {
+            this.$alert("更新成功", '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false
