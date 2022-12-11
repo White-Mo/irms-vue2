@@ -217,7 +217,7 @@ export function delMachineRoom(data) {
   return request({
     url: '/home/baseparameter/delMachineRoom',
     method: 'delete',
-    params: {equipmentTypeId : data}
+    params: {machineRoomId : data}
   })
 }
 
