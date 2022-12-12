@@ -827,6 +827,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for(let i in C18){
                 l.push(C18[i][0])
             }
+
             for(let i of l){
                 i.border = {
                     top: white,
@@ -1528,7 +1529,6 @@ export async function getExcelDemo2(data_list, data_num = 1){
                     item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
                     item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
                     item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
-
                 }
                 if(typeof basic_data['basicInfoSoftware_list'][i] == 'undefined'){
                     item = item.concat(['','','',''])
