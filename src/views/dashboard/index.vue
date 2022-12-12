@@ -60,7 +60,7 @@
         <el-row class="child_charts">
           <div class="chart_title">
             <img src="../../assets/dashboard_imgs/title_1.png">
-            <span id="chart1Data">各单位设备数据量</span>
+            <span id="chart1Data">{{chart1name}}</span>
           </div>
           <p id="pieChart1" class="p_chart"></p>
         </el-row>
@@ -74,11 +74,12 @@
       </el-col>
       <el-col :span="12" class="center col_charts">
         <div class="map_height child_charts">
-          <div class="map_width chart_title">
-            <img src="../../assets/dashboard_imgs/title_0.png">
+          <img src='/static/background.png' alt='' :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}">
+          <div class="map_width chart_title" >
+            <img src="../../assets/dashboard_imgs/title_0.png" >
             <span>信息分布图</span>
           </div>
-          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%'}"></div>
+          <!--          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}"></div>-->
           <div id="el-dialog" class="dialog">
             <div class="xc_layer"></div>
             <div id="printView" :style="{height:'68%'}" class="popBox">
@@ -126,7 +127,7 @@
         <el-row class="child_charts">
           <div class="chart_title">
             <img src="../../assets/dashboard_imgs/title_3.png">
-            <span id="chart2Data">各单位机房统计</span>
+            <span id="chart2Data">{{chart2name}}</span>
           </div>
           <p id="pieChart2" class="p_chart"></p>
         </el-row>
@@ -144,8 +145,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import "@/../node_modules/echarts/extension/bmap/bmap";
-import BMap from "BMap";
+// import "@/../node_modules/echarts/extension/bmap/bmap";
+// import BMap from "BMap";
 import { getDepartmentAllCountData, getEquipmentAllCountData,getIPAddressCountData,getMachineRoomAllCountData,getCabinetAllCountData} from '@/api/dashboard'
 import {
   getApplicationUserCount,
@@ -170,14 +171,15 @@ export default {
       equipmentUserNumber:'',
       chart01Count: 0,
       post01Index: 0,
-
+      chart1name:'',
+      chart2name:'',
     }
   },
   mounted() {
     this.currentRole();
     this.equipmentType();
 
-    this.drawLine();
+    // this.drawLine();
     this.mapChartType();
 
     this.RenderingData() //调用渲染设备概况数据函数
@@ -231,9 +233,8 @@ export default {
       let currentPost = this.role_name.substring(0, endIndex);
       // console.log(currentPost)
       if (this.roles[0] === '超级管理员') {
-
-        $('#chart1Data').html("各单位设备数据量");
-
+        this.chart1name = '各单位设备数据量'
+        // $('#chart1Data').html("各单位设备数据量");
         let chart1Count = await this.handleDepartmentAllCountData();
         console.log(chart1Count)
         let postIndex = 0;
@@ -245,7 +246,8 @@ export default {
           }
         }
         this.initEquipmentCount(chart1Count,postIndex);
-        $('#chart2Data').html("各单位机房数据量");
+        this.chart2name = '各单位机房数据量'
+        // $('#chart2Data').html("各单位机房数据量");
         let chart01Count = await this.handleMachineRoomAllCountData();
         let post01Index = 0;
         for (let i = 0; i < chart1Count.length; i++) {
@@ -260,12 +262,15 @@ export default {
 
       } else {
         // 用户不是超级管理员
-        $('#chart1Data').html("各部门设备数据量");
+        this.chart1name = '各部门设备数据量'
+        // $('#chart1Data').html("各部门设备数据量");
+
         let chart1Count=await this.handleDepartmentAllCountData();
         let chartLabel = this.getDepartmentEqLabData(chart1Count);
         this.initEquipmentCount2(chartLabel,chart1Count);
         console.log("NO")
-        $('#chart01Data').html("各部门机房数据量");
+        this.chart2name = "各部门机房数据量"
+        // $('#chart1Data').html("各部门机房数据量");
         let chart01Count=await this.handleMachineRoomAllCountData();
         let chartLabel1 = this.getMachineRoomEqLabData(chart01Count);
         this.initEquipmentCount02(chartLabel1,chart01Count);
@@ -636,12 +641,12 @@ export default {
       let myChart = elementResizeDetectorMaker();
 
       myChart.listenTo(document.getElementById('pieChart1'), () => {
-          pieChart.dispatchAction({
-            type: 'highlight',
-            seriesIndex: 0,
-            dataIndex: index,//默认选中第一个
-          });
-          pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index,//默认选中第一个
+        });
+        pieChart.resize();
       });
       //监听元素变化
     },
@@ -716,7 +721,7 @@ export default {
         pieChart.resize();
       });
       //监听元素变化
-},
+    },
     //各部门设备类型柱状图
     initEquipmentType(chartLabel,series,chart2YAxis){
       let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
@@ -907,12 +912,12 @@ export default {
       let myChart = elementResizeDetectorMaker();
 
       myChart.listenTo(document.getElementById("pieChart2"), () => {
-          pieChart.dispatchAction({
-            type: 'highlight',
-            seriesIndex: 0,
-            dataIndex: index01,//默认选中第一个
-          });
-          pieChart.resize();
+        pieChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index01,//默认选中第一个
+        });
+        pieChart.resize();
       });
       //监听元素变化
     },
