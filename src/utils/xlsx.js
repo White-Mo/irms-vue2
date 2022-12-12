@@ -238,8 +238,8 @@ function getPortagreement(outdata, excelIndex) {
     var networkCoinfig = {
       networkCardName: '', // 网卡
       networkCardPort: '', // 端口
-      macAddress: '', // MAC地址
       switchInfo: '', // 交换机
+      macAddress: '', // MAC地址
       ipAddress: '' // IP地址
     }
 
