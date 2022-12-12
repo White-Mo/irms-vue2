@@ -19,7 +19,7 @@ export function importfile(obj, head) {
       const wb = XLSX.read(binary, {
         type: 'binary'
       })
-      // console.log(wb)
+      // //console.log(wb)
       const sheet2JSONOpts = {
         /** Default value for null/undefined values */
         defval: ''// 给defval赋值为空的字符串
@@ -176,7 +176,7 @@ function getBaseinfo(outdata,postName) {
 
   const {status:offlineTime, readStatus: readStatus15} = underfindTrans(Object.values(outdata[8])[7] + Object.values(outdata[8])[8], '下线时间',readStatus14) // 下线时间
   equipmentBaseInfo.offlineTime =  offlineTime
-  // console.log(equipmentBaseInfo)
+  // //console.log(equipmentBaseInfo)
   // debugger
   return {equipmentBaseInfo, readStatus: readStatus15}
 }
@@ -188,7 +188,7 @@ function getConfig(outdata, excelIndex) {
   let index = excelIndex
   for (; index < outdata.length; index++) {
     if (Object.values(outdata[index])[0] !== '网络信息') {
-      // console.log(Object.values(outdata[index]))
+      // //console.log(Object.values(outdata[index]))
       var config = {
         frequency: '', // 频率
         projectName: '', // 项目
@@ -219,8 +219,8 @@ function getConfig(outdata, excelIndex) {
       break
     }
   }
-  // console.log(softwares)
-  // console.log(configs)
+  // //console.log(softwares)
+  // //console.log(configs)
   return {
     softwares,
     configs,
@@ -234,7 +234,7 @@ function getPortagreement(outdata, excelIndex) {
   const protocolPorts = []
   let indexs = excelIndex + 2
   for (; indexs < outdata.length; indexs++) {
-    // console.log(Object.values(outdata[indexs]))
+    // //console.log(Object.values(outdata[indexs]))
     var networkCoinfig = {
       networkCardName: '', // 网卡
       networkCardPort: '', // 端口
@@ -248,7 +248,7 @@ function getPortagreement(outdata, excelIndex) {
       appName: '', // 应用名称
       protocolName: '' // 协议
     }
-    // console.log(Object.values(outdata[indexs]))
+    // //console.log(Object.values(outdata[indexs]))
     if (Object.values(outdata[indexs])[0] !== '业  务  应  用  信  息') {
       if (Object.values(outdata[indexs])[0] !== '') {
         networkCoinfig.networkCardName = Object.values(outdata[indexs])[0]
@@ -259,7 +259,7 @@ function getPortagreement(outdata, excelIndex) {
         networks.push(networkCoinfig)
       }
       if (Object.values(outdata[indexs])[5] !== '') {
-        // console.log(outdata[i])
+        // //console.log(outdata[i])
         protocolPortConfig.protocolName = Object.values(outdata[indexs])[5]
         protocolPortConfig.appName = Object.values(outdata[indexs])[6]
         protocolPortConfig.networkCardPort = Object.values(outdata[indexs])[8]
@@ -269,13 +269,13 @@ function getPortagreement(outdata, excelIndex) {
       break
     }
   }
-  // console.log(networks, protocolPorts)
+  // //console.log(networks, protocolPorts)
   return {
     networks,
     protocolPorts,
     excelIndex: indexs
   }
-  // console.log('端口协议', this.protocolPort)
+  // //console.log('端口协议', this.protocolPort)
 }
 // 业务应用信息
 function appSoftwareFir(outdata, excelIndex) {
@@ -289,12 +289,12 @@ function appSoftwareFir(outdata, excelIndex) {
   let softwareFirIndex
   while (index < outdata.length) {
     if (Object.values(outdata[index])[0] === '专用软件信息') {
-      // console.log('专用软件信息', outdata[index])
-      // console.log(index)
+      // //console.log('专用软件信息', outdata[index])
+      // //console.log(index)
       index = index + 2
       for (;index < outdata.length; index++) {
         if (Object.values(outdata[index])[0] !== '系统用户信息') {
-          // console.log(Object.values(outdata[index]))
+          // //console.log(Object.values(outdata[index]))
           // debugger
           var appSoftwareData = {
             softwareName: '', // 名称
@@ -316,13 +316,13 @@ function appSoftwareFir(outdata, excelIndex) {
         } else {
           break
         }
-        // console.log('系统用户信息', this.appSoftware)
+        // //console.log('系统用户信息', this.appSoftware)
       }
     }
     if (Object.values(outdata[index])[0] === '系统用户信息') {
       index = index + 3
       for (;index < outdata.length; index++) {
-        // console.log(Object.values(outdata[index]))
+        // //console.log(Object.values(outdata[index]))
         // debugger
         if (Object.values(outdata[index])[0] !== '业务应用') {
           var appSystemUserData = {
@@ -348,12 +348,12 @@ function appSoftwareFir(outdata, excelIndex) {
       }
       softwareFirIndex = index
     }
-    // console.log(index)
+    // //console.log(index)
     if (Object.values(outdata[index])[0] === '业务应用') {
       index = index + 2
       for (;index < outdata.length; index++) {
         if (Object.values(outdata[index])[0] !== '存  储' && Object.values(outdata[index])[0] !== '') {
-          // console.log(Object.values(outdata[index]))
+          // //console.log(Object.values(outdata[index]))
           // debugger
           var appBusinessData = {
             ICPNum: '', // ICP
@@ -375,7 +375,7 @@ function appSoftwareFir(outdata, excelIndex) {
       index = index + 2
       for (;index < outdata.length; index++) {
         if (Object.values(outdata[index])[0] !== '本  机  存  储' && Object.values(outdata[index])[0] !== '') {
-          // console.log(Object.values(outdata[index]))
+          // //console.log(Object.values(outdata[index]))
           // debugger
           var appStoreConfig = {
             volume: '', // 卷
@@ -383,7 +383,7 @@ function appSoftwareFir(outdata, excelIndex) {
             capacity: '' // 已用信息
           }
           var appStoredata = Object.values(outdata[index])
-          // console.log(appStoredata)
+          // //console.log(appStoredata)
           appStoreConfig.volume = appStoredata[0]
           appStoreConfig.SAN_NAS = appStoredata[3]
           appStoreConfig.capacity = appStoredata[4]
@@ -392,19 +392,19 @@ function appSoftwareFir(outdata, excelIndex) {
           break
         }
       }
-      // console.log(this.appStore)
+      // //console.log(this.appStore)
       // debugger
     }
     if (Object.values(outdata[index])[0] === '本  机  存  储') {
       index = index + 2
-      // console.log(index)
-      // console.log(outdata[index])
-      // console.log(outdata.length)
+      // //console.log(index)
+      // //console.log(outdata[index])
+      // //console.log(outdata.length)
       // debugger
       if (outdata[index] !== undefined) {
         for (;index < outdata.length; index++) {
           if (outdata[index] !== undefined) {
-            // console.log(Object.values(outdata[index])[0])
+            // //console.log(Object.values(outdata[index])[0])
             if (Object.values(outdata[index])[0] !== '') {
               var NativeStoredata = Object.values(outdata[index])
               appNativeStore.totalCapacity = NativeStoredata[0]
@@ -418,7 +418,7 @@ function appSoftwareFir(outdata, excelIndex) {
     }
     index += 1
   }
-  // console.log(appSoftwares,
+  // //console.log(appSoftwares,
   //   appSystemUsers,
   //   appBusinesses,
   //   appStores,
@@ -438,14 +438,14 @@ function appSoftwareSeLi(outdata, rightIndex) {
   const appAccessRights = {}
   const appLinksInfo = []
   let index = rightIndex
-  // console.log(index)
-  // console.log(outdata)
+  // //console.log(index)
+  // //console.log(outdata)
   // debugger
   while (index < outdata.length) {
     if (Object.values(outdata[index])[5] === '访问权限') {
       for (;index < outdata.length; index++) {
         if (Object.values(outdata[index])[5] !== '服务用户信息') {
-          // console.log(Object.values(outdata[index]))
+          // //console.log(Object.values(outdata[index]))
           // debugger
           appAccessRights.intranet = Object.values(outdata[index])[5]
           appAccessRights.industryNetwork = Object.values(outdata[index])[6]
@@ -456,10 +456,10 @@ function appSoftwareSeLi(outdata, rightIndex) {
           break
         }
       }
-      // console.log(index)
+      // //console.log(index)
     }
-    // console.log(outdata)
-    // console.log(Object.values(outdata[index]))
+    // //console.log(outdata)
+    // //console.log(Object.values(outdata[index]))
     if (Object.values(outdata[index])[5] === '服务用户信息') {
       index = index + 2
       for (;index < outdata.length; index++) {
@@ -474,7 +474,7 @@ function appSoftwareSeLi(outdata, rightIndex) {
           appLinksData.userName = Object.values(outdata[index])[6]
           appLinksData.ipAddress = Object.values(outdata[index])[7]
           appLinksData.other = Object.values(outdata[index])[8]
-          // console.log(appLinksData)
+          // //console.log(appLinksData)
           appLinksInfo.push(appLinksData)
         }else {
           break
@@ -482,11 +482,11 @@ function appSoftwareSeLi(outdata, rightIndex) {
       }
     }
     index += 1
-    // console.log(index)
-    // console.log(outdata.length)
+    // //console.log(index)
+    // //console.log(outdata.length)
   }
-  // console.log('访问权限', appAccessRights)
-  // console.log('服务用户信息', appLinksInfo)
+  // //console.log('访问权限', appAccessRights)
+  // //console.log('服务用户信息', appLinksInfo)
   return {
     appAccessRights,
     appLinksInfo
@@ -516,7 +516,7 @@ function underfindTrans(status, part,readStatus) {
 }
 
 export function analysisReply(data) {
-  console.log(data)
+  //console.log(data)
   var analysisData = []
   analysisData.push(getReplayData(data.AddAppAccessRights))
   analysisData.push(getReplayData(data.AddAppBusiness))
@@ -533,7 +533,7 @@ export function analysisReply(data) {
   return analysisData
 }
 function getReplayData(data){
-  console.log(data)
+  //console.log(data)
   if(data !== undefined) {
     const keys = Object.keys(data)
     const values = Object.values(data)

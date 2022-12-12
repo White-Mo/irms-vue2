@@ -197,7 +197,7 @@ export default {
           departmentId
         }
         updateDepartment(params).then( res=>{
-          console.log(res);
+          //console.log(res);
         } )
       }else{
         getDepartment(row.postId).then(response => {

@@ -218,7 +218,7 @@ export default {
       this.addDialog = false
       const data = this.addForm
       addAithor(data).then((res) => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 20000) {
           this.$message({
             type:'success',
@@ -286,7 +286,7 @@ export default {
       const data = {id:row.id}
       getAuthority(data).then((res) => {
         this.tableDatas = res.data.items
-        console.log(this.tableDatas)
+        //console.log(this.tableDatas)
       })
     },
     // 表格合并
@@ -332,7 +332,7 @@ export default {
   },
     //
     upAuthority(){
-      console.log(this.tableDatas)
+      //console.log(this.tableDatas)
       const checkList = []
       for(var i = 0;i < this.tableDatas.length;i++){
         if (this.tableDatas[i].ischeck === true){
@@ -354,7 +354,7 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       // this.fetchData()
     },

@@ -233,9 +233,9 @@ export default {
     this.fetchData()
     let a = 0
     a = await this.handleAsync(a)
-    // console.log(a);
-    // console.log(this.list_network)
-    // console.log(this.list)
+    // //console.log(a);
+    // //console.log(this.list_network)
+    // //console.log(this.list)
   },
   methods: {
     async handleAsync(val){
@@ -246,7 +246,7 @@ export default {
           setTimeout(() => {
             if (e == 2) {
               val = e;
-              console.log(val);
+              //console.log(val);
               resolve(val)
             }
 
@@ -256,7 +256,7 @@ export default {
     },
     handleDetail(index, row) {
       this.visiblePublish=false
-      console.log(row.isEdit)
+      //console.log(row.isEdit)
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
       }
@@ -264,7 +264,7 @@ export default {
     handleMove(index, row) {
       this.visiblePublish=true
       row.isEdit = !row.isEdit;
-      console.log(row.isEdit)
+      //console.log(row.isEdit)
       if (!row.isEdit) {
         // let machineRoomId = ''
         // let cabinetId = ''
@@ -278,7 +278,7 @@ export default {
         //     cabinetId = element.cabinetId;
         //   }
         // })
-        // console.log(machineRoomId,cabinetId);
+        // //console.log(machineRoomId,cabinetId);
         const params = {
           equipmentId: row.equipmentId,
           ip_address:row.ip_address,
@@ -287,7 +287,7 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updateBasicInfoNetwork(params).then( res=>{
-          console.log(res);
+          //console.log(res);
           this.$message({
             message: '申请成功',
             type: 'success'
@@ -309,7 +309,7 @@ export default {
     async changeRoom(row) {
       // let val = row.machineRoomName
       // await this.fetchCabinet(val)
-      // console.log(this.cabinetAll[0].cabinetName);
+      // //console.log(this.cabinetAll[0].cabinetName);
       // row.cabinetName = this.cabinetAll[0].cabinetName
     },
     async fetchCabinet(val) {
@@ -318,7 +318,7 @@ export default {
           if (element.machineRoomName === val) {
             getCabinet(element.machineRoomId).then(response => {
               this.cabinetAll = response.data.items
-              console.log(this.cabinetAll[0].cabinetName);
+              //console.log(this.cabinetAll[0].cabinetName);
               resolve()
             })
           }

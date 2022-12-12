@@ -320,10 +320,10 @@ export default {
   },
   watch:{
     'ClientHeight':function(curVal,oldVal){
-      console.log(curVal,oldVal,'----------------------')
-      console.log(this.tableData.length , this.totalCount)
+      //console.log(curVal,oldVal,'----------------------')
+      //console.log(this.tableData.length , this.totalCount)
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -336,10 +336,10 @@ export default {
         status: ''
       }
       if(this.tableData.length < this.totalCount){
-        console.log("提交请求",params)
+        //console.log("提交请求",params)
         getList(params).then((response) => {
           this.isflag = false
-          console.log(response)
+          //console.log(response)
           if(this.tableData.length < this.totalCount){
             let num = this.tableData.length + 1
             for(let i of response.data.items){
@@ -356,7 +356,7 @@ export default {
   methods: {
     get_data() {
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -376,10 +376,10 @@ export default {
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
       })
-      console.log("提交请求",params)
+      //console.log("提交请求",params)
 
       getList(params).then((response) => {
-        console.log(response)
+        //console.log(response)
         let num = this.tableData.length + 1
         for(let i of response.data.items){
           i["num"] = num
@@ -392,7 +392,7 @@ export default {
     get_data2() {
       this.tableData = []
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -414,7 +414,7 @@ export default {
         this.totalCount = response.data.total
       })
       getList(params).then((response) => {
-        console.log(response)
+        //console.log(response)
         let num = this.tableData.length + 1
         for(let i of response.data.items){
           i["num"] = num
@@ -426,7 +426,7 @@ export default {
     },
     load (e) {
       if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
-        console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
+        //console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
         if(this.ClientHeight == e.target.scrollHeight){
           this.isMore = true
           setTimeout(()=>{
@@ -448,13 +448,13 @@ export default {
       const trigger_fun = (data) => {
         this.StatisticsData.push(data)
         if (this.StatisticsData.length > 5) {
-          console.log('ok')
+          //console.log('ok')
           getExcelDemo3(this.StatisticsData)
         }
       }
       for (const i of item_list) {
         getStatisticsData(i).then((res) => {
-          // console.log(res,i)
+          // //console.log(res,i)
           // StatisticsData.push(res)
           if (typeof res === 'object') {
             trigger_fun(res.data)
@@ -462,7 +462,7 @@ export default {
             trigger_fun(res)
           }
         }).catch(err=>{ // 如果接口失效则添加零
-          console.log(err)
+          //console.log(err)
           trigger_fun(0)
         })
       }
@@ -476,12 +476,12 @@ export default {
       }else {
         this.is_select_all = false;
       }
-      console.log(this.is_select_all)
+      //console.log(this.is_select_all)
     },
     async exportEscel(model) {
       if (model === 0) {
         if (this.DataName === 'all' || this.DataName.length === 0) {
-          console.log(this.DataName)
+          //console.log(this.DataName)
           this.initname = ['111']
         } else {
           this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -511,7 +511,7 @@ export default {
           getExcelDemo2(this.selectData)
           // 取消表格选择
           this.$refs.multipleTable.clearSelection();
-          // console.log('this')
+          // //console.log('this')
         } else {
           this.$message.error('请选择需要导出的信息')
         }
@@ -575,7 +575,7 @@ export default {
               offset: 100,  // 向下偏移100
               duration: 0  // 设置不会自动关闭
           })
-          // console.log("退出弹窗")
+          // //console.log("退出弹窗")
           this.centerDialogVisible = false
           this.select_teble_radio = -1
           this.select_teble_type = -1
@@ -597,13 +597,13 @@ export default {
      * @param table_data: 表格数据
      */
     flexColumnWidth(label, prop) {
-      // console.log('label', label)
-      // console.log('prop', prop)
+      // //console.log('label', label)
+      // //console.log('prop', prop)
       // 1.获取该列的所有数据
       const arr = this.tableData.map((x) => x[prop])
       // arr.push(label) // 把每列的表头也加进去算
       arr.push(prop) // 把每列的表头也加进去算
-      // console.log(arr)
+      // //console.log(arr)
       // // 2.计算每列内容最大的宽度 + 表格的内间距（依据实际情况而定）
       return this.getMaxLength(arr)*1.7 + 40 + 'px'
     },
@@ -644,7 +644,7 @@ export default {
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       // this.currentPage = 1;
       // this.getData_plus(0, this.currentPage * this.PageSize, this.par_str);
-      // console.log(val);
+      // //console.log(val);
     }
     // 显示第几页
     // handleCurrentChange(val) {
@@ -659,7 +659,7 @@ export default {
     //     this.PageSize * this.currentPage
     //     // this.par_str
     //   )
-    //   // console.log(val);
+    //   // //console.log(val);
     // }
   }
 }

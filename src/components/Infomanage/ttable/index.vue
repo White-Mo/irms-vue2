@@ -148,24 +148,24 @@ export default {
       this.ifUpdate = true
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     updateIfupdate(e) {
       this.ifUpdate = e
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      //console.log(`当前页: ${val}`)
     }
   }
 }

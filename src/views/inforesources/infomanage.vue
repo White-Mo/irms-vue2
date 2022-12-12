@@ -540,28 +540,28 @@ export default {
     }
   },
   created() {
-    console.log(this.initname)
+    //console.log(this.initname)
     this.fetchData()
     // this.getInitValue(this.initdata)
   },
   mounted() {
     this.restaurants = this.loadAll()
-    // console.log(this.initval);
+    // //console.log(this.initval);
   },
   methods: {
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
-      console.log(restaurants)
-      console.log(queryString)
+      //console.log(restaurants)
+      //console.log(queryString)
       var results = queryString
         ? restaurants.filter(this.createFilter(queryString))
         : restaurants
       // 调用 callback 返回建议列表的数据
-      console.log(results)
+      //console.log(results)
       cb(results)
     },
     createFilter(queryString) {
-      console.log(queryString)
+      //console.log(queryString)
       return (restaurant) => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
@@ -570,12 +570,12 @@ export default {
       }
     },
     loadAll() {
-      console.log(this.foad)
+      //console.log(this.foad)
       return this.foad
     },
 
     handleSelect(item) {
-      console.log(item)
+      //console.log(item)
     },
 
     // change的处理事件
@@ -584,18 +584,18 @@ export default {
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') == -1 && this.type == 1) {
-        // console.log("删除CPU类型");
+        // //console.log("删除CPU类型");
         this.deleteSelect(this.typeID)
         this.type = 0
       } else if (val.indexOf('edition') == -1 && this.edition == 1) {
-        // console.log("删除中间件版本");
+        // //console.log("删除中间件版本");
         this.deleteSelect(this.editionID)
         this.edition = 0
       } else if (
         val.indexOf('guaranteePeriod') == -1 &&
         this.guaranteePeriod == 1
       ) {
-        // console.log("删除保修期");
+        // //console.log("删除保修期");
         this.deleteSelect(this.guaranteePeriodID)
         this.guaranteePeriod = 0
       }
@@ -629,7 +629,7 @@ export default {
     //清空下拉框的值
     deleteSelect(deleteName) {
       let dfata = JSON.parse(JSON.stringify(this.foad))
-      console.log(dfata)
+      //console.log(dfata)
       let num = 0
       let flag = 0
       for (let index = 0; index < dfata.length; index++) {
@@ -642,11 +642,11 @@ export default {
       }
       dfata.splice(flag, num)
       this.foad = dfata
-      // console.log(this.foad)
+      // //console.log(this.foad)
       this.restaurants = this.loadAll()
     },
     tbCellDoubleClick(row, column, cell, event) {
-      console.log(cell)
+      //console.log(cell)
       this.$alert(row[column.property], '单元格值', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -655,13 +655,13 @@ export default {
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
-      // console.log(this.basicValue)
+      // //console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.DataName)))
+        // //console.log(JSON.parse(JSON.stringify(this.DataName)))
         if (this.eselect == true) {
           this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
         }
@@ -674,12 +674,12 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      // console.log(this.initdata)
+      // //console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
         this.total =response.data.total
-        console.log("List---------");
-        console.log(this.list)
+        //console.log("List---------");
+        //console.log(this.list)
         this.listLoading = false
       })
     },
@@ -688,17 +688,17 @@ export default {
       this.ifUpdate = '1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       this.row = row
       this.ifUpdate = '2'
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       this.row = row
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-      console.log(row)
+      //console.log(row)
       this.$alert('是否永久删除该设备', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -741,7 +741,7 @@ export default {
       // });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit = val
       this.fetchData()
     },

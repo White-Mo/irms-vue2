@@ -66,23 +66,23 @@ export default {
       limit:9999
     }
     getAllmachineroom(data).then((res) => {
-      // console.log(111111)
+      // //console.log(111111)
       this.loading = false
-      console.log(res.data.items)
+      //console.log(res.data.items)
       this.ComputerRoomCard = res.data.items
     })
   },
   methods:{
     CheckComputerRoom(index){
-      console.log(this.ComputerRoomCard[index])
+      //console.log(this.ComputerRoomCard[index])
       // debugger
       var unit = this.ComputerRoomCard[index].unit
       var department =this.ComputerRoomCard[index].postName
       var installation_position = this.ComputerRoomCard[index].machineRoomName
       var unitid = this.ComputerRoomCard[index].postId
       var machineRoomId = this.ComputerRoomCard[index].machineRoomId
-      // console.log(unit,department)
-      // console.log(this.ComputerRoomCard[index])
+      // //console.log(unit,department)
+      // //console.log(this.ComputerRoomCard[index])
       this.$store.commit('machineRoom/SET_UnitId',unitid)
       this.$store.commit('machineRoom/SET_MashRoomId',machineRoomId)
       this.$store.commit('machineRoom/SET_Unit',unit)

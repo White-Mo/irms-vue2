@@ -44,11 +44,11 @@ export default {
   name: 'addDepartment',
   created() {
     getPost().then(response => {
-      console.log(response)
+      //console.log(response)
       this.postAll = response.data.items
       this.postAll.forEach(element => {
         if (element.postId === this.roleid) {
-          console.log(element.postName)
+          //console.log(element.postName)
           this.department.postName = element.postName
           this.department.postId=element.postId
         }
@@ -131,12 +131,12 @@ export default {
             }).then(() => {
               this.back()
             })
-            console.log(res)
+            //console.log(res)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
           })
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });

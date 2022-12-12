@@ -3,8 +3,8 @@ import request from '@/utils/request'
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getCompreDataAll',
@@ -16,8 +16,8 @@ export function getList(obj) {
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/IPaddress/getBasicInfoNetworkByPage1',
@@ -28,8 +28,8 @@ export function getNetWorkList(obj) {
 export function getdataCount(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  // console.log(params)
-  // console.log(typeof (params))
+  // //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getCompreDataCount',
@@ -46,7 +46,7 @@ export function getStatisticsData(par) {
   })
 }
 export function addEquipment(eq) {
-  console.log(eq)
+  //console.log(eq)
   return request({
 
     data: eq,
@@ -56,7 +56,7 @@ export function addEquipment(eq) {
   })
 }
 export function delEquipment(equipmentId) {
-  console.log(typeof (equipmentId))
+  //console.log(typeof (equipmentId))
   return request({
 
     params: { equipmentId: equipmentId },
@@ -83,7 +83,7 @@ export function changeStatus(eq) {
   })
 }
 export function InitValue(initdata) {
-console.log(initdata);
+//console.log(initdata);
   return request({
     params: { initValue: initdata },
     url: '/home/inforesources/getInitDataAll',

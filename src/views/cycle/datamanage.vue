@@ -190,7 +190,7 @@ export default {
             value:file.raw
           }
           this.fileList.push(obj)
-          // console.log(this.fileList)
+          // //console.log(this.fileList)
         } else {
           this.$message({
             type: 'warning',
@@ -209,9 +209,9 @@ export default {
       this.dialogFormVisible = false
       this.checkList = this.fileList
       this.submitUpload()
-      // console.log(this.excelData)
+      // //console.log(this.excelData)
       this.tableData = this.excelData.equipments
-      // console.log(this.tableData)
+      // //console.log(this.tableData)
       this.fileList = []
     },
     // 上传文件
@@ -224,11 +224,11 @@ export default {
       } else {
         for(let index = 0;index < this.checkList.length;index++){
           const outdata = await importfile(this.checkList[index].value, this.value)
-          // console.log(outdata)
+          // //console.log(outdata)
           const postName = this.$store.state.user.roleid
           const {equipment,readStatus} = getEquipment(outdata,postName)
-          // console.log(equipment)
-          // console.log(readStatus)
+          // //console.log(equipment)
+          // //console.log(readStatus)
           // debugger
           if(readStatus === 22 || readStatus === 20) {
             var obj = {
@@ -264,7 +264,7 @@ export default {
         total:1,
       }
       importData.equipments.push(data)
-      // console.log(importData)
+      // //console.log(importData)
       importExcel(importData).then((res) => {
         this.loading = false
         if(res.status === 200) {
@@ -342,9 +342,9 @@ export default {
     },
     // 查看反馈信息
     checkReplay(index) {
-      // console.log(index)
-      // console.log(this.repalyInfo)
-      console.log(this.repalyInfo[index])
+      // //console.log(index)
+      // //console.log(this.repalyInfo)
+      //console.log(this.repalyInfo[index])
       if (this.repalyInfo[index] === undefined){
         this.$message({
           type:'error',
@@ -352,7 +352,7 @@ export default {
         })
       } else {
         this.repalyData =  analysisReply(this.repalyInfo[index])
-        console.log(this.repalyData)
+        //console.log(this.repalyData)
         this.backinfoDialog  = true
       }
     },
@@ -364,7 +364,7 @@ export default {
         return this.push.apply(this, rest);
       };
       this.tableData.remove(index)
-      console.log(this.tableData)
+      //console.log(this.tableData)
     },
     // 清空列表
     clearTable() {
@@ -652,7 +652,7 @@ export default {
 <!--          const outdata = await importfile(this.fileList[index], this.value)-->
 <!--          const postName = this.$store.state.user.roleid-->
 <!--          const {equipment,readStatus} = getEquipment(outdata,postName)-->
-<!--          // console.log(readStatus)-->
+<!--          // //console.log(readStatus)-->
 <!--          if(readStatus === 22 || readStatus === 20) {-->
 <!--            this.excelData.equipments.push(equipment)-->
 <!--          }-->
@@ -665,7 +665,7 @@ export default {
 <!--      this.excelData.total = this.excelData.equipments.length-->
 <!--      this.dialogFormVisible = false-->
 <!--      this.loading = true-->
-<!--      // console.log(this.excelData)-->
+<!--      // //console.log(this.excelData)-->
 <!--      if(this.excelData.equipments.length > 0) {-->
 <!--        importExcel(this.excelData).then((res) => {-->
 <!--          this.loading = false-->

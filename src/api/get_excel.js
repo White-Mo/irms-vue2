@@ -92,7 +92,7 @@ export async function getExcelDemo1(data){
     const header_row = sheet.getRow(1);
     header_row.values = header
     header_row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
-        // console.log('Cell ' + colNumber + ' = ' + cell.value);
+        // //console.log('Cell ' + colNumber + ' = ' + cell.value);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
         cell.font = {
             name: 'Arial Black',
@@ -110,7 +110,7 @@ export async function getExcelDemo1(data){
         row.values = items[i]
         row.numFmt = '0'
         row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
-            // console.log('Cell ' + colNumber + ' = ' + cell.value);
+            // //console.log('Cell ' + colNumber + ' = ' + cell.value);
             cell.alignment = { vertical: 'middle', horizontal: 'center' };
             cell.font = {
                 name: 'Black',
@@ -242,7 +242,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // basicInfoNetwork_list 网络信息
             // basicInfoProtocolPort_list 协议端口信息
             // basicInfoSoftware_list 通用软件信息
-            // console.log(basic_data,"-------244----",item_data['equipmentId'])
+            // //console.log(basic_data,"-------244----",item_data['equipmentId'])
             // if(!basic_data.basicInfo) continue
             let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
             let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
@@ -1449,7 +1449,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
             }else{
                 for(let item in C38[C38.length-1]){
-                    // console.log(item)
+                    // //console.log(item)
                     if(item > 0 || item < 4){
                         C38[C38.length-1][item].border =  {
                             bottom: black,
@@ -1553,10 +1553,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
             }
             // 协议端口信息
-          console.log(basic_data['basicInfoProtocolPort_list'])
+          //console.log(basic_data['basicInfoProtocolPort_list'])
             for(let i in basic_data['basicInfoProtocolPort_list']){
                 i = parseInt(i)
-              console.log(C18)
+              //console.log(C18)
                 C18[i][5].value = basic_data['basicInfoProtocolPort_list'][i]['protocolName']
                 C18[i][6].value = basic_data['basicInfoProtocolPort_list'][i]['appName']
                 C18[i][7].value = basic_data['basicInfoProtocolPort_list'][i]['networkCardPort']
@@ -1699,7 +1699,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
 
             data_index ++
             progress_list[progress_item_num] ++
-            // console.log(progress_list)
+            // //console.log(progress_list)
             window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString())
         }
         //导出下载

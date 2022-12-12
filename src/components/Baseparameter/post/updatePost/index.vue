@@ -92,12 +92,12 @@ export default {
     }
   },
   created() {
-    console.log(this.row)
-    console.log(this.currentShow)
+    //console.log(this.row)
+    //console.log(this.currentShow)
     this.initPostData()
   },
   mounted() {
-    console.log(this.currentShow+"---------------------------------")
+    //console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -131,10 +131,10 @@ export default {
               this.back()
             })
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
           })
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });

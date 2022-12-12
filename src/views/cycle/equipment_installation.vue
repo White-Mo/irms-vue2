@@ -115,11 +115,11 @@ export default {
     },
     // 发送请求
     uploadFunc() {
-      console.log(this.$store.state['user']['role_id'])
+      //console.log(this.$store.state['user']['role_id'])
       this.excelData.total = this.excelData.equipments.length
       this.dialogFormVisible = false
       this.loading = true
-      // console.log(this.excelData)
+      // //console.log(this.excelData)
       if(this.excelData.equipments.length > 0) {
         importExcel(this.excelData).then((res) => {
           this.loading = false

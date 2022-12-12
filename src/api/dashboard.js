@@ -16,8 +16,8 @@ export function getDepartmentAllCountData() {
 export function getEquipmentAllCountData(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   let params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getEquipmentAllCountData',
@@ -29,8 +29,8 @@ export function getEquipmentAllCountData(obj) {
 export function getIPAddressCountData(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   let params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getIPAddressCountData',
@@ -42,7 +42,7 @@ export function getIPAddressCountData(obj) {
 export function getMachineRoomAllCountData() {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   let params = ''
-  // console.log(typeof (params))
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getMachineRoomAllCountData',
@@ -54,8 +54,8 @@ export function getMachineRoomAllCountData() {
 export function getCabinetAllCountData(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getCabinetAllCountData',

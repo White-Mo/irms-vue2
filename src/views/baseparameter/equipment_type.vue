@@ -238,10 +238,10 @@ export default {
     fetchData() {
       this.listLoading = true
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log(this.dataName)
+        //console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        // //console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
@@ -250,7 +250,7 @@ export default {
         start: this.currentPage,
         limit: this.limit
       }
-      // console.log(this.initName)
+      // //console.log(this.initName)
       getEquipmentTypeByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -272,9 +272,9 @@ export default {
       })
     },
     createEquipmentType(){
-      console.log(this.form);
+      //console.log(this.form);
       addEquipmentType(this.form).then(response => {
-        console.log(response)
+        //console.log(response)
         this.$alert("新增成功", '提示', {
           confirmButtonText: '确定',
           type: 'info',
@@ -316,7 +316,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },

@@ -126,9 +126,9 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
     this.getCode(vTime).then((base64) => {
       this.base64 = base64
-      console.log(this.base64)
+      //console.log(this.base64)
     }, (err) => {
-      console.log('fail' + err)
+      //console.log('fail' + err)
     })
   },
   methods: {
@@ -154,17 +154,17 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          //console.log('error submit!!')
           return false
         }
       })
     },
     getCode(vTime) {
-      // console.log(this.vTime)
+      // //console.log(this.vTime)
       return new Promise((resolve, reject) => {
         initVerifyCode(vTime).then(response => {
           const { data } = response
-          // console.log(data.url)
+          // //console.log(data.url)
           const base64 = data
           resolve(base64)
         }).catch(error => {
@@ -178,9 +178,9 @@ export default {
       const vTime = this.vTime
       this.getCode(vTime).then((base64) => {
         this.base64 = base64
-        console.log(this.base64)
+        //console.log(this.base64)
       }, (err) => {
-        console.log('fail' + err)
+        //console.log('fail' + err)
       })
     }
 

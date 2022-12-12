@@ -137,7 +137,7 @@ export default {
       this.unitid = this.$store.state.machineRoom.unitid
       var machineRoomId = this.$store.state.machineRoom.machineRoomId
       getCabinet(machineRoomId).then((res) =>{
-        // console.log(res)
+        // //console.log(res)
         this.tableData = res.data.items
       })
     }
@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     full () {
-      // console.log(this.$store.state.machineRoom.department)
+      // //console.log(this.$store.state.machineRoom.department)
       screenfull.toggle()
     },
     //初始化
@@ -222,7 +222,7 @@ export default {
       let loader = new GLTFLoader();
       //本地模型路径：public/static/mod/Xbot.glb
       loader.load("static/c.glb", function (gltf) {
-        console.log(gltf)
+        //console.log(gltf)
         self.isLoading = false;//关闭载入中效果
         self.mesh = gltf.scene;
         // self.mesh.scale.set(5,5,5);//设置大小比例

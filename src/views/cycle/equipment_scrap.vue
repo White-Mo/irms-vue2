@@ -236,13 +236,13 @@ export default {
     }
   },
   created() {
-    console.log('=======')
+    //console.log('=======')
     this.fetchData()
   },
   methods: {
 
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleScrap(index, row) {
       changeStatus({ id: row.equipmentId, status: '2' }).then(res => {
@@ -252,11 +252,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleRecover(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.equipmentId, status: '0' }).then(res => {
         // this.$router.go(0)
         this.$message({
@@ -265,7 +265,7 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleCurrentChange(val) {
@@ -273,7 +273,7 @@ export default {
       this.fetchData()
     },
     changeTab(name) {
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       this.fetchData()
     }
   }

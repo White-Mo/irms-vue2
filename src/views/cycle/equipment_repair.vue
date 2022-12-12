@@ -237,10 +237,10 @@ export default {
   methods: {
 
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleRepair(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.equipmentId, status: '1' }).then(res => {
         this.$message({
           message: '修改成功',
@@ -248,11 +248,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleRecover(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.equipmentId, status: '0' }).then(res => {
         this.$message({
           message: '修改成功',
@@ -260,11 +260,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -273,7 +273,7 @@ export default {
       this.fetchData()
     },
     changeTab(name) {
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       this.fetchData()
     }
   }

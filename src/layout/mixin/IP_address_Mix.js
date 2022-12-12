@@ -10,12 +10,12 @@ export const hunhe1 = {
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
@@ -39,7 +39,7 @@ export const hunhe1 = {
       }
       getdataCount(NetWork_params).then((response) => {
         this.total_N = response.data.total
-        console.log(this.total_N)
+        //console.log(this.total_N)
         this.listLoading = false
       })
       getList(params).then((response) => {
@@ -48,7 +48,7 @@ export const hunhe1 = {
           element.isEdit = false;
         });
         this.list = response.data.items
-        console.log(this.list)
+        //console.log(this.list)
         this.listLoading = false
       })
       getNetWorkList(NetWork_params).then((response) => {
@@ -61,21 +61,21 @@ export const hunhe1 = {
 
         // // 数据类型转换
         let arr=[]
-        console.log(this.total_N)
+        //console.log(this.total_N)
         for(let i=0;i<list_n.length;i++){
           if(list_n[i][0]==null){
             list_n[i][0]=list_n[i-1][0]
           }
 
           list_n[i][0]["isEdit"]=false
-          console.log(list_n[i][0])
+          //console.log(list_n[i][0])
          let tryss = Object.assign(list_n[i][0],list_n[i][1])
           // list_n[i][0].push(list_n[i][1])
           arr.push(tryss)
           // arr.push({isEdit:list_n[i].isEdit})
           // arr1.concat(arr2);
         }
-        console.log(arr)
+        //console.log(arr)
         this.list_network = arr
 
         this.listLoading = false

@@ -10,12 +10,12 @@ export const hunhe1 = {
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
@@ -38,7 +38,7 @@ export const hunhe1 = {
       }
       getdataCount(numparams).then((response) => {
         this.total = response.data.total
-        console.log(this.total)
+        //console.log(this.total)
         this.listLoading = false
       })
       getList(params).then((response) => {
@@ -56,7 +56,7 @@ export const hunhe1 = {
 
         // }
         this.list = response.data.items
-        console.log(this.list)
+        //console.log(this.list)
         this.listLoading = false
       })
     }

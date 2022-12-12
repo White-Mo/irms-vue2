@@ -199,7 +199,7 @@ export default {
     this.fetchData()
     let a = 0
     a = await this.handleAsync(a)
-    console.log(a);
+    //console.log(a);
   },
   methods: {
     async handleAsync(val){
@@ -210,7 +210,7 @@ export default {
           setTimeout(() => {
             if (e == 2) {
               val = e;
-              console.log(val);
+              //console.log(val);
               resolve(val)
             }
 
@@ -238,7 +238,7 @@ export default {
               cabinetId = element.cabinetId;
             }
           })
-        console.log(machineRoomId,cabinetId);
+        //console.log(machineRoomId,cabinetId);
         const params = {
           equipmentId: row.equipmentId,
           machineRoomId,
@@ -247,7 +247,7 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updatePosition(params).then( res=>{
-          console.log(res);
+          //console.log(res);
         } )
       }else{
 
@@ -265,7 +265,7 @@ export default {
     async changeRoom(row) {
       let val = row.machineRoomName
       await this.fetchCabinet(val)
-      console.log(this.cabinetAll[0].cabinetName);
+      //console.log(this.cabinetAll[0].cabinetName);
       row.cabinetName = this.cabinetAll[0].cabinetName
     },
     async fetchCabinet(val) {
@@ -274,7 +274,7 @@ export default {
           if (element.machineRoomName === val) {
             getCabinet(element.machineRoomId).then(response => {
               this.cabinetAll = response.data.items
-              console.log(this.cabinetAll[0].cabinetName);
+              //console.log(this.cabinetAll[0].cabinetName);
               resolve()
             })
           }

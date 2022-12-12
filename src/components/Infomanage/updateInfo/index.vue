@@ -290,7 +290,7 @@ export default {
   // watch: {
   //   currentShow(val, oldVal) {
   //     const inputDom = document.getElementsByTagName('input')
-  //     console.log(val)
+  //     //console.log(val)
   //     if (val === '2') {
   //       inputDom.forEach(e => {
   //         const parentNode = e.parentNode
@@ -308,7 +308,7 @@ export default {
   // },
   created() {
     this.fetchData()
-    console.log(this.currentShow)
+    //console.log(this.currentShow)
   },
   mounted() {
     const list = document.getElementsByClassName('update_detail')[0]
@@ -330,11 +330,11 @@ export default {
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        console.log(response)
+        //console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            console.log(element.postName)
+            //console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
           }
         })
@@ -361,9 +361,9 @@ export default {
     },
     commit() {
       const equipments = []
-      console.log(this.form)
+      //console.log(this.form)
       const equip = { ...this.equipment }
-      console.log(equip)
+      //console.log(equip)
       const equipmentBaseInfo = equip.equipmentBaseInfo
       Object.keys(equipmentBaseInfo).forEach(key => {
         equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
@@ -371,7 +371,7 @@ export default {
       equip.appAccessRights = equip.appAccessRights[0]
       equip.appNativeStore = equip.appNativeStore[0]
       equipments.push(equip)
-      console.log(equipments)
+      //console.log(equipments)
       addEquipment({ equipments: equipments }).then(res => {
         this.$alert(res.message, '提示', {
           confirmButtonText: '确定',
@@ -380,13 +380,13 @@ export default {
         }).then(() => {
           this.$router.go(0)
         })
-        console.log(res)
+        //console.log(res)
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     changePost(val) {
-      console.log(val)
+      //console.log(val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {
@@ -402,7 +402,7 @@ export default {
       this.$emit('changeDiv', '0')
     },
     checkKey(listname, value) {
-      console.log(value)
+      //console.log(value)
       const a = this.handleList(listname)
       const arr = []
       if (a !== -1) {
@@ -414,7 +414,7 @@ export default {
               obj[k] = e[k] === undefined ? '' : e[k]
             }
           }
-          console.log(obj)
+          //console.log(obj)
           arr.push(obj)
         })
         this.equipment[a] = arr
