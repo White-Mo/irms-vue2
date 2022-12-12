@@ -1499,10 +1499,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             G5.value = item_data['equipmentAdminPhone']
             I5.value = item_data['appAdminName']
             K5.value = item_data['appAdminPhone']
-            D6.value = item_data['businessOrExperimental'] == '0' ? '√\n□' : '□\n√'
-            G6.value = item_data['mainOrBackup'] == '0' ? '√\n□' : '□\n√'
-            I6.value = item_data['tureOrVirtual'] == '0' ? '√\n□' : '□\n√'
-            K6.value = item_data['migratable'] == '0' ? '是√\n否□' : '是□\n否√'
+            D6.value = item_data['businessOrExperimental'] == '0' ? '■\n□' : '□\n■'
+            G6.value = item_data['mainOrBackup'] == '0' ? '■\n□' : '□\n■'
+            I6.value = item_data['tureOrVirtual'] == '0' ? '■\n□' : '□\n■'
+            K6.value = item_data['migratable'] == '0' ? '是■\n否□' : '是□\n否■'
             C9.value = item_data['brandName']
             F9.value = item_data['brandModelName']
             H9.value = item_data['machineRoomName']
