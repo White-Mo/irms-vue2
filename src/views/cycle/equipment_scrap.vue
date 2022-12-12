@@ -96,10 +96,10 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleScrap(scope.$index, scope.row)"
@@ -128,10 +128,10 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRecover(scope.$index, scope.row)"

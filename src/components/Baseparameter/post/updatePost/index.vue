@@ -1,7 +1,7 @@
 <template>
   <div class="update_detail">
     <div class="source">
-      <el-page-header content="编辑单位" @back="back" />
+      <el-page-header content="单位信息" @back="back" />
     </div>
     <div class="source">
       <el-row>

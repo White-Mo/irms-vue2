@@ -86,7 +86,7 @@
           </af-table-column>
           <el-table-column align="center" label="操作" width="200px">
             <template slot-scope="scope">
-              <el-button
+              <el-button v-if="scope.row.isEdit"
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
                 >{{scope.row.isEdit ? '取消' : '详情'}}</el-button

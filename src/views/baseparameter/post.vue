@@ -175,7 +175,7 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage: 0,
+      currentPage:1,
       limit:10,
       initName:'',
       inputValue: '',
@@ -216,7 +216,7 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage,
+        start: this.currentPage-1,
         limit: this.limit
       }
       // console.log(this.initName)
@@ -264,10 +264,11 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: val-1,
+        start: this.currentPage-1,
         limit: 10
       }
       getPostByPage(params).then((response) => {
