@@ -769,8 +769,6 @@ export default {
 
 <style lang="less" scoped>
 .el-select-dropdown .el-scrollbar {
-  height: 420px;
-  overflow: hidden;
   position: relative;
 }
 .tile-content {
@@ -779,6 +777,9 @@ export default {
 }
 .shadows {
   box-shadow: 0 0 4px #0000004d !important;
+}
+.el-select-dropdown .el-scrollbar {
+  position: relative;
 }
 .searchInput {
   height: 40px;

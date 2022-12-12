@@ -324,7 +324,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
