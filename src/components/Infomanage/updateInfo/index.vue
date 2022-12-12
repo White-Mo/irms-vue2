@@ -283,8 +283,9 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end' }
+        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位' }
+     {'basicInfoId': '设备编号' ,'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位'}
     }
   },
   // watch: {

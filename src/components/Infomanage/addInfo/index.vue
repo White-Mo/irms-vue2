@@ -191,7 +191,7 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
-        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
+        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
@@ -224,8 +224,9 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end', 'basicInfoId': '设备编号' }
+        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
+        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
     }
   },
   created() {
@@ -250,7 +251,7 @@ export default {
       })
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
-        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentTypeCode
+        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
       })
     },
     onSubmit() {
