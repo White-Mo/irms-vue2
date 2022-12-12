@@ -34,7 +34,7 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
@@ -241,23 +241,6 @@ export default {
   },
   data() {
     return {
-      options: [{
-        postId: '选项1',
-        name: '黄金糕'
-      }, {
-        postId: '选项2',
-        name: '双皮奶'
-      }, {
-        postId: '选项3',
-        name: '蚵仔煎'
-      }, {
-        postId: '选项4',
-        name: '龙须面'
-      }, {
-        postId: '选项5',
-        name: '北京烤鸭'
-      }],
-      value: '',
       postAll:[],
       form: {
         MachineRoomName:"",
@@ -274,7 +257,6 @@ export default {
       total: 0,
       currentPage: 0,
       limit:10,
-      basicValue: '',
       initName:'',
       inputValue: '',
       dataName: 'all',
@@ -288,24 +270,25 @@ export default {
         {
           value: 'postName',
           label: '所属单位'
-        },
-        {
-          value: 'status',
-          label: '机房状态',
-          formatter:function (row) {
-            var status= row.status
-            switch (status){
-              case "0":
-                status="正常"
-                break
-              case "1":
-                status="维修中"
-                break
-            }
-            console.log(status)
-            return status;
-          }
         }
+        // ,
+        // {
+        //   value: 'status',
+        //   label: '机房状态',
+        //   formatter:function (row) {
+        //     var status= row.status
+        //     switch (status){
+        //       case "0":
+        //         status="正常"
+        //         break
+        //       case "1":
+        //         status="维修中"
+        //         break
+        //     }
+        //     console.log(status)
+        //     return status;
+        //   }
+        // }
       ],
       value: '',
     }
