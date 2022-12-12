@@ -168,7 +168,7 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appAccessRights" :lable="appAccessRightsLable">访问权限</othertable></el-col>
-                <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appLinksInfo" :lable="appLinksInfoLable">链接（服务）用户信息</othertable></el-col>
+                <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appLinksInfo" :lable="appLinksInfoLable">服务用户信息</othertable></el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appStore" :lable="appStoreLable">存 储</othertable></el-col>
@@ -213,16 +213,16 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
+        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
-        config: [{ projectName: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
+        config: [{ projectName: '', type:'',frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
@@ -241,9 +241,9 @@ export default {
       // appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       // appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       // appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
-      configLable: { projectName: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
+      configLable: { projectName: '项目',type:'类型', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量', },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
+      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', networkCardPort: '交换机',macAddress: 'MAC地址',switchInfo: '端口', },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
       appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
@@ -266,7 +266,7 @@ export default {
       //   appNativeStore: ['total_capacity', 'used_space', 'unused_space', 'annual_growth_space' ]
       // },
       KeySet: {
-        config: ['projectName', 'frequency', 'corenessOrCapacity', 'quantity'],
+        config: ['projectName', 'type','frequency', 'corenessOrCapacity', 'quantity'],
         software: ['project', 'projectName', 'edition', 'type'],
         network: ['networkCardName', 'ipAddress', 'switchInfo', 'networkCardPort', 'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
@@ -350,9 +350,12 @@ export default {
       })
       getbasic(this.row.equipmentId).then(response => {
         const item = response.data.items
+        console.log(item)
         for (const key in item) {
           if (Object.hasOwnProperty.call(item, key)) {
             const e = item[key]
+            // console.log(key)
+            // console.log(e)
             if (e !== null && e.length !== 0) {
               this.checkKey(key, e)
             }
@@ -403,7 +406,6 @@ export default {
       this.$emit('changeDiv', '0')
     },
     checkKey(listname, value) {
-      //console.log(value)
       const a = this.handleList(listname)
       const arr = []
       if (a !== -1) {
@@ -419,12 +421,17 @@ export default {
           arr.push(obj)
         })
         this.equipment[a] = arr
+        // console.log(this.equipment)
       }
     },
     handleList(listname) {
       for (const key in this.equipment) {
+        // console.log(key)
         if (Object.hasOwnProperty.call(this.equipment, key)) {
           if (listname.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+            // console.log(99999)
+            // console.log(listname)
+            // console.log(key)
             return key
           }
         }

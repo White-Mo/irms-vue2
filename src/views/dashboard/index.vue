@@ -60,7 +60,7 @@
         <el-row class="child_charts">
           <div class="chart_title">
             <img src="../../assets/dashboard_imgs/title_1.png">
-            <span id="chart1Data">{{chart1name}}</span>
+            <span id="chart1Data">各单位设备数据量</span>
           </div>
           <p id="pieChart1" class="p_chart"></p>
         </el-row>
@@ -74,12 +74,11 @@
       </el-col>
       <el-col :span="12" class="center col_charts">
         <div class="map_height child_charts">
-          <img src='/static/background.png' alt='' :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}">
-          <div class="map_width chart_title" >
-            <img src="../../assets/dashboard_imgs/title_0.png" >
+          <div class="map_width chart_title">
+            <img src="../../assets/dashboard_imgs/title_0.png">
             <span>信息分布图</span>
           </div>
-          <!--          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}"></div>-->
+          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%'}"></div>
           <div id="el-dialog" class="dialog">
             <div class="xc_layer"></div>
             <div id="printView" :style="{height:'68%'}" class="popBox">
@@ -127,7 +126,7 @@
         <el-row class="child_charts">
           <div class="chart_title">
             <img src="../../assets/dashboard_imgs/title_3.png">
-            <span id="chart2Data">{{chart2name}}</span>
+            <span id="chart2Data">各单位机房统计</span>
           </div>
           <p id="pieChart2" class="p_chart"></p>
         </el-row>
@@ -145,8 +144,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
-// import "@/../node_modules/echarts/extension/bmap/bmap";
-// import BMap from "BMap";
+import "@/../node_modules/echarts/extension/bmap/bmap";
+import BMap from "BMap";
 import { getDepartmentAllCountData, getEquipmentAllCountData,getIPAddressCountData,getMachineRoomAllCountData,getCabinetAllCountData} from '@/api/dashboard'
 import {
   getApplicationUserCount,
@@ -171,15 +170,14 @@ export default {
       equipmentUserNumber:'',
       chart01Count: 0,
       post01Index: 0,
-      chart1name:'',
-      chart2name:'',
+
     }
   },
   mounted() {
     this.currentRole();
     this.equipmentType();
 
-    // this.drawLine();
+    this.drawLine();
     this.mapChartType();
 
     this.RenderingData() //调用渲染设备概况数据函数
@@ -200,27 +198,27 @@ export default {
     RenderingData(){
       const that = this
       getEquipmentCount().then(function (res){
-        // //console.log("************总设备数据量:"+ res.data.total +"*********************")
+        // console.log("************总设备数据量:"+ res.data.total +"*********************")
         that.allEquipmentNumber = res.data.total;
       }),
         getEquipmentTypeCount().then(function (res){
-          // //console.log("************设备类型数据量:"+ res.data +"*********************")
+          // console.log("************设备类型数据量:"+ res.data +"*********************")
           that.equipmentTypeNumber = res.data;
         }),
         getGuaranteePeriodCount().then(function (res){
-          // //console.log("************过保设备数据量:"+ res +"*********************")
+          // console.log("************过保设备数据量:"+ res +"*********************")
           that.periodEquipmentNumber = res;
         }),
         getBusinessSystemCount().then(function (res){
-          // //console.log("************总应用系统数量:"+ res +"*********************")
+          // console.log("************总应用系统数量:"+ res +"*********************")
           that.allApplicationSystemNumber = res.data;
         }),
         getApplicationUserCount().then(function (res){
-          // //console.log("************应用管理员数量:"+ res +"*********************")
+          // console.log("************应用管理员数量:"+ res +"*********************")
           that.applicationUserNumber = res;
         }),
         getEquipmentUserCount().then(function (res){
-          // //console.log("************设备管理员数量:"+ res +"*********************")
+          // console.log("************设备管理员数量:"+ res +"*********************")
           that.equipmentUserNumber = res;
         })
     },
@@ -231,57 +229,54 @@ export default {
     async currentRole() {
       let endIndex = this.role_name.indexOf('/');
       let currentPost = this.role_name.substring(0, endIndex);
-      // //console.log(currentPost)
+      // console.log(currentPost)
       if (this.roles[0] === '超级管理员') {
-        this.chart1name = '各单位设备数据量'
-        // $('#chart1Data').html("各单位设备数据量");
+
+        $('#chart1Data').html("各单位设备数据量");
+
         let chart1Count = await this.handleDepartmentAllCountData();
-        //console.log(chart1Count)
+        console.log(chart1Count)
         let postIndex = 0;
         for (let i = 0; i < chart1Count.length; i++) {
-          //console.log(chart1Count[i].name)
+          console.log(chart1Count[i].name)
           if (chart1Count[i].name == currentPost) {
             postIndex = i;
             break;
           }
         }
         this.initEquipmentCount(chart1Count,postIndex);
-        this.chart2name = '各单位机房数据量'
-        // $('#chart2Data').html("各单位机房数据量");
+        $('#chart2Data').html("各单位机房数据量");
         let chart01Count = await this.handleMachineRoomAllCountData();
         let post01Index = 0;
         for (let i = 0; i < chart1Count.length; i++) {
-          //console.log(chart01Count[i].name)
+          console.log(chart01Count[i].name)
           if (chart01Count[i].name == currentPost) {
             post01Index = i;
             break;
           }
         }
         this.initEquipmentCount01(chart01Count,post01Index);
-        // //console.log("机房数据"+post01Index)
+        // console.log("机房数据"+post01Index)
 
       } else {
         // 用户不是超级管理员
-        this.chart1name = '各部门设备数据量'
-        // $('#chart1Data').html("各部门设备数据量");
-
+        $('#chart1Data').html("各部门设备数据量");
         let chart1Count=await this.handleDepartmentAllCountData();
         let chartLabel = this.getDepartmentEqLabData(chart1Count);
         this.initEquipmentCount2(chartLabel,chart1Count);
-        //console.log("NO")
-        this.chart2name = "各部门机房数据量"
-        // $('#chart1Data').html("各部门机房数据量");
+        console.log("NO")
+        $('#chart01Data').html("各部门机房数据量");
         let chart01Count=await this.handleMachineRoomAllCountData();
         let chartLabel1 = this.getMachineRoomEqLabData(chart01Count);
         this.initEquipmentCount02(chartLabel1,chart01Count);
-        //console.log("NO")
+        console.log("NO")
       }
     },
 
     // 各部门设备类型 堆叠条形图
     async equipmentType(){
       let colData = await this.handleEquipmentAllCountData();// 堆叠条形图所需所有数据
-      //console.log(colData)
+      console.log(colData)
       let chartLabel = this.handleChartLable(colData); // 图例
       let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴设备类型
       let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData); // 各部门的各设备类型数据
@@ -295,10 +290,10 @@ export default {
       let result = [];
       await getDepartmentAllCountData().then((response) => {
         list = response.data.items
-        // //console.log(this.equipmentCount)
+        // console.log(this.equipmentCount)
       })
       for (let i = 0; i < list.length; i++) {
-        ////console.log(list[i].id)
+        //console.log(list[i].id)
         result.push({id: list[i].id, value: list[i].total, name: list[i].name});
       }
 
@@ -325,7 +320,7 @@ export default {
       }
       await getEquipmentAllCountData(data).then((response) => {
         result = response.data.items
-        // //console.log(this.equipmentCount)
+        // console.log(this.equipmentCount)
       })
 
       return result;
@@ -350,7 +345,7 @@ export default {
       let result = temp.filter(function(item,index){
         return temp.indexOf(item) === index;
       });
-      //console.log(result)
+      console.log(result)
       return result;
     },
     // 堆叠条形图 各部门的各设备数量 处理为二维数组
@@ -385,7 +380,7 @@ export default {
         for (let j=0;j<chart2Count[i].length;j++){
           if(chart2Count[i][j]==0){
             chart2Count[i][j]="无"
-            //console.log(chart2Count[i][j])
+            console.log(chart2Count[i][j])
           }
         }
         let item={
@@ -404,9 +399,9 @@ export default {
 // 点击饼状图，重新加载其他图表
     async clickFunc(data){
       this.$echarts.init(document.getElementById('histogramChart')).clear();  //清空重画
-      //console.log(data);
+      console.log(data);
       let colData = await this.handleEquipmentAllCountData(data.id);// 柱状图所需所有数据
-      //console.log(colData)
+      console.log(colData)
       let chartLabel = this.handleChartLable(colData); // 图例
       let chart2YAxis = this.handleEquipmentTypeLable(colData); // Y轴
       let chart2Count= this.handleEquipmentCountData(chartLabel,chart2YAxis,colData);
@@ -429,10 +424,10 @@ export default {
       let result = [];
       await getMachineRoomAllCountData().then((response) => {
         list = response.data.items
-        // //console.log(this.equipmentCount)
+        // console.log(this.equipmentCount)
       })
       for (let i = 0; i < list.length; i++) {
-        //console.log(list[i].id)
+        console.log(list[i].id)
         result.push({id: list[i].id, value: list[i].total, name: list[i].name});
       }
 
@@ -444,7 +439,7 @@ export default {
       let lab=[];
       for(let i= 0;i<chart01Count.length;i++){
         lab.push(chart01Count[i].name);
-        //console.log(lab)
+        console.log(lab)
       }
       return lab;
     },
@@ -482,7 +477,7 @@ export default {
       for(let i = 0; i < colData.length; i++){
         temp.push(colData[i].machineRoomName)
       }
-      //console.log(temp)
+      console.log(temp)
       return temp;
     },
     // 堆叠条形图 各部门的各设备数量 处理为二维数组
@@ -525,7 +520,7 @@ export default {
 
       let nums = [];
       for (let i = 0; i < chart2Count.length; i++) {
-        // //console.log(chart2Count[i])
+        // console.log(chart2Count[i])
         nums.push(chart2Count[i][0])
       }
       let series=[];
@@ -609,7 +604,7 @@ export default {
         }
       });
       pieChart.on('mouseout', function (e) {
-        // index = e.dataIndex;
+        index = e.dataIndex;
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
@@ -617,7 +612,7 @@ export default {
         });
       });
       pieChart.on("click",(params)=> {
-        // //console.log(params.data)
+        // console.log(params.data)
         this.clickFunc(params.data);
         if (params.dataIndex !== index) {
           //没用选中的取消高亮
@@ -626,7 +621,7 @@ export default {
         //选中某一条高亮
         index = params.dataIndex;
         pieChart.dispatchAction({type: 'highlight', seriesIndex: 0, dataIndex: index});
-        //console.log(index);
+        console.log(index);
       });
 
       window.addEventListener("resize", function () {
@@ -641,12 +636,12 @@ export default {
       let myChart = elementResizeDetectorMaker();
 
       myChart.listenTo(document.getElementById('pieChart1'), () => {
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index,//默认选中第一个
-        });
-        pieChart.resize();
+          pieChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: index,//默认选中第一个
+          });
+          pieChart.resize();
       });
       //监听元素变化
     },
@@ -721,7 +716,7 @@ export default {
         pieChart.resize();
       });
       //监听元素变化
-    },
+},
     //各部门设备类型柱状图
     initEquipmentType(chartLabel,series,chart2YAxis){
       let histogramChart = this.$echarts.init(document.getElementById('histogramChart'));
@@ -876,16 +871,16 @@ export default {
         }
       });
       pieChart.on('mouseout', function (e) {
-        // index01 = e.dataIndex;
+        // index = e.dataIndex;
         pieChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
-          dataIndex: index01,
+          dataIndex: index,
         });
       });
       pieChart.on("click", (params)=>{
 
-        //console.log(params.data)
+        console.log(params.data)
 
         // this.clickCabinetFunc(params.data);
         this.clickFunc(params.data);
@@ -896,7 +891,7 @@ export default {
         //选中某一条高亮
         index01 = params.dataIndex;
         pieChart.dispatchAction({type: 'highlight', seriesIndex: 0, dataIndex: index01});
-        //console.log(index01);
+        console.log(index01);
       });
 
       window.addEventListener("resize", function () {
@@ -912,12 +907,12 @@ export default {
       let myChart = elementResizeDetectorMaker();
 
       myChart.listenTo(document.getElementById("pieChart2"), () => {
-        pieChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index01,//默认选中第一个
-        });
-        pieChart.resize();
+          pieChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: index01,//默认选中第一个
+          });
+          pieChart.resize();
       });
       //监听元素变化
     },
