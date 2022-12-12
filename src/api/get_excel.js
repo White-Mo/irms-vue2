@@ -5,7 +5,7 @@ export async function getExcelDemo1(data){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
-    workbook.creator = '中国地震局信息管理系统';
+    workbook.creator = '中国地震台网中心信息资源管理系统';
     // workbook.lastModifiedBy = 'Her';
     workbook.created = new Date();
     workbook.modified = new Date();
@@ -208,7 +208,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
     for (let file_num of file_list){
         let workbook = new ExcelJS.Workbook();
         //设置工作簿属性↓
-        workbook.creator = '中国地震局信息管理系统';
+        workbook.creator = '中国地震台网中心信息资源管理系统';
         // workbook.lastModifiedBy = 'Her';
         workbook.created = new Date();
         workbook.modified = new Date();
@@ -1724,7 +1724,7 @@ export async function getExcelDemo3(StatisticsData){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
-    workbook.creator = '中国地震局信息管理系统';
+    workbook.creator = '中国地震台网中心信息资源管理系统';
     // workbook.lastModifiedBy = 'Her';
     workbook.created = new Date();
     workbook.modified = new Date();
