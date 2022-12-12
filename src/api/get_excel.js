@@ -694,7 +694,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill4
                 C14.push(item_cell)
             }
-            let tables = ['项  目','频率','性能指标','通用软件信息','核数/容量','项  目','名称','版本','类型']
+            let tables = ['项  目','类型','性能指标','数量指标','实配数量','项  目','名称','版本','类型']
             for (let i in tables){
                 C14[i].value = tables[i]
             }
@@ -1521,12 +1521,14 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for (let i = 0;i < n;i++){
                 let item = []
                 if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
-                    item = item.concat(['','','',''])
+                    item = item.concat(['','','','',''])
                 }else{
                     item.push(basic_data['basicInfoConfig_list'][i]['projectName'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['type'])
                     item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
                     item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
                     item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
+
                 }
                 if(typeof basic_data['basicInfoSoftware_list'][i] == 'undefined'){
                     item = item.concat(['','','',''])
@@ -1547,10 +1549,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for(let i in basic_data['basicInfoNetwork_list']){
                 i = parseInt(i)
                 C18[i][0].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
-                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
-                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
                 C18[i][3].value = basic_data['basicInfoNetwork_list'][i]['macAddress']
-                C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
+                C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
             }
             // 协议端口信息
           //console.log(basic_data['basicInfoProtocolPort_list'])
