@@ -33,7 +33,7 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
