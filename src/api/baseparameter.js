@@ -89,6 +89,15 @@ export function createDepartment(data) {
     responseType: 'json'
   })
 }
+//新增业务系统 ----------------------赵长开-------------------
+export function createBusinessSystem(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/createBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
 
 //修改单位
 export function updatePostAction(data) {

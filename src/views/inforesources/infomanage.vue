@@ -211,6 +211,7 @@ import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import { all } from 'q'
+import {addEquipment} from "@/api/IP_address";
 
 export default {
   // 引用vue reload方法
@@ -547,6 +548,7 @@ export default {
   mounted() {
     this.restaurants = this.loadAll()
     // //console.log(this.initval);
+
   },
   methods: {
     querySearch(queryString, cb) {

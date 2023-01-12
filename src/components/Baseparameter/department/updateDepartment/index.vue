@@ -41,7 +41,7 @@ import {updatePostDepartmentAction, checkDepartmentName, checkDepartmentCode } f
 import { getPost } from "@/api/select";
 
 export default {
-  name: 'addDepartment',
+  name: 'upDataDepartment',
   props: {
     row: {
       type: Object,

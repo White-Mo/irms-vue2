@@ -63,7 +63,6 @@ export default {
         await this.getNameRules()
         if (!this.nameRules) {
           callback(new Error('部门已存在，请重新输入'))
-          // this.department.departmentName = ''
           } else {
           callback()
           }
