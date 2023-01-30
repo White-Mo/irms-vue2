@@ -138,9 +138,9 @@
                     <el-col :span="2"><div class="label-style">保修期</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                     <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
                     <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
                   </el-row>
                 </el-form>
                 <el-row :gutter="20">
