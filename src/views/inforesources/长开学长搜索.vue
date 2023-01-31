@@ -6,12 +6,88 @@
       <div>
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark" style="background-color: #99a9bf">
-              <span style="color: black">线上数字机房</span>
+            <div class="grid-content bg-purple-dark">
+              <span style="color: #ffffff">线上数字机房</span>
             </div>
           </el-col>
         </el-row>
-
+        <el-row
+          :gutter="10"
+          class="bg-condition"
+        >
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <span>查询条件：</span>
+          </el-col>
+          <el-col
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
+          >
+            <el-select
+              v-model="dataName"
+              placeholder="详细字段查询"
+              multiple
+              size="medium"
+            >
+              <el-option
+                v-for="(item,index) in basicValue"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+                class="searchInput"
+              />
+            </el-select>
+          </el-col>
+          <el-col
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
+          >
+            <el-input
+              v-model="inputValue"
+              placeholder="输入查询内容"
+              clearable
+              size="medium"
+            />
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              icon="el-icon-search"
+              clearable="true"
+              @click="searchData()"
+            >搜索</el-button>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2">
+            <el-button
+              size="medium"
+              type="primary"
+              @click="Refresh()"
+            >返回数字机房首页</el-button>
+          </el-col>
+        </el-row>
       </div>
       <div class="main"  style='overflow: auto;position:relative;padding-bottom: 20px'>
         <dv-loading v-show='loading'>Loading...</dv-loading>
@@ -31,25 +107,24 @@
                       <span>{{item.postName}}</span>
                     </div>
                     <div class="roomData">
-<!--                      <span class="roomName">数字机房</span>-->
                       <span class="roomName">{{item.machineRoomName}}</span>
                     </div>
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="7">
+                  <el-col :span="9">
                     <div class="roomData">
-                      <span> </span>
+                      <span>机房状态：</span>
                     </div>
                   </el-col>
                   <el-col :span="6">
-                    <!--                    <el-tag-->
-                    <!--                      size="small"-->
-                    <!--                      :type="item.status === '0' ? 'success' : 'danger'"-->
-                    <!--                      disable-transitions>{{item.status === "0" ? "正常" : "维修中" }}</el-tag>-->
+                    <el-tag
+                      size="small"
+                      :type="item.status === '0' ? 'success' : 'danger'"
+                      disable-transitions>{{item.status === "0" ? "正常" : "维修中" }}</el-tag>
                   </el-col>
-                  <el-col :span="10">
-                    <el-button type="primary" size="mini" @click="CheckComputerRoom(index)">进入机房群</el-button>
+                  <el-col :span="8">
+                    <el-button type="primary" size="mini" @click="CheckComputerRoom(index)">进入机房</el-button>
                   </el-col>
                 </el-row>
               </div>

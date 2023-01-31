@@ -31,8 +31,8 @@
                       <span>{{item.postName}}</span>
                     </div>
                     <div class="roomData">
-<!--                      <span class="roomName">数字机房</span>-->
-                      <span class="roomName">{{item.machineRoomName}}</span>
+                      <span class="roomName">数字机房</span>
+                      <!--                      <span class="roomName">{{item.machineRoomName}}</span>-->
                     </div>
                   </el-col>
                 </el-row>

@@ -11,6 +11,7 @@
             <div class="grid-content bg-purple-dark">综合信息管理</div>
           </el-col>
         </el-row>
+
         <el-row
           :gutter="10"
           class="bg-condition"
@@ -32,7 +33,6 @@
             :lg="3"
             :xl="3"
           >
-
             <el-select
               @change="handleSelectChange"
               v-model="DataName"
@@ -48,7 +48,6 @@
                 class="searchInput"
               />
             </el-select>
-
           </el-col>
           <el-col
             :xs="4"
@@ -128,6 +127,7 @@
               @click="addInfo()"
             >添加设备信息</el-button>
           </el-col>
+
         </el-row>
         <el-table
           v-loading="listLoading"
@@ -166,19 +166,40 @@
           >
             <template slot-scope="scope">
               <el-button
+                type="success" plain
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
               <el-button
+                type="primary" plain
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                text
-                @click=handleDelete(scope.row)
-              >删除</el-button>
+
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="danger"-->
+<!--                text-->
+<!--                @click=handleDelete(scope.row)-->
+<!--              >删除</el-button>-->
+
+<!--              <el-button-->
+<!--                研究发现，好像只是写了个删除键，仅此而已-->
+<!--              >删除</el-button>-->
+
+              <template>
+                <el-popconfirm
+                  confirm-button-text='确定'
+                  cancel-button-text='不用了'
+                  icon="el-icon-info"
+                  icon-color="red"
+                  title="请问这一行数据确定删除吗？"
+                  @confirm="handleDelete(scope.row)"
+                >
+                  <el-button slot="reference" type="danger" plain size="mini" style="position: relative;left: 10px" >删除</el-button>
+                </el-popconfirm>
+              </template>
+
             </template>
           </el-table-column>
         </el-table>
@@ -211,6 +232,7 @@ import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import { all } from 'q'
+import { delPostDepartment } from '@/api/baseparameter'
 
 export default {
   // 引用vue reload方法
@@ -698,25 +720,17 @@ export default {
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-      //console.log(row)
-      this.$alert('是否永久删除该设备', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delEquipment(row.equipmentId).then((response) => {
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.fetchData()
-              })
-            })
-          }
-        }
+      delPostDepartment(row.equipmentId).then((response) => {
+        this.$alert(response.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.fetchData()
+        })
       })
+    }
+
       // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
       //   confirmButtonText: '确定',
       //   cancelButtonText: '取消',
@@ -763,7 +777,7 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
     }
-  }
+
 }
 </script>
 
