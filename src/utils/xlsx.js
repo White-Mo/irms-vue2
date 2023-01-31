@@ -1,6 +1,7 @@
 import {Message} from  "element-ui"
 import { status } from "nprogress"
 import logdepthbuf_fragmentGlsl from "three/src/renderers/shaders/ShaderChunk/logdepthbuf_fragment.glsl";
+import item from '@/layout/components/Sidebar/Item'
 
 export function importfile(obj, head) {
   return new Promise((resolve, reject) => {
@@ -516,11 +517,15 @@ function underfindTrans(status, part,readStatus) {
 }
 
 export function analysisReply(data) {
-  console.log(data)
-  var analysisData = []
+  //console.log(data)
+  //这个数组的元素是对象
+  let analysisData = []
+  let result_data = []
+  //每张小表是一个对象
   analysisData.push(getReplayData(data.AddAppAccessRights))
   analysisData.push(getReplayData(data.AddAppBusiness))
   analysisData.push(getReplayData(data.AddAppLinksInfo))
+  analysisData.push(getReplayData(data.AddAppSoftware))
   analysisData.push(getReplayData(data.AddAppStore))
   analysisData.push(getReplayData(data.AddAppSystemUser))
   analysisData.push(getReplayData(data.AddConfig))
@@ -530,27 +535,50 @@ export function analysisReply(data) {
   analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
   analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
   analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
-  return analysisData
+
+  console.log('*',analysisData)
+  analysisData.forEach(function(items){
+    if(items !== undefined){
+      items.forEach(function(item){ // 少写了item
+        result_data.push(item)
+      })
+    }
+    // console.log('!',result_data)
+  })
+  return result_data
 }
-function getReplayData(data){
-  console.log(data)
-  if(data !== undefined) {
+export function getReplayData(data) {
+  // console.log(data)
+  let backdata = []
+  if (data !== undefined) {
+    //keys是数组
     const keys = Object.keys(data)
     const values = Object.values(data)
-    let backdata = []
+    // debugger
     if (keys !== undefined) {
-      for (var i = 0; i < keys.length; i++) {
+      keys.forEach(function(key, index) {
         const obj = {
-          key: keys[i],
-          value: values[i]
+          //AddAppAccessRights
+          key: keys[index],
+          //0
+          values: values[index]
         }
         backdata.push(obj)
+        console.log('$',backdata)
         return backdata
-      }
-    } else {
-      return backdata
+      })
     }
-  } else {
-    return []
+    return backdata
   }
+}
+
+//这是一个表
+export function getUploadData(data,message){
+  let backdata = []
+  const obj = {
+    key:data.equipmentBasicInfo.equipmentBusinessRelInfo['设备编号'],
+    value:message
+  }
+  backdata.push(obj)
+  return backdata
 }

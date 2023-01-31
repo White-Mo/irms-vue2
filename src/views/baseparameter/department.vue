@@ -120,13 +120,32 @@
               >详情</el-button>
               <el-button
                 size="mini"
+                type="primary"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button>
+
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="danger"-->
+<!--                @click="handleDelete(scope.$index, scope.row)"-->
+<!--              >删除</el-button>-->
+
+              <el-popconfirm
+                title="这是一段内容确定删除吗？"
+                confirm-button-text='好的'
+                cancel-button-text='不用了'
+                @confirm="handleDelete(scope.$index, scope.row)"
+              >
+                <el-button
+                  slot="reference"
+                  type="danger"
+                  size="mini"
+                  style="position:relative;left:10px"
+                >删除</el-button>
+              </el-popconfirm>
+
+
+
             </template>
           </el-table-column>
         </el-table>
@@ -170,13 +189,15 @@ export default {
       return statusMap[status]
     }
   },
+
+  //
   data() {
     return {
       list: null,
       total: 0,
       currentPage: 0,
-      limit:10,
-      initName:'',
+      limit: 10,
+      initName: '',
       inputValue: '',
       dataName: 'all',
       ifUpdate: '0',
@@ -231,43 +252,57 @@ export default {
     },
 
     addDepartment() {
-      this.ifUpdate ='1'
+      this.ifUpdate = '1'
     },
     handleDetail(index, row) {
-      this.ifUpdate ='2'
+      this.ifUpdate = '2'
       this.row = row
     },
     handleEdit(index, row) {
-      this.ifUpdate ='3'
+      this.ifUpdate = '3'
       this.row = row
     },
+
+    // handleDelete(index, row) {
+    //   this.$alert("是否永久删除该部门", '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning',
+    //     callback: (action, instance) => {
+    //       if (action === 'confirm') {
+    //         delPostDepartment(row.departmentId).then((response) => {
+    //           this.$alert(response.data, '提示', {
+    //             confirmButtonText: '确定',
+    //             type: 'info',
+    //             showClose: false
+    //           }).then(() => {
+    //             this.fetchData()
+    //           })
+    //         })
+    //       }
+    //     }
+    //   })
+    // },
+
     handleDelete(index, row) {
-      this.$alert("是否永久删除该部门", '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delPostDepartment(row.departmentId).then((response) => {
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.fetchData()
-              })
-            })
-          }
-        }
+      delPostDepartment(row.departmentId).then((response) => {
+        this.$alert(response.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.fetchData()
+        })
       })
     },
+
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
-      this.limit=val
+      this.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.currentPage=val-1
+      this.currentPage = val - 1
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
@@ -400,4 +435,16 @@ export default {
   height:2rem;
   width:100%;
 }
+
+//#btn_Id{
+//  font-size:12px;
+//  width:58px;
+//  height:30px;
+//  margin-left: 10px;
+//  text-align: center;
+//
+//  align-content: center;
+//  background-color: orangered;
+//  color: white;
+//}
 </style>

@@ -278,12 +278,16 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',
+
+
         callback: (action, instance) => {
           if (action === 'confirm') {
             delEquipmentFirstType(row.equipmentTypeId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
+
+
                 showClose: false
               }).then(() => {
                 this.dataName="all"

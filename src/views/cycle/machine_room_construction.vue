@@ -119,6 +119,12 @@
                     size="mini"
                     @click="handleConstruct(scope.$index, scope.row)"
                   >施工</el-button>
+
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleConstruct(scope.$index, scope.row)"-->
+<!--                  >删除</el-button>-->
+
                 </template>
               </el-table-column>
             </el-table>
