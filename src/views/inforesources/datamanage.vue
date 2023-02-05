@@ -146,6 +146,7 @@ import {
   importfile
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
+import {options} from "runjs";
 export default {
   name: 'Dashboard',
   data() {
@@ -172,7 +173,16 @@ export default {
       },
       tableData: [],
       repalyInfo:[],
-      repalyData:[]
+      repalyData:[],
+
+      uploadResult:{
+        success:0,
+        fail:0
+      },
+      submitResult:{
+        success:0,
+        fail:0
+      }
     }
   },
   methods:  {
@@ -238,6 +248,8 @@ export default {
               uploadStatus:'待上传',
             }
             this.excelData.equipments.push(obj)
+            this.submitResult.success = this.submitResult.success  + 1
+
           } else {
             this.$message({
               type:'error',
@@ -250,7 +262,17 @@ export default {
               uploadStatus:'读取失败',
             }
             this.excelData.equipments.push(obj)
+            this.submitResult.fail = this.submitResult.fail  + 1
+
           }
+        }
+
+        // 上传结果统计
+        if(this.submitResult.success + this.submitResult.fail === this.tableData.length){
+          this.$message({
+            type:'success',
+            message:"读取成功" + this.submitResult.success +"个文件，读取失败" + this.submitResult.fail + "个文件"
+          })
         }
       }
       // this.uploadFunc()
@@ -273,7 +295,8 @@ export default {
             type: 'success'
           })
           this.tableData[index].uploadStatus = "上传成功"
-          this.repalyInfo[index] = res.data
+          // this.repalyInfo[index] = res.data
+          this.uploadResult.success = this.uploadResult.success + 1
         } else {
           this.tableData[index].uploadStatus = "上传失败"
           this.repalyInfo[index] = res.data
@@ -285,8 +308,15 @@ export default {
         }
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
+        this.uploadResult.fail = this.uploadResult.fail + 1
       }).finally(() =>{
         this.disabled = false
+        if(this.submitResult.success + this.submitResult.fail === this.tableData.length){
+          this.$message({
+            type:'success',
+            message:"读取成功" + this.submitResult.success +"个文件，读取失败" + this.submitResult.fail + "个文件"
+          })
+        }
       })
     },
     // 手动移除

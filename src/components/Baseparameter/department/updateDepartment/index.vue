@@ -39,8 +39,10 @@
 <script>
 import {updatePostDepartmentAction, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
 import { getPost } from "@/api/select";
+import {mapGetters} from "vuex";
 
 export default {
+
   name: 'addDepartment',
   props: {
     row: {
@@ -52,9 +54,19 @@ export default {
       required: true
     }
   },
+  computed:{
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
     this.initDepartmentData()
-    getPost().then(response => {
+    const data ={
+      role:this.roles[0], //这个地方是realRole 你写成了roles
+      postid:this.$store.state.user.roleid,
+    }
+    console.log(data)
+    getPost(data).then(response => {
       console.log(response)
       this.postAll = response.data.items
     })
