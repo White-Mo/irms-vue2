@@ -482,7 +482,7 @@ export default {
             <el-button
               size="medium"
               type="primary"
-              @click="Refresh()"
+              @click="Back()"
             >返回数字机房首页</el-button>
           </el-col>
         </el-row>
@@ -539,6 +539,7 @@ export default {
   props:['postName'],
   data() {
     return{
+      postName:this.postName,
       loading:true,
       ComputerRoomCard:[],
       tempTotalData:[],
@@ -559,82 +560,26 @@ export default {
     };
   },
   mounted() {
-    const data = {
-      dataName:['111'],
-      dataValue:'',
-      status:'',
-      start:0,
-      limit:9999
+    this.fetchData();
+  },
+  watch: {
+    postName (val) {
+      this.postName = val;
+      this.fetchData();
     }
-    console.log("传递的单位名：",this.postName)
-    getAllmachineroom(data).then((res) => {
-      this.loading = false
-      //this.ComputerRoomCard = res.data.items
-/*      if(this.postName != ''){
-        setTimeout(() => {
-          let searchResults = [];
-          searchResults = res.data.items.filter(data=>{
-            return(
-              data.postName.includes(this.postName)
-            );
-          })
-          console.log(searchResults)
-          this.ComputerRoomCard = searchResults;
-          this.tempTotalData = this.ComputerRoomCard;
-          this.listLoading = false;
-        }, 200)
-      }*/
-
-      setTimeout(() => {
-        let searchResults = [];
-        searchResults = res.data.items.filter(data=>{
-          return(
-            data.postName.includes(this.postName)
-          );
-        })
-        console.log(searchResults)
-        this.ComputerRoomCard = searchResults;
-        this.tempTotalData = this.ComputerRoomCard;
-        this.listLoading = false;
-      }, 200)
-    })
-
-
-
-/*    getAllmachineroom(data).then((res) => {
-      this.loading = false
-      console.log("请求的数据：", res.data.items);
-      setTimeout(() => {
-        let searchResults = [];
-        searchResults = res.data.items.filter(data=>{
-          console.log("data.postName：", data.postName);
-          console.log("this.postName：", this.postName);
-          return(
-            data.postName.includes(this.postName)
-          );
-        })
-        console.log("过滤后的数据：", searchResults)
-        this.ComputerRoomCard = searchResults;
-        this.tempTotalData = this.ComputerRoomCard;
-        this.listLoading = false;
-      }, 200)
-    })*/
-
-
-
-
-
   },
 
 
 
 
   methods:{
-    //--------------刷新功能开始---------------------
-    Refresh(){
-      location.reload();
+    //--------------返回功能开始---------------------
+    Back(){
+      console.log(0);
+      this.ComputerRoomCard=[];
+      this.$emit('changeDiv', '0')
     },
-    //--------------刷新功能结束---------------------
+    //--------------返回功能结束---------------------
 
     //----------------------搜索功能searchData()实现开始--赵长开-----------------------------------------------------------
     searchData() {
@@ -686,6 +631,34 @@ export default {
       this.$store.commit('machineRoom/SET_InstallPosition',installation_position)
       this.$router.push({ name:'computerRoom'})
     },
+
+    fetchData(){
+      this.loading = true;
+      const data = {
+        dataName:['111'],
+        dataValue:'',
+        status:'',
+        start:0,
+        limit:9999
+      }
+      getAllmachineroom(data).then((res) => {
+        //this.ComputerRoomCard = res.data.items
+        setTimeout(() => {
+          let searchResults = [];
+          searchResults = res.data.items.filter(data=>{
+            return(
+              data.postName.includes(this.postName)
+            );
+          })
+          console.log(searchResults)
+          this.ComputerRoomCard = searchResults;
+          this.tempTotalData = this.ComputerRoomCard;
+          this.listLoading = false;
+          this.loading = false
+        }, 200)
+      })
+
+    }
   }
 }
 </script>
@@ -697,7 +670,7 @@ export default {
 }
 .main{
   width: 100%;
-  height: 100vh;
+  height: 76.5vh;
   background: #041135;
   position: absolute;
   top: 0;

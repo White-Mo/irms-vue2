@@ -663,8 +663,9 @@ export default {
             }
           })
         )
+
       }
-      //console.log(promises)
+      // console.log("++++++++++++++++++++++",promises)
       Promise.all(promises).then(results => {
         for (let result of results) {
           this.tableData.push(result)
@@ -672,6 +673,7 @@ export default {
         }
         this.listLoading = false
       })
+      // console.log("--------------------",this.tableData)
       this.tempTableData = this.tableData
       //console.log(this.tableData)
     })

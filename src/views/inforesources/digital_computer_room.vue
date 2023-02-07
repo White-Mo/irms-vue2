@@ -581,7 +581,9 @@ export default {
 <!--搜索加分级测试版-->
 <template>
   <div class="Online_digital_computer_room_panel">
-    <div v-show="ifUpdate === '0'">
+    <div
+      v-show="ifUpdate === '0'"
+    >
       <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
       <div class="app-container"  >
         <div>
@@ -684,7 +686,7 @@ export default {
       </div>
     </div>
     <div v-show="ifUpdate === '1'">
-      <search-computer-room-by-post-name v-bind:postName="this.tempPost"></search-computer-room-by-post-name>
+      <search-computer-room-by-post-name v-bind:postName="this.tempPost"   @changeDiv="changeDiv"></search-computer-room-by-post-name>
     </div>
   </div>
 </template>
@@ -700,6 +702,7 @@ export default {
   data() {
     return{
       loading:true,
+      tempPost:'',
       ifUpdate: '0',
       unitAll:[],
       unit:[],
@@ -723,15 +726,18 @@ export default {
 
 
     //--------------------获取单位开始-赵长开------------
-    getPost().then(response => {
-      this.loading = false
-      this.unitAll = response.data.items
-      this.unit = response.data.items
-    })
+    this.fetchData()
     //--------------------获取单位结束-赵长开------------
 
   },
   methods:{
+    fetchData(){
+      getPost().then(response => {
+        this.loading = false
+        this.unitAll = response.data.items
+        this.unit = response.data.items
+      })
+    },
     //----------------------搜索功能searchData()实现开始--赵长开-----------------------------------------------------------
     searchData() {
       this.listLoading = true;
@@ -757,9 +763,14 @@ export default {
 
     //--------------通过单位获取对应的全部机房--开始--赵长开------
     enterComputerRooms(postName){
+      console.log(postName);
       this.tempPost = postName
       this.ifUpdate = '1'
     },
+    changeDiv(value) {
+      this.ifUpdate = value
+      this.fetchData()
+    }
   }
 }
 </script>
