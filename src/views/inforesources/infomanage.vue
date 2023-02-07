@@ -166,19 +166,40 @@
           >
             <template slot-scope="scope">
               <el-button
+                type="success" plain
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
               <el-button
+                type="primary" plain
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                text
-                @click=handleDelete(scope.row)
-              >删除</el-button>
+
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="danger"-->
+<!--                text-->
+<!--                @click=handleDelete(scope.row)-->
+<!--              >删除</el-button>-->
+
+<!--              <el-button-->
+<!--                研究发现，好像只是写了个删除键，仅此而已-->
+<!--              >删除</el-button>-->
+
+              <template>
+                <el-popconfirm
+                  confirm-button-text='确定'
+                  cancel-button-text='不用了'
+                  icon="el-icon-info"
+                  icon-color="red"
+                  title="请问这一行数据确定删除吗？"
+                  @confirm="handleDelete(scope.row)"
+                >
+                  <el-button slot="reference" type="danger" plain size="mini" style="position: relative;left: 10px" >删除</el-button>
+                </el-popconfirm>
+              </template>
+
             </template>
           </el-table-column>
         </el-table>
@@ -211,7 +232,7 @@ import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import { all } from 'q'
-import {addEquipment} from "@/api/IP_address";
+import { delPostDepartment } from '@/api/baseparameter'
 
 export default {
   // 引用vue reload方法
@@ -547,8 +568,7 @@ export default {
   },
   mounted() {
     this.restaurants = this.loadAll()
-    // //console.log(this.initval);
-
+    // console.log(this.initval);
   },
   methods: {
     querySearch(queryString, cb) {
@@ -586,18 +606,18 @@ export default {
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') == -1 && this.type == 1) {
-        // //console.log("删除CPU类型");
+        // console.log("删除CPU类型");
         this.deleteSelect(this.typeID)
         this.type = 0
       } else if (val.indexOf('edition') == -1 && this.edition == 1) {
-        // //console.log("删除中间件版本");
+        // console.log("删除中间件版本");
         this.deleteSelect(this.editionID)
         this.edition = 0
       } else if (
         val.indexOf('guaranteePeriod') == -1 &&
         this.guaranteePeriod == 1
       ) {
-        // //console.log("删除保修期");
+        // console.log("删除保修期");
         this.deleteSelect(this.guaranteePeriodID)
         this.guaranteePeriod = 0
       }
@@ -644,7 +664,7 @@ export default {
       }
       dfata.splice(flag, num)
       this.foad = dfata
-      // //console.log(this.foad)
+      // console.log(this.foad)
       this.restaurants = this.loadAll()
     },
     tbCellDoubleClick(row, column, cell, event) {
@@ -657,13 +677,13 @@ export default {
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
-      // //console.log(this.basicValue)
+      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)
         this.initname = ['111']
       } else {
-        // //console.log(JSON.parse(JSON.stringify(this.DataName)))
+        // console.log(JSON.parse(JSON.stringify(this.DataName)))
         if (this.eselect == true) {
           this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
         }
@@ -676,7 +696,7 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      // //console.log(this.initdata)
+      // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
         this.total =response.data.total
@@ -700,25 +720,17 @@ export default {
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-      //console.log(row)
-      this.$alert('是否永久删除该设备', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delEquipment(row.equipmentId).then((response) => {
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.fetchData()
-              })
-            })
-          }
-        }
+      delPostDepartment(row.equipmentId).then((response) => {
+        this.$alert(response.data, '提示', {
+          confirmButtonText: '确定',
+          type: 'info',
+          showClose: false
+        }).then(() => {
+          this.fetchData()
+        })
       })
+    }
+
       // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
       //   confirmButtonText: '确定',
       //   cancelButtonText: '取消',
@@ -765,7 +777,7 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
     }
-  }
+
 }
 </script>
 

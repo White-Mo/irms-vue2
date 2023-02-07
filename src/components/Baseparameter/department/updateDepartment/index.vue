@@ -1,7 +1,7 @@
 <template>
   <div class="edit-department">
     <div class="source">
-      <el-page-header content="部门信息" @back="back" />
+      <el-page-header content="修改部门" @back="back" />
     </div>
     <div class="source">
       <el-row>
@@ -39,6 +39,7 @@
 <script>
 import {updatePostDepartmentAction, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
 import { getPost } from "@/api/select";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'upDataDepartment',
@@ -52,10 +53,20 @@ export default {
       required: true
     }
   },
+  computed:{
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
     this.initDepartmentData()
-    getPost().then(response => {
-      //console.log(response)
+    const data ={
+      role:this.roles[0], //这个地方是realRole 你写成了roles
+      postid:this.$store.state.user.roleid,
+    }
+    console.log(data)
+    getPost(data).then(response => {
+      console.log(response)
       this.postAll = response.data.items
     })
   },
@@ -121,7 +132,7 @@ export default {
     }
   },
   mounted() {
-    //console.log(this.currentShow+"---------------------------------")
+    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -154,12 +165,12 @@ export default {
             }).then(() => {
               this.back()
             })
-            //console.log(res)
+            console.log(res)
           }).catch(err => {
-            //console.log(err)
+            console.log(err)
           })
         } else {
-          //console.log('error submit!!');
+          console.log('error submit!!');
           return false;
         }
       });

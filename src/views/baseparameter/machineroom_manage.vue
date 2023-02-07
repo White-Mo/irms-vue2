@@ -148,10 +148,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-              <!--              <el-button-->
-              <!--                size="mini"-->
-              <!--                @click="handleEdit(scope.$index, scope.row)"-->
-              <!--              >编辑</el-button>-->
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                @click="handleEdit(scope.$index, scope.row)"-->
+<!--              >编辑</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
@@ -184,34 +184,34 @@
           <!-- <h3 style="text-align:center">机柜号</h3> -->
           <!-- <el-divider></el-divider> -->
           <el-table
-            v-loading="cabinetLoading"
-            :data="[{tag:0}]"
-            element-loading-text="Loading"
-            border
+          v-loading="cabinetLoading"
+          :data="[{tag:0}]"
+          element-loading-text="Loading"
+          border
+        >
+        <el-table-column
+          label="机柜号"
+            align="center"
           >
-            <el-table-column
-              label="机柜号"
-              align="center"
-            >
-              <template>
-                <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
-                  <template slot="append">
-                    <template>
-                      <el-popconfirm
-                        confirm-button-text='确认'
-                        cancel-button-text='算了'
-                        icon="el-icon-info"
-                        icon-color="red"
-                        title="是否永久删除该机房"
-                        @confirm="deleteU(cabinetAll[index].cabinetId)"
-                      >
-                        <el-button slot="reference" type="danger">删除</el-button>
-                      </el-popconfirm>
-                    </template>
-                  </template>
-                </el-input>
+            <template>
+            <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
+              <template slot="append">
+                <template>
+                  <el-popconfirm
+                    confirm-button-text='确认'
+                    cancel-button-text='算了'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="是否永久删除该机房"
+                    @confirm="deleteU(cabinetAll[index].cabinetId)"
+                  >
+                    <el-button slot="reference" type="danger">删除</el-button>
+                  </el-popconfirm>
+                </template>
               </template>
-            </el-table-column>
+            </el-input>
+            </template>
+          </el-table-column>
           </el-table>
         </div>
       </el-drawer>
@@ -223,7 +223,7 @@
 import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal,delCabinet,addMachineRoom} from '@/api/baseparameter'
 import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
 import { getCabinet,getPost } from '@/api/select'
-import user from "@/store/modules/user";
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -242,8 +242,6 @@ export default {
   },
   data() {
     return {
-      realName: user.state.realname,
-      presentPostId:user.state.roleid,
       postAll:[],
       form: {
         MachineRoomName:"",
@@ -288,30 +286,42 @@ export default {
         //         status="维修中"
         //         break
         //     }
-        //     //console.log(status)
+        //     console.log(status)
         //     return status;
         //   }
         // }
       ],
       value: '',
+      realRole:'',
+      realChact:'',
+      realRoleid:'',
     }
   },
+   computed:{
+    ...mapGetters([
+      'roles'
+    ])
+   },
   created() {
     this.fetchData()
+    // this.realChact=this.$store.state.user.role_department_name
+    // this.realRole=this.$store.state.user.role_name.split('/')[0] //这个
+    this.realRoleid=this.$store.state.user.roleid
+
   },
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
-      // //console.log(this.basicValue)
+      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
-      // //console.log(this.basicValue)
+      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        //console.log(this.dataName)
+        console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // //console.log(JSON.parse(JSON.stringify(this.dataName)))
+        // console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
@@ -329,33 +339,46 @@ export default {
       getMachineRoomTotal(numparams).then((response) => {
         this.total = response.data
       })
-      // //console.log(this.initName)
+      // console.log(this.initName)
       getMachineRoomByPage(params).then((response) => {
         this.list = response.data.items
         this.listLoading = false
       })
     },
 
-    //-----------------------根据权限获取单位开始--赵长开---------------------
     addMachine() {
       // this.ifUpdate ='1'
       this.dialogFormVisible = true
-        getPost().then(response=>{
-            let total = response.data.total;
-            for (let i = 0; i < total; i++){
-              if(this.presentPostId === response.data.items[i].postId){
-                this.postAll = []
-                this.postAll.push(response.data.items[i])
-                break;
-              }
-            }
-        })
+      // 取值有问题
+      const data ={
+        role:this.roles[0], //这个地方是realRole 写成了roles
+        postid:this.realRoleid
+      }
+      console.log(data)
+      getPost(data).then(response => {
+        this.postAll = response.data.items
+      })
+      // if(this.realChact !=="超级管理员"){
+      //   this.postAll = []
+      //   var obj = {
+      //    postId: this.realRoleid,
+      //    postName: this.realRole
+      //   }
+      //   this.postAll.push(obj)
+      // }else{
+      //   getPost().then(response => {
+      //     // console.log(response.data.items)
+      //     this.postAll = response.data.items
+      //     // console.log(this.postAll);
+      //     // console.log(this.options);
+      //   })
+      // }
+
     },
-    //-----------------------根据权限获取单位结束--赵长开---------------------
 
     ceateMachineRoom(){
       addMachineRoom(this.form).then(response => {
-        //console.log(response)
+        console.log(response)
         this.$alert("新增成功", '提示', {
           confirmButtonText: '确定',
           type: 'info',
@@ -400,7 +423,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`)
+      console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -448,9 +471,9 @@ export default {
       })
     },
     changeSelect() {
-      //console.log("============");
-      this.$forceUpdate();
-    },
+      console.log("============");
+        this.$forceUpdate();
+      },
   }
 }
 </script>
@@ -459,9 +482,7 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-.el-select-dropdown .el-scrollbar {
-  position: relative;
-}
+
 .searchInput {
   height: 40px;
   text-align: center;

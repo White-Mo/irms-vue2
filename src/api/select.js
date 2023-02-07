@@ -7,11 +7,12 @@
  */
 import request from '@/utils/request'
 
-export function getPost() {
+export function getPost(data) { // 接受 data
   return request({
     url: '/home/inforesources/getPostAll',
     method: 'post',
-    responseType: 'json'
+    responseType: 'json',
+    params:data //在发送请求的时候把data发送过去
   })
 }
 
