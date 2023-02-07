@@ -631,8 +631,9 @@ export default {
 
     getPost().then(response => {
       this.listLoading = true
-      this.postTotal = response.data.total
-      let total = response.data.total
+      // this.postTotal = response.data.total
+      this.postTotal = response.data.items.length
+      let total = response.data.items.length
       let promises = []
       this.departmentTotal=0
       for (let i = 0; i < total; i++) {
