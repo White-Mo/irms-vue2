@@ -1,5 +1,5 @@
 <template>
-  <div class="update_detail">
+  <div class="edit-department">
     <div class="source">
       <el-page-header content="部门信息" @back="back" />
     </div>

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {checkDepartmentName, createBusinessSystem} from '@/api/baseparameter'
+import {checkBusinessSystemName, createBusinessSystem} from '@/api/baseparameter'
 import {getDepartment, getPost} from "@/api/select";
 import user from "@/store/modules/user";
 
@@ -75,12 +75,11 @@ export default {
   data(){
     const checkName = async (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('部门不能为空'))
+        return callback(new Error('业务系统不能为空'))
       } else {
         await this.getNameRules()
         if (!this.nameRules) {
-          callback(new Error('部门已存在，请重新输入'))
-          // this.department.departmentName = ''
+          callback(new Error('该业务系统已存在，请重新输入'))
         } else {
           callback()
         }
@@ -103,15 +102,15 @@ export default {
         ],
         departmentName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
-          {
-            validator: checkName, trigger: 'blur'
-          }
         ],
         businessSystemLevel: [
           { required: true, message: '请输入业务系统等级', trigger: 'blur' },
         ],
         businessSystemName:[
           { required: true, message: '请输入业务系统名称', trigger: 'blur' },
+          {
+            validator: checkName, trigger: 'blur'
+          }
         ]
       }
 
@@ -143,9 +142,11 @@ export default {
         }
       });
     },
+
+    // 验证添加的业务系统是否存在
     async getNameRules() {
       const addInformation = { ...this.addInformation }
-      await checkDepartmentName(addInformation).then((res) => {
+      await checkBusinessSystemName(addInformation).then((res) => {
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
@@ -153,6 +154,7 @@ export default {
         }
       })
     },
+
     changePost(val) {
       //console.log(val)
       this.postAll.forEach(element => {

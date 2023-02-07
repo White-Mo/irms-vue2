@@ -148,10 +148,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
+              <!--              <el-button-->
+              <!--                size="mini"-->
+              <!--                @click="handleEdit(scope.$index, scope.row)"-->
+              <!--              >编辑</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
@@ -184,34 +184,34 @@
           <!-- <h3 style="text-align:center">机柜号</h3> -->
           <!-- <el-divider></el-divider> -->
           <el-table
-          v-loading="cabinetLoading"
-          :data="[{tag:0}]"
-          element-loading-text="Loading"
-          border
-        >
-        <el-table-column
-          label="机柜号"
-            align="center"
+            v-loading="cabinetLoading"
+            :data="[{tag:0}]"
+            element-loading-text="Loading"
+            border
           >
-            <template>
-            <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
-              <template slot="append">
-                <template>
-                  <el-popconfirm
-                    confirm-button-text='确认'
-                    cancel-button-text='算了'
-                    icon="el-icon-info"
-                    icon-color="red"
-                    title="是否永久删除该机房"
-                    @confirm="deleteU(cabinetAll[index].cabinetId)"
-                  >
-                    <el-button slot="reference" type="danger">删除</el-button>
-                  </el-popconfirm>
-                </template>
+            <el-table-column
+              label="机柜号"
+              align="center"
+            >
+              <template>
+                <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
+                  <template slot="append">
+                    <template>
+                      <el-popconfirm
+                        confirm-button-text='确认'
+                        cancel-button-text='算了'
+                        icon="el-icon-info"
+                        icon-color="red"
+                        title="是否永久删除该机房"
+                        @confirm="deleteU(cabinetAll[index].cabinetId)"
+                      >
+                        <el-button slot="reference" type="danger">删除</el-button>
+                      </el-popconfirm>
+                    </template>
+                  </template>
+                </el-input>
               </template>
-            </el-input>
-            </template>
-          </el-table-column>
+            </el-table-column>
           </el-table>
         </div>
       </el-drawer>
@@ -223,6 +223,7 @@
 import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal,delCabinet,addMachineRoom} from '@/api/baseparameter'
 import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
 import { getCabinet,getPost } from '@/api/select'
+import user from "@/store/modules/user";
 
 export default {
   components: {
@@ -241,6 +242,8 @@ export default {
   },
   data() {
     return {
+      realName: user.state.realname,
+      presentPostId:user.state.roleid,
       postAll:[],
       form: {
         MachineRoomName:"",
@@ -333,16 +336,22 @@ export default {
       })
     },
 
+    //-----------------------根据权限获取单位开始--赵长开---------------------
     addMachine() {
       // this.ifUpdate ='1'
       this.dialogFormVisible = true
-      getPost().then(response => {
-        //console.log(response.data.items)
-        this.postAll = response.data.items
-        //console.log(this.postAll);
-        //console.log(this.options);
-      })
+        getPost().then(response=>{
+            let total = response.data.total;
+            for (let i = 0; i < total; i++){
+              if(this.presentPostId === response.data.items[i].postId){
+                this.postAll = []
+                this.postAll.push(response.data.items[i])
+                break;
+              }
+            }
+        })
     },
+    //-----------------------根据权限获取单位结束--赵长开---------------------
 
     ceateMachineRoom(){
       addMachineRoom(this.form).then(response => {
@@ -440,8 +449,8 @@ export default {
     },
     changeSelect() {
       //console.log("============");
-        this.$forceUpdate();
-      },
+      this.$forceUpdate();
+    },
   }
 }
 </script>

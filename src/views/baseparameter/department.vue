@@ -426,285 +426,6 @@ export default {
 
 
 
-
-<!--练习测试版-->
-<!--<template>
-  <div class="info-body">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
-    <div class="app-container">
-      <div>
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">部门管理</span>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row
-          :gutter="10"
-          class="bg-condition"
-        >
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <span>查询条件：</span>
-          </el-col>
-          <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
-          >
-            <el-select
-              v-model="dataName"
-              placeholder="详细字段查询"
-              multiple
-              size="medium"
-            >
-              <el-option
-                v-for="(item,index) in basicValue"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                class="searchInput"
-              />
-            </el-select>
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <el-input
-              v-model="inputValue"
-              placeholder="输入查询内容"
-              clearable
-              size="medium"
-            />
-          </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-search"
-              clearable="true"
-              @click="fetchData()"
-            >搜索</el-button>
-          </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
-            <el-button
-              size="medium"
-              type="info"
-              @click="addDepartment()"
-            >添加部门</el-button>
-          </el-col>
-        </el-row>
-      </div>
-      <el-table
-        :data="tableData"
-        height="67vh"
-        :row-style="{height:'6.26vh'}"
-        :cell-style="{padding:'0px'}"
-        stripe
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-        row-key="id"
-        highlight-current-row
-        border
-        style="width: 100%">
-        <el-table-column align="center" type="index" />
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="name" label="部门所属单位" />
-          <el-table-column prop="code" label="单位代码&部门代码" />
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-table>
-
-    </div>
-  </div>
-</template>
-
-<script>
-import {getDepartment, getPost} from "@/api/select";
-export default {
-  data() {
-    return {
-      tableData: [],
-      //postId:[],
-      //testData:[],
-      //postName:[],
-      dataName: 'all',
-      listLoading: true,
-      basicValue: [
-        {
-          value: 'departmentName',
-          label: '部门名称',
-        },
-        {
-          value: 'departmentCode',
-          label: '部门代码'
-        },
-        {
-          value: 'postName',
-          label: '所属单位'
-        }
-      ],
-    }
-  },
-  mounted() {
-/*    getPost().then((response)=>{
-      let total = response.data.total
-      let promises = []
-      for(let i = 0; i<total; i++){
-        this.postId=(response.data.items[i].postId)
-        promises.push(getDepartment(this.postId))
-      }
-      Promise.all(promises).then((results) => {
-        for(let result of results) {
-          this.postName.push(result.data.items[0].postName)
-          this.testData.push(result.data)
-        }
-        console.log("通过单位ID获取的部门数据:")
-        console.log(this.testData)
-        console.log(this.postName)
-      })
-    })*/
-
-
-      getPost().then(response => {
-        let total = response.data.total
-        let promises = []
-        for (let i = 0; i < total; i++) {
-          let postId = response.data.items[i].postId
-          promises.push(
-            getDepartment(postId).then(response => {
-              let item = {
-                name: response.data.items[0].postName,
-                code: i>=10?i:'0'+i,
-                children: []
-              }
-              let departments = response.data.items
-              for (let department of departments) {
-                item.children.push({
-                  name: department.departmentName,
-                  code: department.departmentCode,
-                  edit: this.handleEdit,
-                  delete: this.handleDelete
-                })
-              }
-              return item
-            })
-          )
-        }
-        Promise.all(promises).then(results => {
-          for (let result of results) {
-            this.tableData.push(result)
-            //console.log(result)
-          }
-          console.log(this.tableData)
-          console.log(this.tableData[36].name)
-          console.log(this.tableData[36].code)
-          console.log(this.tableData[36].children[0].name)
-          console.log(this.tableData[36].children[0].code)
-        })
-      })
-    },
-    methods: {
-      handleEdit(row) {
-        console.log('编辑', row)
-      },
-      handleDelete(row) {
-        console.log('删除', row)
-      }
-    }
-
-
-}
-</script>
-
-<style lang="less" scoped>
-.searchInput {
-  height: 40px;
-  text-align: center;
-  color: #0b0c10;
-  background-color: #deecff;
-}
-.bg-purple-dark {
-  background: #304156;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.app-container {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-  padding: 9px;
-  box-shadow: 0 0 4px rgb(0 0 0 / 30%);
-}
-
-.bg-condition {
-  line-height: 50px;
-  text-align: center;
-  height: 54px;
-  margin: 0px !important;
-  background: #d3dce6;
-}
-</style>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--测试版(最终版)-->
 <template>
   <div class="info-body">
@@ -829,11 +550,11 @@ export default {
             <template slot-scope="props">
               <el-table
                 :data="props.row.children" cell-style="background-color: pink">
-                <el-table-column align="center" width="48"/>
-                <el-table-column align="center" type="index"/>
-                <el-table-column prop="departmentName" label="部门" width="675"></el-table-column>
-                <el-table-column prop="departmentCode" label="部门代码" width="675" ></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column  align="center" width="48"/>
+                <el-table-column  align="center" type="index"/>
+                <el-table-column  prop="departmentName" label="部门" width="675"></el-table-column>
+                <el-table-column  prop="departmentCode" label="部门代码" width="675" ></el-table-column>
+                <el-table-column  label="操作">
                   <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.$index, scope.row)" type="primary">编辑</el-button>
                     <el-button @click="handleDelete(scope.$index, scope.row)" type="danger">删除</el-button>
@@ -883,6 +604,7 @@ export default {
     return {
       listLoading: true,
       tableData: [],
+      tempTableData:[],
       postTotal:'',
       departmentTotal:'',
       inputValue: '',
@@ -912,12 +634,12 @@ export default {
       this.postTotal = response.data.total
       let total = response.data.total
       let promises = []
-      this.departmentTotal = 0
+      this.departmentTotal=0
       for (let i = 0; i < total; i++) {
         let postId = response.data.items[i].postId
         promises.push(
           getDepartment(postId).then(response => {
-            this.departmentTotal += response.data.items.length
+            //this.departmentTotal += response.data.items.length
             let item = {
               postName: '',
               postCode: i>=10?i:'0'+i,
@@ -946,10 +668,12 @@ export default {
       Promise.all(promises).then(results => {
         for (let result of results) {
           this.tableData.push(result)
+          this.departmentTotal += result.children.length
         }
         this.listLoading = false
       })
-      console.log(this.tableData)
+      this.tempTableData = this.tableData
+      //console.log(this.tableData)
     })
     //------------------------------获取数据结束------------------------------------------------------
   },
@@ -966,6 +690,7 @@ export default {
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
       this.listLoading = true;
+     this.tableData =  this.tempTableData ;
       setTimeout(() => {
         let searchResults = [];
         if (this.inputValue !== '') {
@@ -1002,7 +727,7 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该部门", '提示', {
+      this.$alert(`是否永久删除部门:\"${row.departmentName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',
@@ -1034,6 +759,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+*{
+  font-size: 18px;
+}
 .count{
   background-color: #304156;
   color: #ffffff;
@@ -1079,4 +807,11 @@ export default {
   background: #d3dce6;
 }
 
+</style>
+
+<style lang="less">
+.el-table--border th.el-table__cell, .el-table__fixed-right-patch {
+  border-bottom: 1px solid #EBEEF5;
+  background-color: beige;
+}
 </style>

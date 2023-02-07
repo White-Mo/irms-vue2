@@ -468,7 +468,7 @@ export default {
             :xl="3"
           >
             <el-select
-              v-model="basicValueName"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
@@ -483,11 +483,11 @@ export default {
             </el-select>
           </el-col>
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
             <el-input
               v-model="inputValue"
@@ -547,7 +547,7 @@ export default {
             align="center"
           >
           </el-table-column>
-          <el-table-column align="center" label="操作" width="250px">
+          <el-table-column align="center" label="操作" width="350px">
             <template slot-scope="scope">
                 <el-button
                   type="primary"
@@ -557,6 +557,10 @@ export default {
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
+              <el-button
+                type="info"
+                @click="getEquipmentByBusinessSystemId(scope.$index, scope.row)"
+              >查看设备</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -573,6 +577,12 @@ export default {
       <div v-if="ifShow === '1'">
         <addBusinessSystem @changeDiv="changeDiv" />
       </div>
+      <div v-if="ifShow === '3'">
+        <updateBusinessSystem :row="row" :current-show="ifShow" @changeDiv="changeDiv"></updateBusinessSystem>
+      </div>
+      <div v-if="ifShow === '4'">
+        <searchEquipmentByBusinessSystem :tempBusinessSystemNameId="this.tempBusinessSystemNameId" :current-show="ifShow" @changeDiv="changeDiv"></searchEquipmentByBusinessSystem>
+      </div>
     </div>
   </div>
 </template>
@@ -580,9 +590,13 @@ export default {
 <script>
 import {delBusinessSystem, getBusinessSystemByPage,} from '@/api/baseparameter'
 import addBusinessSystem from '@/components/Baseparameter/businessSystem/addBusinessSystem'
+import updateBusinessSystem from '@/components/Baseparameter/businessSystem/updateBusinessSystem'
+import searchEquipmentByBusinessSystem from '@/components/Baseparameter/businessSystem/searchEquipmentByBusinessSystem'
 export default {
   components:{
-    addBusinessSystem
+    addBusinessSystem,
+    updateBusinessSystem,
+    searchEquipmentByBusinessSystem
   },
   filters: {
     statusFilter(status) {
@@ -596,6 +610,7 @@ export default {
   },
   data() {
     return {
+      tempBusinessSystemNameId:'',
       list: null,
       total: 0,
       currentPage: 0,
@@ -606,6 +621,10 @@ export default {
       dataName: 'all',
       ifShow: '0',
       listLoading: true,
+      businessSystemNameAndId:{
+        businessSystem_Name:'',
+        businessSystem_Id:''
+      },
       basicValue: [
 
         {
@@ -657,17 +676,22 @@ export default {
       this.ifShow = '1'
     },
     handleEdit(index, row) {
-      this.ifUpdate ='3'
+      //console.log(row)
+      this.ifShow ='3'
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该系统", '提示', {
+      this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
+      this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
+      const businessSystemNameAndId = {...this.businessSystemNameAndId}
+      this.$alert(`是否永久删除: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delBusinessSystem(row.departmentId).then((response) => {
+            delBusinessSystem(businessSystemNameAndId).then((response) => {
+              console.log(businessSystemNameAndId)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
@@ -680,6 +704,13 @@ export default {
         }
       })
     },
+
+    //通过业务系统搜索设备
+    getEquipmentByBusinessSystemId(index, row){
+      this.ifShow ='4'
+      this.tempBusinessSystemNameId = row.businessSystemId
+    },
+
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit=val

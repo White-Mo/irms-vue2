@@ -3,7 +3,7 @@
  * @Author:  wr
  * @Date: 2022-10-11 15:13:06
  * @LastEditTime: 2022-11-05 16:15:42
- * @LastEditors:  
+ * @LastEditors:
  */
 import request from '@/utils/request'
 
@@ -14,6 +14,7 @@ export function getPost() {
     responseType: 'json'
   })
 }
+
 
 export function getDepartment(postId) {
   return request({
