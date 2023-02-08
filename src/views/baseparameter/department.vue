@@ -581,7 +581,7 @@ export default {
 </template>
 
 <script>
-import {getDepartment, getPost} from "@/api/select";
+import {getDepartment, getPost, getPostAllWithDepartment} from "@/api/select";
 import addDepartment from "@/components/Baseparameter/department/addDepartment";
 import updateDepartment from "@/components/Baseparameter/department/updateDepartment";
 import {delPostDepartment} from "@/api/baseparameter";
@@ -627,11 +627,14 @@ export default {
     }
   },
   mounted() {
+    getPostAllWithDepartment().then(res=>{
+      console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++")
+      console.log(res)
+    })
     //------------------------------获取数据开始------------------------------------------------------
 
     getPost().then(response => {
       this.listLoading = true
-      // this.postTotal = response.data.total
       this.postTotal = response.data.items.length
       let total = response.data.items.length
       let promises = []
@@ -674,7 +677,7 @@ export default {
         }
         this.listLoading = false
       })
-      // console.log("--------------------",this.tableData)
+      console.log("--------------------",this.tableData)
       this.tempTableData = this.tableData
       //console.log(this.tableData)
     })

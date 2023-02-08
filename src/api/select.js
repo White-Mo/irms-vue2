@@ -16,6 +16,16 @@ export function getPost(data) { // 接受 data
   })
 }
 
+//获取拥有嵌套关系的单位和部门（部门所属于单位)
+export function getPostAllWithDepartment(data) {
+  return request({
+    url: '/home/inforesources/getPostAllWithDepartment',
+    method: 'post',
+    responseType: 'json',
+    params:data
+  })
+}
+
 
 export function getDepartment(postId) {
   return request({
