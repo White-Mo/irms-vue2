@@ -231,7 +231,6 @@ export default {
   },
   created() {
     this.fetchData()
-    this.next()
   },
   methods: {
     fetchData() {

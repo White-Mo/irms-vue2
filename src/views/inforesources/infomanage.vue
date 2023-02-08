@@ -642,7 +642,7 @@ export default {
         this.initval = response.data.items
 
         for (let i = 0; i < this.initval.length; i++) {
-          this.foad.push({ label: name, value: name + this.initval[i] })
+          this.foad.push({label: name, value: name + this.initval[i]})
         }
 
         this.listLoading = false
@@ -699,7 +699,7 @@ export default {
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
-        this.total =response.data.total
+        this.total = response.data.total
         //console.log("List---------");
         //console.log(this.list)
         this.listLoading = false
@@ -729,31 +729,30 @@ export default {
           this.fetchData()
         })
       })
-    }
-
-      // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning',
-      //   center: true
-      // }).then(() => {
-      //   delEquipment(row.equipmentId).then((response) => {
-      //     this.active = 0
-      //     this.$alert(response.data, '提示', {
-      //       confirmButtonText: '确定',
-      //       type: 'info',
-      //       showClose: false
-      //     }).then(() => {
-      //       this.fetchData()
-      //     })
-      //   })
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消删除'
-      //   });
-      // });
     },
+
+    // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+    //   confirmButtonText: '确定',
+    //   cancelButtonText: '取消',
+    //   type: 'warning',
+    //   center: true
+    // }).then(() => {
+    //   delEquipment(row.equipmentId).then((response) => {
+    //     this.active = 0
+    //     this.$alert(response.data, '提示', {
+    //       confirmButtonText: '确定',
+    //       type: 'info',
+    //       showClose: false
+    //     }).then(() => {
+    //       this.fetchData()
+    //     })
+    //   })
+    // }).catch(() => {
+    //   this.$message({
+    //     type: 'info',
+    //     message: '已取消删除'
+    //   });
+    // });
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit = val
@@ -777,7 +776,7 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
     }
-
+  }
 }
 </script>
 
