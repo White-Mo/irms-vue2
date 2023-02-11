@@ -46,7 +46,7 @@ export function getStatisticsData(par) {
   })
 }
 export function addEquipment(eq) {
-  console.log(eq)
+  console.log('$$$',eq,message)
   return request({
     data: eq,
     url: '/home/inforesources/AddEquipment',
@@ -56,7 +56,7 @@ export function addEquipment(eq) {
 }
 
 export function AddExcel(eq) {
-  console.log(eq)
+  console.log('$$$',eq)
   return request({
     data: eq,
     url: '/home/inforesources/AddExcel',

@@ -126,17 +126,17 @@
         <el-button type="primary" @click="addAuthor">新 增</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      title="删除角色"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <span>请确认要删除这条记录吗?</span>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="handdelAuthor">确 定</el-button>
-  </span>
-    </el-dialog>
+<!--    <el-dialog-->
+<!--      title="删除角色"-->
+<!--      :visible.sync="centerDialogVisible"-->
+<!--      width="30%"-->
+<!--      center>-->
+<!--      <span>请确认要删除这条记录吗?</span>-->
+<!--      <span slot="footer" class="dialog-footer">-->
+<!--    <el-button @click="centerDialogVisible = false">取 消</el-button>-->
+<!--    <el-button type="primary" @click="handdelAuthor">确 定</el-button>-->
+<!--      </span>-->
+<!--    </el-dialog>-->
     <el-dialog
       title="编辑"
       :visible.sync="editdialogVisible"
@@ -163,7 +163,7 @@
 <script>
 import {addAithor, delAuthor, editAuthor, getAuthorData, getAuthority, updateAuthority} from "@/api/Sys_info_manage";
 import {getAutherCount} from "@/api/Sys_info_manage";
-import {getPostByPage} from "@/api/baseparameter";
+import { delPost, getPostByPage } from '@/api/baseparameter'
 
 export default {
   name: 'Dashboard',
@@ -191,6 +191,7 @@ export default {
       tableData: [],
       tableDatas: []
     }
+
   },
   mounted() {
     this.datainit()
@@ -264,6 +265,23 @@ export default {
     handleDelete(index, row) {
       this.delform = row
       this.centerDialogVisible = true
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '删除提示',
+        type: 'warning',
+        message: h('h3', null, [
+          h('span', null, '是否确定删除：'),
+          h('span', null, ' " '+ row.name + ' " '+ '角色信息？')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        callback: (action) => {
+          if (action === 'confirm') {
+            this.handdelAuthor(row.name)
+          }
+        }
+      })
     },
     // 删除角色 提交
     handdelAuthor(){

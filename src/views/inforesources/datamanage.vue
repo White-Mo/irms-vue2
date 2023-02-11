@@ -543,12 +543,13 @@ export default {
 
     // 查看反馈信息
     checkReplay(index, row) {
+
       const equipments = []
       AddExcel({ equipments: equipments }).then(res => {
         //获得数据
         console.log('@@',res)
-        // this.checkReplayResult.push(res.message)
-        // console.log('@@@',this.checkReplayResult[0])
+        this.checkReplayResult.push(res.message)
+        console.log('@@@',this.checkReplayResult[0])
         const h = this.$createElement;
         this.$msgbox({
           title: '查看反馈信息',
@@ -561,6 +562,8 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+
+
       // if (this.repalyInfo[index] === undefined){
       //   this.$message({
       //     type:'error',

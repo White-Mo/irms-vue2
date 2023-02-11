@@ -257,7 +257,7 @@ export default {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
-                showClose: false
+                showClose: true
               }).then(() => {
                 this.fetchData()
               })
