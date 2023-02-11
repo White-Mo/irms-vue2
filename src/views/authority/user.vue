@@ -450,7 +450,7 @@ export default {
         type: 'warning',
         message : h('h3',null,[
           h('span',null, '是否确定删除：'),
-          h('span',null, row.realname+ " - "+ row.username+ " - "+ row.role+ " - "+ row.roles+ " - "+ row.status)
+          h('span',null,'"' + row.realname + '"' +"用户信息？")
         ]),
         showCancelButton: true,
         confirmButtonClass: '确定',
@@ -472,7 +472,7 @@ export default {
         //   message: '删除成功',
         //   type: 'success'
         // });
-        _this.$alert("用户"+realname+"删除完成",'提示' , {
+        _this.$alert("用户"+ '"' +realname+ '"' +"信息删除完成",'提示' , {
           cancelButtonText: '确定',
           type: 'info',
           showClose: true
