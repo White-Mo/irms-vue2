@@ -119,17 +119,18 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-dialog
-            title="请确认要删除这条记录吗?"
+<!--        <el-dialog
+            title="删除提示"
             :visible.sync="centerDialogVisible"
             width="30%"
-            center
+            left
           >
+          <span><p>是否确定删除：</p></span>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
               <el-button type="primary" style="height: 2.8rem;" @click="deleteUserPlus">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog>-->
         <el-dialog
             :title="headInfo"
             :visible.sync="userDialogDisplay"
@@ -195,7 +196,7 @@
               </el-select>
             </div>
             <div>
-              
+
             </div>
           </div>
             <span slot="footer" class="dialog-footer">
@@ -360,7 +361,7 @@ export default {
     handleSelectUsername(item) {
       console.log(item);
       this.user_input.username_id = item.id
-    },    
+    },
     handleSelectUnit(item) {
       console.log(item);
       this.user_input.Unit_id = item.id
@@ -386,7 +387,7 @@ export default {
         return item
       }
 
-			let params = { 
+			let params = {
 					realname:this.user_input.username == "" ? "all" : this.user_input.username_id,
 					username:this.user_input.account,
 					use_post:this.user_input.Unit == "" ? "all" : this.user_input.Unit_id,
@@ -396,7 +397,7 @@ export default {
       console.log(params)
       this.totalCount = (await getFosUserCount(params)).data
       params["start"] = this.currentPage - 1
-      params["limit"] = this.PageSize 
+      params["limit"] = this.PageSize
       getFosUserByPage(params).then(res =>{
         for(let i of res.data.items){
           i.roles = get_roles(i.groupid)
@@ -411,7 +412,7 @@ export default {
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1;
       this.get_user()
-    },  
+    },
     // 显示第几页
     handleCurrentChange(val) {
       // 改变默认的页数
@@ -442,18 +443,40 @@ export default {
     deleteUser(row){
       this.deleteUseRparams = {
         id:row.id
-      }
-      this.centerDialogVisible = true
+      };
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '删除提示',
+        type: 'warning',
+        message : h('h3',null,[
+          h('span',null, '是否确定删除：'),
+          h('span',null, row.realname+ " - "+ row.username+ " - "+ row.role+ " - "+ row.roles+ " - "+ row.status)
+        ]),
+        showCancelButton: true,
+        confirmButtonClass: '确定',
+        cancelButtonText: '取消',
+        callback: (action) => {
+          if(action === 'confirm') {
+            this.deleteUserPlus(row.realname)
+          }
+        }
+      })
+      // this.centerDialogVisible = true
     },
-    deleteUserPlus(){
+    deleteUserPlus(realname){
       let _this = this
       deleteFosUser(this.deleteUseRparams).then(()=>{
         _this.centerDialogVisible = false
         _this.get_user()
-        _this.$message({
-          message: '删除成功',
-          type: 'success'
-        });
+        // _this.$message({
+        //   message: '删除成功',
+        //   type: 'success'
+        // });
+        _this.$alert("用户"+realname+"删除完成",'提示' , {
+          cancelButtonText: '确定',
+          type: 'info',
+          showClose: true
+        })
       })
     },
     async updateUser(row){
@@ -507,7 +530,7 @@ export default {
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
-        password:this.update_data.password, // 
+        password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
       console.log(params)
@@ -545,7 +568,7 @@ export default {
         isdel: this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
-        password:this.update_data.password, // 
+        password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
       console.log(params)
