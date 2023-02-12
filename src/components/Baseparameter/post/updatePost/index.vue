@@ -29,7 +29,7 @@
 import { checkPostName, checkPostCode, updatePostAction} from '@/api/baseparameter'
 
 export default {
-  name: 'addPost',
+  name: 'updatePost',
   props: {
     row: {
       type: Object,
