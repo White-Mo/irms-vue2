@@ -24,11 +24,20 @@ export function getEquipmentFirstTypeByPage(data) {
   })
 }
 
-//修改业务系统----------------赵长开----------------
+//修改一级设备类型----------------赵长开----------------
 export function updateEquipmentFirstType(data) {
   return request({
     params: data,
     url: '/home/baseparameter/updateEquipmentFirstType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//修改一级设备类型----------------赵长开----------------
+export function updateEquipmentSecondType(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateEquipmentSecondType',
     method: 'post',
     responseType: 'json'
   })
@@ -256,7 +265,7 @@ export function addEquipmentFirstType(data) {
 }
 
 //新增二级设备类型
-export function addEquipmentType(data) {
+export function addEquipmentSecondType(data) {
   return request({
     params: data,
     url: '/home/baseparameter/addEquipmentType',
@@ -271,6 +280,16 @@ export function checkEquipmentTypeFirstName(data) {
   return request({
     params: data,
     url: '/home/baseparameter/checkEquipmentTypeFirstName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//检查二级设备类型名称是否重复
+export function checkEquipmentTypeSecondName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkEquipmentTypeName',
     method: 'post',
     responseType: 'json'
   })

@@ -687,7 +687,7 @@ export default {
       this.$alert(`是否永久删除: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delBusinessSystem(businessSystemNameAndId).then((response) => {
