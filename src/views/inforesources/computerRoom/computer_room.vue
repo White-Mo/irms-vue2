@@ -65,7 +65,7 @@
             </tr>
           </table>
         </div>
-        </table>
+<!--        </table>-->
       </dv-border-box-11>
       <dv-border-box-12 style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 24rem;background: #142437" v-show="datacard">
         <el-row style="position: relative;top:5%">

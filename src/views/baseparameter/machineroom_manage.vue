@@ -223,6 +223,7 @@
 import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal,delCabinet,addMachineRoom} from '@/api/baseparameter'
 import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
 import { getCabinet,getPost } from '@/api/select'
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -285,30 +286,42 @@ export default {
         //         status="维修中"
         //         break
         //     }
-        //     //console.log(status)
+        //     console.log(status)
         //     return status;
         //   }
         // }
       ],
       value: '',
+      realRole:'',
+      realChact:'',
+      realRoleid:'',
     }
   },
+   computed:{
+    ...mapGetters([
+      'roles'
+    ])
+   },
   created() {
     this.fetchData()
+    // this.realChact=this.$store.state.user.role_department_name
+    // this.realRole=this.$store.state.user.role_name.split('/')[0] //这个
+    this.realRoleid=this.$store.state.user.roleid
+
   },
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
-      // //console.log(this.basicValue)
+      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
-      // //console.log(this.basicValue)
+      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        //console.log(this.dataName)
+        console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // //console.log(JSON.parse(JSON.stringify(this.dataName)))
+        // console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
@@ -326,7 +339,7 @@ export default {
       getMachineRoomTotal(numparams).then((response) => {
         this.total = response.data
       })
-      // //console.log(this.initName)
+      // console.log(this.initName)
       getMachineRoomByPage(params).then((response) => {
         this.list = response.data.items
         this.listLoading = false
@@ -336,17 +349,36 @@ export default {
     addMachine() {
       // this.ifUpdate ='1'
       this.dialogFormVisible = true
-      getPost().then(response => {
-        //console.log(response.data.items)
+      // 取值有问题
+      const data ={
+        role:this.roles[0], //这个地方是realRole 写成了roles
+        postid:this.realRoleid
+      }
+      console.log(data)
+      getPost(data).then(response => {
         this.postAll = response.data.items
-        //console.log(this.postAll);
-        //console.log(this.options);
       })
+      // if(this.realChact !=="超级管理员"){
+      //   this.postAll = []
+      //   var obj = {
+      //    postId: this.realRoleid,
+      //    postName: this.realRole
+      //   }
+      //   this.postAll.push(obj)
+      // }else{
+      //   getPost().then(response => {
+      //     // console.log(response.data.items)
+      //     this.postAll = response.data.items
+      //     // console.log(this.postAll);
+      //     // console.log(this.options);
+      //   })
+      // }
+
     },
 
     ceateMachineRoom(){
       addMachineRoom(this.form).then(response => {
-        //console.log(response)
+        console.log(response)
         this.$alert("新增成功", '提示', {
           confirmButtonText: '确定',
           type: 'info',
@@ -391,7 +423,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`)
+      console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -439,7 +471,7 @@ export default {
       })
     },
     changeSelect() {
-      //console.log("============");
+      console.log("============");
         this.$forceUpdate();
       },
   }
@@ -450,9 +482,7 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-.el-select-dropdown .el-scrollbar {
-  position: relative;
-}
+
 .searchInput {
   height: 40px;
   text-align: center;

@@ -1,7 +1,7 @@
 <template>
-  <div class="update_detail">
+  <div class="edit-department">
     <div class="source">
-      <el-page-header content="部门信息" @back="back" />
+      <el-page-header content="修改部门" @back="back" />
     </div>
     <div class="source">
       <el-row>
@@ -27,7 +27,7 @@
               <el-input v-model="departmentForm.departmentCode" />
             </el-col>
           </el-form-item>
-          <el-form-item v-show="currentShow === '3'">
+          <el-form-item v-show="currentShow === '2'">
             <el-button type="primary" @click="onSubmit('departmentForm')">提交修改</el-button>
           </el-form-item>
         </el-form>
@@ -39,9 +39,10 @@
 <script>
 import {updatePostDepartmentAction, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
 import { getPost } from "@/api/select";
+import {mapGetters} from "vuex";
 
 export default {
-  name: 'addDepartment',
+  name: 'upDataDepartment',
   props: {
     row: {
       type: Object,
@@ -52,11 +53,27 @@ export default {
       required: true
     }
   },
+  computed:{
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
     this.initDepartmentData()
-    getPost().then(response => {
-      //console.log(response)
+    const data = {
+      role:this.roles[0],
+      postid:this.$store.state.user.roleid,
+    }
+    getPost(data).then(response => {
+      console.log(response)
       this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          console.log(element.postName)
+          this.department.postName = element.postName
+          this.department.postId=element.postId
+        }
+      })
     })
   },
   data() {
@@ -90,6 +107,7 @@ export default {
     }
 
     return {
+
       nameRules: false,
       codeRules: false,
       postRules:false,
@@ -121,7 +139,7 @@ export default {
     }
   },
   mounted() {
-    //console.log(this.currentShow+"---------------------------------")
+    console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -154,12 +172,12 @@ export default {
             }).then(() => {
               this.back()
             })
-            //console.log(res)
+            console.log(res)
           }).catch(err => {
-            //console.log(err)
+            console.log(err)
           })
         } else {
-          //console.log('error submit!!');
+          console.log('error submit!!');
           return false;
         }
       });
@@ -186,6 +204,7 @@ export default {
       })
     },
     changePost(val) {
+      console.log("+++++++++++++++++++++",val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           this.department.postId=element.postId
@@ -193,6 +212,7 @@ export default {
       })
     },
     initDepartmentData(){
+      console.log("***********",this.row)
       this.department=this.row
     }
   }

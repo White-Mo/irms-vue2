@@ -52,7 +52,7 @@ router.beforeEach(async(to, from, next) => {
           Message.error({
             message: error || '出现错误，请稍后再试'
           })
-          next(`/login?redirect=${to.path}`)
+          next({ path: '/' })
           NProgress.done()
         }
       }

@@ -91,36 +91,25 @@
               @click="addDepartment()"
             >添加部门</el-button>
           </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1">
-            <el-button
-              size="medium"
-              type="primary"
-              style="margin-left: 50px"
-              @click="Refresh()"
-            >返回部门首页</el-button>
-          </el-col>
         </el-row>
-        <el-table
-          :data="tableData"
-          height="67vh"
-          :row-style="{height:'6.26vh'}"
-          v-loading="listLoading"
-          element-loading-text="Loading"
-          stripe
-          highlight-current-row
-          border
-          show-header
-          style="width: 100%">
-          <el-table-column align="center" type="index" />
+      <el-table
+        v-if="refreshTable"
+        :data="tableData"
+        height="67vh"
+        :row-style="{height:'6.26vh'}"
+        v-loading="listLoading"
+        :default-expand-all="isExpand"
+        element-loading-text="Loading"
+        stripe
+        highlight-current-row
+        border
+        show-header
+        style="width: 100%">
+        <el-table-column align="center" type="index" />
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-table
-                :data="props.row.children" cell-style="background-color: pink">
+                :data="props.row.children" :cell-style="{background:'pink'}">
                 <el-table-column  align="center" width="48"/>
                 <el-table-column  align="center" type="index"/>
                 <el-table-column  prop="departmentName" label="部门" width="675"></el-table-column>
@@ -134,17 +123,16 @@
               </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="postName" label="部门所属单位" width="675"></el-table-column>
-          <el-table-column prop="postCode" label="单位代码" width="675"></el-table-column>
-          <el-table-column prop="operation" label="操作" ></el-table-column>
-        </el-table>
-        <div class="count"><span class="countPost">单位总数:{{this.postTotal}}</span><span class="countDepartment">部门总数:{{this.departmentTotal}}</span> </div>
+          <el-table-column prop="postName" label="部门所属单位" width="675*2"></el-table-column>
+          <el-table-column prop="postCode"  label="" width="675"></el-table-column>
+          <el-table-column prop="operation" label="" ></el-table-column>
+      </el-table>
       </div>
       <div v-if="ifUpdate === '1'">
         <addDepartment @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifUpdate === '3'">
-        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv"></updateDepartment>
+      <div v-if="ifUpdate === '2'">
+        <updateDepartment :row="row"  :current-show="ifUpdate" @changeDiv="changeDiv"></updateDepartment>
       </div>
 
     </div>
@@ -152,7 +140,7 @@
 </template>
 
 <script>
-import {getDepartment, getPost} from "@/api/select";
+import {getDepartment, getPost, getPostAllWithDepartment} from "@/api/select";
 import addDepartment from "@/components/Baseparameter/department/addDepartment";
 import updateDepartment from "@/components/Baseparameter/department/updateDepartment";
 import {delPostDepartment} from "@/api/baseparameter";
@@ -173,12 +161,15 @@ export default {
   },
   data() {
     return {
+      refreshTable:true,
+      isExpand:false,
       listLoading: true,
       tableData: [],
+      tempTableData:[],
       postTotal:'',
       departmentTotal:'',
       inputValue: '',
-      dataName: 'all',
+      dataName: '',
       ifUpdate: '0',
       basicValue: [
         {
@@ -197,12 +188,12 @@ export default {
     }
   },
   mounted() {
-    //------------------------------获取数据开始------------------------------------------------------
-
-    getPost().then(response => {
+    this.fetchData()
+    // ------------------------------获取数据开始------------------------------------------------------
+   /* getPost().then(response => {
       this.listLoading = true
-      this.postTotal = response.data.total
-      let total = response.data.total
+      this.postTotal = response.data.items.length
+      let total = response.data.items.length
       let promises = []
       this.departmentTotal=0
       for (let i = 0; i < total; i++) {
@@ -233,8 +224,9 @@ export default {
             }
           })
         )
+
       }
-      //console.log(promises)
+      // console.log("++++++++++++++++++++++",promises)
       Promise.all(promises).then(results => {
         for (let result of results) {
           this.tableData.push(result)
@@ -242,37 +234,50 @@ export default {
         }
         this.listLoading = false
       })
-      console.log(this.tableData)
-    })
+      console.log("--------------------",this.tableData)
+      this.tempTableData = this.tableData
+      //console.log(this.tableData)
+    })*/
+
     //------------------------------获取数据结束------------------------------------------------------
   },
   created() {
-    this.fetchData()
-    this.searchData()
+
   },
   methods: {
-    //--------------刷新功能开始---------------------
-    Refresh(){
-      location.reload();
-    },
-    //--------------刷新功能结束---------------------
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
+      console.log("****************1",this.dataName[0])
+      console.log("***",this.basicValue[0].value)
       this.listLoading = true;
+     this.tableData =  this.tempTableData ;
       setTimeout(() => {
         let searchResults = [];
         if (this.inputValue !== '') {
           searchResults = this.tableData.filter(data => {
-            return (
-              data.postName.includes(this.inputValue) ||
-              data.children.some(child => child.departmentName.includes(this.inputValue) || child.departmentCode.includes(this.inputValue))
-            );
+            if(this.dataName[0]===this.basicValue[0].value){
+              return(data.children.some(child => child.departmentName.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[1].value){
+              return (data.children.some(child => child.departmentCode.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[2].value){
+              return (data.postName.includes(this.inputValue))
+            }else {
+              return null;
+            }
           });
+          this.isExpand=true;
         } else {
           searchResults = this.tableData;
+          this.isExpand=false;
         }
         //console.log(searchResults)
+        this.refreshTable = false;
         this.tableData = searchResults;
+        this.$nextTick(() => {
+          this.refreshTable = true;
+        });
         this.listLoading = false;
       }, 200);
     },
@@ -280,18 +285,19 @@ export default {
 
     fetchData() {
       this.listLoading = true
-      if (this.dataName === 'all' || this.dataName.length === 0) {
-        this.initName = ['111']
-      } else {
-        this.initName = JSON.parse(JSON.stringify(this.dataName))
-      }
-      this.listLoading = false
+      getPostAllWithDepartment().then(res=>{
+        this.postTotal = res.data.items.length
+        this.tableData = res.data.items
+        this.tempTableData = this.tableData
+        this.listLoading = false
+        console.log("+++",this.tableData)
+      })
     },
     addDepartment() {
       this.ifUpdate = '1'
     },
     handleEdit(index, row) {
-      this.ifUpdate = '3'
+      this.ifUpdate = '2'
       this.row = row
     },
     handleDelete(index, row) {
@@ -315,6 +321,7 @@ export default {
         }
       })
     },
+
     changeDiv(value) {
       this.ifUpdate = value
       this.fetchData()
@@ -383,4 +390,3 @@ export default {
   background-color: beige;
 }
 </style>
-

@@ -89,6 +89,55 @@ export function createDepartment(data) {
     responseType: 'json'
   })
 }
+//新增业务系统 ----------------------赵长开-------------------
+export function createBusinessSystem(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/createBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//检查业务系统是否重复----------------------赵长开-------------------
+export function checkBusinessSystemName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkBusinessSystemName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//删除业务系统---------------------赵长开----------------------
+export function delBusinessSystem(data) {
+  return request({
+    url: '/home/baseparameter/delBusinessSystem',
+    method: 'delete',
+    params: data
+  })
+}
+//修改业务系统----------------赵长开----------------
+export function updateBusinessSystemAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateBusinessSystemAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//通过业务系统Id获取设备------------赵长开
+export function getEquipmentByBusinessSystemId(data){
+  return request({
+    //params:data,
+    params: {tempBusinessSystemNameId : data},
+    url:'/home/baseparameter/getEquipmentByBusinessSystemId',
+    method:'post',
+    responseType:'json'
+  })
+}
+
 
 //修改单位
 export function updatePostAction(data) {
@@ -109,6 +158,7 @@ export function updatePostDepartmentAction(data) {
     responseType: 'json'
   })
 }
+
 //检查单位名称是否重复
 export function checkPostName(data) {
   return request({
@@ -230,11 +280,3 @@ export function delCabinet(data) {
   })
 }
 
-//删除业务系统
-export function delBusinessSystem(data) {
-  return request({
-    url: '/home/baseparameter/delBusinessSystem',
-    method: 'delete',
-    params: {equipmentTypeId : data}
-  })
-}

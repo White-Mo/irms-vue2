@@ -80,14 +80,18 @@
 <!--&lt;!&ndash;                  :value="item.cabinetName"&ndash;&gt;-->
 <!--&lt;!&ndash;                />&ndash;&gt;-->
 <!--              </el-select>-->
-              <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
-              </el-input>
-              <span v-else>{{ scope.row[key] }}</span>
+              <el-form :ref="labels" :model="labels">
+                <el-form-item style="height:20px">
+                  <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
+                  </el-input>
+                  <span v-else>{{ scope.row[key] }}</span>
+                </el-form-item>
+              </el-form>
             </template>
           </af-table-column>
           <el-table-column align="center" label="操作" width="200px"  fixed="right">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.isEdit"
+              <el-button
                 size="mini"
                 :style="{ display: scope.row.isEdit==false?'none':'' }"
                 @click="handleDetail(scope.$index, scope.row)"
@@ -119,6 +123,8 @@ import { hunhe1 } from '@/layout/mixin/IP_address_Mix'
 import { updateBasicInfoNetwork } from '@/api/IP_address'
 import user from '@/store/modules/user'
 import { getMachineRoom,getCabinet } from '@/api/select'
+
+import {validateIP, validateMAC} from '@/api/validate'
 
 export default {
   filters: {
@@ -233,9 +239,12 @@ export default {
     this.fetchData()
     let a = 0
     a = await this.handleAsync(a)
-    // //console.log(a);
-    // //console.log(this.list_network)
-    // //console.log(this.list)
+    // console.log(a);
+    // console.log(this.list_network)
+    // console.log(this.list)
+  },
+  created() {
+    this.fetchData()
   },
   methods: {
     async handleAsync(val){
@@ -246,7 +255,7 @@ export default {
           setTimeout(() => {
             if (e == 2) {
               val = e;
-              //console.log(val);
+              console.log(val);
               resolve(val)
             }
 
@@ -256,15 +265,16 @@ export default {
     },
     handleDetail(index, row) {
       this.visiblePublish=false
-      //console.log(row.isEdit)
+      console.log(row.isEdit)
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
       }
+      this.fetchData()
     },
     handleMove(index, row) {
       this.visiblePublish=true
       row.isEdit = !row.isEdit;
-      //console.log(row.isEdit)
+      console.log(row.isEdit)
       if (!row.isEdit) {
         // let machineRoomId = ''
         // let cabinetId = ''
@@ -278,21 +288,31 @@ export default {
         //     cabinetId = element.cabinetId;
         //   }
         // })
-        // //console.log(machineRoomId,cabinetId);
+        // console.log(machineRoomId,cabinetId);
         const params = {
           equipmentId: row.equipmentId,
           ip_address:row.ip_address,
           switch_info: row.switch_info,
           cabinetUStart: row.cabinetUStart,
           cabinetUEnd: row.cabinetUEnd
-        }
-        updateBasicInfoNetwork(params).then( res=>{
-          //console.log(res);
+        };
+        const checkIp = validateIP(params.ip_address)
+        const checkSwitch = validateMAC(params.switch_info)
+        if(checkIp && checkSwitch){
+          updateBasicInfoNetwork(params).then( res=>{
+          console.log(res);
           this.$message({
             message: '申请成功',
             type: 'success'
           })
-        } )
+        } )}
+        else if(checkIp == false || checkSwitch == false){
+          this.$message({
+          message: '申请失败，IP地址或MAC地址有误',
+          type: 'error'
+        });
+        this.fetchData()}
+        else {};
       }else{
         //
         // getMachineRoom(row.postId).then(response => {
@@ -309,7 +329,7 @@ export default {
     async changeRoom(row) {
       // let val = row.machineRoomName
       // await this.fetchCabinet(val)
-      // //console.log(this.cabinetAll[0].cabinetName);
+      // console.log(this.cabinetAll[0].cabinetName);
       // row.cabinetName = this.cabinetAll[0].cabinetName
     },
     async fetchCabinet(val) {
@@ -318,7 +338,7 @@ export default {
           if (element.machineRoomName === val) {
             getCabinet(element.machineRoomId).then(response => {
               this.cabinetAll = response.data.items
-              //console.log(this.cabinetAll[0].cabinetName);
+              console.log(this.cabinetAll[0].cabinetName);
               resolve()
             })
           }
@@ -335,9 +355,7 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-.el-select-dropdown .el-scrollbar {
-  position: relative;
-}
+
 .searchInput {
   height: 40px;
   text-align: center;
