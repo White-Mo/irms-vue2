@@ -582,7 +582,7 @@ export default {
 <template>
   <div class="Online_digital_computer_room_panel">
     <div
-      v-show="ifUpdate === '0'"
+      v-if="ifUpdate === '0'"
     >
       <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
       <div class="app-container"  >
@@ -685,7 +685,7 @@ export default {
         </div>
       </div>
     </div>
-    <div v-show="ifUpdate === '1'">
+    <div v-if="ifUpdate === '1'">
       <search-computer-room-by-post-name v-bind:postName="this.tempPost"   @changeDiv="changeDiv"></search-computer-room-by-post-name>
     </div>
   </div>
@@ -733,9 +733,9 @@ export default {
   methods:{
     fetchData(){
       getPost().then(response => {
-        this.loading = false
         this.unitAll = response.data.items
         this.unit = response.data.items
+        this.loading = false
       })
     },
     //----------------------搜索功能searchData()实现开始--赵长开-----------------------------------------------------------
@@ -768,8 +768,9 @@ export default {
       this.ifUpdate = '1'
     },
     changeDiv(value) {
-      this.ifUpdate = value
+      this.loading=true;
       this.fetchData()
+      this.ifUpdate = value
     }
   }
 }
