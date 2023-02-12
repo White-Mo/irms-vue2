@@ -1,432 +1,3 @@
-<!--
-<template>
-  <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
-    <div class="app-container">
-      <div v-show="ifUpdate === '0'"
-        class="show"
-      >
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">部门管理</span>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row
-          :gutter="10"
-          class="bg-condition"
-        >
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <span>查询条件：</span>
-          </el-col>
-          <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
-          >
-            <el-select
-              v-model="dataName"
-              placeholder="详细字段查询"
-              multiple
-              size="medium"
-            >
-              <el-option
-                v-for="(item,index) in basicvalue"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                class="searchInput"
-              />
-            </el-select>
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <el-input
-              v-model="inputValue"
-              placeholder="输入查询内容"
-              clearable
-              size="medium"
-            />
-          </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-search"
-              clearable="true"
-              @click="fetchData()"
-            >搜索</el-button>
-          </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
-            <el-button
-              size="medium"
-              type="info"
-              @click="addDepartment()"
-            >添加部门</el-button>
-          </el-col>
-        </el-row>
-        <el-table
-          height="70vh"
-          :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
-          v-loading="listLoading"
-          :disable="true"
-          :data="list"
-          element-loading-text="Loading"
-          border
-          highlight-current-row
-          stripe
-        >
-          <el-table-column align="center" type="index" />
-          <el-table-column
-            v-for="(item,index) in basicvalue"
-            :key="index"
-            :label="item.label"
-            :prop="item.value"
-            :formatter="item.formatter"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column align="center" label="操作" width="250px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="block">
-          <el-pagination
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
-        </div>
-      </div>
-      <div v-if="ifUpdate === '1'">
-        <addDepartment @changeDiv="changeDiv" />
-      </div>
-      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv"></updateDepartment>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-import {delPostDepartment, getPostDepartmentByPage} from '@/api/baseparameter'
-import addDepartment from '@/components/Baseparameter/department/addDepartment'
-import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
-
-
-export default {
-  components: {
-    addDepartment,
-    updateDepartment
-  },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      list: null,
-      total: 0,
-      currentPage: 0,
-      limit: 10,
-      initName: '',
-      inputValue: '',
-      dataName: 'all',
-      ifUpdate: '0',
-      listLoading: true,
-      basicvalue: [
-        {
-          value: 'departmentName',
-          label: '部门名称',
-        },
-        {
-          value: 'departmentCode',
-          label: '部门代码'
-        },
-        {
-          value: 'postName',
-          label: '所属单位'
-        }
-      ],
-      value: '',
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    // 综合数据管理展示与查询&#45;&#45;lry
-    fetchData() {
-      // //console.log(this.basicValue)
-      // 判断处理-&#45;&#45;解决空值与后台逻辑不符合问题&#45;&#45;&#45;&#45;时间紧待优化
-      this.listLoading = true
-      // //console.log(this.basicValue)
-      // 判断处理-&#45;&#45;解决空值与后台逻辑不符合问题&#45;&#45;&#45;&#45;时间紧待优化
-      if (this.dataName === 'all' || this.dataName.length === 0) {
-        //console.log(this.dataName)
-        this.initName = ['111']
-      } else {
-        // //console.log(JSON.parse(JSON.stringify(this.dataName)))
-        this.initName = JSON.parse(JSON.stringify(this.dataName))
-      }
-      const params = {
-        dataName: this.initName,
-        dataValue: this.inputValue,
-        start: this.currentPage,
-        limit: this.limit,
-      }
-      // //console.log(this.initdata)
-      getPostDepartmentByPage(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    },
-
-    addDepartment() {
-      this.ifUpdate = '1'
-    },
-    handleDetail(index, row) {
-      this.ifUpdate = '2'
-      this.row = row
-    },
-    handleEdit(index, row) {
-      this.ifUpdate = '3'
-      this.row = row
-    },
-    handleDelete(index, row) {
-      this.$alert("是否永久删除该部门", '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delPostDepartment(row.departmentId).then((response) => {
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.fetchData()
-              })
-            })
-          }
-        }
-      })
-    },
-    handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`)
-      this.limit = val
-      this.fetchData()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val - 1
-      const params = {
-        dataName: this.initName,
-        dataValue: this.inputValue,
-        start: this.currentPage,
-        limit: this.limit
-      }
-      getPostDepartmentByPage(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    },
-    changeDiv(value) {
-      this.ifUpdate = value
-      this.fetchData()
-    },
-
-  }
-}
-</script>
-
-<style lang="less" scoped>
-//*{
-//  font-size: 18px;
-//}
-.el-select-dropdown .el-scrollbar {
-  position: relative;
-}
-.searchInput {
-  height: 40px;
-  text-align: center;
-  color: #0b0c10;
-  background-color: #deecff;
-}
-.el-col {
-  border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #304156;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-condition {
-  line-height: 50px;
-  text-align: center;
-  height: 54px;
-  margin: 0px !important;
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
-.app-container {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-.grid-content {
-  padding: 9px;
-  box-shadow: 0 0 4px rgb(0 0 0 / 30%);
-}
-.font {
-  font-size: 18px;
-}
-.el-cascader .el-input {
-  width: 130px;
-}
-.el-pagination > *{
-  font-size: 18px;
-}
-.block{
-  text-align: center;
-}
-</style>
-<style  lang="less">
-//覆盖样式
-.el-select-dropdown__item {
-  height: 30px;
-  flex: 1 0 25%;
-  margin: 10px;
-}
-.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px;
-  height: auto;
-  width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-}
-.el-select-dropdown__wrap{
-  max-height: none;
-}
-.el-scrollbar {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: auto;
-  height: 100%;
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #1d1e1f;
-  background-color: #d2d2d2;
-}
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
-}
-
-.el-button&#45;&#45;primary {
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-.radio_class{
-  display:inline-block;
-  height:2rem;
-  width:100%;
-}
-</style>
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--测试版(最终版)-->
 <template>
   <div class="info-body">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
@@ -520,25 +91,14 @@ export default {
               @click="addDepartment()"
             >添加部门</el-button>
           </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1">
-            <el-button
-              size="medium"
-              type="primary"
-              style="margin-left: 50px"
-              @click="Refresh()"
-            >返回部门首页</el-button>
-          </el-col>
         </el-row>
       <el-table
+        v-if="refreshTable"
         :data="tableData"
         height="67vh"
         :row-style="{height:'6.26vh'}"
         v-loading="listLoading"
+        :default-expand-all="isExpand"
         element-loading-text="Loading"
         stripe
         highlight-current-row
@@ -549,7 +109,7 @@ export default {
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-table
-                :data="props.row.children" cell-style="background-color: pink">
+                :data="props.row.children" :cell-style="{background:'pink'}">
                 <el-table-column  align="center" width="48"/>
                 <el-table-column  align="center" type="index"/>
                 <el-table-column  prop="departmentName" label="部门" width="675"></el-table-column>
@@ -563,17 +123,16 @@ export default {
               </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="postName" label="部门所属单位" width="675"></el-table-column>
-          <el-table-column prop="postCode" label="单位代码" width="675"></el-table-column>
-          <el-table-column prop="operation" label="操作" ></el-table-column>
+          <el-table-column prop="postName" label="部门所属单位" width="675*2"></el-table-column>
+          <el-table-column prop="postCode"  label="" width="675"></el-table-column>
+          <el-table-column prop="operation" label="" ></el-table-column>
       </el-table>
-        <div class="count"><span class="countPost">单位总数:{{this.postTotal}}</span><span class="countDepartment">部门总数:{{this.departmentTotal}}</span> </div>
       </div>
       <div v-if="ifUpdate === '1'">
         <addDepartment @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifUpdate === '3'">
-        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv"></updateDepartment>
+      <div v-if="ifUpdate === '2'">
+        <updateDepartment :row="row"  :current-show="ifUpdate" @changeDiv="changeDiv"></updateDepartment>
       </div>
 
     </div>
@@ -602,13 +161,15 @@ export default {
   },
   data() {
     return {
+      refreshTable:true,
+      isExpand:false,
       listLoading: true,
       tableData: [],
       tempTableData:[],
       postTotal:'',
       departmentTotal:'',
       inputValue: '',
-      dataName: 'all',
+      dataName: '',
       ifUpdate: '0',
       basicValue: [
         {
@@ -627,13 +188,9 @@ export default {
     }
   },
   mounted() {
-    getPostAllWithDepartment().then(res=>{
-      console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++")
-      console.log(res)
-    })
-    //------------------------------获取数据开始------------------------------------------------------
-
-    getPost().then(response => {
+    this.fetchData()
+    // ------------------------------获取数据开始------------------------------------------------------
+   /* getPost().then(response => {
       this.listLoading = true
       this.postTotal = response.data.items.length
       let total = response.data.items.length
@@ -680,37 +237,47 @@ export default {
       console.log("--------------------",this.tableData)
       this.tempTableData = this.tableData
       //console.log(this.tableData)
-    })
+    })*/
+
     //------------------------------获取数据结束------------------------------------------------------
   },
   created() {
-    this.fetchData()
-    this.searchData()
+
   },
   methods: {
-    //--------------刷新功能开始---------------------
-    Refresh(){
-      location.reload();
-    },
-    //--------------刷新功能结束---------------------
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
+      console.log("****************1",this.dataName[0])
+      console.log("***",this.basicValue[0].value)
       this.listLoading = true;
      this.tableData =  this.tempTableData ;
       setTimeout(() => {
         let searchResults = [];
         if (this.inputValue !== '') {
           searchResults = this.tableData.filter(data => {
-            return (
-              data.postName.includes(this.inputValue) ||
-              data.children.some(child => child.departmentName.includes(this.inputValue) || child.departmentCode.includes(this.inputValue))
-            );
+            if(this.dataName[0]===this.basicValue[0].value){
+              return(data.children.some(child => child.departmentName.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[1].value){
+              return (data.children.some(child => child.departmentCode.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[2].value){
+              return (data.postName.includes(this.inputValue))
+            }else {
+              return null;
+            }
           });
+          this.isExpand=true;
         } else {
           searchResults = this.tableData;
+          this.isExpand=false;
         }
         //console.log(searchResults)
+        this.refreshTable = false;
         this.tableData = searchResults;
+        this.$nextTick(() => {
+          this.refreshTable = true;
+        });
         this.listLoading = false;
       }, 200);
     },
@@ -718,18 +285,19 @@ export default {
 
     fetchData() {
       this.listLoading = true
-      if (this.dataName === 'all' || this.dataName.length === 0) {
-        this.initName = ['111']
-      } else {
-        this.initName = JSON.parse(JSON.stringify(this.dataName))
-      }
-      this.listLoading = false
+      getPostAllWithDepartment().then(res=>{
+        this.postTotal = res.data.items.length
+        this.tableData = res.data.items
+        this.tempTableData = this.tableData
+        this.listLoading = false
+        console.log("+++",this.tableData)
+      })
     },
     addDepartment() {
       this.ifUpdate = '1'
     },
     handleEdit(index, row) {
-      this.ifUpdate = '3'
+      this.ifUpdate = '2'
       this.row = row
     },
     handleDelete(index, row) {
@@ -753,6 +321,7 @@ export default {
         }
       })
     },
+
     changeDiv(value) {
       this.ifUpdate = value
       this.fetchData()

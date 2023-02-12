@@ -295,7 +295,7 @@ export default {
     },
 
     changePost(val) {
-      //console.log(val)
+      console.log("*************",val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {

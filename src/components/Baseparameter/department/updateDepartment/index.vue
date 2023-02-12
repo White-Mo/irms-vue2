@@ -27,7 +27,7 @@
               <el-input v-model="departmentForm.departmentCode" />
             </el-col>
           </el-form-item>
-          <el-form-item v-show="currentShow === '3'">
+          <el-form-item v-show="currentShow === '2'">
             <el-button type="primary" @click="onSubmit('departmentForm')">提交修改</el-button>
           </el-form-item>
         </el-form>
@@ -60,14 +60,20 @@ export default {
   },
   created() {
     this.initDepartmentData()
-    const data ={
-      role:this.roles[0], //这个地方是realRole 你写成了roles
+    const data = {
+      role:this.roles[0],
       postid:this.$store.state.user.roleid,
     }
-    console.log(data)
     getPost(data).then(response => {
       console.log(response)
       this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          console.log(element.postName)
+          this.department.postName = element.postName
+          this.department.postId=element.postId
+        }
+      })
     })
   },
   data() {
@@ -101,6 +107,7 @@ export default {
     }
 
     return {
+
       nameRules: false,
       codeRules: false,
       postRules:false,
@@ -197,6 +204,7 @@ export default {
       })
     },
     changePost(val) {
+      console.log("+++++++++++++++++++++",val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           this.department.postId=element.postId
@@ -204,6 +212,7 @@ export default {
       })
     },
     initDepartmentData(){
+      console.log("***********",this.row)
       this.department=this.row
     }
   }

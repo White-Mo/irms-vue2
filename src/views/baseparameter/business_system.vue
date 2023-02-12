@@ -577,10 +577,10 @@ export default {
       <div v-if="ifShow === '1'">
         <addBusinessSystem @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifShow === '3'">
+      <div v-if="ifShow === '2'">
         <updateBusinessSystem :row="row" :current-show="ifShow" @changeDiv="changeDiv"></updateBusinessSystem>
       </div>
-      <div v-if="ifShow === '4'">
+      <div v-if="ifShow === '3'">
         <searchEquipmentByBusinessSystem :tempBusinessSystemNameId="this.tempBusinessSystemNameId" :current-show="ifShow" @changeDiv="changeDiv"></searchEquipmentByBusinessSystem>
       </div>
     </div>
@@ -677,7 +677,7 @@ export default {
     },
     handleEdit(index, row) {
       //console.log(row)
-      this.ifShow ='3'
+      this.ifShow ='2'
       this.row = row
     },
     handleDelete(index, row) {
@@ -707,7 +707,7 @@ export default {
 
     //通过业务系统搜索设备
     getEquipmentByBusinessSystemId(index, row){
-      this.ifShow ='4'
+      this.ifShow ='3'
       this.tempBusinessSystemNameId = row.businessSystemId
     },
 

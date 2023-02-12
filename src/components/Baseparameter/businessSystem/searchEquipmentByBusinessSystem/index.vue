@@ -11,7 +11,7 @@
       :gutter="10"
       class="bg-condition"
     >
-      <el-col
+<!--      <el-col
         :xs="2"
         :sm="2"
         :md="2"
@@ -70,42 +70,46 @@
           clearable="true"
           @click="fetchData()"
         >搜索</el-button>
-        <el-col
-          :xs="2"
-          :sm="2"
-          :md="2"
-          :lg="2"
-          :xl="2">
-          <el-button
-            size="medium"
-            type="primary"
-            style="margin-left: 130px"
-            @click="Refresh()"
-          >返回业务系统首页</el-button>
-        </el-col>
+      </el-col>-->
+      <el-col
+        :xs="1"
+        :sm="1"
+        :md="1"
+        :lg="1"
+        :xl="1">
+        <el-button
+          size="medium"
+          :plain="true"
+          @click="Refresh()"
+        >返回</el-button>
       </el-col>
     </el-row>
-    <div style="height: 76.5vh; background-color: #5db2ff; line-height: 76.5vh; text-align: center; font-size: 80px" >
-      我是通过业务系统查找设备页面</div>
-<!--    <el-table-->
-<!--      height="76.5vh"-->
-<!--      :row-style="{height:'6.26vh'}"-->
-<!--      :cell-style="{padding:'0px'}"-->
-<!--      v-loading="listLoading"-->
-<!--      :disable="true"-->
-<!--      :data="list"-->
-<!--      element-loading-text="Loading"-->
-<!--      border-->
-<!--      highlight-current-row-->
-<!--      stripe-->
-<!--    >-->
-<!--      <el-table-column align="center" type="index" />-->
-<!--    </el-table>-->
+<!--    <div style="height: 76.5vh; background-color: #5db2ff; line-height: 76.5vh; text-align: center; font-size: 80px" >
+      我是通过业务系统查找设备页面</div>-->
+    <el-table
+      height="76.5vh"
+      :row-style="{height:'6.26vh'}"
+      :cell-style="{padding:'0px'}"
+      v-loading="listLoading"
+      :disable="true"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      highlight-current-row
+      stripe
+    >
+      <el-table-column align="center" type="index" />
+      <el-table-column  prop="BasicInfoId" label="设备名称" ></el-table-column>
+      <el-table-column  prop="equipmentName" label="设备名称" ></el-table-column>
+      <el-table-column  prop="postName" label="设备所属单位" ></el-table-column>
+      <el-table-column  prop="departmentName" label="设备所属部门" ></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
 import {getEquipmentByBusinessSystemId} from "@/api/baseparameter";
+
 export default {
   name:'searchEquipmentByBusinessSystem',
   props:['tempBusinessSystemNameId'],
@@ -113,14 +117,20 @@ export default {
     return{
       // listLoading: true,
       list:null,
+      listLoading:true,
 
     }
   },
   mounted() {
     const tempBusinessSystemNameId = this.tempBusinessSystemNameId
+    this.listLoading = true
     getEquipmentByBusinessSystemId(tempBusinessSystemNameId).then(res=>{
+      console.log("**********",res)
+      if(res.data.items[0].message === "该业务系统下没有设备"){
+        alert(res.data.items[0].message)
+      }
       this.list = res.data.items
-      console.log(res)
+      this.listLoading = false
     })
   },
   methods:{
