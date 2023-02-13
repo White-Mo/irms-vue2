@@ -402,13 +402,14 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该机房", '提示', {
+      this.$alert(`是否永久删除机房：\"${row.machineRoomName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delMachineRoom(row.machineRoomId).then((response) => {
+              console.log("***",row.machineRoomId)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',

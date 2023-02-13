@@ -176,29 +176,29 @@
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
 
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                type="danger"-->
-<!--                text-->
-<!--                @click=handleDelete(scope.row)-->
-<!--              >删除</el-button>-->
+              <el-button
+                size="mini"
+                type="danger"
+                text
+                @click=handleDelete(scope.row)
+              >删除</el-button>
 
 <!--              <el-button-->
 <!--                研究发现，好像只是写了个删除键，仅此而已-->
 <!--              >删除</el-button>-->
 
-              <template>
-                <el-popconfirm
-                  confirm-button-text='确定'
-                  cancel-button-text='不用了'
-                  icon="el-icon-info"
-                  icon-color="red"
-                  title="请问这一行数据确定删除吗？"
-                  @confirm="handleDelete(scope.row)"
-                >
-                  <el-button slot="reference" type="danger" plain size="mini" style="position: relative;left: 10px" >删除</el-button>
-                </el-popconfirm>
-              </template>
+<!--              <template>-->
+<!--                <el-popconfirm-->
+<!--                  confirm-button-text='确定'-->
+<!--                  cancel-button-text='不用了'-->
+<!--                  icon="el-icon-info"-->
+<!--                  icon-color="red"-->
+<!--                  title="请问这一行数据确定删除吗？"-->
+<!--                  @confirm="handleDelete(scope.row)"-->
+<!--                >-->
+<!--                  <el-button slot="reference" type="danger" plain size="mini" style="position: relative;left: 10px" >删除</el-button>-->
+<!--                </el-popconfirm>-->
+<!--              </template>-->
 
             </template>
           </el-table-column>
@@ -720,7 +720,7 @@ export default {
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-      delPostDepartment(row.equipmentId).then((response) => {
+/*      delPostDepartment(row.equipmentId).then((response) => {
         this.$alert(response.data, '提示', {
           confirmButtonText: '确定',
           type: 'info',
@@ -728,31 +728,33 @@ export default {
         }).then(() => {
           this.fetchData()
         })
-      })
+      })*/
+
+      this.$confirm(`是否永久删除设备：\"${row.equipmentName}\"信息`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        delEquipment(row.equipmentId).then((response) => {
+          this.active = 0
+          this.$alert(response.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.fetchData()
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
     },
 
-    // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
-    //   confirmButtonText: '确定',
-    //   cancelButtonText: '取消',
-    //   type: 'warning',
-    //   center: true
-    // }).then(() => {
-    //   delEquipment(row.equipmentId).then((response) => {
-    //     this.active = 0
-    //     this.$alert(response.data, '提示', {
-    //       confirmButtonText: '确定',
-    //       type: 'info',
-    //       showClose: false
-    //     }).then(() => {
-    //       this.fetchData()
-    //     })
-    //   })
-    // }).catch(() => {
-    //   this.$message({
-    //     type: 'info',
-    //     message: '已取消删除'
-    //   });
-    // });
+
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit = val

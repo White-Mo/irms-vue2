@@ -16,7 +16,7 @@
               <el-input v-model="updateEquipmentSecondTypeForm.equipmentSecondTypeCode" />
             </el-col>
           </el-form-item>
-          <el-form-item label="所属二级设备类型" prop="equipmentFirstTypeId">
+          <el-form-item label="所属一级设备类型" prop="equipmentFirstTypeId">
             <el-select v-model="updateEquipmentSecondTypeForm.equipmentFirstTypeId" placeholder="请选择">
               <el-option
                 v-for="item in equipmentFirst"

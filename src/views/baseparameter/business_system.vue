@@ -687,7 +687,7 @@ export default {
       this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
       this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
       const businessSystemNameAndId = {...this.businessSystemNameAndId}
-      this.$alert(`是否永久删除: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
+      this.$alert(`是否永久删除业务系统: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

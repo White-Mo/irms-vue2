@@ -304,7 +304,7 @@ export default {
       this.$alert(`是否永久删除部门:\"${row.departmentName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delPostDepartment(row.departmentId).then((response) => {
