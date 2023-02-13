@@ -60,10 +60,10 @@ export default {
     }
     return{
       equipmentSecondType: {
-        equipmentSecondTypeName: this.row.equipmentSecondTypeName,
-        equipmentSecondTypeCode: this.row.equipmentSecondTypeCode,
-        equipmentSecondTypeId:this.row.equipmentSecondTypeId,
-        equipmentFirstTypeId:''
+        equipmentSecondTypeName: this.row.equipmentTypeName,
+        equipmentSecondTypeCode: this.row.equipmentTypeCode,
+        equipmentSecondTypeId:this.row.equipmentTypeId,
+        equipmentFirstTypeId:this.row.equipmentFirstTypeName
       },
       equipmentFirst:[],
       currentPage: 0,

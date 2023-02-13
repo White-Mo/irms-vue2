@@ -662,6 +662,7 @@ export default {
   methods: {
     // 综合数据管理展示与查询--lry
     fetchData() {
+      console.log(this.dataName)
       this.listLoading = true
       if (this.dataName === 'all' || this.dataName.length === 0) {
         //console.log(this.dataName)
@@ -744,7 +745,7 @@ export default {
 
 <style lang="less" scoped>
 *{
-  font-size: 18px;
+  //font-size: 18px;
 }
 .el-select-dropdown .el-scrollbar {
   position: relative;

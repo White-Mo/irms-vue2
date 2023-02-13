@@ -551,14 +551,17 @@ export default {
             <template slot-scope="scope">
                 <el-button
                   type="primary"
+                  size="mini"
                   @click="handleEdit(scope.$index, scope.row)"
                 >编辑</el-button>
               <el-button
                 type="danger"
+                size="mini"
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
               <el-button
                 type="info"
+                size="mini"
                 @click="getEquipmentByBusinessSystemId(scope.$index, scope.row)"
               >查看设备</el-button>
             </template>
@@ -740,9 +743,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
+/**{
   font-size: 18px;
-}
+}*/
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
