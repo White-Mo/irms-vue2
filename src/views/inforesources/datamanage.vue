@@ -131,17 +131,20 @@
 
 
 <!--    查看导入反馈-->
-<!--    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">-->
-<!--      <el-descriptions class="margin-top" title="" :column="2">-->
-<!--        <el-descriptions-item v-for="item in replayData">-->
-<!--          <template slot="label">-->
-<!--            {{item.key}}-->
-<!--          </template>-->
-<!--          {{item.value}}-->
-<!--        </el-descriptions-item>-->
-<!--      </el-descriptions>-->
-<!--      <el-button @click="resultBtn()" type="primary" style="margin-top: -25px;position:fixed;right:460px">确定</el-button>-->
-<!--    </el-dialog>-->
+    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
+      <el-descriptions class="margin-top" title="" :column="2">
+        <el-descriptions-item v-for="item in repalyData">
+          <template slot="label">
+            {{item.key}}
+          </template>
+          <el-tag :type= " item.values === 'update' ? 'success' : 'primary'">
+            {{item.values}}
+          </el-tag>
+
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-button @click="resultBtn()" type="primary">确定</el-button>
+    </el-dialog>
 
 
 
@@ -166,7 +169,7 @@
             </el-tag>
           </el-descriptions-item>
         </el-descriptions>
-        <el-button @click="uploadBtn()" type="primary" style="margin-top: -25px;position:fixed;right:460px">确定</el-button>
+        <el-button @click="uploadBtn()" type="primary" >确定</el-button>
       </div>
     </el-dialog>
 
@@ -543,37 +546,16 @@ export default {
 
     // 查看反馈信息
     checkReplay(index, row) {
-
-      const equipments = []
-      AddExcel({ equipments: equipments }).then(res => {
-        //获得数据
-        console.log('@@',res)
-        this.checkReplayResult.push(res.message)
-        console.log('@@@',this.checkReplayResult[0])
-        const h = this.$createElement;
-        this.$msgbox({
-          title: '查看反馈信息',
-          message: h('p', null, [
-            h('h2', null, row.name),
-            h('h3', null, res.message),
-          ]),
-          confirmButtonText: '确定',
+      if (this.repalyInfo[index] === undefined){
+        this.$message({
+          type:'error',
+          message:'暂无反馈信息'
         })
-      }).catch(err => {
-        console.log(err)
-      })
-
-
-      // if (this.repalyInfo[index] === undefined){
-      //   this.$message({
-      //     type:'error',
-      //     message:'暂无反馈信息'
-      //   })
-      // } else {
-      //   this.repalyData =  analysisReply(this.repalyInfo[index])
-      //   console.log(this.repalyData)
-      //   this.backinfoDialog  = true
-      // }
+      } else {
+        this.repalyData =  analysisReply(this.repalyInfo[index])
+        console.log(this.repalyData)
+        this.backinfoDialog  = true
+      }
       //
       // const equipments = []
       // console.log('&',this.form)
