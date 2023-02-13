@@ -346,57 +346,5 @@ export default {
 }
 </style>
 <style  lang="less">
-//覆盖样式
-.el-select-dropdown__item {
-  height: 30px;
-  flex: 1 0 25%;
-  margin: 10px;
-}
-.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px;
-  height: auto;
-  width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-}
-.el-select-dropdown__wrap{
-  max-height: none;
-}
-.el-scrollbar {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: auto;
-  height: 100%;
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #1d1e1f;
-  background-color: #d2d2d2;
-}
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
-}
 
-.el-button--primary {
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-.radio_class{
-  display:inline-block;
-  height:2rem;
-  width:100%;
-}
 </style>

@@ -356,9 +356,9 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
+<!-- <style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -401,4 +401,4 @@ export default {
 //  background-color: #409eff;
 //  border-color: #409eff;
 //}
-</style>
+</style> -->
