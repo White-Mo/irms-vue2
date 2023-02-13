@@ -800,7 +800,7 @@ export default {
 
 <style lang="less" scoped>
 *{
-  font-size: 18px;
+  // font-size: 18px;
 }
 .el-select-dropdown .el-scrollbar {
   position: relative;

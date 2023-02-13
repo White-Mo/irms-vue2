@@ -335,7 +335,7 @@ export default {
 
 <style lang="less" scoped>
 *{
-  font-size: 18px;
+  // font-size: 18px;
 }
 .count{
   background-color: #304156;
