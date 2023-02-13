@@ -166,7 +166,12 @@
 </template>
 
 <script>
-import { getEquipmentFirstTypeByPage, getEquipmentTypeByPage,addEquipmentFirstType } from '@/api/baseparameter'
+import {
+  getEquipmentFirstTypeByPage,
+  getEquipmentTypeByPage,
+  addEquipmentFirstType,
+  delPost, delEquipmentFirstType
+} from '@/api/baseparameter'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
 export default {
@@ -274,6 +279,32 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
+      // const h = this.$createElement;
+      // this.$msgbox({
+      //   title: '删除提示',
+      //   type: 'warning',
+      //   message: h('h3', null, [
+      //     h('span', null, '是否确定删除：'),
+      //     h('span', null, row.equipmentFirstTypeName + "-" + row.equipmentFirstTypeCode)
+      //   ]),
+      //   showCancelButton: true,
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   callback: (action) => {
+      //     if (action === 'confirm') {
+      //       delEquipmentFirstType(row.equipmentTypeId).then((response) => {
+      //         this.$alert(response.data, '提示', {
+      //           confirmButtonText: '确定',
+      //           type: 'info',
+      //           showClose: false
+      //         }).then(() => {
+      //           this.dataName="all"
+      //           this.fetchData()
+      //         })
+      //       })
+      //     }
+      //   }
+      // })
       this.$alert("是否永久删除该一级设备类型", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -284,6 +315,8 @@ export default {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
+
+
                 showClose: false
               }).then(() => {
                 this.dataName="all"

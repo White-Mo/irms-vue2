@@ -176,7 +176,13 @@
 </template>
 
 <script>
-import {delEquipmentType, getEquipmentTypeByPage,addEquipmentType,getEquipmentFirstTypeByPage} from '@/api/baseparameter'
+import {
+  delEquipmentType,
+  getEquipmentTypeByPage,
+  addEquipmentType,
+  getEquipmentFirstTypeByPage,
+  delPost
+} from '@/api/baseparameter'
 import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
 
 export default {
@@ -295,6 +301,7 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
+
       this.$alert("是否永久删除该二级设备类型", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

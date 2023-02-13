@@ -239,17 +239,25 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该单位", '提示', {
+      //console.log(row)
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '删除提示',
+        type: 'warning',
+        message: h('h3', null, [
+          h('span', null, '是否确定删除：'),
+          h('span', null, row.postCode + "-" + row.postName)
+        ]),
+        showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
+        callback: (action) => {
           if (action === 'confirm') {
             delPost(row.postId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
-                showClose: false
+                showClose: true
               }).then(() => {
                 this.fetchData()
               })
@@ -257,6 +265,24 @@ export default {
           }
         }
       })
+      // this.$alert("是否永久删除该单位", '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'info',
+      //   callback: (action, instance) => {
+      //     if (action === 'confirm') {
+      //       delPost(row.postId).then((response) => {
+      //         this.$alert(response.data, '提示', {
+      //           confirmButtonText: '确定',
+      //           type: 'info',
+      //           showClose: false
+      //         }).then(() => {
+      //           this.fetchData()
+      //         })
+      //       })
+      //     }
+      //   }
+
     },
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)

@@ -57,8 +57,10 @@
           </el-form-item>
         </el-form>
         <el-row v-show="currentShow === '3'">
-          <el-col :span="2" :offset="11"><el-button type="primary" @click="back">取消</el-button></el-col>
+          <el-col :span="2" :offset="9"><el-button type="primary" @click="back">取消</el-button></el-col>
           <el-col :span="2"><el-button type="primary" @click="commit">提交</el-button></el-col>
+<!--          <el-col :span="2"><el-button type="indo" @click="showResult">查看反馈信息</el-button></el-col>-->
+
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="详情表" name="1">
@@ -180,9 +182,34 @@
         <el-row v-show="currentShow === '3'">
           <el-col :span="2" :offset="11"><el-button type="primary" @click="back">取消</el-button></el-col>
           <el-col :span="2"><el-button type="primary" @click="commit">提交</el-button></el-col>
+<!--          <el-col :span="3"><el-button type="indo" @click="showResult">查看反馈信息1</el-button></el-col>-->
         </el-row>
       </el-tab-pane>
     </el-tabs>
+
+    <el-dialog
+      :visible.sync="showDialog"
+      width="80%"
+      title="查看反馈信息">
+      <div style="height:450px;text-align:center">
+        <!--需要弹出的内容部分-->
+        <el-descriptions  :column="3"  border>
+          <el-descriptions-item v-for="item in replayData">
+            <template slot="label">
+              <i></i>
+              {{item.key}}
+            </template>
+            <el-tag
+              size="small"
+              :type = "item.values === 'update' ? 'success' :'primary'">
+              {{item.values === 'update' ? '更新' : item.values}}
+            </el-tag>
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-button @click="showDialog=false" type="primary" style="margin-top: 10px;position:fixed;right:200px">确定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -191,6 +218,7 @@ import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
 import { addEquipment, getbasic } from '@/api/table'
 import user from '@/store/modules/user'
+import {analysisReply} from '@/utils/xlsx'
 
 export default {
   components: {
@@ -208,6 +236,10 @@ export default {
   },
   data() {
     return {
+      replayData:[],
+      allTableData: [],
+      dialogVisible:false,
+      showDialog:false,
       tab_name: '0',
       roleid: user.state.roleid,
       department: {},
@@ -309,7 +341,7 @@ export default {
   // },
   created() {
     this.fetchData()
-    //console.log(this.currentShow)
+    console.log(this.currentShow)
   },
   mounted() {
     const list = document.getElementsByClassName('update_detail')[0]
@@ -328,14 +360,19 @@ export default {
     }
   },
   methods: {
+    //
+    showResult(){
+      this.showDialog=true
+    },
+
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        //console.log(response)
+        console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            //console.log(element.postName)
+            console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
           }
         })
@@ -350,12 +387,9 @@ export default {
       })
       getbasic(this.row.equipmentId).then(response => {
         const item = response.data.items
-        console.log(item)
         for (const key in item) {
           if (Object.hasOwnProperty.call(item, key)) {
             const e = item[key]
-            // console.log(key)
-            // console.log(e)
             if (e !== null && e.length !== 0) {
               this.checkKey(key, e)
             }
@@ -365,7 +399,7 @@ export default {
     },
     commit() {
       const equipments = []
-      //console.log(this.form)
+      console.log('&',this.form)
       const equip = { ...this.equipment }
       //console.log(equip)
       const equipmentBaseInfo = equip.equipmentBaseInfo
@@ -375,20 +409,23 @@ export default {
       equip.appAccessRights = equip.appAccessRights[0]
       equip.appNativeStore = equip.appNativeStore[0]
       equipments.push(equip)
-      //console.log(equipments)
+
       addEquipment({ equipments: equipments }).then(res => {
-        this.$alert(res.message, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.$router.go(0)
-        })
-        //console.log(res)
+        //获得数据
+        //console.log('#',res)
+        console.log('@@',res)
+        const result = analysisReply(res.data)
+        console.log('#',result)
+        this.replayData = result
+        this.showDialog=true
+        console.log('@@@',res.message)
       }).catch(err => {
         //console.log(err)
       })
     },
+
+
+
     changePost(val) {
       //console.log(val)
       this.postAll.forEach(element => {
@@ -421,17 +458,12 @@ export default {
           arr.push(obj)
         })
         this.equipment[a] = arr
-        // console.log(this.equipment)
       }
     },
     handleList(listname) {
       for (const key in this.equipment) {
-        // console.log(key)
         if (Object.hasOwnProperty.call(this.equipment, key)) {
           if (listname.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
-            // console.log(99999)
-            // console.log(listname)
-            // console.log(key)
             return key
           }
         }

@@ -27,11 +27,13 @@
           <el-table-column
             prop="name"
             label="文件名称"
-            width="180">
+            width="170">
           </el-table-column>
           <el-table-column
             prop="data"
-            label="设备名称">
+            label="设备名称"
+            width="240"
+          >
             <template slot-scope="scope">
               <el-tag
                 class="statusTg"
@@ -43,7 +45,7 @@
           <el-table-column
             prop="data"
             label="设备编号"
-            width="180">
+            width="170">
             <template slot-scope="scope">
               <el-tag
                 class="statusTg"
@@ -65,7 +67,7 @@
           <el-table-column
             prop="status"
             label="文件状态"
-            width="180">
+            width="130">
           <template slot-scope="scope">
             <el-tag
               class="statusTg"
@@ -76,7 +78,7 @@
           <el-table-column
             prop="uploadStatus"
             label="上传状态"
-            width="180">
+            width="130">
             <template slot-scope="scope">
               <el-tag
                 class="statusTg"
@@ -87,12 +89,12 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button
-                @click="handupload(scope.$index, scope.row)" :disabled = 'disabled'>上传</el-button>
+                @click="handupload(scope.$index, scope.row)" :disabled = 'disabled' size="small">上传</el-button>
               <el-button
                 type="danger"
-                @click="handleDelete(scope.$index)" :disabled = 'disabled'>删除</el-button>
-<!--              <el-button-->
-<!--                @click="checkReplay(scope.$index, scope.row)">查看反馈信息</el-button>-->
+                @click="handleDelete(scope.$index)" :disabled = 'disabled' size="small">删除</el-button>
+              <el-button
+                @click="checkReplay(scope.$index, scope.row)" :visible.sync="showDialog">查看反馈信息</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -111,7 +113,7 @@
           :file-list="fileList"
           :auto-upload="false"
         >
-          <el-button size="larger" type="primary">选取文件</el-button>
+          <el-button size="larger" type="primary" @click="cleanBtn()">选取文件</el-button>
           <div slot="tip" style="font-size: 18px;position: relative;top: 15px">
             <p>注意事项：</p>
             <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
@@ -125,16 +127,49 @@
         <el-button @click="closeDialog()">取 消</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
-<!--      <el-descriptions class="margin-top" title="" :column="2"  border v-for="item in repalyData">-->
-<!--        <el-descriptions-item v-for="items in item">-->
+
+
+
+<!--    查看导入反馈-->
+<!--    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">-->
+<!--      <el-descriptions class="margin-top" title="" :column="2">-->
+<!--        <el-descriptions-item v-for="item in replayData">-->
 <!--          <template slot="label">-->
-<!--            {{items.key}}-->
+<!--            {{item.key}}-->
 <!--          </template>-->
-<!--          {{items.value}}-->
+<!--          {{item.value}}-->
 <!--        </el-descriptions-item>-->
 <!--      </el-descriptions>-->
+<!--      <el-button @click="resultBtn()" type="primary" style="margin-top: -25px;position:fixed;right:460px">确定</el-button>-->
+<!--    </el-dialog>-->
+
+
+
+    <el-dialog
+      :visible.sync="showDialog"
+      width="40%"
+      title="导入结果反馈">
+      <div style="text-align:center;font-size: 10px">
+        <!--需要弹出的内容部分-->
+        <el-descriptions  :column="1" >
+          <el-descriptions-item v-for="item in tableData">
+            <template slot="label">
+              <i></i>
+<!--              这里显示文件名-->
+              {{item.name}}
+            </template>
+<!--            这里显示上传成功或者上传失败的原因-->
+            <el-tag
+              size='small'
+              :type = "item.uploadStatus === '上传成功' ? 'success' :'danger' " >
+              {{item.uploadStatus === '上传成功' ? '上传成功' : item.uploadStatus}}
+            </el-tag>
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-button @click="uploadBtn()" type="primary" style="margin-top: -25px;position:fixed;right:460px">确定</el-button>
+      </div>
     </el-dialog>
+
 
   </div>
 </template>
@@ -142,11 +177,13 @@
 <script>
 import {
   analysisReply,
-  getEquipment,
+  getEquipment, getUploadData,
   importfile
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
-import {options} from "runjs";
+import { addEquipment, AddExcel, addExcel } from '@/api/table'
+// import { addEquipment, getbasic } from '@/api/table'
+
 export default {
   name: 'Dashboard',
   data() {
@@ -159,6 +196,7 @@ export default {
       //   value: '汇总表',
       //   label: '汇总表'
       // }],
+      showDialog:false,
       disabled:false,
       name: '',
       dialogFormVisible: false,
@@ -175,6 +213,7 @@ export default {
       repalyInfo:[],
       repalyData:[],
 
+      //统计导入结果
       uploadResult:{
         success:0,
         fail:0
@@ -182,10 +221,42 @@ export default {
       submitResult:{
         success:0,
         fail:0
-      }
+      },
+      submitOutcome:{
+        "读取成功":'',
+        "读取失败":''
+      },
+      uploadOutcome:{
+        "上传成功":'',
+        "上传失败":''
+      },
+      uploadSumxx:{
+        failure:''
+      },
+      replayData:{},
+      checkReplayResult:[]
     }
   },
   methods:  {
+    uploadBtn(){
+      this.showDialog=false
+
+    },
+    resultBtn(){
+      this.backinfoDialog=false
+    },
+    cleanBtn(){
+      this.uploadResult={
+        success:0,
+        fail:0
+      }
+      this.uploadSumxx={
+        failure:''
+      }
+      this.clearTable()
+    },
+
+
     headStyle(){
       return "text-align:center;font-size:16px;color:black"
     },
@@ -195,12 +266,12 @@ export default {
       this.fileTemp = file.raw
       if (this.fileTemp) {
         if ((types === 'xlsx') || (types === 'xls') || (types === 'csv')) {
-          var obj = {
+          let obj = {
             name:file.name,
             value:file.raw
           }
           this.fileList.push(obj)
-          // //console.log(this.fileList)
+          // console.log(this.fileList)
         } else {
           this.$message({
             type: 'warning',
@@ -219,103 +290,198 @@ export default {
       this.dialogFormVisible = false
       this.checkList = this.fileList
       this.submitUpload()
-      // //console.log(this.excelData)
+      // console.log(this.excelData)
       this.tableData = this.excelData.equipments
-      // //console.log(this.tableData)
+      // console.log(this.tableData)
       this.fileList = []
     },
-    // 上传文件
+
+    // 读取文件
     async submitUpload() {
+      // let submitSuccess = []
+      let submitFail = []
       if (this.checkList.length === 0) {
         this.$message({
           type: 'error',
           message: '请选择文件！'
         })
       } else {
-        for(let index = 0;index < this.checkList.length;index++){
+        for (let index = 0; index < this.checkList.length; index++) {
           const outdata = await importfile(this.checkList[index].value, this.value)
-          // //console.log(outdata)
+          //console.log("@",this.checkList[index].value.name)
           const postName = this.$store.state.user.roleid
-          const {equipment,readStatus} = getEquipment(outdata,postName)
+          const { equipment, readStatus } = getEquipment(outdata, postName)
           //console.log(equipment)
           //console.log(readStatus)
           // debugger
-          if(readStatus === 22 || readStatus === 20) {
-            var obj = {
-              name:this.checkList[index].name,
+          if (readStatus === 22 || readStatus === 20) {
+            let obj = {
+              name: this.checkList[index].name,
               data: equipment,
-              status:'读取成功',
-              uploadStatus:'待上传',
+              status: '读取成功',
+              uploadStatus: '待上传',
             }
             this.excelData.equipments.push(obj)
-            this.submitResult.success = this.submitResult.success  + 1
+            this.submitResult.success = this.submitResult.success + 1
+            //this.submitOutcome = this.submitOutcome[this.checkList[index].value.name] = "读取成功"
+            // this.submitOutcome.读取成功= this.submitOutcome.读取成功+ this.checkList[index].value.name + "；"
 
           } else {
             this.$message({
-              type:'error',
-              message:'基础表信息读取错误'
+              type: 'error',
+              message: '基础表信息读取错误'
             })
-            var obj = {
-              name:this.checkList[index].name,
+            let obj = {
+              name: this.checkList[index].name,
               data: equipment,
-              status:'读取失败',
-              uploadStatus:'读取失败',
+              status: '读取失败',
+              uploadStatus: '读取失败',
             }
             this.excelData.equipments.push(obj)
-            this.submitResult.fail = this.submitResult.fail  + 1
-
+            this.submitResult.fail = this.submitResult.fail + 1
+            // submitFail.push(this.checkList[index].name)
+            // this.submitOutcome.push(this.checkList[index].value.name.toString())
+            //this.submitOutcome.读取失败 = this.submitOutcome.读取失败 + this.checkList[index].value.name + ";"
           }
         }
+        // const h = this.$createElement;
+        // await this.$msgbox({
+        //   // title: '上传的文件',
+        //   message: h('p', null, [
+        //     h('h2',{style:'color=blue'},'读取成功：'),
+        //     h('h3', null, this.submitOutcome.读取成功),
+        //     h('h2',{style:'color=red'},'读取失败：'),
+        //     h('h3', null, this.submitOutcome.读取失败)
+        //   ]),
+        //   confirmButtonText: '确定',
 
-        // 上传结果统计
-        if(this.submitResult.success + this.submitResult.fail === this.tableData.length){
-          this.$message({
-            type:'success',
-            message:"读取成功" + this.submitResult.success +"个文件，读取失败" + this.submitResult.fail + "个文件"
-          })
-        }
+          //cancelButtonText: '取消',
+          // beforeClose: (action, instance, done) => {
+          //   if (action === 'confirm') {
+          //     instance.confirmButtonLoading = true;
+          //     instance.confirmButtonText = '执行中...';
+          //     setTimeout(() => {
+          //       done();
+          //       setTimeout(() => {
+          //         instance.confirmButtonLoading = false;
+          //       }, 300);
+          //     }, 3000);
+          //   } else {
+          //     done();
+          //   }
+          // }
+        //})
+        // this.uploadFunc()
       }
-      // this.uploadFunc()
     },
     // 发送请求
-    uploadFunc(index,data) {
+    //上传文件
+    uploadFunc(index,data){
+      const equipments = []
       this.dialogFormVisible = false
       this.disabled = true
-      var importData = {
+      let importData = {
         equipments: [],
         total:1,
       }
       importData.equipments.push(data)
-      // //console.log(importData)
+      // console.log(importData)
       importExcel(importData).then((res) => {
         this.loading = false
         if(res.status === 200) {
-          this.$message({
-            message: '文件上传成功！',
-            type: 'success'
-          })
+          // this.$message({
+          //   message: '文件上传成功！',
+          //   type: 'success'
+          // })
           this.tableData[index].uploadStatus = "上传成功"
-          // this.repalyInfo[index] = res.data
+          this.repalyInfo[index] = res.data
           this.uploadResult.success = this.uploadResult.success + 1
         } else {
           this.tableData[index].uploadStatus = "上传失败"
+          this.uploadResult.fail = this.uploadResult.fail + 1
+          this.uploadSumxx.failure = this.uploadSumxx.failure + this.checkList[index].value.name + ";"
+          //this.uploadOutcome.上传失败 = this.uploadOutcome.上传失败 + this.checkList[index].value.name + ";"
           this.repalyInfo[index] = res.data
-          this.$message({
-            type:'error',
-            message:res.message
-            }
-          )
         }
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
         this.uploadResult.fail = this.uploadResult.fail + 1
+        // this.uploadSumxx.failure = this.uploadSumxx.failure + this.checkList[index].value.name + ";  "
+        AddExcel({ equipments: equipments }).then(res => {
+          //获得数据
+          console.log('@@',res)
+        }).catch(err => {
+          console.log(err)
+        })
+        //this.uploadOutcome.上传失败 = this.uploadOutcome.上传失败 + this.checkList[index].value.name + ";" + "\n"
+
       }).finally(() =>{
         this.disabled = false
-        if(this.submitResult.success + this.submitResult.fail === this.tableData.length){
-          this.$message({
-            type:'success',
-            message:"读取成功" + this.submitResult.success +"个文件，读取失败" + this.submitResult.fail + "个文件"
-          })
+        console.log('*',this.tableData[index].uploadStatus)
+        if(this.uploadResult.success + this.uploadResult.fail === this.tableData.length){
+          console.log('￥',this.tableData)
+
+          // this.tableData.forEach(function(items){
+          //   const obj = {
+          //     key:items.name,
+          //     value:items.uploadStatus
+          //   }
+          //   this.replayData[obj.key]=obj.value
+          // })
+          // AddExcel({ equipments: equipments }).then(res => {
+          //   //获得数据
+          //   console.log('@@',res)
+          //   //result单个表的对象
+          //   const result = getUploadData(res.data,res.message)
+          //   console.log('#',result)
+          //   this.replayData.push(result)
+          //   // this.showDialog=true
+          // }).catch(err => {
+          //   console.log(err)
+          // })
+
+          this.showDialog=true
+
+
+          // if(this.uploadResult.success=== this.tableData.length){
+          //   const h = this.$createElement;
+          //   this.$msgbox({
+          //     title: '导入结果统计',
+          //     message: h('p', null, [
+          //       h('h2', null,'全部上传成功'),
+          //     ]),
+          //     confirmButtonText: '确定'
+          //   }).then(_ => {
+          //     this.uploadResult={
+          //       success:0,
+          //       fail:0
+          //     }
+          //     //location.reload();
+          //     this.clearTable()
+          //     this.uploadSumxx={
+          //       failure:''
+          //     }
+          //   })
+          // }else{
+          //   const h = this.$createElement;
+          //   this.$msgbox({
+          //     title: '导入结果统计',
+          //     message: h('p', null, [
+          //       h('h2',null,'上传失败：'),
+          //       h('h3',null,this.uploadSumxx.failure),
+          //     ]),
+          //     confirmButtonText: '确定'
+          //   }).then(_ => {
+          //     this.uploadResult={
+          //       success:0,
+          //       fail:0
+          //     }
+          //     this.uploadSumxx={
+          //       failure:''
+          //     }
+          //     this.clearTable()
+          //   })
+          // }
         }
       })
     },
@@ -354,56 +520,109 @@ export default {
         this.uploadFunc(index,row.data)
       }
     },
+
+
     // 上传 table data
-    upLoadTableData() {
+    upLoadTableData(){
       if(this.tableData.length !== 0) {
-        for(var i = 0; i < this.tableData.length; i++){
-          if(this.tableData[i].uploadStatus !== "上传成功"&&this.tableData[i].uploadStatus !=="读取失败"){
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (this.tableData[i].uploadStatus !== "上传成功" && this.tableData[i].uploadStatus !== "读取失败") {
             this.tableData[i].uploadStatus = "上传中"
-            this.uploadFunc(i,this.tableData[i].data)
+            this.uploadFunc(i, this.tableData[i].data)
           }
         }
-      } else {
+      }
+      else {
         this.$message({
           type:'error',
           message:'暂无文件可上传'
         })
       }
     },
+
+
     // 查看反馈信息
-    checkReplay(index) {
-      // //console.log(index)
-      // //console.log(this.repalyInfo)
-      //console.log(this.repalyInfo[index])
-      if (this.repalyInfo[index] === undefined){
-        this.$message({
-          type:'error',
-          message:'暂无反馈信息'
+    checkReplay(index, row) {
+
+      const equipments = []
+      AddExcel({ equipments: equipments }).then(res => {
+        //获得数据
+        console.log('@@',res)
+        this.checkReplayResult.push(res.message)
+        console.log('@@@',this.checkReplayResult[0])
+        const h = this.$createElement;
+        this.$msgbox({
+          title: '查看反馈信息',
+          message: h('p', null, [
+            h('h2', null, row.name),
+            h('h3', null, res.message),
+          ]),
+          confirmButtonText: '确定',
         })
-      } else {
-        this.repalyData =  analysisReply(this.repalyInfo[index])
-        //console.log(this.repalyData)
-        this.backinfoDialog  = true
-      }
+      }).catch(err => {
+        console.log(err)
+      })
+
+
+      // if (this.repalyInfo[index] === undefined){
+      //   this.$message({
+      //     type:'error',
+      //     message:'暂无反馈信息'
+      //   })
+      // } else {
+      //   this.repalyData =  analysisReply(this.repalyInfo[index])
+      //   console.log(this.repalyData)
+      //   this.backinfoDialog  = true
+      // }
+      //
+      // const equipments = []
+      // console.log('&',this.form)
+      // const equip = { ...this.equipment }
+      // console.log(equip)
+      // const equipmentBaseInfo = equip.equipmentBaseInfo
+      // Object.keys(equipmentBaseInfo).forEach(key => {
+      //   equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
+      // })
+      // equip.appAccessRights = equip.appAccessRights[0]
+      // equip.appNativeStore = equip.appNativeStore[0]
+      // equipments.push(equip)
+      //
+      // addEquipment({ equipments: equipments }).then(res => {
+      //   //获得数据
+      //   //console.log('#',res)
+      //   console.log('@@',res)
+      //   const result = analysisReply(res.data)
+      //   console.log('#',result)
+      //   this.replayData = result
+      //   this.showDialog=true
+      // }).catch(err => {
+      //   console.log(err)
+      // })
     },
     // 删除
     handleDelete(index) {
       Array.prototype.remove = function(from, to) {
-        var rest = this.slice((to || from) + 1 || this.length);
+        let rest = this.slice((to || from) + 1 || this.length);
         this.length = from < 0 ? this.length + from : from;
         return this.push.apply(this, rest);
       };
       this.tableData.remove(index)
-      //console.log(this.tableData)
+      console.log(this.tableData)
     },
     // 清空列表
     clearTable() {
       this.tableData = []
       this.excelData.equipments = []
-      this.$message({
-        type:'success',
-        message:'上传列表已清空'
-      })
+      // this.$message({
+      //   type:'success',
+      //   message:'上传列表已清空'
+      // })
+      //this.fetchData()
+      //location.reload();
+      this.uploadResult={
+        success:0,
+          fail:0
+      }
     }
   }
 }
@@ -419,9 +638,6 @@ export default {
 }
 .shadows{
   box-shadow: 0 0 4px #0000004d !important;
-}
-.el-select-dropdown .el-scrollbar {
-  position: relative;
 }
 .searchInput {
   height: 40px;
@@ -500,7 +716,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  // height: 380px;
+  height: 380px;
   overflow: hidden;
   position: relative;
 }
@@ -685,7 +901,7 @@ export default {
 <!--          const outdata = await importfile(this.fileList[index], this.value)-->
 <!--          const postName = this.$store.state.user.roleid-->
 <!--          const {equipment,readStatus} = getEquipment(outdata,postName)-->
-<!--          // //console.log(readStatus)-->
+<!--          // console.log(readStatus)-->
 <!--          if(readStatus === 22 || readStatus === 20) {-->
 <!--            this.excelData.equipments.push(equipment)-->
 <!--          }-->
@@ -698,7 +914,7 @@ export default {
 <!--      this.excelData.total = this.excelData.equipments.length-->
 <!--      this.dialogFormVisible = false-->
 <!--      this.loading = true-->
-<!--      // //console.log(this.excelData)-->
+<!--      // console.log(this.excelData)-->
 <!--      if(this.excelData.equipments.length > 0) {-->
 <!--        importExcel(this.excelData).then((res) => {-->
 <!--          this.loading = false-->

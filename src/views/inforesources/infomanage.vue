@@ -58,24 +58,26 @@
             :xl="4"
           >
 
-            <el-autocomplete
-              style="width: 240px;"
-              autosize
-              type="text"
-              class="inline-input"
-              v-model="inputValue"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              @select="handleSelect"
-            ></el-autocomplete>
+<!--            <el-autocomplete-->
+<!--              style="width: 240px;"-->
+<!--              autosize-->
+<!--              type="text"-->
+<!--              class="inline-input"-->
+<!--              v-model="inputValue"-->
+<!--              :fetch-suggestions="querySearch"-->
+<!--              placeholder="请输入内容"-->
+<!--              @select="handleSelect"-->
+<!--            ></el-autocomplete>-->
 
-            <!-- <el-input
 
+
+            <el-input
               v-model="inputValue"
               placeholder="输入式查询"
               clearable
               size="medium"
-            /> -->
+            />
+
 
           </el-col>
           <el-col
@@ -85,6 +87,12 @@
             :lg="4"
             :xl="4"
           >
+            <el-input
+              v-model="inputValue2"
+              placeholder="输入式查询"
+              clearable
+              size="medium"
+            />
 
           </el-col>
           <el-col
@@ -94,6 +102,7 @@
             :lg="2"
             :xl="2"
           >
+
             <el-button
               size="medium"
               type="primary"
@@ -274,6 +283,7 @@ export default {
       initname: ['123'],
       department: '',
       inputValue: '',
+      inputValue2:'',
       postname: '',
       input3: '',
       ifUpdate: '0',
@@ -692,6 +702,7 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
+        dataValue2: this.inputValue2,
         status: "0",
         start: this.start,
         limit: this.limit
