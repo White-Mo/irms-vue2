@@ -170,65 +170,76 @@
           />
         </div>
       </div>
-      <!-- <div v-if="ifUpdate === '1'">
-        <addMachineRoom @changeDiv="changeDiv" />
+      <div v-if="ifUpdate === '1'">
+        <InfoTemplate :pre-row="row" @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updateMachineRoom :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
-      </div> -->
       <el-drawer
-        direction="ttb"
+        direction="rtl"
         :visible.sync="drawer"
         :with-header="false">
         <div>
-          <!-- <h3 style="text-align:center">机柜号</h3> -->
-          <!-- <el-divider></el-divider> -->
           <el-table
-          v-loading="cabinetLoading"
-          :data="[{tag:0}]"
-          element-loading-text="Loading"
-          border
-        >
-        <el-table-column
-          label="机柜号"
-            align="center"
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px'}"
+            v-loading="listLoading"
+            :disable="true"
+            :data="cabinetAll"
+            element-loading-text="Loading"
+            border
+            highlight-current-row
+            stripe
           >
-            <template>
-            <el-input placeholder="请输入内容" v-for="(item,index) in cabinetAll" :key="index" v-model="cabinetAll[index].cabinetName" v-loading="listLoading">
-              <template slot="append">
-                <template>
-                  <el-popconfirm
-                    confirm-button-text='确认'
-                    cancel-button-text='算了'
-                    icon="el-icon-info"
-                    icon-color="red"
-                    title="是否永久删除该机房"
-                    @confirm="deleteU(cabinetAll[index].cabinetId)"
-                  >
-                    <el-button slot="reference" type="danger">删除</el-button>
-                  </el-popconfirm>
-                </template>
+            <el-table-column align="center" type="index" />
+            <el-table-column
+              v-for="(item,index) in cabinetColumn"
+              :key="index"
+              :label="item.label"
+              :prop="item.value"
+              :formatter="item.formatter"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column align="center" label="操作" width="250px">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="cabinetDetail(scope.$index, scope.row)"
+                >详情</el-button>
+                <el-button
+                  size="mini"
+                  @click="cabinetEdit(scope.$index, scope.row)"
+                >编辑</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="cabinetDelete(scope.$index, scope.row)"
+                >删除</el-button>
               </template>
-            </el-input>
-            </template>
-          </el-table-column>
+            </el-table-column>
           </el-table>
         </div>
       </el-drawer>
     </div>
   </div>
+
 </template>
 
 <script>
-import {delMachineRoom,getMachineRoomByPage,getMachineRoomTotal,delCabinet,addMachineRoom} from '@/api/baseparameter'
-import updateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom'
+import {
+  delMachineRoom,
+  getMachineRoomByPage,
+  getMachineRoomTotal,
+  delCabinet,
+  addMachineRoom,
+  getEquipmentByCabinetId
+} from '@/api/baseparameter'
+import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
 import {mapGetters} from "vuex";
 
 export default {
   components: {
-    addMachineRoom,
-    updateMachineRoom
+    InfoTemplate
   },
   filters: {
     statusFilter(status) {
@@ -271,25 +282,12 @@ export default {
         {
           value: 'postName',
           label: '所属单位'
+        }],
+      cabinetColumn: [
+        {
+          value: 'cabinetName',
+          label: '机房名称'
         }
-        // ,
-        // {
-        //   value: 'status',
-        //   label: '机房状态',
-        //   formatter:function (row) {
-        //     var status= row.status
-        //     switch (status){
-        //       case "0":
-        //         status="正常"
-        //         break
-        //       case "1":
-        //         status="维修中"
-        //         break
-        //     }
-        //     console.log(status)
-        //     return status;
-        //   }
-        // }
       ],
       value: '',
       realRole:'',
@@ -398,7 +396,7 @@ export default {
       this.fetchCabinet(row)
     },
     handleEdit(index, row) {
-      this.ifUpdate ='3'
+      // this.ifUpdate ='3'
       this.row = row
     },
     handleDelete(index, row) {
@@ -445,9 +443,17 @@ export default {
       this.ifUpdate = value
       this.fetchData()
     },
-    deleteU(val){
-      // alert(val);
-      // this.cabinetId = val;
+
+    cabinetDetail(index, row) {
+      this.row = row
+      console.log(row.cabinetId)
+      getEquipmentByCabinetId(row.cabinetId)
+      this.drawer =false
+      this.ifUpdate ='1'
+    },
+    cabinetEdit(index, row) {
+    },
+    cabinetDelete(val){
       delCabinet(val).then((response) => {
         this.$alert(response.data, '提示', {
           confirmButtonText: '确定',

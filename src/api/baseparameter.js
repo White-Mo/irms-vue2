@@ -280,3 +280,13 @@ export function delCabinet(data) {
   })
 }
 
+//根据机房获取设备
+export function getEquipmentByCabinetId(cabinetId) {
+  return request({
+    params: { cabinetId: cabinetId },
+    url: '/home/baseparameter/getEquipmentByCabinetId',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+

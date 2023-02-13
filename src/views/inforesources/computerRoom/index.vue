@@ -56,7 +56,6 @@
           </tr>
         </table>
       </div>
-      </table>
     </dv-border-box-11>
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background: #142437" v-show="datacard">
       <el-row style="position: relative;top:5%">
@@ -76,6 +75,20 @@
         <!--          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>-->
         <!--          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>-->
         <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          width="250px"
+        >
+          <template slot-scope="scope">
+            <el-button
+              type="success" plain
+              size="mini"
+              @click="cabinetDetail(scope.$index, scope.row)"
+            >详情</el-button>
+          </template>
+        </el-table-column>
         <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
       </el-table>
 <!--      <el-popover-->
@@ -85,6 +98,12 @@
 <!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
 <!--      </el-popover>-->
     </dv-border-box-12>
+    <el-dialog
+      :visible.sync="showEquipment"
+      width="100%"
+      :with-header="false">
+      <InfoTemplate :pre-row="row" @changeDiv="changeDiv" />
+    </el-dialog>
   </div>
 </template>
 
@@ -94,8 +113,13 @@ import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
+import InfoTemplate from '@/components/Infomanage/InfoTemplate'
+import {getEquipmentByCabinetId} from "@/api/baseparameter";
 export default {
   name:'computerRoom',
+  components: {
+    InfoTemplate
+  },
   data() {
     return {
       datavcolor:['#0e94eb','#0e94eb'],
@@ -103,6 +127,7 @@ export default {
       datacard:true,
       showButton:false,
       loading:true,
+      showEquipment:false,
       logosrc:'',
       roomBasicInfo:{ // 左上角机房信息概况
         manager_name: '',
@@ -319,7 +344,17 @@ export default {
         ]
       };
       myChart.setOption(option);
-    }
+    },
+
+    changeDiv(value) {
+      this.showEquipment =false
+    },
+
+    cabinetDetail(index, row) {
+      this.row = row
+      console.log(row.cabinetId)
+      this.showEquipment =true
+    },
   }
 };
 </script>
