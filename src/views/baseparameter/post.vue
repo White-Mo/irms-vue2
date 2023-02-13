@@ -239,25 +239,17 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      //console.log(row)
-      const h = this.$createElement;
-      this.$msgbox({
-        title: '删除提示',
-        type: 'warning',
-        message: h('h3', null, [
-          h('span', null, '是否确定删除：'),
-          h('span', null, row.postCode + "-" + row.postName)
-        ]),
-        showCancelButton: true,
+      this.$alert(`是否永久删除单位:\"${row.postName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        callback: (action) => {
+        type: 'warning',
+        callback: (action, instance) => {
           if (action === 'confirm') {
             delPost(row.postId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
-                showClose: true
+                showClose: false
               }).then(() => {
                 this.fetchData()
               })
@@ -265,24 +257,6 @@ export default {
           }
         }
       })
-      // this.$alert("是否永久删除该单位", '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'info',
-      //   callback: (action, instance) => {
-      //     if (action === 'confirm') {
-      //       delPost(row.postId).then((response) => {
-      //         this.$alert(response.data, '提示', {
-      //           confirmButtonText: '确定',
-      //           type: 'info',
-      //           showClose: false
-      //         }).then(() => {
-      //           this.fetchData()
-      //         })
-      //       })
-      //     }
-      //   }
-
     },
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
@@ -372,5 +346,57 @@ export default {
 }
 </style>
 <style  lang="less">
+//覆盖样式
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 25%;
+  margin: 10px;
+}
+.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px;
+  height: auto;
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: stretch;
+}
+.el-select-dropdown__wrap{
+  max-height: none;
+}
+.el-scrollbar {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.el-scrollbar .el-scrollbar__wrap {
+  overflow: auto;
+  height: 100%;
+}
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+  color: #1d1e1f;
+  background-color: #d2d2d2;
+}
+.el-scrollbar__bar.is-vertical > div {
+  width: 0;
+}
 
+.el-button--primary {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+}
+.myel_row {
+  margin-bottom: 2px !important;
+  background-color: #d3dce6;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.radio_class{
+  display:inline-block;
+  height:2rem;
+  width:100%;
+}
 </style>

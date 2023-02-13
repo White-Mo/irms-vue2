@@ -551,14 +551,17 @@ export default {
             <template slot-scope="scope">
                 <el-button
                   type="primary"
+                  size="mini"
                   @click="handleEdit(scope.$index, scope.row)"
                 >编辑</el-button>
               <el-button
                 type="danger"
+                size="mini"
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
               <el-button
                 type="info"
+                size="mini"
                 @click="getEquipmentByBusinessSystemId(scope.$index, scope.row)"
               >查看设备</el-button>
             </template>
@@ -681,30 +684,21 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-
       this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
       this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
       const businessSystemNameAndId = {...this.businessSystemNameAndId}
-      const h = this.$createElement;
-      this.$msgbox({
-        title: '删除提示',
-        type: 'warning',
-        message: h('h3', null, [
-          h('span', null, '是否确定删除：'),
-          h('span', null, row.businessSystemName + "-" + row.businessSystemLevel+ "-"+ row.departmentName+ "-"+ row.postName)
-        ]),
-        showCancelButton: true,
+      this.$alert(`是否永久删除业务系统: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delBusinessSystem(businessSystemNameAndId).then((response) => {
               console.log(businessSystemNameAndId)
-                this.$alert(response.data, '提示', {
-                  confirmButtonText: '确定',
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
                 type: 'info',
-                showClose: true
-
+                showClose: false
               }).then(() => {
                 this.fetchData()
               })
@@ -712,56 +706,6 @@ export default {
           }
         }
       })
-
-      // const h = this.$createElement;
-      // this.$msgbox({
-      //   title: '删除提示',
-      //   type: 'warning',
-      //   message: h('h3', null, [
-      //     h('span', null, '是否确定删除：'),
-      //     h('span', null, row.equipmentTypeName + "-" + row.equipmentTypeCode+  "-"+ row.equipmentFirstTypeName)
-      //   ]),
-      //   showCancelButton: true,
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   callback: (action) => {
-      //     if (action === 'confirm') {
-      //       delEquipmentType(row.equipmentTypeId).then((response) => {
-      //         this.$alert(response.data, '提示', {
-      //           confirmButtonText: '确定',
-      //           type: 'info',
-      //           showClose: true
-      //         }).then(() => {
-      //           this.fetchData()
-      //         })
-      //       })
-      //     }
-      //   }
-      // })
-
-      // this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
-      // this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
-      // const businessSystemNameAndId = {...this.businessSystemNameAndId}
-      // this.$alert(`是否永久删除: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'info',
-      //   callback: (action, instance) => {
-      //     if (action === 'confirm') {
-      //       delBusinessSystem(businessSystemNameAndId).then((response) => {
-      //         console.log(businessSystemNameAndId)
-      //         this.$alert(response.data, '提示', {
-      //           confirmButtonText: '确定',
-      //           type: 'info',
-      //           showClose: false
-      //         }).then(() => {
-      //           this.fetchData()
-      //         })
-      //       })
-      //     }
-      //   }
-      // })
-
     },
 
     //通过业务系统搜索设备
@@ -799,9 +743,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  // font-size: 18px;
-}
+/**{
+  font-size: 18px;
+}*/
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }

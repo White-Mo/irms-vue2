@@ -95,7 +95,7 @@
       <el-table
         v-if="refreshTable"
         :data="tableData"
-        height="67vh"
+        height="70vh"
         :row-style="{height:'6.26vh'}"
         v-loading="listLoading"
         :default-expand-all="isExpand"
@@ -112,19 +112,19 @@
                 :data="props.row.children" :cell-style="{background:'pink'}">
                 <el-table-column  align="center" width="48"/>
                 <el-table-column  align="center" type="index"/>
-                <el-table-column  prop="departmentName" label="部门" width="675"></el-table-column>
-                <el-table-column  prop="departmentCode" label="部门代码" width="675" ></el-table-column>
+                <el-table-column  prop="departmentName" label="部门" ></el-table-column>
+                <el-table-column  prop="departmentCode" label="部门代码"  ></el-table-column>
                 <el-table-column  label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary">编辑</el-button>
-                    <el-button @click="handleDelete(scope.$index, scope.row)" type="danger">删除</el-button>
+                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="primary">编辑</el-button>
+                    <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="danger">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="postName" label="部门所属单位" width="675*2"></el-table-column>
-          <el-table-column prop="postCode"  label="" width="675"></el-table-column>
+          <el-table-column prop="postName" label="部门所属单位" ></el-table-column>
+          <el-table-column prop="postCode"  label="" ></el-table-column>
           <el-table-column prop="operation" label="" ></el-table-column>
       </el-table>
       </div>
@@ -304,7 +304,7 @@ export default {
       this.$alert(`是否永久删除部门:\"${row.departmentName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delPostDepartment(row.departmentId).then((response) => {
@@ -334,9 +334,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-*{
-  // font-size: 18px;
-}
+//*{
+//  font-size: 18px;
+//}
 .count{
   background-color: #304156;
   color: #ffffff;

@@ -119,7 +119,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-dialog
+<!--        <el-dialog
             title="请确认要删除这条记录吗?"
             :visible.sync="centerDialogVisible"
             width="30%"
@@ -129,7 +129,7 @@
               <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
               <el-button type="primary" style="height: 2.8rem;" @click="deleteUserPlus">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog>-->
         <el-dialog
             :title="headInfo"
             :visible.sync="userDialogDisplay"
@@ -225,6 +225,7 @@
 import { mapGetters } from 'vuex'
 import { getQComSelect, getFosUserByPage, getPostDepartmentAll, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
+import {delMachineRoom} from "@/api/baseparameter";
 export default {
   name: 'Dashboard',
   computed: {
@@ -440,22 +441,26 @@ export default {
       })
     },
     deleteUser(row){
-      this.deleteUseRparams = {
-        id:row.id
-      }
-      this.centerDialogVisible = true
+        this.$alert(`是否永久删除用户：\"${row.realname}\"信息`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback: (action, instance) => {
+            if (action === 'confirm') {
+              deleteFosUser(row.id).then((response)=>{
+                this.$alert(response.data, '提示', {
+                  confirmButtonText: '确定',
+                  type: 'info',
+                  showClose: false
+                }).then(()=>{
+                  this.get_user()
+                })
+              })
+            }
+          }
+        })
     },
-    deleteUserPlus(){
-      let _this = this
-      deleteFosUser(this.deleteUseRparams).then(()=>{
-        _this.centerDialogVisible = false
-        _this.get_user()
-        _this.$message({
-          message: '删除成功',
-          type: 'success'
-        });
-      })
-    },
+
     async updateUser(row){
       let temp = row.role.split("/")
       this.userDialogDisplay = true
