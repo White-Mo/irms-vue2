@@ -188,6 +188,10 @@ export default {
       singalInfo: {},
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备ID'
+        },
+        {
           value: 'postName',
           label: '所属单位'
         },

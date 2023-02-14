@@ -152,6 +152,10 @@ export default {
       singalInfo: {},
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备ID'
+        },
+        {
           value: 'postName',
           label: '所属单位'
         },
@@ -171,10 +175,7 @@ export default {
           value: 'cabinetName',
           label: '机柜编号'
         },
-        {
-          value: 'basicInfoId',
-          label: '设备ID'
-        },
+
       ],
       value: '',
       labels: {

@@ -568,6 +568,7 @@ export default {
           type: 'success'
         });
         _this.get_user()
+        location.reload();
         _this.userDialogDisplay = false
       }).catch((err)=>{
         //console.log(err)

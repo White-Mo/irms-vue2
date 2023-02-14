@@ -113,7 +113,7 @@
               @click="addInfo()"
             >添加设备信息</el-button>
           </el-col>
-          <el-col
+<!--          <el-col
             :xs="1"
             :sm="1"
             :md="1"
@@ -126,7 +126,7 @@
               style="margin-left: 420px"
               @click="search()"
             >筛选</el-button>
-          </el-col>
+          </el-col>-->
         </el-row>
         <el-table
           v-loading="listLoading"
@@ -184,14 +184,14 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog
+<!--        <el-dialog
           title="多条件搜索"
           :visible.sync="dialogVisible"
           width="55%"
           style="margin-top: -80px;"
           custom-class="transparent-dialog">
           <search-template></search-template>
-        </el-dialog>
+        </el-dialog>-->
         <div class="block">
           <el-pagination
             :page-size="10"
