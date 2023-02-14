@@ -245,6 +245,7 @@
   flex-wrap: wrap;
   align-content: flex-start;
   align-items: stretch;
+  max-height: 100vh;
 }
 .el-select-dropdown__wrap{
   max-height: none;
