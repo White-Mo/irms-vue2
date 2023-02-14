@@ -187,7 +187,8 @@
         <el-dialog
           title="多条件搜索"
           :visible.sync="dialogVisible"
-          width="50%"
+          width="55%"
+          style="margin-top: -80px;"
           custom-class="transparent-dialog">
           <search-template></search-template>
         </el-dialog>

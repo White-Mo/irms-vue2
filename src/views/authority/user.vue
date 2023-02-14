@@ -72,7 +72,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="get_user()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2" >
@@ -307,6 +307,7 @@ export default {
     }
   },
   mounted() {
+
     for (let i of ['getRealnameAll','getPostAll','getFosGroupAll']){
       getQComSelect(i).then(res => {
         if(i == 'getRealnameAll'){
@@ -319,10 +320,15 @@ export default {
     })
     }
     this.get_user()
+
   },
   destroyed() {
   },
   methods: {
+    search(){
+      this.currentPage = 0
+      this.get_user()
+    },
     querySearchName(queryString, cb){
       return this.querySearch(this.RealnameAll,0,queryString,cb)
     },

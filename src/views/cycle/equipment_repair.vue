@@ -71,7 +71,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
         </el-row>
@@ -235,7 +235,10 @@ export default {
     this.fetchData()
   },
   methods: {
-
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     handleDetail(index, row) {
       //console.log(index, row)
     },
