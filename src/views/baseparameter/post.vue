@@ -74,7 +74,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
           <el-col
@@ -199,6 +199,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.currentPage = 0
+      this.fetchData()
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       // //console.log(this.basicValue)

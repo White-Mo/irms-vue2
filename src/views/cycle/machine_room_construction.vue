@@ -78,7 +78,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
         </el-row>
@@ -250,6 +250,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {

@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
               >搜索</el-button
             >
           </el-col>
@@ -177,6 +177,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     handleDetail(index, row) {
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
