@@ -730,9 +730,7 @@ export default {
   height:2rem;
   width:100%;
 }
-.el-button--primary {
-  height: 40px;
-}
+
 </style>
 
 <!--<template>-->

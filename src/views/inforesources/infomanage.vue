@@ -58,42 +58,16 @@
             :xl="4"
           >
 
-<!--            <el-autocomplete-->
-<!--              style="width: 240px;"-->
-<!--              autosize-->
-<!--              type="text"-->
-<!--              class="inline-input"-->
-<!--              v-model="inputValue"-->
-<!--              :fetch-suggestions="querySearch"-->
-<!--              placeholder="请输入内容"-->
-<!--              @select="handleSelect"-->
-<!--            ></el-autocomplete>-->
-
-
-
-            <el-input
+            <el-autocomplete
+              style="width: 240px;"
+              autosize
+              type="text"
+              class="inline-input"
               v-model="inputValue"
-              placeholder="输入式查询"
-              clearable
-              size="medium"
-            />
-
-
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-            <el-input
-              v-model="inputValue2"
-              placeholder="输入式查询"
-              clearable
-              size="medium"
-            />
-
+              :fetch-suggestions="querySearch"
+              placeholder="请输入内容"
+              @select="handleSelect"
+            ></el-autocomplete>
           </el-col>
           <el-col
             :xs="2"
