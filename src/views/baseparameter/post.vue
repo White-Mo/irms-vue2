@@ -33,11 +33,13 @@
             :lg="3"
             :xl="3"
           >
+            <div class="select-container">
             <el-select
               v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
+              class="select"
             >
               <el-option
                 v-for="(item,index) in basicvalue"
@@ -47,6 +49,7 @@
                 class="searchInput"
               />
             </el-select>
+              </div>
           </el-col>
           <el-col
             :xs="4"
@@ -286,6 +289,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.select-container {
+  height: 40px;
+  overflow: hidden;
+}
+
+.select {
+  height: 100%;
+}
+
 //*{
 //  font-size: 18px;
 //}
