@@ -39,10 +39,21 @@ export function getIPAddressCountData(obj) {
   })
 }
 
+export function getPostMachineRoom(data) {
+  // 将有数组和字符串的对象转为符合JSON格式的对象
+  // //console.log(typeof (params))
+  return request({
+    params: {postId: data},
+    url: '/home/inforesources/getPostMachineRoom',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+
 export function getMachineRoomAllCountData() {
   // 将有数组和字符串的对象转为符合JSON格式的对象
-  let params = ''
   // //console.log(typeof (params))
+  let params = ''
   return request({
     params,
     url: '/home/inforesources/getMachineRoomAllCountData',

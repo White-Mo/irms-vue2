@@ -45,14 +45,14 @@
           <tr style="height: 60px">
             <th>设备总数:</th>
             <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.total}}</th>
-            <th>服务器数量:</th>
-            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.serverCount}}</th>
+            <th>单位机房数:</th>
+            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.machineRoomCount}}</th>
           </tr>
           <tr style="height: 60px" >
-            <th>设备种类:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.typeCount}}</th>
-            <th>交换机数量:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.switchCount}}</th>
+            <th>机房机柜数:</th>
+            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.cabinetCount}}</th>
+            <th>机房设备数:</th>
+            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.equipmentCount}}</th>
           </tr>
         </table>
       </div>
@@ -115,6 +115,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentByCabinetId} from "@/api/baseparameter";
+import {getEquipmentCount} from "@/api/cockpit_data";
+import {getPostMachineRoom} from "@/api/dashboard";
+import {getList} from "@/api/table";
 export default {
   name:'computerRoom',
   components: {
@@ -135,10 +138,10 @@ export default {
         UnitDepartment: '',
       } ,
       equipmentBaseInfo:{
-        total:25,
-        typeCount:4,
-        serverCount:5,
-        switchCount:6
+        total:0,
+        machineRoomCount:0,
+        cabinetCount:0,
+        equipmentCount:0
       },
       tableData:[],
       camera: null,
@@ -169,9 +172,11 @@ export default {
     var that = this
     setTimeout(function () {
       that.echartsDraw()
+      that.initCount()
       that.init();
       that.animate();
       that.loadGltf()
+
     }, 200);
   },
   methods: {
@@ -232,6 +237,38 @@ export default {
       //创建控件对象
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     },
+
+    //右上角数据
+    initCount(){
+      // equipmentBaseInfo:{
+      //   total:0,
+      //     typeCount:0,
+      //     serverCount:0,
+      //     switchCount:0
+      // },
+      // this.equipmentBaseInfo.
+
+      getEquipmentCount().then((response)=> {
+        this.equipmentBaseInfo.total = response.data.total
+      })
+      getPostMachineRoom(this.$store.state.machineRoom.unitid).then((response)=> {
+        this.equipmentBaseInfo.machineRoomCount = response.data.total
+      })
+      getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) =>{
+        this.equipmentBaseInfo.cabinetCount = response.data.total
+      })
+      const params = {
+        dataName: ['machineRoomId'],
+        dataValue: this.$store.state.machineRoom.machineRoomId,
+        status: "0",
+        start: 0,
+        limit: 99999
+      }
+      getList(params).then((response)=> {
+        this.equipmentBaseInfo.equipmentCount = response.data.total
+      })
+    },
+
     // 动画
     animate() {
       if (this.mesh) {

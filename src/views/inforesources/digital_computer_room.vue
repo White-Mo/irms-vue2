@@ -675,7 +675,7 @@ export default {
                       {{item.postName}}
                     </el-row>
                     <el-row style="width: 100%;height: 50%;text-align: center;padding-top: 10px;">
-                      <el-button type="primary" size="mini" @click="enterComputerRooms(item.postName)">进入机房群</el-button>
+                      <el-button type="primary" size="mini" @click="enterComputerRooms(item.postName,item.postId)">进入机房群</el-button>
                     </el-row>
                   </el-col>
                 </div>
@@ -686,7 +686,7 @@ export default {
       </div>
     </div>
     <div v-if="ifUpdate === '1'">
-      <search-computer-room-by-post-name v-bind:postName="this.tempPost"   @changeDiv="changeDiv"></search-computer-room-by-post-name>
+      <search-computer-room-by-post-name v-bind:postName="this.postName" :postId="this.postId"   @changeDiv="changeDiv"></search-computer-room-by-post-name>
     </div>
   </div>
 </template>
@@ -762,9 +762,9 @@ export default {
     //----------------------搜索功能searchData()实现结束-------------------------------------------------------------
 
     //--------------通过单位获取对应的全部机房--开始--赵长开------
-    enterComputerRooms(postName){
-      console.log(postName);
-      this.tempPost = postName
+    enterComputerRooms(postName,postId){
+      this.postName = postName
+      this.postId=postId
       this.ifUpdate = '1'
     },
     changeDiv(value) {
