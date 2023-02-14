@@ -82,6 +82,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
+              style="margin-left: 40px"
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
@@ -107,9 +108,24 @@
           >
             <el-button
               size="medium"
-              type="info"
+              type="primary"
+              STYLE="margin-left: 50px"
               @click="addInfo()"
             >添加设备信息</el-button>
+          </el-col>
+          <el-col
+            :xs="1"
+            :sm="1"
+            :md="1"
+            :lg="1"
+            :xl="1"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              style="margin-left: 420px"
+              @click="search()"
+            >筛选</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -165,27 +181,16 @@
                 text
                 @click=handleDelete(scope.row)
               >删除</el-button>
-
-<!--              <el-button-->
-<!--                研究发现，好像只是写了个删除键，仅此而已-->
-<!--              >删除</el-button>-->
-
-<!--              <template>-->
-<!--                <el-popconfirm-->
-<!--                  confirm-button-text='确定'-->
-<!--                  cancel-button-text='不用了'-->
-<!--                  icon="el-icon-info"-->
-<!--                  icon-color="red"-->
-<!--                  title="请问这一行数据确定删除吗？"-->
-<!--                  @confirm="handleDelete(scope.row)"-->
-<!--                >-->
-<!--                  <el-button slot="reference" type="danger" plain size="mini" style="position: relative;left: 10px" >删除</el-button>-->
-<!--                </el-popconfirm>-->
-<!--              </template>-->
-
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog
+          title="多条件搜索"
+          :visible.sync="dialogVisible"
+          width="50%"
+          custom-class="transparent-dialog">
+          <search-template></search-template>
+        </el-dialog>
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -214,15 +219,15 @@
 import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
-import { all } from 'q'
-import { delPostDepartment } from '@/api/baseparameter'
+import searchTemplate from "@/components/Infomanage/searchTemplate";
 
 export default {
   // 引用vue reload方法
   inject: ['reload'],
   components: {
     addInfo,
-    updateInfo
+    updateInfo,
+    searchTemplate
   },
   filters: {
     statusFilter(status) {
@@ -705,16 +710,6 @@ export default {
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-/*      delPostDepartment(row.equipmentId).then((response) => {
-        this.$alert(response.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.fetchData()
-        })
-      })*/
-
       this.$confirm(`是否永久删除设备：\"${row.equipmentName}\"信息`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -760,6 +755,9 @@ export default {
         this.listLoading = false
       })
     },
+    search(){
+      this.dialogVisible = true
+    },
     changeDiv(value) {
       this.ifUpdate = value
     }
@@ -768,6 +766,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
@@ -851,6 +850,7 @@ export default {
 <style  lang="less">
 //覆盖样式
 
+
 .el-autocomplete-suggestion.el-scrollbar {
   //  height: 420px;
   //  overflow: hidden;
@@ -891,7 +891,14 @@ export default {
   border-color: #409eff;
 }
 .searchInput[data-v-35ac1005] {
-
     background-color: #d3dce6;
 }
+.transparent-dialog{
+  background-color: rgba(300,300,300,0.8)
+}
+
+//.transparent-dialog .el-dialog__body {
+//  background: transparent;
+//}
 </style>
+
