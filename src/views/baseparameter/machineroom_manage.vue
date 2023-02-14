@@ -205,10 +205,10 @@
                   size="mini"
                   @click="cabinetDetail(scope.$index, scope.row)"
                 >详情</el-button>
-                <el-button
-                  size="mini"
-                  @click="cabinetEdit(scope.$index, scope.row)"
-                >编辑</el-button>
+<!--                <el-button-->
+<!--                  size="mini"-->
+<!--                  @click="cabinetEdit(scope.$index, scope.row)"-->
+<!--                >编辑</el-button>-->
                 <el-button
                   size="mini"
                   type="danger"

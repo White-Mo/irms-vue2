@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button
             >
           </el-col>
@@ -243,10 +243,11 @@ export default {
     // console.log(this.list_network)
     // console.log(this.list)
   },
-  created() {
-    this.fetchData()
-  },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     async handleAsync(val){
       return new Promise((resolve,reject)=>{
         let arr = [1,2,3]
