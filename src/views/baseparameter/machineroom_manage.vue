@@ -382,7 +382,7 @@ export default {
           type: 'info',
           showClose: false
         }).then(() => {
-          this.dataName="all"
+          this.dataName=""
           this.dialogFormVisible = false
           this.fetchData()
         })

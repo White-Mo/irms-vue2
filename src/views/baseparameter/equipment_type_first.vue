@@ -233,6 +233,7 @@ export default {
 
     addEquipmentType() {
       this.ifUpdate ='1'
+      this.dataName = ""
     },
     handleEdit(index, row) {
       this.ifUpdate ='2'
@@ -253,7 +254,7 @@ export default {
                 type: 'info',
                 showClose: true
               }).then(() => {
-                this.dataName="all"
+                this.dataName=""
                 this.fetchData()
               })
             })

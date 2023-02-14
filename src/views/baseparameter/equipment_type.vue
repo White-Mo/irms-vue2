@@ -688,6 +688,7 @@ export default {
 
     addEquipmentType() {
       this.ifUpdate ='1'
+      this.dataName=""
     },
     handleDetail(index, row) {
       this.ifUpdate ='2'
@@ -710,7 +711,7 @@ export default {
                 type: 'info',
                 showClose: false
               }).then(() => {
-                this.dataName="all"
+                this.dataName=""
                 this.fetchData()
               })
             })
