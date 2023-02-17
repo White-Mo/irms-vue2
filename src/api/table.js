@@ -102,3 +102,14 @@ console.log(initdata);
   })
 }
 
+
+
+//综合信息管理表多条件查询
+export function searchComprehensiveInfoByMultipleConditions(data) {
+  return request({
+    url: '/home/inforesources/searchComprehensiveInfoByMultipleConditions',
+    method: 'get',
+    params: data
+  })
+}
+
