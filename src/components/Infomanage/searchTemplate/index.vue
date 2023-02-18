@@ -4,24 +4,32 @@
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
         <el-autocomplete
-          class="inline-input"
+          popper-class="my-autocomplete"
           v-model="infoInput.postName"
           :fetch-suggestions="querySearchPost"
           placeholder="请输入单位"
           clearable
-          @select="handlePosSelect"
-        ></el-autocomplete>
+          @select="handlePostSelect"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.postName }}</div>
+          </template>
+        </el-autocomplete>
       </el-col>
       <el-col  :span="12" >
         <el-label>设备编号：</el-label>
         <el-autocomplete
-          class="inline-input"
+          popper-class="my-autocomplete"
           v-model="infoInput.basicInfoId"
-          :fetch-suggestions="querySearchEquipmentId"
-          placeholder="请输入内容"
+          :fetch-suggestions="querySearchBasicInfoId"
+          placeholder="请输入编号"
           clearable
-          @select="handleSelectEquipmentId"
-        ></el-autocomplete>
+          @select="handleSelectBasicInfoId"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.basicInfoId }}</div>
+          </template>
+        </el-autocomplete>
       </el-col>
     </el-row>
 
@@ -90,6 +98,7 @@ export default{
         edition:'',                    //中间件版本
       },
       postAll:[],
+      backDataAll:[],
       queryParams:{  //获取数据需要的接口参数
         dataName: ['123'],
         dataValue: '',
@@ -120,59 +129,36 @@ export default{
       })
     },
     querySearchPost(queryString, cb) {
-      let postAll = this.postAll;
-      let item = []
-      for (let i of postAll) {
-        item.push({
-          "value": i["postName"],
-          "id": i["postId"]
-        })
-      }
-      let results = queryString ? item.filter(this.createFilter(queryString)) : item;
-      // 调用 callback 返回建议列表的数据
+      let postAll = this.backDataAll;
+      let results = queryString ? postAll.filter(this.createFilter(queryString)) : postAll;
       cb(results);
     },
-    querySearchEquipmentId(queryString, cb){},
     createFilter(queryString) {
       return (post) => {
-        return (post.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        return (post.postName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    handlePosSelect(item) {
-      // console.log("++++++++++++++",item);
-      // console.log(item.value)
-      // console.log(this.dynamic)
-      this.dynamic.postName = item.value
+    handlePostSelect(item) {
+      this.infoInput.postName = item.postName;
+      this.dynamic.postName = item.postName;
+      this.getSearchData()
     },
-    handleSelectEquipmentId(item){},
+    querySearchBasicInfoId(queryString, cb){
+      let basicInfoIds = this.backDataAll;
+      let results = queryString ? basicInfoIds.filter(this.createFilter(queryString)) : basicInfoIds;
+      cb(results);
+    },
+    handleSelectBasicInfoId(item){
+      this.infoInput.basicInfoId = item.basicInfoId
+    },
 
     getSearchData(){ //调接口获取多条件搜索出的结果数据
-/*      const params = {
-        basicInfoId:this.dynamic.basicInfoId,
-        postName:this.dynamic.postName,
-        departmentName:this.dynamic.departmentName,
-        equipmentName:this.dynamic.equipmentName,
-        brandName:this.dynamic.brandName,
-        equipmentTypeName:this.dynamic.equipmentTypeName,
-        machineRoomName:this.dynamic.machineRoomName,
-        cabinetName:this.dynamic.cabinetName,
-        onlineTime:this.dynamic.onlineTime,
-        offlineTime:this.dynamic.offlineTime,
-        hostName:this.dynamic.hostName,
-        equipmentAdminName:this.dynamic.equipmentAdminName,
-        equipmentAdminPhone:this.dynamic.equipmentAdminPhone,
-        appAdminName:this.dynamic.appAdminName,
-        appAdminPhone:this.dynamic.appAdminPhone,
-        brandModelName:this.dynamic.brandModelName,
-        serialNumber:this.dynamic.serialNumber,
-        guaranteePeriod:this.dynamic.guaranteePeriod,
-        type:this.dynamic.type,
-        edition:this.dynamic.edition,
-      }*/
-
       const params = { ...this.dynamic }; //获取输入框里的值传给后端，简化了上面注释的写法
+      console.log(params)
       searchComprehensiveInfoByMultipleConditions(params).then(res=>{
-        console.log(res)
+        this.backDataAll = [];
+        this.backDataAll = res.data.items
+        console.log(res.data.items)
       })
     }
   }
@@ -317,3 +303,26 @@ el-label{
 </el-col>
 </el-row>
 -->
+<!--
+/*      const params = {
+basicInfoId:this.dynamic.basicInfoId,
+postName:this.dynamic.postName,
+departmentName:this.dynamic.departmentName,
+equipmentName:this.dynamic.equipmentName,
+brandName:this.dynamic.brandName,
+equipmentTypeName:this.dynamic.equipmentTypeName,
+machineRoomName:this.dynamic.machineRoomName,
+cabinetName:this.dynamic.cabinetName,
+onlineTime:this.dynamic.onlineTime,
+offlineTime:this.dynamic.offlineTime,
+hostName:this.dynamic.hostName,
+equipmentAdminName:this.dynamic.equipmentAdminName,
+equipmentAdminPhone:this.dynamic.equipmentAdminPhone,
+appAdminName:this.dynamic.appAdminName,
+appAdminPhone:this.dynamic.appAdminPhone,
+brandModelName:this.dynamic.brandModelName,
+serialNumber:this.dynamic.serialNumber,
+guaranteePeriod:this.dynamic.guaranteePeriod,
+type:this.dynamic.type,
+edition:this.dynamic.edition,
+}*/-->
