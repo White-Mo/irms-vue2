@@ -251,15 +251,24 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updatePosition(params).then( res=>{
-          //console.log(res);
+          if(res.data.items == false){
+            this.$message({
+              message: 'U位冲突，不能移动',
+              type: 'error'
+            });
+          }else {
+            this.$message({
+              message: '移动成功',
+              type: 'success'
+            });
+          }
+          this.fetchData()
         } )
       }else{
-
         getMachineRoom(row.postId).then(response => {
           this.machineRoomAll = response.data.items
           this.fetchCabinet(row.machineRoomName)
         })
-
       }
     },
     handleCurrentChange(val) {

@@ -190,7 +190,7 @@
           width="55%"
           style="margin-top: -80px;"
           custom-class="transparent-dialog">
-          <search-template></search-template>
+          <search-template @changList="receiveAllSearchData"></search-template>
         </el-dialog>
         <div class="block">
           <el-pagination
@@ -270,6 +270,7 @@ export default {
       listLoading: true,
       singalInfo: {},
       initval: [],
+      tempAllData:null,
       dataname: [
 
         {
@@ -561,6 +562,10 @@ export default {
     // console.log(this.initval);
   },
   methods: {
+    receiveAllSearchData(searchAllData){
+      this.list = searchAllData;
+      this.dialogVisible = false;
+    },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
       //console.log(restaurants)

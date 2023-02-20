@@ -6,10 +6,10 @@
         <el-autocomplete
           popper-class="my-autocomplete"
           v-model="infoInput.postName"
-          :fetch-suggestions="querySearchPost"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'postName')})"
           placeholder="请输入单位"
           clearable
-          @select="handlePostSelect"
+          @select="handleSelect('postName',$event)"
         >
           <template slot-scope="{ item }">
             <div class="name">{{ item.postName }}</div>
@@ -21,10 +21,10 @@
         <el-autocomplete
           popper-class="my-autocomplete"
           v-model="infoInput.basicInfoId"
-          :fetch-suggestions="querySearchBasicInfoId"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'basicInfoId')})"
           placeholder="请输入编号"
           clearable
-          @select="handleSelectBasicInfoId"
+          @select="handleSelect('basicInfoId',$event)"
         >
           <template slot-scope="{ item }">
             <div class="name">{{ item.basicInfoId }}</div>
@@ -32,17 +32,271 @@
         </el-autocomplete>
       </el-col>
     </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>所属部门：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.departmentName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'departmentName')})"
+          placeholder="请输入部门"
+          clearable
+          @select="handleSelect('departmentName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.departmentName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>设备名：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.equipmentName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'equipmentName')})"
+          placeholder="请输入设备名"
+          clearable
+          @select="handleSelect('equipmentName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.equipmentName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>设备品牌：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.brandName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'brandName')})"
+          placeholder="请输入设备品牌"
+          clearable
+          @select="handleSelect('brandName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.brandName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>设备类型：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.equipmentTypeName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'equipmentTypeName')})"
+          placeholder="请输入设备类型"
+          clearable
+          @select="handleSelect('equipmentTypeName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.equipmentTypeName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>安装位置：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.machineRoomName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'machineRoomName')})"
+          placeholder="请输入安装位置"
+          clearable
+          @select="handleSelect('machineRoomName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.machineRoomName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>机柜编号：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.cabinetName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'cabinetName')})"
+          placeholder="请输入机柜编号"
+          clearable
+          @select="handleSelect('cabinetName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.cabinetName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>主机名：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.hostName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'hostName')})"
+          placeholder="请输入主机名"
+          clearable
+          @select="handleSelect('hostName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.hostName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>设备管理员：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.equipmentAdminName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'equipmentAdminName')})"
+          placeholder="请输入设备管理员"
+          clearable
+          @select="handleSelect('equipmentAdminName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.equipmentAdminName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>设备管理员电话：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.equipmentAdminPhone"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'equipmentAdminPhone')})"
+          placeholder="请输入设备管理员电话"
+          clearable
+          @select="handleSelect('equipmentAdminPhone',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.equipmentAdminPhone }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>应用管理员：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.appAdminName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'appAdminName')})"
+          placeholder="请输入应用管理员"
+          clearable
+          @select="handleSelect('appAdminName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.appAdminName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>应用管理员电话：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.appAdminPhone"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'appAdminPhone')})"
+          placeholder="请输入应用管理员电话"
+          clearable
+          @select="handleSelect('appAdminPhone',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.appAdminPhone }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>型号：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.brandModelName"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'brandModelName')})"
+          placeholder="请输入型号"
+          clearable
+          @select="handleSelect('brandModelName',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.brandModelName }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>序列号：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.serialNumber"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'serialNumber')})"
+          placeholder="请输入序列号"
+          clearable
+          @select="handleSelect('serialNumber',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.serialNumber }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>保修期：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.guaranteePeriod"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'guaranteePeriod')})"
+          placeholder="请输入保修期"
+          clearable
+          @select="handleSelect('guaranteePeriod',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.guaranteePeriod }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>CPU类型：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.type"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'type')})"
+          placeholder="请输入CPU类型"
+          clearable
+          @select="handleSelect('type',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.type }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>中间件版本：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.edition"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'edition')})"
+          placeholder="请输入中间件版本"
+          clearable
+          @select="handleSelect('edition',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.edition }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
 
-
-    <div slot="footer" class="dialog-footer" style="height: 40px;text-align: center;margin-top: 20px;">
-      <el-button style="width: 100px" type="primary" @click="confirm">查询</el-button>
+    <div slot="footer" class="dialog-footer" style="height: 40px;text-align: center;margin-top: 40px;">
+      <el-button style="width: 100px" type="primary" @click="confirmSearch">查询</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import {getList, searchComprehensiveInfoByMultipleConditions} from "@/api/table";
-import {getPost} from "@/api/select";
+import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
 
 
 export default{
@@ -50,7 +304,6 @@ export default{
   data(){
     return{
       dialogVisible:true,
-      allData:null,
       totalDataNumber:0,
       infoInput:{ //定义输入框里的字段
         basicInfoId:'',
@@ -73,31 +326,9 @@ export default{
         guaranteePeriod:'',
         type:'',
         edition:'',
+        mark:''
+      },
 
-      },
-      dynamic:{  //动态字段，用于接收输入框输入后的值
-        basicInfoId:'',                //设备编号
-        postName:'',                   //所属单位
-        departmentName:'',             //所属部门
-        equipmentName:'',              //设备名
-        brandName:'',                  //设备品牌
-        equipmentTypeName:'',          //设备类型
-        machineRoomName:'',            //安装位置
-        cabinetName:'',                //机柜编号
-        onlineTime:'',                 //上线时间
-        offlineTime:'',                //下线时间
-        hostName:'',                   //主机名
-        equipmentAdminName:'',         //设备管理员
-        equipmentAdminPhone:'',        //设备管理员电话
-        appAdminName:'',               //应用管理员
-        appAdminPhone:'',              //应用管理员电话
-        brandModelName:'',             //型号
-        serialNumber:'',               //序列号
-        guaranteePeriod:'',            //保修期
-        type:'',                       //CPU类型
-        edition:'',                    //中间件版本
-      },
-      postAll:[],
       backDataAll:[],
       queryParams:{  //获取数据需要的接口参数
         dataName: ['123'],
@@ -107,59 +338,54 @@ export default{
         start: 0,
         limit: 10,
       },
+      timeout:null,
 
     }
   },
   created() {
-    this.getData()
     this.getPost()
-    this.getSearchData() //获取多条件查询的数据
+
   },
   methods: {
-    getData() { //获取limit条数据
-      getList(this.queryParams).then((response) => {
-        this.allData = response.data.items
-        this.totalDataNumber = response.data.total
-        console.log(this.allData)
-      })
+    async querySearch(queryString, cb , mark) {
+      this.infoInput.mark=mark
+      await this.getSearchData() //获取多条件查询的数据
+      let dataAll = this.backDataAll;
+      let results = queryString ? dataAll.filter(this.createFilter(queryString,mark)) : dataAll;
+
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 30 * Math.random());
     },
-    getPost() {
-      getPost().then(res => {
-        this.postAll = res.data.items
-      })
-    },
-    querySearchPost(queryString, cb) {
-      let postAll = this.backDataAll;
-      let results = queryString ? postAll.filter(this.createFilter(queryString)) : postAll;
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (post) => {
-        return (post.postName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+    createFilter(queryString,mark) {
+      return (data) => {
+        return (data[mark].toLowerCase().match(queryString.toLowerCase()));
       };
     },
-    handlePostSelect(item) {
-      this.infoInput.postName = item.postName;
-      this.dynamic.postName = item.postName;
+    handleSelect(mark,item) {
+      this.infoInput[mark] = item[mark];
+      this.infoInput.mark = '';
       this.getSearchData()
     },
-    querySearchBasicInfoId(queryString, cb){
-      let basicInfoIds = this.backDataAll;
-      let results = queryString ? basicInfoIds.filter(this.createFilter(queryString)) : basicInfoIds;
-      cb(results);
-    },
-    handleSelectBasicInfoId(item){
-      this.infoInput.basicInfoId = item.basicInfoId
-    },
-
-    getSearchData(){ //调接口获取多条件搜索出的结果数据
-      const params = { ...this.dynamic }; //获取输入框里的值传给后端，简化了上面注释的写法
-      console.log(params)
-      searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+    async getSearchData(){ //调接口获取多条件搜索出的结果数据
+      const params = { ...this.infoInput}; //获取输入框里的值传给后端
+      await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
         this.backDataAll = [];
         this.backDataAll = res.data.items
         console.log(res.data.items)
       })
+    },
+    async confirmSearch(){
+      await this.getSearchData()
+      let searchAllData = this.backDataAll;
+      for (const key in this.infoInput) {  //每次点击查询后清空输入框里的值
+        if (Object.hasOwnProperty.call(this.infoInput, key)) {
+          this.infoInput[key] = '';
+        }
+      }
+      this.$emit('changList', searchAllData);
+      this.dialogVisible = false
     }
   }
 
@@ -182,6 +408,33 @@ el-label{
 
 
 <!--
+
+
+      // dynamic:{  //动态字段，用于接收输入框输入后的值
+      //   basicInfoId:'',                //设备编号
+      //   postName:'',                   //所属单位
+      //   departmentName:'',             //所属部门
+      //   equipmentName:'',              //设备名
+      //   brandName:'',                  //设备品牌
+      //   equipmentTypeName:'',          //设备类型
+      //   machineRoomName:'',            //安装位置
+      //   cabinetName:'',                //机柜编号
+      //   onlineTime:'',                 //上线时间
+      //   offlineTime:'',                //下线时间
+      //   hostName:'',                   //主机名
+      //   equipmentAdminName:'',         //设备管理员
+      //   equipmentAdminPhone:'',        //设备管理员电话
+      //   appAdminName:'',               //应用管理员
+      //   appAdminPhone:'',              //应用管理员电话
+      //   brandModelName:'',             //型号
+      //   serialNumber:'',               //序列号
+      //   guaranteePeriod:'',            //保修期
+      //   type:'',                       //CPU类型
+      //   edition:'',                    //中间件版本
+      //   mark:''                        //去重字段标记
+      // },
+
+
 <el-row :gutter="20"  style="margin-bottom: 10px;">
 <el-col  :span="12">
   <el-label>所属部门：</el-label>
