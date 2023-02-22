@@ -190,7 +190,7 @@
           width="55%"
           style="margin-top: -80px;"
           custom-class="transparent-dialog">
-          <search-template @changList="receiveAllSearchData"></search-template>
+          <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
         </el-dialog>
         <div class="block">
           <el-pagination
@@ -199,6 +199,7 @@
             :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
           />
         </div>
       </div>
@@ -217,7 +218,7 @@
 </template>
 
 <script>
-import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
+import {getList, getdataCount, delEquipment, InitValue, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import searchTemplate from "@/components/Infomanage/searchTemplate";
@@ -242,6 +243,7 @@ export default {
   },
   data() {
     return {
+      currentPage:1,
       guaranteePeriodID: '保修期:',
       editionID: '中间件版本:',
       typeID: 'CPU类型:',
@@ -550,6 +552,8 @@ export default {
         }
       ],
       value: '',
+      isMultiline:false,
+      infoInput:[],
     }
   },
   created() {
@@ -562,14 +566,17 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData){
-      this.list = searchAllData;
+    receiveAllSearchData(searchAllData,infoInput){
+      this.isMultiline=true;
+      this.start=0;
+      this.currentPage=1;
+      this.infoInput=infoInput;
+      this.list = searchAllData.items;
+      this.total = searchAllData.total;
       this.dialogVisible = false;
     },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
-      //console.log(restaurants)
-      //console.log(queryString)
       var results = queryString
         ? restaurants.filter(this.createFilter(queryString))
         : restaurants
@@ -672,6 +679,7 @@ export default {
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
+      this.isMultiline=false
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
@@ -744,22 +752,49 @@ export default {
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit = val
-      this.fetchData()
+      if(this.isMultiline){
+        this.infoInput.start=this.start
+        this.infoInput.limit=this.limit
+        this.listLoading=true
+        const params=this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading=false
+        })
+      }else {
+        this.fetchData()
+      }
+
     },
     handleCurrentChange(val) {
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: "0",
-        start: (val - 1) * this.limit,
-        // start: val - 1,
-        limit: this.limit
+      this.listLoading=true
+      this.currentPage=val
+      if(this.isMultiline){
+        this.infoInput.start=val - 1
+        this.infoInput.limit=this.limit
+        const params=this.infoInput
+
+        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading = false
+        })
+      }else {
+        const params = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          status: "0",
+          start: (val - 1) * this.limit,
+          // start: val - 1,
+          limit: this.limit
+        }
+        getList(params).then((response) => {
+          this.list = response.data.items
+          this.total = response.data.total
+          this.listLoading = false
+        })
       }
-      getList(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
     },
     search(){
       this.dialogVisible = true

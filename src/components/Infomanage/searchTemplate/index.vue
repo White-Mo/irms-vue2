@@ -301,6 +301,7 @@ import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
 
 export default{
   name:'searchTemplate',
+  props:["limit"],
   data(){
     return{
       dialogVisible:true,
@@ -326,31 +327,30 @@ export default{
         guaranteePeriod:'',
         type:'',
         edition:'',
-        mark:''
-      },
-
-      backDataAll:[],
-      queryParams:{  //获取数据需要的接口参数
-        dataName: ['123'],
-        dataValue: '',
-        dataValue2: '',
-        status: "0",
+        mark:'',
         start: 0,
         limit: 10,
+        status: "0",
       },
+      selectInput:{},
+      start:0,
+      backDataAll:[],
       timeout:null,
 
     }
   },
   created() {
-    this.getPost()
-
+    this.infoInput.start=this.start;
+    this.infoInput.limit=this.limit;
   },
   methods: {
     async querySearch(queryString, cb , mark) {
       this.infoInput.mark=mark
-      await this.getSearchData() //获取多条件查询的数据
-      let dataAll = this.backDataAll;
+      const selectInput=JSON.parse(JSON.stringify(this.infoInput));
+      selectInput.start=0
+      selectInput.limit=9999
+      await this.getSearchData(selectInput) //获取多条件查询的数据
+      let dataAll = this.backDataAll.items;
       let results = queryString ? dataAll.filter(this.createFilter(queryString,mark)) : dataAll;
 
       clearTimeout(this.timeout);
@@ -366,25 +366,29 @@ export default{
     handleSelect(mark,item) {
       this.infoInput[mark] = item[mark];
       this.infoInput.mark = '';
-      this.getSearchData()
     },
-    async getSearchData(){ //调接口获取多条件搜索出的结果数据
-      const params = { ...this.infoInput}; //获取输入框里的值传给后端
+    async getSearchData(data){ //调接口获取多条件搜索出的结果数据
+      const params={ ...data }
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
         this.backDataAll = [];
-        this.backDataAll = res.data.items
+        this.backDataAll = res.data
         console.log(res.data.items)
       })
     },
     async confirmSearch(){
-      await this.getSearchData()
+      this.infoInput.start=this.start
+      this.infoInput.limit=this.limit
+      const params={ ...this.infoInput}
+      // console.log(params)
+      await this.getSearchData(params)
+
       let searchAllData = this.backDataAll;
+      this.$emit('changList', searchAllData,params);
       for (const key in this.infoInput) {  //每次点击查询后清空输入框里的值
         if (Object.hasOwnProperty.call(this.infoInput, key)) {
           this.infoInput[key] = '';
         }
       }
-      this.$emit('changList', searchAllData);
       this.dialogVisible = false
     }
   }

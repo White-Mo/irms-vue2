@@ -1,5 +1,5 @@
 <template>
-  <div class = "main">
+  <div class = "mains">
     <dv-loading>Loading...</dv-loading>
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
@@ -100,6 +100,7 @@
     </dv-border-box-12>
     <el-dialog
       :visible.sync="showEquipment"
+      v-if="showEquipment"
       width="100%"
       :with-header="false">
       <InfoTemplate :pre-row="row" @changeDiv="changeDiv" />
@@ -397,7 +398,7 @@ export default {
 </script>
 
 <style>
-.main{
+.mains{
   cursor: pointer;
   position:absolute;
   left:0;

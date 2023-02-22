@@ -194,7 +194,7 @@
       <div style="height:450px;text-align:center">
         <!--需要弹出的内容部分-->
         <el-descriptions  :column="3"  border>
-          <el-descriptions-item v-for="item in replayData">
+          <el-descriptions-item v-for="item in replayData" :key="index">
             <template slot="label">
               <i></i>
               {{item.key}}
