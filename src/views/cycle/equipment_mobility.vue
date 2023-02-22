@@ -251,7 +251,7 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updatePosition(params).then( res=>{
-          if(res.data.items == false){
+          if(res.data === 'u位冲突'){
             this.$message({
               message: 'U位冲突，不能移动',
               type: 'error'
@@ -262,6 +262,7 @@ export default {
               type: 'success'
             });
           }
+          console.log(res.data)
           this.fetchData()
         } )
       }else{

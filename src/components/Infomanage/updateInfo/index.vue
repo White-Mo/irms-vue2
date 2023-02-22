@@ -411,16 +411,21 @@ export default {
       equipments.push(equip)
 
       addEquipment({ equipments: equipments }).then(res => {
-        //获得数据
-        //console.log('#',res)
-        console.log('@@',res)
-        const result = analysisReply(res.data)
-        console.log('#',result)
-        this.replayData = result
-        this.showDialog=true
-        console.log('@@@',res.message)
+        if(res.message === '填写错误'){
+          this.$message({
+            message: '填写错误',
+            type: 'error'
+          });
+          this.showDialog=false
+        }else {
+          const result = analysisReply(res.data)
+          console.log('#',result)
+          this.replayData = result
+          this.showDialog=true
+
+        }
       }).catch(err => {
-        //console.log(err)
+        console.log(err)
       })
     },
 
