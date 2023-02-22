@@ -51,8 +51,29 @@
           <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
+          <el-col
+            :xs="1"
+            :sm="1"
+            :md="1"
+            :lg="1"
+            :xl="1"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              style="margin-left: 280px"
+              @click="search()"
+            >筛选</el-button>
+          </el-col>
         </el-row>
-
+        <el-dialog
+          title="多条件搜索"
+          :visible.sync="dialogVisible"
+          width="55%"
+          style="margin-top: -80px;"
+          custom-class="transparent-dialog">
+          <dataStatementMakeSearchTemplate @changList="receiveAllSearchData"></dataStatementMakeSearchTemplate>
+        </el-dialog>
         <div class="grid-content form_table_class" >
           <el-table
             ref="multipleTable"
@@ -143,9 +164,12 @@ import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
 import { getStatisticsData } from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
+import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
 export default {
+
   data() {
     return {
+      dialogVisible: false,
       // 总数据
       tableData: [],
       // 默认显示第几页
@@ -305,7 +329,8 @@ export default {
     }
   },
   components:{
-    Progress
+    Progress,
+    dataStatementMakeSearchTemplate
   },
   computed: {
     ...mapGetters(['name', 'roles']),
@@ -354,6 +379,13 @@ export default {
     }
   },
   methods: {
+    receiveAllSearchData(searchAllData){
+      this.tableData = searchAllData;
+      this.dialogVisible = false;
+    },
+    search(){
+      this.dialogVisible = true
+    },
     get_data() {
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)

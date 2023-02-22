@@ -61,7 +61,6 @@ export function getStatisticsData(par) {
 export function addEquipment(eq) {
   //console.log(eq)
   return request({
-
     data: eq,
     url: '/home/inforesources/AddEquipment',
     method: 'post',
