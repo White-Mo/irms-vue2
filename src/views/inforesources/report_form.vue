@@ -42,13 +42,13 @@
               @click="get_data2()"
             >搜索</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
           <el-col
@@ -61,7 +61,7 @@
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 280px"
+              style="margin-left: 100px"
               @click="search()"
             >筛选</el-button>
           </el-col>
