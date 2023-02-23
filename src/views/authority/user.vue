@@ -468,6 +468,7 @@ export default {
     },
 
     async updateUser(row){
+      console.log(row)
       let temp = row.role.split("/")
       this.userDialogDisplay = true
       this.updateOrAdd = true
@@ -476,9 +477,11 @@ export default {
       this.update_data.account = row.username
       this.update_data.password = row.password
       this.update_data.Unit = temp[0]
-      this.update_data.department = ""
-      this.update_data.Roles = ""
-      this.update_data.Status = ""
+      this.update_data.department =""
+
+      this.update_data.Roles = row.roles
+      this.update_data.Status = row.status==="激活" ? '0':'1'
+      // this.update_data.Status = row.status==="激活" ? '0':'1'
       this.update_data.row = row
       //console.log(row)
       //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
@@ -522,7 +525,7 @@ export default {
         password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
-      //console.log(params)
+      console.log(params)
       let _this = this
       updateFosUserAction(params).then((res)=>{
         //console.log(res)
