@@ -492,6 +492,7 @@ export default {
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
+      // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
