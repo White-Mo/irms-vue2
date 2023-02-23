@@ -229,7 +229,7 @@
         <el-label>序列号：</el-label>
         <el-autocomplete
           popper-class="my-autocomplete"
-          v-model="infoInput.serialNumber"
+          v-model="infoInput.serialNumber.trim()"
           :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'serialNumber')})"
           placeholder="请输入序列号"
           clearable
@@ -365,7 +365,6 @@ export default{
     },
     handleSelect(mark,item) {
       this.infoInput[mark] = item[mark];
-      this.infoInput.mark = '';
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
@@ -378,6 +377,7 @@ export default{
     async confirmSearch(){
       this.infoInput.start=this.start
       this.infoInput.limit=15
+      this.infoInput.mark = '';
       const params={ ...this.infoInput}
       // console.log(params)
       await this.getSearchData(params)

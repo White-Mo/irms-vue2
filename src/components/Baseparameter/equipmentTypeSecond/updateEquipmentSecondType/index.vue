@@ -63,7 +63,7 @@ export default {
         equipmentSecondTypeName: this.row.equipmentTypeName,
         equipmentSecondTypeCode: this.row.equipmentTypeCode,
         equipmentSecondTypeId:this.row.equipmentTypeId,
-        equipmentFirstTypeId:this.row.equipmentFirstTypeName
+        equipmentFirstTypeId:this.row.equipmentFirstTypeId
       },
       equipmentFirst:[],
       currentPage: 0,

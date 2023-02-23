@@ -90,6 +90,7 @@
 
           >
             <el-table-column label="" width="40" type="selection" />
+            <el-table-column label="" width="40" type="index" />
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -196,9 +197,6 @@ export default {
       basic_info_id: '',
       dataname: [
         {
-          value: 'num',
-          label: '#'
-        },{
           value: 'basicInfoId',
           label: '设备编号'
         },

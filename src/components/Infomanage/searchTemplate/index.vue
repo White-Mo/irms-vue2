@@ -52,7 +52,7 @@
         <el-label>设备名：</el-label>
         <el-autocomplete
           popper-class="my-autocomplete"
-          v-model="infoInput.equipmentName"
+          v-model.trim="infoInput.equipmentName"
           :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'equipmentName')})"
           placeholder="请输入设备名"
           clearable
@@ -364,8 +364,7 @@ export default{
       };
     },
     handleSelect(mark,item) {
-      this.infoInput[mark] = item[mark];
-      this.infoInput.mark = '';
+      this.infoInput[mark] = item[mark].trim();
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
@@ -378,6 +377,7 @@ export default{
     async confirmSearch(){
       this.infoInput.start=this.start
       this.infoInput.limit=this.limit
+      this.infoInput.mark = '';
       const params={ ...this.infoInput}
       // console.log(params)
       await this.getSearchData(params)
