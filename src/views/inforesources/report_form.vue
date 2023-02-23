@@ -1,4 +1,3 @@
-<!--
 <template>
   <div class="infobody">
     <div class="grid-content bg-purple">
@@ -104,7 +103,7 @@
           </el-table>
           <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
           <el-alert v-if="isMore" title="没有更多数据" type="warning" center show-icon></el-alert>
-          &lt;!&ndash; <div class="tabListPage" style="text-align: center">
+          <!-- <div class="tabListPage" style="text-align: center">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -115,7 +114,7 @@
               :total="totalCount"
             >
             </el-pagination>
-          </div> &ndash;&gt;
+          </div> -->
           <el-dialog
             title="详表导出模式选择"
             :visible.sync="centerDialogVisible"
@@ -346,7 +345,7 @@ export default {
   },
   watch:{
     'ClientHeight':function(curVal,oldVal){
-      //console.log(curVal,oldVal,'&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;')
+      //console.log(curVal,oldVal,'----------------------')
       //console.log(this.tableData.length , this.totalCount)
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)
@@ -812,7 +811,7 @@ export default {
   width: 0;
 }
 
-.el-button&#45;&#45;primary {
+.el-button--primary {
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
@@ -829,7 +828,6 @@ export default {
   width:100%;
 }
 </style>
--->
 
 
 
@@ -856,7 +854,7 @@ export default {
 
 
 
-<template>
+<!--<template>
   <div class="infobody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
     <div class="app-container">
@@ -1512,12 +1510,12 @@ export default {
         cancelButtonText: '取消'
       })
     },
-    // 综合数据管理展示与查询--lry
+    // 综合数据管理展示与查询&#45;&#45;lry
     fetchData() {
       this.listLoading = true
       this.isMultiline=false
       // console.log(this.basicValue)
-      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
+      // 判断处理-&#45;&#45;解决空值与后台逻辑不符合问题&#45;&#45;&#45;&#45;时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)
         this.initname = ['111']
@@ -1540,7 +1538,7 @@ export default {
       getList(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
-        //console.log("List---------");
+        //console.log("List-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;");
         //console.log(this.list)
         this.listLoading = false
       })
@@ -1918,7 +1916,7 @@ export default {
     max-height: none;
   }
 }
-.el-button--primary {
+.el-button&#45;&#45;primary {
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
@@ -1939,4 +1937,4 @@ export default {
 //.transparent-dialog .el-dialog__body {
 //  background: transparent;
 //}
-</style>
+</style>-->
