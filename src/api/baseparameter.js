@@ -191,6 +191,9 @@ export function addEquipmentFirstType(data) {
   })
 }
 
+//修改一级设备类型
+
+
 //新增二级设备类型
 export function addEquipmentType(data) {
   return request({

@@ -247,7 +247,18 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updatePosition(params).then( res=>{
-          console.log(res);
+          console.log("@@",res);
+          if(res.data.items === true){
+            this.$message({
+              type:'success',
+              message:'修改成功'
+            })
+          }else{
+            this.$message({
+              type:'error',
+              message:'U位冲突，修改失败'
+            })
+          }
         } )
       }else{
 

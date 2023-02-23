@@ -339,9 +339,6 @@ export default {
             }
             this.excelData.equipments.push(obj)
             this.submitResult.fail = this.submitResult.fail + 1
-            // submitFail.push(this.checkList[index].name)
-            // this.submitOutcome.push(this.checkList[index].value.name.toString())
-            //this.submitOutcome.读取失败 = this.submitOutcome.读取失败 + this.checkList[index].value.name + ";"
           }
         }
         // const h = this.$createElement;

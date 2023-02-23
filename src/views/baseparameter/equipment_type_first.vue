@@ -34,7 +34,7 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
@@ -91,13 +91,14 @@
             >添加一级设备类型</el-button>
           </el-col>
         </el-row>
+
         <el-dialog title="新增一级设备类型" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <el-form-item label="一级设备类型名称" :label-width="formLabelWidth">
-              <el-input v-model="form.equipmentFirstTypeName" autocomplete="off"></el-input>
+              <el-input v-model="form.equipmentFirstTypeName"  ></el-input>
             </el-form-item>
             <el-form-item label="一级设备类型代码" :label-width="formLabelWidth">
-              <el-input v-model="form.equipmentFirstTypeCode" autocomplete="off"></el-input>
+              <el-input v-model="form.equipmentFirstTypeCode"  ></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -105,6 +106,7 @@
             <el-button type="primary" @click="createEquipmentType">确 定</el-button>
           </div>
         </el-dialog>
+
         <el-table
           height="70vh"
           :row-style="{height:'6.26vh'}"
@@ -133,10 +135,10 @@
 <!--                size="mini"-->
 <!--                @click="handleDetail(scope.$index, scope.row)"-->
 <!--              >详情</el-button>-->
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -223,6 +225,12 @@ export default {
     this.fetchData()
   },
   methods: {
+
+    restart(){
+      this.form.equipmentFirstTypeName=''
+      this.form.equipmentFirstTypeCode=''
+    },
+
     // 综合数据管理展示与查询--lry
     fetchData() {
       // console.log(this.basicValue)
@@ -231,11 +239,12 @@ export default {
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log(this.dataName)
+        console.log("空值或逻辑不合",this.dataName)
         this.initName = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
+        console.log("不为空值",this.initName)
       }
       const params = {
         dataName: this.initName,
@@ -243,7 +252,7 @@ export default {
         start: this.currentPage,
         limit: this.limit
       }
-      // console.log(this.initName)
+      console.log(params)
       getEquipmentFirstTypeByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -253,6 +262,8 @@ export default {
 
     addEquipmentType() {
       // this.ifUpdate ='1'
+      // this.from.equipmentFirstTypeName=''
+      // this.from.equipmentFirstTypeCode=''
       this.dialogFormVisible = true
     },
     createEquipmentType(){
@@ -267,6 +278,7 @@ export default {
           this.dataName="all"
           this.dialogFormVisible = false
           this.fetchData()
+          this.restart()
         })
       })
     },
@@ -277,46 +289,22 @@ export default {
     handleEdit(index, row) {
       // this.ifUpdate ='3'
       this.row = row
+      console.log(1,this.row)
+      this.form.equipmentFirstTypeName=this.row.equipmentFirstTypeName
+      this.form.equipmentFirstTypeCode=this.row.equipmentFirstTypeCode
+      this.dialogFormVisible=true
     },
     handleDelete(index, row) {
-      // const h = this.$createElement;
-      // this.$msgbox({
-      //   title: '删除提示',
-      //   type: 'warning',
-      //   message: h('h3', null, [
-      //     h('span', null, '是否确定删除：'),
-      //     h('span', null, row.equipmentFirstTypeName + "-" + row.equipmentFirstTypeCode)
-      //   ]),
-      //   showCancelButton: true,
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   callback: (action) => {
-      //     if (action === 'confirm') {
-      //       delEquipmentFirstType(row.equipmentTypeId).then((response) => {
-      //         this.$alert(response.data, '提示', {
-      //           confirmButtonText: '确定',
-      //           type: 'info',
-      //           showClose: false
-      //         }).then(() => {
-      //           this.dataName="all"
-      //           this.fetchData()
-      //         })
-      //       })
-      //     }
-      //   }
-      // })
       this.$alert("是否永久删除该一级设备类型", '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delEquipmentFirstType(row.equipmentTypeId).then((response) => {
+            delEquipmentFirstType(row.equipmentFirstTypeId).then((response) => {
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
-
-
                 showClose: false
               }).then(() => {
                 this.dataName="all"

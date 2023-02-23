@@ -207,11 +207,13 @@ export default {
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log(this.dataName)
+        console.log("空值或逻辑不合",this.dataName)
         this.initName = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        console.log("$$",JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
+        console.log("@@",this.initName)
+
       }
       const params = {
         dataName: this.initName,
