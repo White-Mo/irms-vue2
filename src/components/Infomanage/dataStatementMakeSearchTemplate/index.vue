@@ -364,7 +364,7 @@ export default{
       };
     },
     handleSelect(mark,item) {
-      this.infoInput[mark] = item[mark];
+      this.infoInput[mark] = item[mark].trim();
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
