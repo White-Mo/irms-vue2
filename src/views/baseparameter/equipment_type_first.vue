@@ -286,10 +286,11 @@ export default {
       this.ifUpdate ='2'
       this.row = row
     },
+
+    //修改一级设备类型
     handleEdit(index, row) {
       // this.ifUpdate ='3'
-      this.row = row
-      console.log(1,this.row)
+      console.log(1,row)
       this.form.equipmentFirstTypeName=this.row.equipmentFirstTypeName
       this.form.equipmentFirstTypeCode=this.row.equipmentFirstTypeCode
       this.dialogFormVisible=true
