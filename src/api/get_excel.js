@@ -215,7 +215,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         workbook.lastPrinted = new Date();
         workbook.properties.date1904 = true;
         workbook.calcProperties.fullCalcOnLoad = true;
-        //工作簿视图 ？？啥玩意
+        //工作簿视图
         workbook.views = [{
                 x: 0,
                 y: 0,
@@ -1710,7 +1710,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         let link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
-        link.download = data_list[0]["basicInfoId"]+".xlsx";
+        link.download = data_list[progress_item_num]["basicInfoId"]+".xlsx";
         link.click();
         document.body.removeChild(link);
 
