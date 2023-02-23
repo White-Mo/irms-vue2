@@ -86,19 +86,6 @@
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
-<!--          <el-col-->
-<!--            :xs="2"-->
-<!--            :sm="2"-->
-<!--            :md="2"-->
-<!--            :lg="2"-->
-<!--            :xl="2"-->
-<!--          >-->
-<!--            <el-button-->
-<!--              size="medium"-->
-<!--              type="primary"-->
-<!--              icon="el-icon-download"-->
-<!--            >导出</el-button>-->
-<!--          </el-col>-->
           <el-col
             :xs="1"
             :sm="1"
@@ -942,4 +929,29 @@ export default {
 //  background: transparent;
 //}
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
