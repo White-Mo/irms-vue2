@@ -224,6 +224,7 @@ export default {
             type:'success',
             message:"新增成功"
           })
+          this.datainit()
         }else {
           this.$message({
             type:'error',

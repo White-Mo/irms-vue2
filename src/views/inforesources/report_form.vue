@@ -86,8 +86,11 @@
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
+            v-loading="listLoading"
+
           >
             <el-table-column label="" width="40" type="selection" />
+            <el-table-column label="" width="40" type="index" />
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -161,7 +164,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
-import { getStatisticsData } from '@/api/table'
+import {getStatisticsData, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
 import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
@@ -169,6 +172,7 @@ export default {
 
   data() {
     return {
+      listLoading:false,
       dialogVisible: false,
       // 总数据
       tableData: [],
@@ -193,9 +197,6 @@ export default {
       basic_info_id: '',
       dataname: [
         {
-          value: 'num',
-          label: '#'
-        },{
           value: 'basicInfoId',
           label: '设备编号'
         },
@@ -325,7 +326,8 @@ export default {
       // 统计数据
       StatisticsData: [],
       // 全选事件
-      is_select_all:false
+      is_select_all:false,
+      isMultiline:false,//是否多条件筛选
     }
   },
   components:{
@@ -335,7 +337,9 @@ export default {
   computed: {
     ...mapGetters(['name', 'roles']),
   },
-
+  created() {
+    this.listLoading=true
+  },
   mounted() {
     this.get_data()
     document.getElementsByClassName('el-table__body-wrapper')[0].addEventListener('scroll',this.load)
@@ -345,48 +349,91 @@ export default {
   },
   watch:{
     'ClientHeight':function(curVal,oldVal){
+      this.isflag = true
       //console.log(curVal,oldVal,'----------------------')
       //console.log(this.tableData.length , this.totalCount)
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        //console.log(this.DataName)
-        this.initname = ['111']
-      } else {
-        this.initname = JSON.parse(JSON.stringify(this.DataName))
-      }
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        start: this.tableData.length ? this.tableData.length : 0,
-        limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-        status: ''
-      }
-      if(this.tableData.length < this.totalCount){
-        //console.log("提交请求",params)
-        getList(params).then((response) => {
-          this.isflag = false
-          //console.log(response)
-          if(this.tableData.length < this.totalCount){
-            let num = this.tableData.length + 1
-            for(let i of response.data.items){
-              i["num"] = num
-              num++
+      if(this.isMultiline){
+        const params=JSON.parse(JSON.stringify(this.infoInput));
+        params.start=this.tableData.length ? this.tableData.length : 0;
+        params.limit=this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15;
+        if(this.tableData.length < this.totalCount){
+          this.isMore=false
+          searchComprehensiveInfoByMultipleConditions(params).then(response=>{
+            //console.log(response)
+            this.isflag = false
+            if(this.tableData.length < this.totalCount){
+              let num = this.tableData.length + 1
+              for(let i of response.data.items){
+                i["num"] = num
+                num++
+              }
+              this.tableData = this.tableData.concat(response.data.items)
+              this.listLoading=false;
             }
-            this.tableData = this.tableData.concat(response.data.items)
-            }
-        })
-      }
+          })
+        }else {
+          this.isflag=false
+          this.isMore=true
+        }
 
+      }else {
+        if (this.DataName === 'all' || this.DataName.length === 0) {
+          //console.log(this.DataName)
+          this.initname = ['111']
+        } else {
+          this.initname = JSON.parse(JSON.stringify(this.DataName))
+        }
+        const params = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          start: this.tableData.length ? this.tableData.length : 0,
+          limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
+          status: ''
+        }
+        if(this.tableData.length < this.totalCount){
+
+          this.isMore=false
+          //console.log("提交请求",params)
+          getList(params).then((response) => {
+            //console.log(response)
+            this.isflag = false
+            if(this.tableData.length < this.totalCount){
+              let num = this.tableData.length + 1
+              for(let i of response.data.items){
+                i["num"] = num
+                num++
+              }
+              this.tableData = this.tableData.concat(response.data.items)
+            }
+          })
+        }else {
+          this.isflag=false
+          this.isMore=true
+        }
+      }
     }
   },
   methods: {
-    receiveAllSearchData(searchAllData){
-      this.tableData = searchAllData;
+    receiveAllSearchData(searchAllData,infoInput){
       this.dialogVisible = false;
+      this.isMultiline=true;
+      this.infoInput=infoInput;
+      this.listLoading=true;
+      this.tableData=[];
+      let num = 1
+      for(let i of searchAllData.items){
+        i["num"] = num
+        num++
+      }
+      this.tableData = this.tableData.concat(searchAllData.items)
+      this.totalCount=searchAllData.total;
+      this.listLoading=false;
     },
     search(){
       this.dialogVisible = true
     },
     get_data() {
+      this.isMultiline=false
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)
         this.initname = ['111']
@@ -411,6 +458,7 @@ export default {
       //console.log("提交请求",params)
 
       getList(params).then((response) => {
+
         //console.log(response)
         let num = this.tableData.length + 1
         for(let i of response.data.items){
@@ -418,10 +466,12 @@ export default {
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
+        this.listLoading=false
       })
 
     },
     get_data2() {
+      this.isMultiline=false
       this.tableData = []
       if (this.DataName === 'all' || this.DataName.length === 0) {
         //console.log(this.DataName)
@@ -453,6 +503,7 @@ export default {
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
+        this.listLoading=false
       })
 
     },
@@ -460,9 +511,9 @@ export default {
       if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
         //console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
         if(this.ClientHeight == e.target.scrollHeight){
-          this.isMore = true
+          this.isflag = true
           setTimeout(()=>{
-            this.isMore = false
+            this.isflag = false
           },1000)
         }
         this.ClientHeight = e.target.scrollHeight

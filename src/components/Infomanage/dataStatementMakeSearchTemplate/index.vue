@@ -229,7 +229,7 @@
         <el-label>序列号：</el-label>
         <el-autocomplete
           popper-class="my-autocomplete"
-          v-model="infoInput.serialNumber"
+          v-model="infoInput.serialNumber.trim()"
           :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'serialNumber')})"
           placeholder="请输入序列号"
           clearable
@@ -256,6 +256,38 @@
         </el-autocomplete>
       </el-col>
     </el-row>
+    <el-row :gutter="20" style="margin-bottom: 10px;">
+      <el-col  :span="12">
+        <el-label>CPU类型：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.type"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'type')})"
+          placeholder="请输入CPU类型"
+          clearable
+          @select="handleSelect('type',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.type }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+      <el-col  :span="12" >
+        <el-label>中间件版本：</el-label>
+        <el-autocomplete
+          popper-class="my-autocomplete"
+          v-model="infoInput.edition"
+          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'edition')})"
+          placeholder="请输入中间件版本"
+          clearable
+          @select="handleSelect('edition',$event)"
+        >
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.edition }}</div>
+          </template>
+        </el-autocomplete>
+      </el-col>
+    </el-row>
 
     <div slot="footer" class="dialog-footer" style="height: 40px;text-align: center;margin-top: 40px;">
       <el-button style="width: 100px" type="primary" @click="confirmSearch">查询</el-button>
@@ -268,7 +300,7 @@ import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
 
 
 export default{
-  name:'dataStatementMakeSearchTemplate',
+  name:'searchTemplate',
   props:["limit"],
   data(){
     return{
@@ -332,8 +364,7 @@ export default{
       };
     },
     handleSelect(mark,item) {
-      this.infoInput[mark] = item[mark];
-      this.infoInput.mark = '';
+      this.infoInput[mark] = item[mark].trim();
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
@@ -345,7 +376,8 @@ export default{
     },
     async confirmSearch(){
       this.infoInput.start=this.start
-      this.infoInput.limit=this.limit
+      this.infoInput.limit=15
+      this.infoInput.mark = '';
       const params={ ...this.infoInput}
       // console.log(params)
       await this.getSearchData(params)
@@ -362,8 +394,6 @@ export default{
   }
 
 }
-
-
 </script>
 
 <style lang="less">
@@ -374,3 +404,9 @@ el-label{
   text-align: right;
 }
 </style>
+
+
+
+
+
+
