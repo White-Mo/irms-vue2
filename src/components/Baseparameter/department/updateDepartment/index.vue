@@ -169,6 +169,7 @@ export default {
       const department = { ...this.department }
       await checkDepartmentName(department).then((res) => {
         if (res.data.valid === true) {
+          console.log(res.data.valid)
           this.nameRules = true
         } else {
           this.nameRules = false
