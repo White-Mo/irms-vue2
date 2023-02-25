@@ -33,11 +33,13 @@
             :lg="3"
             :xl="3"
           >
+            <div class="select-container">
             <el-select
               v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
+              class="select"
             >
               <el-option
                 v-for="(item,index) in basicvalue"
@@ -47,6 +49,7 @@
                 class="searchInput"
               />
             </el-select>
+              </div>
           </el-col>
           <el-col
             :xs="4"
@@ -74,7 +77,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
           <el-col
@@ -175,7 +178,7 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage: 0,
+      currentPage:1,
       limit:10,
       initName:'',
       inputValue: '',
@@ -199,27 +202,31 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.currentPage = 0
+      this.fetchData()
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
-      // console.log(this.basicValue)
+      // //console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
-      // console.log(this.basicValue)
+      // //console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log(this.dataName)
+        //console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        // //console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage,
+        start: this.currentPage-1,
         limit: this.limit
       }
-      // console.log(this.initName)
+      // //console.log(this.initName)
       getPostByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -239,10 +246,10 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该单位", '提示', {
+      this.$alert(`是否永久删除单位:\"${row.postName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delPost(row.postId).then((response) => {
@@ -259,15 +266,16 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: val-1,
+        start: this.currentPage-1,
         limit: 10
       }
       getPostByPage(params).then((response) => {
@@ -285,10 +293,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.select-container {
+  height: 40px;
+  overflow: hidden;
+}
+
+.select {
+  height: 100%;
+}
+
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;

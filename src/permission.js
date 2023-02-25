@@ -39,7 +39,7 @@ router.beforeEach(async(to, from, next) => {
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
-          console.log('accessRoutes', accessRoutes)
+          //console.log('accessRoutes', accessRoutes)
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
 
@@ -52,7 +52,7 @@ router.beforeEach(async(to, from, next) => {
           Message.error({
             message: error || '出现错误，请稍后再试'
           })
-          next(`/login?redirect=${to.path}`)
+          next({ path: '/' })
           NProgress.done()
         }
       }

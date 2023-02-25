@@ -23,6 +23,29 @@ export function getEquipmentFirstTypeByPage(data) {
     params: data
   })
 }
+
+//修改一级设备类型----------------赵长开----------------
+export function updateEquipmentFirstType(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateEquipmentFirstType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//修改一级设备类型----------------赵长开----------------
+export function updateEquipmentSecondType(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateEquipmentSecondType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
+
+
 //通过页码获取二级设备类型
 export function getEquipmentTypeByPage(data) {
   return request({
@@ -89,6 +112,55 @@ export function createDepartment(data) {
     responseType: 'json'
   })
 }
+//新增业务系统 ----------------------赵长开-------------------
+export function createBusinessSystem(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/createBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//检查业务系统是否重复----------------------赵长开-------------------
+export function checkBusinessSystemName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkBusinessSystemName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//删除业务系统---------------------赵长开----------------------
+export function delBusinessSystem(data) {
+  return request({
+    url: '/home/baseparameter/delBusinessSystem',
+    method: 'delete',
+    params: data
+  })
+}
+//修改业务系统----------------赵长开----------------
+export function updateBusinessSystemAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateBusinessSystemAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//通过业务系统Id获取设备------------赵长开
+export function getEquipmentByBusinessSystemId(data){
+  return request({
+    //params:data,
+    params: {tempBusinessSystemNameId : data},
+    url:'/home/baseparameter/getEquipmentByBusinessSystemId',
+    method:'post',
+    responseType:'json'
+  })
+}
+
 
 //修改单位
 export function updatePostAction(data) {
@@ -169,7 +241,7 @@ export function delEquipmentFirstType(data) {
   return request({
     url: '/home/baseparameter/delEquipmentFirstType',
     method: 'delete',
-    params: {EquipmentFirstType : data}
+    params: {equipmentFirstTypeId : data}
   })
 }
 //删除二级设备类型
@@ -192,10 +264,31 @@ export function addEquipmentFirstType(data) {
 }
 
 //新增二级设备类型
-export function addEquipmentType(data) {
+export function addEquipmentSecondType(data) {
   return request({
     params: data,
     url: '/home/baseparameter/addEquipmentType',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
+//检查一级设备类型名称是否重复
+export function checkEquipmentTypeFirstName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkEquipmentTypeFirstName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//检查二级设备类型名称是否重复
+export function checkEquipmentTypeSecondName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkEquipmentTypeName',
     method: 'post',
     responseType: 'json'
   })
@@ -248,11 +341,13 @@ export function delCabinet(data) {
   })
 }
 
-//删除业务系统
-export function delBusinessSystem(data) {
+//根据机房获取设备
+export function getEquipmentByCabinetId(cabinetId) {
   return request({
-    url: '/home/baseparameter/delBusinessSystem',
-    method: 'delete',
-    params: {equipmentTypeId : data}
+    params: { cabinetId: cabinetId },
+    url: '/home/baseparameter/getEquipmentByCabinetId',
+    method: 'get',
+    responseType: 'json'
   })
 }
+

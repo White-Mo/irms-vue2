@@ -48,13 +48,23 @@ export function getStatisticsData(par) {
 export function addEquipment(eq) {
   console.log(eq)
   return request({
-
     data: eq,
     url: '/home/inforesources/AddEquipment',
     method: 'post',
     responseType: 'json'
   })
 }
+
+export function AddExcel(eq) {
+  console.log('$$$',eq)
+  return request({
+    data: eq,
+    url: '/home/inforesources/AddExcel',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 export function delEquipment(equipmentId) {
   console.log(typeof (equipmentId))
   return request({
@@ -89,6 +99,18 @@ console.log(initdata);
     url: '/home/inforesources/getInitDataAll',
     method: 'post',
     responseType: 'json'
+  })
+}
+
+
+
+//综合信息管理表多条件查询
+export function searchComprehensiveInfoByMultipleConditions(data) {
+  return request({
+    params: data,
+    url: '/home/inforesources/searchComprehensiveInfoByMultipleConditions',
+    method: 'post',
+    responseType: 'json',
   })
 }
 

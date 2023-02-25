@@ -73,7 +73,7 @@ export function getAsyncRoutes() {
     getMoveRoute().then(response => {
       const { data } = response
       asyncRoutes = filterAsyncRoutes(data) // 全部的路由数据
-      console.log('ASR:', asyncRoutes)
+      //console.log('ASR:', asyncRoutes)
       resolve()
     }).catch(error => {
       reject(error)
@@ -82,7 +82,7 @@ export function getAsyncRoutes() {
 }
 
 export function getRouter(permission) {
-  // console.log('permission.component' + [`@/views/${permission.component}`])
+  // //console.log('permission.component' + [`@/views/${permission.component}`])
   if (permission.children && permission.children.length > 0) { // 一级菜单Layout
     return {
       path: permission.path,
@@ -135,7 +135,7 @@ export function initRoute(permission) { // 封装路由
 export function filterAsyncRoutes(routes) {
   const accessedRoutes = []
   routes.forEach(permission => {
-    // console.log(permission)
+    // //console.log(permission)
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })

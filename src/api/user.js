@@ -71,12 +71,11 @@ export function isdeleteFosUser(params) {
     responseType: 'json'
   })
 }
-export function deleteFosUser(params) {
+export function deleteFosUser(data) {
   return request({
-    params,
     url: '/home/authority/delFosUser',
-    method: 'post',
-    responseType: 'json'
+    method: 'delete',
+    params: {id : data}
   })
 }
 export function updateFosUserAction(params) {

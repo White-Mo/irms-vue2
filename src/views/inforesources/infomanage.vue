@@ -68,24 +68,6 @@
               placeholder="请输入内容"
               @select="handleSelect"
             ></el-autocomplete>
-
-            <!-- <el-input
-
-              v-model="inputValue"
-              placeholder="输入式查询"
-              clearable
-              size="medium"
-            /> -->
-
-          </el-col>
-          <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
-          >
-
           </el-col>
           <el-col
             :xs="2"
@@ -94,11 +76,13 @@
             :lg="2"
             :xl="2"
           >
+
             <el-button
               size="medium"
               type="primary"
               icon="el-icon-search"
               clearable="true"
+              style="margin-left: 40px"
               @click="fetchData()"
             >搜索</el-button>
           </el-col>
@@ -124,9 +108,24 @@
           >
             <el-button
               size="medium"
-              type="info"
+              type="primary"
+              STYLE="margin-left: 50px"
               @click="addInfo()"
             >添加设备信息</el-button>
+          </el-col>
+          <el-col
+            :xs="1"
+            :sm="1"
+            :md="1"
+            :lg="1"
+            :xl="1"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              style="margin-left: 420px"
+              @click="search()"
+            >筛选</el-button>
           </el-col>
         </el-row>
         <el-table
@@ -166,13 +165,16 @@
           >
             <template slot-scope="scope">
               <el-button
+                type="success" plain
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
               <el-button
+                type="primary" plain
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
+
               <el-button
                 size="mini"
                 type="danger"
@@ -182,6 +184,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog
+          title="多条件搜索"
+          :visible.sync="dialogVisible"
+          width="55%"
+          style="margin-top: -80px;"
+          custom-class="transparent-dialog">
+          <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
+        </el-dialog>
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -189,6 +199,7 @@
             :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
           />
         </div>
       </div>
@@ -207,17 +218,18 @@
 </template>
 
 <script>
-import { getList, getdataCount, delEquipment, InitValue } from '@/api/table'
+import {getList, getdataCount, delEquipment, InitValue, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
-import { all } from 'q'
+import searchTemplate from "@/components/Infomanage/searchTemplate";
 
 export default {
   // 引用vue reload方法
   inject: ['reload'],
   components: {
     addInfo,
-    updateInfo
+    updateInfo,
+    searchTemplate
   },
   filters: {
     statusFilter(status) {
@@ -231,6 +243,7 @@ export default {
   },
   data() {
     return {
+      currentPage:1,
       guaranteePeriodID: '保修期:',
       editionID: '中间件版本:',
       typeID: 'CPU类型:',
@@ -252,12 +265,14 @@ export default {
       initname: ['123'],
       department: '',
       inputValue: '',
+      inputValue2:'',
       postname: '',
       input3: '',
       ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       initval: [],
+      tempAllData:null,
       dataname: [
 
         {
@@ -537,10 +552,12 @@ export default {
         }
       ],
       value: '',
+      isMultiline:false,
+      infoInput:[],
     }
   },
   created() {
-    console.log(this.initname)
+    //console.log(this.initname)
     this.fetchData()
     // this.getInitValue(this.initdata)
   },
@@ -549,19 +566,26 @@ export default {
     // console.log(this.initval);
   },
   methods: {
+    receiveAllSearchData(searchAllData,infoInput){
+      this.isMultiline=true;
+      this.start=0;
+      this.currentPage=1;
+      this.infoInput=infoInput;
+      this.list = searchAllData.items;
+      this.total = searchAllData.total;
+      this.dialogVisible = false;
+    },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
-      console.log(restaurants)
-      console.log(queryString)
       var results = queryString
         ? restaurants.filter(this.createFilter(queryString))
         : restaurants
       // 调用 callback 返回建议列表的数据
-      console.log(results)
+      //console.log(results)
       cb(results)
     },
     createFilter(queryString) {
-      console.log(queryString)
+      //console.log(queryString)
       return (restaurant) => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
@@ -570,12 +594,12 @@ export default {
       }
     },
     loadAll() {
-      console.log(this.foad)
+      //console.log(this.foad)
       return this.foad
     },
 
     handleSelect(item) {
-      console.log(item)
+      //console.log(item)
     },
 
     // change的处理事件
@@ -620,7 +644,7 @@ export default {
         this.initval = response.data.items
 
         for (let i = 0; i < this.initval.length; i++) {
-          this.foad.push({ label: name, value: name + this.initval[i] })
+          this.foad.push({label: name, value: name + this.initval[i]})
         }
 
         this.listLoading = false
@@ -629,7 +653,7 @@ export default {
     //清空下拉框的值
     deleteSelect(deleteName) {
       let dfata = JSON.parse(JSON.stringify(this.foad))
-      console.log(dfata)
+      //console.log(dfata)
       let num = 0
       let flag = 0
       for (let index = 0; index < dfata.length; index++) {
@@ -646,7 +670,7 @@ export default {
       this.restaurants = this.loadAll()
     },
     tbCellDoubleClick(row, column, cell, event) {
-      console.log(cell)
+      //console.log(cell)
       this.$alert(row[column.property], '单元格值', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -655,10 +679,11 @@ export default {
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
+      this.isMultiline=false
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.DataName)))
@@ -670,6 +695,7 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
+        dataValue2: this.inputValue2,
         status: "0",
         start: this.start,
         limit: this.limit
@@ -677,9 +703,9 @@ export default {
       // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
-        this.total =response.data.total
-        console.log("List---------");
-        console.log(this.list)
+        this.total = response.data.total
+        //console.log("List---------");
+        //console.log(this.list)
         this.listLoading = false
       })
     },
@@ -688,77 +714,90 @@ export default {
       this.ifUpdate = '1'
     },
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       this.row = row
       this.ifUpdate = '2'
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       this.row = row
       this.ifUpdate = '3'
     },
     handleDelete(row) {
-      console.log(row)
-      this.$alert('是否永久删除该设备', '提示', {
+      this.$confirm(`是否永久删除设备：\"${row.equipmentName}\"信息`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delEquipment(row.equipmentId).then((response) => {
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.fetchData()
-              })
-            })
-          }
-        }
-      })
-      // this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning',
-      //   center: true
-      // }).then(() => {
-      //   delEquipment(row.equipmentId).then((response) => {
-      //     this.active = 0
-      //     this.$alert(response.data, '提示', {
-      //       confirmButtonText: '确定',
-      //       type: 'info',
-      //       showClose: false
-      //     }).then(() => {
-      //       this.fetchData()
-      //     })
-      //   })
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消删除'
-      //   });
-      // });
+        type: 'warning',
+      }).then(() => {
+        delEquipment(row.equipmentId).then((response) => {
+          this.active = 0
+          this.$alert(response.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.fetchData()
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
     },
+
+
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit = val
-      this.fetchData()
+      if(this.isMultiline){
+        this.infoInput.start=this.start
+        this.infoInput.limit=this.limit
+        this.listLoading=true
+        const params=this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading=false
+        })
+      }else {
+        this.fetchData()
+      }
+
     },
     handleCurrentChange(val) {
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: "0",
-        start: (val - 1) * this.limit,
-        // start: val - 1,
-        limit: this.limit
+      this.listLoading=true
+      this.currentPage=val
+      if(this.isMultiline){
+        this.infoInput.start=val - 1
+        this.infoInput.limit=this.limit
+        const params=this.infoInput
+
+        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading = false
+        })
+      }else {
+        const params = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          status: "0",
+          start: (val - 1) * this.limit,
+          // start: val - 1,
+          limit: this.limit
+        }
+        getList(params).then((response) => {
+          this.list = response.data.items
+          this.total = response.data.total
+          this.listLoading = false
+        })
       }
-      getList(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
+    },
+    search(){
+      this.dialogVisible = true
     },
     changeDiv(value) {
       this.ifUpdate = value
@@ -768,9 +807,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .el-select-dropdown .el-scrollbar {
-  height: 420px;
-  overflow: hidden;
   position: relative;
 }
 .tile-content {
@@ -779,6 +817,9 @@ export default {
 }
 .shadows {
   box-shadow: 0 0 4px #0000004d !important;
+}
+.el-select-dropdown .el-scrollbar {
+  position: relative;
 }
 .searchInput {
   height: 40px;
@@ -850,6 +891,7 @@ export default {
 <style  lang="less">
 //覆盖样式
 
+
 .el-autocomplete-suggestion.el-scrollbar {
   //  height: 420px;
   //  overflow: hidden;
@@ -890,7 +932,14 @@ export default {
   border-color: #409eff;
 }
 .searchInput[data-v-35ac1005] {
-
     background-color: #d3dce6;
 }
+.transparent-dialog{
+  background-color: rgba(300,300,300,0.8)
+}
+
+//.transparent-dialog .el-dialog__body {
+//  background: transparent;
+//}
 </style>
+

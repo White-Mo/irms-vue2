@@ -78,7 +78,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
         </el-row>
@@ -111,14 +111,20 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="250px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleConstruct(scope.$index, scope.row)"
                   >施工</el-button>
+
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleConstruct(scope.$index, scope.row)"-->
+<!--                  >删除</el-button>-->
+
                 </template>
               </el-table-column>
             </el-table>
@@ -151,10 +157,10 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRecover(scope.$index, scope.row)"
@@ -244,10 +250,14 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initName = ['111']
       } else {
         this.initName = JSON.parse(JSON.stringify(this.DataName))
@@ -274,10 +284,10 @@ export default {
     },
 
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleConstruct(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.machineRoomId, status: '1' }).then(res => {
         this.$message({
           message: '修改成功',
@@ -285,11 +295,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleRecover(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.machineRoomId, status: '0' }).then(res => {
         this.$message({
           message: '修改成功',
@@ -297,11 +307,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -310,7 +320,7 @@ export default {
       this.fetchData()
     },
     changeTab(name) {
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       this.fetchData()
     }
   }
@@ -321,7 +331,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
@@ -410,7 +422,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }

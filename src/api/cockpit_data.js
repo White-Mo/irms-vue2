@@ -5,7 +5,7 @@ export const getEquipmentCount= () => {
   return request.get( '/home/inforesources/getCompreDataCount?dataName[]=111&dataValue=&status=0')
 }
 
-//总设备数据量
+//总设备类型数据量
 export const getEquipmentTypeCount= () => {
   return request.get( '/home/baseparameter/getEquipmentTypeCount')
 }

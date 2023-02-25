@@ -6,15 +6,15 @@
     <div class="app-container" style="height: 47rem">
         <el-row>
           <el-col>
-            <div class="grid-content bg-purple-dark">帮助文档</div>
+            <div class="grid-content bg-purple-dark">帮助信息</div>
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
-          <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="DownHelpDocument()">点击下载说明文档</el-button>
+          <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="DownHelpDocument()">点击下载用户手册</el-button>
         </el-row>
     </div>
     <footer>
-      <p style="text-align: center">软件信息-中国地震局信息资源管理系统v1.0 Beta</p>
+      <p style="text-align: center">软件信息-中国地震台网中心信息资源管理系统v1.0 Beta</p>
     </footer>
   </div>
 </template>

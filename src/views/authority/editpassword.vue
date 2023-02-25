@@ -49,7 +49,7 @@ export default {
           }else {
             if(res.data.valid === false){
               callback(new Error('原密码错误'))
-              console.log(res.data.valid,"原密码错误")
+              //console.log(res.data.valid,"原密码错误")
             }else {
               callback(new Error(res.data.message));
             }
@@ -123,7 +123,7 @@ export default {
 
           //--------------------------------------------------------------
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });
@@ -306,7 +306,7 @@ export default {
 <!--          alert('submit!');-->
 <!--          //使用post请求发送更新修改密码-->
 <!--        } else {-->
-<!--          console.log('error submit!!');-->
+<!--          //console.log('error submit!!');-->
 <!--          return false;-->
 <!--        }-->
 <!--      });-->

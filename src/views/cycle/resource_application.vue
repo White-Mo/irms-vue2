@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button
             >
           </el-col>
@@ -243,10 +243,11 @@ export default {
     // console.log(this.list_network)
     // console.log(this.list)
   },
-  created() {
-    this.fetchData()
-  },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     async handleAsync(val){
       return new Promise((resolve,reject)=>{
         let arr = [1,2,3]
@@ -258,7 +259,7 @@ export default {
               console.log(val);
               resolve(val)
             }
-            
+
           }, 1000);
         }
       })
@@ -272,7 +273,6 @@ export default {
       this.fetchData()
     },
     handleMove(index, row) {
-
       this.visiblePublish=true
       row.isEdit = !row.isEdit;
       console.log(row.isEdit)
@@ -445,7 +445,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }

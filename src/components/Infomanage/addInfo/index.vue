@@ -195,7 +195,7 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
-        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
+        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
@@ -228,8 +228,9 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end', 'basicInfoId': '设备编号' }
+        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
+        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
     }
   },
   created() {
@@ -239,11 +240,11 @@ export default {
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        console.log(response)
+        //console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            console.log(element.postName)
+            //console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
           }
         })
@@ -254,15 +255,15 @@ export default {
       })
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
-        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentTypeCode
+        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
       })
     },
     onSubmit() {
-      console.log('submit!')
+      //console.log('submit!')
     },
     prev() {
       if (--this.active < 0) {
-        console.log(this.active)
+        //console.log(this.active)
         this.active = 0
       }
     },
@@ -270,12 +271,12 @@ export default {
       this.active++
       const equipments = []
       if (this.active === 2) {
-        console.log(this.form)
+        //console.log(this.form)
         const equip = { ...this.equipment }
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
-        console.log(equipments)
+        //console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           this.$alert(res.message, '提示', {
@@ -285,15 +286,15 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          console.log(res)
+          //console.log(res)
         }).catch(err => {
           this.active = 0
-          console.log(err)
+          //console.log(err)
         })
       }
     },
     changePost(val) {
-      console.log(val)
+      //console.log(val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {

@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
               >搜索</el-button
             >
           </el-col>
@@ -86,7 +86,7 @@
           </af-table-column>
           <el-table-column align="center" label="操作" width="200px">
             <template slot-scope="scope">
-              <el-button
+              <el-button v-if="scope.row.isEdit"
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
                 >{{scope.row.isEdit ? '取消' : '详情'}}</el-button
@@ -152,6 +152,10 @@ export default {
       singalInfo: {},
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备ID'
+        },
+        {
           value: 'postName',
           label: '所属单位'
         },
@@ -171,10 +175,7 @@ export default {
           value: 'cabinetName',
           label: '机柜编号'
         },
-        {
-          value: 'basicInfoId',
-          label: '设备ID'
-        },
+
       ],
       value: '',
       labels: {
@@ -186,8 +187,8 @@ export default {
         // brandName: '设备品牌',
         machineRoomName: '安装位置',
         cabinetName: '机柜编号',
-        cabinetUStart: '柜内U位start',
-        cabinetUEnd: '柜内U位end',
+        cabinetUStart: '柜内U位开始位',
+        cabinetUEnd: '柜内U位结束位',
         // onlineTime: '上线时间',
         // hostName: '主机名',
         // guaranteePeriod: '保修期',
@@ -199,9 +200,13 @@ export default {
     this.fetchData()
     let a = 0
     a = await this.handleAsync(a)
-    console.log(a);
+    //console.log(a);
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     async handleAsync(val){
       return new Promise((resolve,reject)=>{
         let arr = [1,2,3]
@@ -210,7 +215,7 @@ export default {
           setTimeout(() => {
             if (e == 2) {
               val = e;
-              console.log(val);
+              //console.log(val);
               resolve(val)
             }
 
@@ -238,7 +243,7 @@ export default {
               cabinetId = element.cabinetId;
             }
           })
-        console.log(machineRoomId,cabinetId);
+        //console.log(machineRoomId,cabinetId);
         const params = {
           equipmentId: row.equipmentId,
           machineRoomId,
@@ -247,15 +252,25 @@ export default {
           cabinetUEnd: row.cabinetUEnd
         }
         updatePosition(params).then( res=>{
-          console.log(res);
+          if(res.data === 'u位冲突'){
+            this.$message({
+              message: 'U位冲突，不能移动',
+              type: 'error'
+            });
+          }else {
+            this.$message({
+              message: '移动成功',
+              type: 'success'
+            });
+          }
+          console.log(res.data)
+          this.fetchData()
         } )
       }else{
-
         getMachineRoom(row.postId).then(response => {
           this.machineRoomAll = response.data.items
           this.fetchCabinet(row.machineRoomName)
         })
-
       }
     },
     handleCurrentChange(val) {
@@ -265,7 +280,7 @@ export default {
     async changeRoom(row) {
       let val = row.machineRoomName
       await this.fetchCabinet(val)
-      console.log(this.cabinetAll[0].cabinetName);
+      //console.log(this.cabinetAll[0].cabinetName);
       row.cabinetName = this.cabinetAll[0].cabinetName
     },
     async fetchCabinet(val) {
@@ -274,7 +289,7 @@ export default {
           if (element.machineRoomName === val) {
             getCabinet(element.machineRoomId).then(response => {
               this.cabinetAll = response.data.items
-              console.log(this.cabinetAll[0].cabinetName);
+              //console.log(this.cabinetAll[0].cabinetName);
               resolve()
             })
           }
@@ -289,7 +304,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
@@ -354,9 +371,9 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
+<!-- <style  lang="less" scoped>
 /* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -399,4 +416,4 @@ export default {
 //  background-color: #409eff;
 //  border-color: #409eff;
 //}
-</style>
+</style> -->

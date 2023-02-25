@@ -1,8 +1,9 @@
+
 <template>
-  <div class="infobody">
+  <div class="infoBody">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>基础信息管理</span></div>
     <div class="app-container">
-      <div v-show="ifUpdate === '0'"
+      <div v-show="ifShow === '0'"
            class="show"
       >
         <el-row>
@@ -33,13 +34,13 @@
             :xl="3"
           >
             <el-select
-              v-model="basicValue"
+              v-model="dataName"
               placeholder="详细字段查询"
               multiple
               size="medium"
             >
               <el-option
-                v-for="(item,index) in basicvalue"
+                v-for="(item,index) in basicValue"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -48,11 +49,11 @@
             </el-select>
           </el-col>
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
             <el-input
               v-model="inputValue"
@@ -73,25 +74,25 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
-<!--          <el-col-->
-<!--            :xs="1"-->
-<!--            :sm="1"-->
-<!--            :md="1"-->
-<!--            :lg="1"-->
-<!--            :xl="1"-->
-<!--          >-->
-<!--            <el-button-->
-<!--              size="medium"-->
-<!--              type="info"-->
-<!--              @click="addDepartment()"-->
-<!--            >添加业务系统</el-button>-->
-<!--          </el-col>-->
+          <el-col
+            :xs="1"
+            :sm="1"
+            :md="1"
+            :lg="1"
+            :xl="1"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              @click="addBusinessSystem()"
+            >添加业务系统</el-button>
+          </el-col>
         </el-row>
         <el-table
-          height="70vh"
+          height="68vh"
           :row-style="{height:'6.26vh'}"
           :cell-style="{padding:'0px'}"
           v-loading="listLoading"
@@ -104,7 +105,7 @@
         >
           <el-table-column align="center" type="index" />
           <el-table-column
-            v-for="(item,index) in basicvalue"
+            v-for="(item,index) in basicValue"
             :key="index"
             :label="item.label"
             :prop="item.value"
@@ -112,25 +113,27 @@
             align="center"
           >
           </el-table-column>
-          <el-table-column align="center" label="操作" width="250px">
+          <el-table-column align="center" label="操作" width="350px">
             <template slot-scope="scope">
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleDetail(scope.$index, scope.row)"-->
-<!--              >详情</el-button>-->
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)"
+                >编辑</el-button>
               <el-button
-                size="mini"
                 type="danger"
+                size="mini"
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
+              <el-button
+                type="info"
+                size="mini"
+                @click="getEquipmentByBusinessSystemId(scope.$index, scope.row)"
+              >查看设备</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="block">
+        <div class="block" style="height: 4vh;">
           <el-pagination
             :page-size="10"
             layout="total, sizes, prev, pager, next, jumper"
@@ -140,28 +143,29 @@
           />
         </div>
       </div>
-      <div v-if="ifUpdate === '1'">
-        <addDepartment @changeDiv="changeDiv" />
+      <div v-if="ifShow === '1'">
+        <addBusinessSystem @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updateDepartment :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+      <div v-if="ifShow === '2'">
+        <updateBusinessSystem :row="row" :current-show="ifShow" @changeDiv="changeDiv"></updateBusinessSystem>
+      </div>
+      <div v-if="ifShow === '3'">
+        <searchEquipmentByBusinessSystem :tempBusinessSystemNameId="this.tempBusinessSystemNameId" :current-show="ifShow" @changeDiv="changeDiv"></searchEquipmentByBusinessSystem>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  delBusinessSystem,
-  getBusinessSystemByPage,
-} from '@/api/baseparameter'
-import addDepartment from '@/components/Baseparameter/department/addDepartment'
-import updateDepartment from '@/components/Baseparameter/department/updateDepartment'
-
+import {delBusinessSystem, getBusinessSystemByPage,} from '@/api/baseparameter'
+import addBusinessSystem from '@/components/Baseparameter/businessSystem/addBusinessSystem'
+import updateBusinessSystem from '@/components/Baseparameter/businessSystem/updateBusinessSystem'
+import searchEquipmentByBusinessSystem from '@/components/Baseparameter/businessSystem/searchEquipmentByBusinessSystem'
 export default {
-  components: {
-    addDepartment,
-    updateDepartment
+  components:{
+    addBusinessSystem,
+    updateBusinessSystem,
+    searchEquipmentByBusinessSystem
   },
   filters: {
     statusFilter(status) {
@@ -175,17 +179,22 @@ export default {
   },
   data() {
     return {
+      tempBusinessSystemNameId:'',
       list: null,
       total: 0,
       currentPage: 0,
       limit:10,
-      basicValue: '',
+      basicValueName: '',
       initName:'',
       inputValue: '',
       dataName: 'all',
-      ifUpdate: '0',
+      ifShow: '0',
       listLoading: true,
-      basicvalue: [
+      businessSystemNameAndId:{
+        businessSystem_Name:'',
+        businessSystem_Id:''
+      },
+      basicValue: [
 
         {
           value: 'businessSystemName',
@@ -211,18 +220,15 @@ export default {
     this.fetchData()
   },
   methods: {
-    // 综合数据管理展示与查询--lry
+    search(){
+      this.currentPage = 0
+      this.fetchData()
+    },
     fetchData() {
-      // console.log(this.basicValue)
-      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
-      // console.log(this.basicValue)
-      // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
       const params = {
@@ -232,7 +238,6 @@ export default {
         limit: this.limit,
         status:"0"
       }
-      // console.log(this.initdata)
       getBusinessSystemByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -240,25 +245,26 @@ export default {
       })
     },
 
-    addDepartment() {
-      this.ifUpdate ='1'
-    },
-    handleDetail(index, row) {
-      this.ifUpdate ='2'
-      this.row = row
+    addBusinessSystem(){
+      this.ifShow = '1'
     },
     handleEdit(index, row) {
-      this.ifUpdate ='3'
+      //console.log(row)
+      this.ifShow ='2'
       this.row = row
     },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该系统", '提示', {
+      this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
+      this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
+      const businessSystemNameAndId = {...this.businessSystemNameAndId}
+      this.$alert(`是否永久删除业务系统: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delBusinessSystem(row.departmentId).then((response) => {
+            delBusinessSystem(businessSystemNameAndId).then((response) => {
+              console.log(businessSystemNameAndId)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
@@ -271,8 +277,15 @@ export default {
         }
       })
     },
+
+    //通过业务系统搜索设备
+    getEquipmentByBusinessSystemId(index, row){
+      this.ifShow ='3'
+      this.tempBusinessSystemNameId = row.businessSystemId
+    },
+
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -292,7 +305,7 @@ export default {
       })
     },
     changeDiv(value) {
-      this.ifUpdate = value
+      this.ifShow = value
       this.fetchData()
     }
   }
@@ -300,10 +313,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-//*{
-//  font-size: 18px;
-//}
-
+/**{
+  font-size: 18px;
+}*/
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
