@@ -187,8 +187,13 @@ export default {
       }
     },
     handleMove(index, row) {
+      console.log("&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;")
+      console.log(row)
+      console.log(row.isEdit)
+      console.log("&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;")
       row.isEdit = !row.isEdit;
       if (!row.isEdit) {
+        console.log("+++++++++++++++++++************")
         let departmentId = ''
         //这里存在两个部门值一样的情况，以下写法就无法规避这种情况，后期再考虑
         this.departmentAll.forEach(element => {
@@ -204,6 +209,7 @@ export default {
           //console.log(res);
         } )
       }else{
+        console.log("+++++++++++++-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;++++++************")
         getDepartment(row.postId).then(response => {
           this.departmentAll = response.data.items
         })
@@ -440,6 +446,7 @@ export default {
             border
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             v-loading="listLoading"
+            @selection-change="handleSelectionChange"
           >
             <el-table-column align="center" label="" width="40" type="selection" />
             <el-table-column align="center" label="" width="50" type="index" />
@@ -502,6 +509,7 @@ export default {
       dialogVisible: false,
       isEdit:false,
       departmentAll: [],
+      selectData: [],
       // 总数据
       tableData: [],
       // 总条数，根据接口获取数据长度(注意：这里不能为空)
@@ -586,7 +594,6 @@ export default {
 
       }else {
         if (this.DataName === 'all' || this.DataName.length === 0) {
-          //console.log(this.DataName)
           this.initname = ['111']
         } else {
           this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -601,9 +608,7 @@ export default {
         if(this.tableData.length < this.totalCount){
 
           this.isMore=false
-          //console.log("提交请求",params)
           getList(params).then((response) => {
-            //console.log(response)
             this.isflag = false
             if(this.tableData.length < this.totalCount){
               let num = this.tableData.length + 1
@@ -640,7 +645,11 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    handleSelectionChange(val) {
+      this.selectData = val
+    },
     handleDetail(index, row) {
+      console.log(row)
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
       }
@@ -694,6 +703,9 @@ export default {
       //console.log("提交请求",params)
 
       getList(params).then((response) => {
+        response.data.items.forEach(element => {
+          element.isEdit = false;
+        });
 
         //console.log(response)
         let num = this.tableData.length + 1
@@ -703,6 +715,7 @@ export default {
         }
         this.tableData = this.tableData.concat(response.data.items)
         this.listLoading=false
+        this.isEdit = false
       })
 
     },
