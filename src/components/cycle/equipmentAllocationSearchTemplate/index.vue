@@ -162,6 +162,9 @@ export default{
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+        res.data.items.forEach(element => {
+          element.isEdit = false;
+        });
         this.backDataAll = [];
         this.backDataAll = res.data
         console.log(res.data.items)
