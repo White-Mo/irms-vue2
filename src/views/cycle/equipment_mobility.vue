@@ -138,7 +138,7 @@ export default {
       start:0,
       limit:10,
       isEdit:false,
-      tab_name: '',
+      tab_name: '0',
       list: null,
       total: 0,
       currentPage1: 5,

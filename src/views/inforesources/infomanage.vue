@@ -683,7 +683,7 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         dataValue2: this.inputValue2,
-        status: "",
+        status: "0",
         start: this.start,
         limit: this.limit
       }
@@ -771,7 +771,7 @@ export default {
         const params = {
           dataName: this.initname,
           dataValue: this.inputValue,
-          status: "",
+          status: "0",
           start: (val - 1) * this.limit,
           // start: val - 1,
           limit: this.limit

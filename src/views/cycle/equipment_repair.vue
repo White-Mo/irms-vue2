@@ -174,7 +174,7 @@ export default {
     return {
       start:0,
       limit:10,
-      tab_name: '',
+      tab_name: '0',
       list: null,
       total: 0,
       currentPage1: 5,
