@@ -174,7 +174,7 @@ export default {
     return {
       start:0,
       limit:10,
-      tab_name: '0',
+      tab_name: '',
       list: null,
       total: 0,
       currentPage1: 5,
@@ -240,7 +240,6 @@ export default {
     }
   },
   created() {
-    //console.log('=======')
     this.fetchData()
   },
   methods: {

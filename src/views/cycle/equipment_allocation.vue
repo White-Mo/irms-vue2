@@ -738,12 +738,12 @@ export default {
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: '0'
+        status: ''
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: '0'
+        status: ''
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -781,14 +781,14 @@ export default {
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: '0'
+        status: ''
       }
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: '0'
+        status: ''
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -848,9 +848,7 @@ export default {
           getDepartment(FirstPostId).then(response => {
             this.departmentAll = response.data.items
           })
-
           this.departmentValue = ''
-
         }
       }
       else if(this.selectData.length===1){
