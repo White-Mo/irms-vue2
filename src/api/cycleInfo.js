@@ -34,3 +34,5 @@ export function batchUpdateDepartment(params) {
     responseType: 'json'
   })
 }
+
+

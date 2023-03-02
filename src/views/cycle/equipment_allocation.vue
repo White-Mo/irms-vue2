@@ -538,7 +538,7 @@ export default {
       batchAllocationDialogVisible:false, //决定批量调拨框是否显示
       isEdit:false,   //决定 调拨 取消 提交 按钮的显示
       departmentAll: [],
-      selectData: [],    //接收勾选中的数据
+      selectedData: [],    //接收勾选中的数据
       departmentValue:'',  //绑定批量调拨框里部门的选择值
       tempEquipmentId:[],  //用于接收需要批量调拨的所有数据的设备Id
       tempDepartmentId:'',  //用于接收调拨目标部门的ID
@@ -595,7 +595,8 @@ export default {
   destroyed() {
     document.removeEventListener('scroll',this.load)
   },
-  watch:{  //   watch是一个对象，它有一个属性ClientHeight，它的值是一个函数.  这个函数会在ClientHeight这个数据变化时执行
+  watch:{
+    //   watch是一个对象，它有一个属性ClientHeight，它的值是一个函数.  这个函数会在ClientHeight这个数据变化时执行
     //这个函数的作用是根据isMultiline的值，执行不同的逻辑
     'ClientHeight':function(curVal,oldVal){
       this.isflag = true
@@ -689,8 +690,8 @@ export default {
     },
     //记录勾选了哪些（条）数据
     handleSelectionChange(val) {
-      //用selectData接收所有勾选中的数据
-      this.selectData = val
+      //用selectedData接收所有勾选中的数据
+      this.selectedData = val
     },
     //点击取消后，隐藏取消按钮
     handleDetail(index, row) {
@@ -831,10 +832,10 @@ export default {
     },
     //弹出批量调拨框，并进行批量调拨逻辑处理
     batchAllocation(){
-      if(this.selectData.length>1){
+      if(this.selectedData.length>1){
         let flag = true;
-        let FirstPostId = this.selectData[0].postId
-        this.selectData.forEach(element=>{
+        let FirstPostId = this.selectedData[0].postId
+        this.selectedData.forEach(element=>{
           this.tempEquipmentId.push(element.equipmentId)
           if(element.postId === FirstPostId){
             FirstPostId = element.postId
@@ -853,7 +854,7 @@ export default {
 
         }
       }
-      else if(this.selectData.length===1){
+      else if(this.selectedData.length===1){
         this.$message.error('请至少选择两条设备信息')
       }
       else {
@@ -862,7 +863,7 @@ export default {
 
     },
     //批量调拨触发，调接口批量更新部门
-    async handleAllots(){
+    handleAllots(){
       this.departmentAll.forEach(element => {
         if (element.departmentName === this.departmentValue) {
           this.tempDepartmentId = element.departmentId;
@@ -877,10 +878,10 @@ export default {
       })
       this.batchAllocationDialogVisible = false;
       //更新成功，等待2秒后重新刷新数据，重新渲染批量调拨成功后的数据
-      await setTimeout(()=>{
+      setTimeout(() => {
         location.reload();
         this.listLoading = false
-      },2000)
+      }, 2000)
     }
   }
 }

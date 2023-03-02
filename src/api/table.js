@@ -92,6 +92,17 @@ export function changeStatus(eq) {
     responseType: 'json'
   })
 }
+
+export function batchChangeEquipmentStatus(params) {
+  return request({
+    params,
+    url: '/home/inforesources/batchChangeEquipmentStatus',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
 export function InitValue(initdata) {
 console.log(initdata);
   return request({
