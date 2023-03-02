@@ -512,6 +512,11 @@ export default{
           value: '地震预测研究所',
           label: '地震预测研究所',
           width: '200px'
+        },
+        {
+          value: '中国地震台网中心',
+          label: '中国地震台网中心',
+          width: '200px'
         }
       ],
     }
