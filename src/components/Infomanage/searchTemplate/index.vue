@@ -1,20 +1,34 @@
 <template>
-  <div style="height: 550px">
+  <div style="height: auto">
     <el-row :gutter="20" style="margin-bottom: 10px;">
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
-        <el-autocomplete
-          popper-class="my-autocomplete"
-          v-model="infoInput.postName"
-          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'postName')})"
-          placeholder="请输入单位"
-          clearable
-          @select="handleSelect('postName',$event)"
+<!--        <el-autocomplete-->
+<!--          popper-class="my-autocomplete"-->
+<!--          v-model="infoInput.postName"-->
+<!--          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'postName')})"-->
+<!--          placeholder="请输入单位"-->
+<!--          clearable-->
+<!--          @select="handleSelect('postName',$event)"-->
+<!--        >-->
+<!--          <template slot-scope="{ item }">-->
+<!--            <div class="name">{{ item.postName }}</div>-->
+<!--          </template>-->
+<!--        </el-autocomplete>-->
+        <el-select
+          placeholder="详细字段查询"
+          multiple
+          v-model="DataName"
+          size="medium"
         >
-          <template slot-scope="{ item }">
-            <div class="name">{{ item.postName }}</div>
-          </template>
-        </el-autocomplete>
+          <el-option
+            v-for="(item,index) in dataname_option"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+            class="searchInput"
+          />
+        </el-select>
       </el-col>
       <el-col  :span="12" >
         <el-label>设备编号：</el-label>
@@ -297,6 +311,7 @@
 
 <script>
 import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
+import { getPost } from "@/api/select";
 
 
 export default{
@@ -304,6 +319,7 @@ export default{
   props:["limit"],
   data(){
     return{
+      DataName: 'all',
       dialogVisible:true,
       totalDataNumber:0,
       infoInput:{ //定义输入框里的字段
@@ -336,7 +352,168 @@ export default{
       start:0,
       backDataAll:[],
       timeout:null,
+      dataname_option: [
+        {
+          value: '天津地震局',
+          label: '天津地震局',
+          width: '200px'
+        },
+        {
+          value: '河北地震局',
+          label: '河北地震局',
+          width: '200px'
+        },
+        {
+          value: '内蒙古地震局',
+          label: '内蒙古地震局',
+          width: '200px'
+        },
+        {
+          value: '辽宁地震局',
+          label: '辽宁地震局',
+          width: '200px'
+        },
+        {
+          value: '吉林地震局',
+          label: '吉林地震局',
+          width: '200px'
+        },
+        {
+          value: '黑龙江地震局',
+          label: '黑龙江地震局',
+          width: '200px'
+        },
+        {
+          value: '上海地震局',
+          label: '上海地震局',
+          width: '200px'
+        },
+        {
+          value: '江苏地震局',
+          label: '江苏地震局',
+          width: '200px'
+        },
+        {
+          value: '浙江地震局',
+          label: '浙江地震局',
+          width: '200px'
+        },
 
+        {
+          value: '安徽地震局',
+          label: '安徽地震局',
+          width: '200px'
+        },
+        {
+          value: '福建地震局',
+          label: '福建地震局',
+          width: '200px'
+        },
+        {
+          value: '江西地震局',
+          label: '江西地震局',
+          width: '200px'
+        },
+        {
+          value: '山东地震局',
+          label: '山东地震局',
+          width: '200px'
+        },
+        {
+          value: '山西地震局',
+          label: '山西地震局',
+          width: '200px'
+        },
+        {
+          value: '河南地震局',
+          label: '河南地震局',
+          width: '200px'
+        },
+        {
+          value: '湖北地震局',
+          label: '湖北地震局',
+          width: '200px'
+        },
+        {
+          value: '湖南地震局',
+          label: '湖南地震局',
+          width: '200px'
+        },
+        {
+          value: '广东地震局',
+          label: '广东地震局',
+          width: '200px'
+        },
+        {
+          value: '广西地震局',
+          label: '广西地震局',
+          width: '200px'
+        },
+        {
+          value: '海南地震局',
+          label: '海南地震局',
+          width: '200px'
+        },{
+          value: '重庆地震局',
+          label: '重庆地震局',
+          width: '200px'
+        },{
+          value: '四川地震局',
+          label: '四川地震局',
+          width: '200px'
+        },
+        {
+          value: '贵州地震局',
+          label: '贵州地震局',
+          width: '200px'
+        },
+        {
+          value: '云南地震局',
+          label: '云南地震局',
+          width: '200px'
+        },
+        {
+          value: '青海地震局',
+          label: '青海地震局',
+          width: '200px'
+        },
+        {
+          value: '西藏地震局',
+          label: '西藏地震局',
+          width: '200px'
+        },
+        {
+          value: '陕西地震局',
+          label: '陕西地震局',
+          width: '200px'
+        },
+        {
+          value: '甘肃地震局',
+          label: '甘肃地震局',
+          width: '200px'
+        },
+        {
+          value: '宁夏地震局',
+          label: '宁夏地震局',
+          width: '200px'
+        },
+
+        {
+          value: '地球物理研究所',
+          label: '地球物理研究所',
+          width: '200px'
+        },
+        {
+          value: '地质研究所',
+          label: '地质研究所',
+          width: '200px'
+        },
+        {
+          value: '地震预测研究所',
+          label: '地震预测研究所',
+          width: '200px'
+        }
+      ],
     }
   },
   created() {
@@ -368,6 +545,10 @@ export default{
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
+      console.log(params)
+      params.postName = this.DataName
+      // params.postName = (params.postName).replace(/\[\]/g, '\\"\\"')
+      // console.log(this.DataName)
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
         this.backDataAll = [];
         this.backDataAll = res.data
@@ -379,11 +560,12 @@ export default{
       this.infoInput.limit=this.limit
       this.infoInput.mark = '';
       const params={ ...this.infoInput}
+      const postNameReturn=this.DataName
       // console.log(params)
       await this.getSearchData(params)
-
       let searchAllData = this.backDataAll;
-      this.$emit('changList', searchAllData,params);
+      this.$emit('changList', searchAllData,params,postNameReturn);
+      this.DataName=[];
       for (const key in this.infoInput) {  //每次点击查询后清空输入框里的值
         if (Object.hasOwnProperty.call(this.infoInput, key)) {
           this.infoInput[key] = '';
@@ -402,6 +584,15 @@ el-label{
   line-height: 40px;
   width: 150px;
   text-align: right;
+}
+.searchInput {
+  height: 40px;
+  text-align: center;
+  color: #0b0c10;
+  background-color: #deecff;
+}
+.searchInput[data-v-35ac1005] {
+  background-color: #d3dce6;
 }
 </style>
 

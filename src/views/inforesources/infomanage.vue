@@ -566,11 +566,12 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput){
+    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.isMultiline=true;
       this.start=0;
       this.currentPage=1;
       this.infoInput=infoInput;
+      this.infoInput.postName=postNameReturn
       this.list = searchAllData.items;
       this.total = searchAllData.total;
       this.dialogVisible = false;
@@ -774,7 +775,6 @@ export default {
         this.infoInput.start=val - 1
         this.infoInput.limit=this.limit
         const params=this.infoInput
-
         searchComprehensiveInfoByMultipleConditions(params).then(res=>{
           this.list=res.data.items
           this.total=res.data.total
