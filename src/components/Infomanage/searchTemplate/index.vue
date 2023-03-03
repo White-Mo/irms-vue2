@@ -17,6 +17,7 @@
             :label="item.label"
             :value="item.value"
             class="searchInput"
+            :title="item.label"
           />
         </el-select>
 
@@ -603,18 +604,18 @@ el-label{
   margin: 10px;
 }
 
-//.el-select-dropdown__list {
-//  margin: 5px 20px 20px 5px;
-//  height: auto;
-//  width: 950px;
-//  display: flex;
-//  justify-content: space-between;
-//  flex-direction: row;
-//  flex-wrap: wrap;
-//  align-content: flex-start;
-//  align-items: stretch;
-//  max-height: 100vh;
-//}
+.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px;
+  height: auto;
+  width: 950px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: stretch;
+  max-height: 100vh;
+}
 </style>
 
 
