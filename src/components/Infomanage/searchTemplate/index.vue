@@ -3,23 +3,13 @@
     <el-row :gutter="20" style="margin-bottom: 10px;">
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
-<!--        <el-autocomplete-->
-<!--          popper-class="my-autocomplete"-->
-<!--          v-model="infoInput.postName"-->
-<!--          :fetch-suggestions="((queryString,cb)=>{querySearch(queryString,cb,'postName')})"-->
-<!--          placeholder="请输入单位"-->
-<!--          clearable-->
-<!--          @select="handleSelect('postName',$event)"-->
-<!--        >-->
-<!--          <template slot-scope="{ item }">-->
-<!--            <div class="name">{{ item.postName }}</div>-->
-<!--          </template>-->
-<!--        </el-autocomplete>-->
+<!--        多条件展示-->
         <el-select
           placeholder="详细字段查询"
           multiple
           v-model="DataName"
           size="medium"
+          class="four-column-select"
         >
           <el-option
             v-for="(item,index) in dataname_option"
@@ -29,6 +19,8 @@
             class="searchInput"
           />
         </el-select>
+
+
       </el-col>
       <el-col  :span="12" >
         <el-label>设备编号：</el-label>
@@ -352,174 +344,178 @@ export default{
       start:0,
       backDataAll:[],
       timeout:null,
+      // 筛选——多单位
       dataname_option: [
+        {
+          value: '北京地震局',
+          label: '北京地震局',
+        },
         {
           value: '天津地震局',
           label: '天津地震局',
-          width: '200px'
         },
         {
           value: '河北地震局',
           label: '河北地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震台网中心',
+          label: '中国地震台网中心',
+        },
+        {
+          value: '山西地震局',
+          label: '山西地震局',
         },
         {
           value: '内蒙古地震局',
           label: '内蒙古地震局',
-          width: '200px'
         },
         {
           value: '辽宁地震局',
           label: '辽宁地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震灾害防御中心',
+          label: '中国地震灾害防御中心',
         },
         {
           value: '吉林地震局',
           label: '吉林地震局',
-          width: '200px'
         },
         {
           value: '黑龙江地震局',
           label: '黑龙江地震局',
-          width: '200px'
         },
         {
           value: '上海地震局',
           label: '上海地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震局发展研究中心',
+          label: '中国地震局发展研究中心',
         },
         {
           value: '江苏地震局',
           label: '江苏地震局',
-          width: '200px'
         },
         {
           value: '浙江地震局',
           label: '浙江地震局',
-          width: '200px'
         },
 
         {
           value: '安徽地震局',
           label: '安徽地震局',
-          width: '200px'
+        },{
+          value: '中国地震局地球物理勘探中心',
+          label: '中国地震局地球物理勘探中心',
         },
         {
           value: '福建地震局',
           label: '福建地震局',
-          width: '200px'
         },
         {
           value: '江西地震局',
           label: '江西地震局',
-          width: '200px'
         },
         {
           value: '山东地震局',
           label: '山东地震局',
-          width: '200px'
         },
         {
-          value: '山西地震局',
-          label: '山西地震局',
-          width: '200px'
+          value: '中国地震局第一检测中心',
+          label: '中国地震局第一检测中心',
         },
         {
           value: '河南地震局',
           label: '河南地震局',
-          width: '200px'
         },
         {
           value: '湖北地震局',
           label: '湖北地震局',
-          width: '200px'
         },
         {
           value: '湖南地震局',
           label: '湖南地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震局第二检测中心',
+          label: '中国地震局第二检测中心',
         },
         {
           value: '广东地震局',
           label: '广东地震局',
-          width: '200px'
         },
         {
           value: '广西地震局',
           label: '广西地震局',
-          width: '200px'
         },
         {
           value: '海南地震局',
           label: '海南地震局',
-          width: '200px'
-        },{
+        },
+        {
+          value: '中国地震局地球物理研究所',
+          label: '中国地震局地球物理研究所',
+        },
+        {
           value: '重庆地震局',
           label: '重庆地震局',
-          width: '200px'
-        },{
+        },
+        {
           value: '四川地震局',
           label: '四川地震局',
-          width: '200px'
         },
         {
           value: '贵州地震局',
           label: '贵州地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震局地质研究所',
+          label: '中国地震局地质研究所',
         },
         {
           value: '云南地震局',
           label: '云南地震局',
-          width: '200px'
-        },
-        {
-          value: '青海地震局',
-          label: '青海地震局',
-          width: '200px'
         },
         {
           value: '西藏地震局',
           label: '西藏地震局',
-          width: '200px'
         },
         {
           value: '陕西地震局',
           label: '陕西地震局',
-          width: '200px'
+        },
+        {
+          value: '中国地震局地震预测研究所',
+          label: '中国地震局地震预测研究所',
         },
         {
           value: '甘肃地震局',
           label: '甘肃地震局',
-          width: '200px'
+        },
+        {
+          value: '青海地震局',
+          label: '青海地震局',
         },
         {
           value: '宁夏地震局',
           label: '宁夏地震局',
-          width: '200px'
-        },
-
-        {
-          value: '地球物理研究所',
-          label: '地球物理研究所',
-          width: '200px'
         },
         {
-          value: '地质研究所',
-          label: '地质研究所',
-          width: '200px'
+          value: '中国地震局工程力学研究所',
+          label: '中国地震局工程力学研究所',
         },
         {
-          value: '地震预测研究所',
-          label: '地震预测研究所',
-          width: '200px'
+          value: '新疆地震局',
+          label: '新疆地震局',
         },
         {
-          value: '中国地震台网中心',
-          label: '中国地震台网中心',
-          width: '200px'
+          value: '防灾科技学院',
+          label: '防灾科技学院',
         }
-      ],
-    }
+      ]
+  }
   },
   created() {
     this.infoInput.start=this.start;
@@ -552,6 +548,7 @@ export default{
       const params={ ...data }
       console.log(params)
       params.postName = this.DataName
+      params.status='0'
       // params.postName = (params.postName).replace(/\[\]/g, '\\"\\"')
       // console.log(this.DataName)
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
@@ -583,22 +580,41 @@ export default{
 }
 </script>
 
-<style lang="less">
+
+<style lang="less" scoped>
 el-label{
   display: inline-block;
   line-height: 40px;
-  width: 150px;
+  width: 200px;
   text-align: right;
 }
 .searchInput {
-  height: 40px;
+  width: 100px;
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
 }
-.searchInput[data-v-35ac1005] {
-  background-color: #d3dce6;
+.el-select-dropdown__list{
+  width: 950px;
 }
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 18%;
+  margin: 10px;
+}
+
+//.el-select-dropdown__list {
+//  margin: 5px 20px 20px 5px;
+//  height: auto;
+//  width: 950px;
+//  display: flex;
+//  justify-content: space-between;
+//  flex-direction: row;
+//  flex-wrap: wrap;
+//  align-content: flex-start;
+//  align-items: stretch;
+//  max-height: 100vh;
+//}
 </style>
 
 
