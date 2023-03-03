@@ -4,6 +4,7 @@
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
 <!--        多条件展示-->
+<!--        popper-append-to-body = false   跳出body元素-->
         <el-select
           placeholder="详细字段查询"
           multiple
