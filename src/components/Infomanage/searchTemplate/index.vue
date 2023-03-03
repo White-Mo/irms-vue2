@@ -9,7 +9,7 @@
           multiple
           v-model="DataName"
           size="medium"
-          class="four-column-select"
+          :popper-append-to-body ="false"
         >
           <el-option
             v-for="(item,index) in dataname_option"
@@ -20,8 +20,6 @@
             :title="item.label"
           />
         </el-select>
-
-
       </el-col>
       <el-col  :span="12" >
         <el-label>设备编号：</el-label>
@@ -583,28 +581,12 @@ export default{
 
 
 <style lang="less" scoped>
-el-label{
-  display: inline-block;
-  line-height: 40px;
-  width: 200px;
-  text-align: right;
-}
-.searchInput {
-  width: 100px;
-  text-align: center;
-  color: #0b0c10;
-  background-color: #deecff;
-}
-.el-select-dropdown__list{
-  width: 950px;
-}
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 18%;
   margin: 10px;
 }
-
-.el-select-dropdown__list {
+/deep/.el-select-dropdown__list {
   margin: 5px 20px 20px 5px;
   height: auto;
   width: 950px;
@@ -615,6 +597,17 @@ el-label{
   align-content: flex-start;
   align-items: stretch;
   max-height: 100vh;
+}
+el-label{
+  display: inline-block;
+  line-height: 40px;
+  width: 200px;
+  text-align: right;
+}
+.searchInput {
+  text-align: center;
+  color: #0b0c10;
+  background-color: #deecff;
 }
 </style>
 
