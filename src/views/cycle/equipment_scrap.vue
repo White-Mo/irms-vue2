@@ -88,6 +88,20 @@
               @click="batchScrap()"
             >批量报废</el-button>
           </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              clearable="true"
+              @click="batchRecoverNormal()"
+            >批量恢复正常</el-button>
+          </el-col>
         </el-row>
         <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
           <el-tab-pane label="正常设备" name="0">
@@ -133,7 +147,9 @@
               border
               highlight-current-row
               stripe
+              @selection-change="handleSelectionNormalChange"
             >
+              <el-table-column align="center" type="selection" />
               <el-table-column align="center" type="index" />
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
@@ -301,6 +317,7 @@ export default {
     handleSelectionNormalChange(val){
       this.selectedData = val
     },
+    //批量报废
     batchScrap(){
       if(this.selectedData.length>=1){
         this.selectedData.forEach(element=>{
@@ -320,6 +337,28 @@ export default {
         }, 2000)
       }else {
         this.$message.error('请选择要报废的设备')
+      }
+    },
+    //批量恢复正常
+    batchRecoverNormal(){
+      if(this.selectedData.length>=1){
+        this.selectedData.forEach(element=>{
+          this.tempEquipmentId.push(element.equipmentId)
+        })
+        const params = {
+          id:this.tempEquipmentId,
+          status:'0'
+        }
+        batchChangeEquipmentStatus(params).then(res=>{
+          this.$message.success(res.message)
+        })
+        this.tempEquipmentId = []
+        //报废成功，等待2秒后重新刷新数据，重新渲染批量报废成功后的数据
+        setTimeout(() => {
+          location.reload();
+        }, 2000)
+      }else {
+        this.$message.error('请选择要恢复正常的设备')
       }
     }
   }

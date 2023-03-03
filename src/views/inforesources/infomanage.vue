@@ -96,7 +96,7 @@
             <el-button
               size="medium"
               type="primary"
-              STYLE="margin-left: 50px"
+              style="margin-left: 50px"
               @click="addInfo()"
             >添加设备信息</el-button>
           </el-col>
@@ -674,7 +674,7 @@ export default {
         this.initname = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.DataName)))
-        if (this.eselect == true) {
+        if (this.eselect === true) {
           this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
         }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
