@@ -58,7 +58,7 @@ export function getEquipmentTypeByPage(data) {
 //获取机房数量wr
 export function getMachineRoomTotal(data) {
   return request({
-    url: '/home/baseparameter/   ',
+    url: '/home/baseparameter/getMachineRoomTotal',
     method: 'get',
     params: data
   })
