@@ -1,5 +1,6 @@
 <template>
-  <div style="height: 550px">
+
+  <div style="height: 580px">
     <el-row :gutter="20" style="margin-bottom: 10px;">
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
@@ -32,6 +33,7 @@
         </el-autocomplete>
       </el-col>
     </el-row>
+
     <el-row :gutter="20" style="margin-bottom: 10px;">
       <el-col  :span="12">
         <el-label>所属部门：</el-label>
@@ -288,15 +290,50 @@
         </el-autocomplete>
       </el-col>
     </el-row>
-
-    <div slot="footer" class="dialog-footer" style="height: 40px;text-align: center;margin-top: 40px;">
+    <div slot="footer" class="dialog-footer" style="height: 40px;text-align: center;margin-top: 20px;">
       <el-button style="width: 100px" type="primary" @click="confirmSearch">查询</el-button>
     </div>
+
+
+
+    <el-row :gutter="20" style="margin-bottom: 10px;margin-top: 30px">
+      <el-select
+        @change="handleSelectChange"
+        v-model="DataName"
+        placeholder="查询IP地址/Mac地址"
+        size="medium"
+      >
+        <el-option
+          v-for="item in dataname_option"
+          :key="item.label"
+          :label="item.label"
+          :value="item.value"
+          class="searchInput"
+        />
+      </el-select>
+      <el-input
+        style="width: 240px;"
+        autosize
+        type="text"
+        class="inline-input"
+        v-model="inputValue"
+        placeholder="请输入内容"
+      ></el-input>
+      <el-button
+        size="medium"
+        type="primary"
+        icon="el-icon-search"
+        clearable="true"
+        style="margin-left: 40px"
+        @click="soleSearch()"
+      >搜索</el-button>
+    </el-row>
+
   </div>
 </template>
 
 <script>
-import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
+import { getList, searchComprehensiveInfoByMultipleConditions, solelySearchIdAndMacAddress } from '@/api/table'
 
 
 export default{
@@ -306,6 +343,14 @@ export default{
     return{
       dialogVisible:true,
       totalDataNumber:0,
+      dataname_option:[{
+        value:"ipAddress",
+        label:"IP地址"
+      },{
+        value: "macAddress",
+        label: "Mac地址"
+      }],
+      inputValue:"",
       infoInput:{ //定义输入框里的字段
         basicInfoId:'',
         postName:'',
@@ -337,6 +382,9 @@ export default{
       backDataAll:[],
       timeout:null,
 
+
+      DataName: '',
+      initname: ['123'],
     }
   },
   created() {
@@ -368,6 +416,7 @@ export default{
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }
+      //接口在这里
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
         this.backDataAll = [];
         this.backDataAll = res.data
@@ -383,6 +432,7 @@ export default{
       await this.getSearchData(params)
 
       let searchAllData = this.backDataAll;
+      // console.log("哦豁",searchAllData)
       this.$emit('changList', searchAllData,params);
       for (const key in this.infoInput) {  //每次点击查询后清空输入框里的值
         if (Object.hasOwnProperty.call(this.infoInput, key)) {
@@ -390,8 +440,34 @@ export default{
         }
       }
       this.dialogVisible = false
-    }
-  }
+    },
+
+
+    //新添IP地址、Mac地址查询
+    soleSearch() {
+      if (this.DataName === 'all' || this.DataName.length === 0) {
+        this.initname = ['111']
+      } else {
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
+      }
+      const params = {
+        dataName: this.initname, //dataName为选择框中的查询方式
+        dataValue: this.inputValue,  //dataValue为搜索框中输入的内容
+        status: "0",
+        start:this.start,
+        limit:this.limit,
+      }
+      console.log('222', this.initname)
+      solelySearchIdAndMacAddress(params).then((response) => {
+        let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
+        console.log(IpOrMacSearchAllData)
+        this.$emit('changList2', IpOrMacSearchAllData); //$emit()--将子组件的数据传递给父组件
+      })
+      this.dialogVisible = false
+    },
+  },
+
+
 
 }
 </script>

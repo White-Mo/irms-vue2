@@ -132,13 +132,13 @@
 
 <!--    查看导入反馈-->
     <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
-      <el-descriptions class="margin-top" title="" :column="2">
+      <el-descriptions class="margin-top" title="" :column="2" border>
         <el-descriptions-item v-for="item in repalyData">
           <template slot="label">
             {{item.key}}
           </template>
           <el-tag :type= " item.values === 'update' ? 'success' : 'primary'">
-            {{item.values}}
+            {{item.values === 'update' ? '更新' : item.values}}
           </el-tag>
 
         </el-descriptions-item>

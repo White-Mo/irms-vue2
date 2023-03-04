@@ -41,8 +41,8 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in dataname_option"
-                :key="index"
+                v-for="item in dataname_option"
+                :key="item.label"
                 :label="item.label"
                 :value="item.value"
                 class="searchInput"
@@ -63,6 +63,7 @@
               autosize
               type="text"
               class="inline-input"
+              clearable
               v-model="inputValue"
               :fetch-suggestions="querySearch"
               placeholder="请输入内容"
@@ -190,7 +191,7 @@
           width="55%"
           style="margin-top: -80px;"
           custom-class="transparent-dialog">
-          <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
+          <search-template :start="start" :limit="limit" @changList="receiveAllSearchData" @changList2="receiveIpOrMacSearchAllData"></search-template>
         </el-dialog>
         <div class="block">
           <el-pagination
@@ -218,7 +219,14 @@
 </template>
 
 <script>
-import {getList, getdataCount, delEquipment, InitValue, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
+import {
+  getList,
+  getdataCount,
+  delEquipment,
+  InitValue,
+  searchComprehensiveInfoByMultipleConditions,
+  solelySearchIdAndMacAddress
+} from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import searchTemplate from "@/components/Infomanage/searchTemplate";
@@ -260,8 +268,8 @@ export default {
       total: 0,
       start: 0,
       limit: 10,
-      DataName: 'all',
       keyname: [],
+      DataName: 'all',
       initname: ['123'],
       department: '',
       inputValue: '',
@@ -290,6 +298,20 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
+        //新添IP地址Mac地址
+        {
+          value:'ipAddress',
+          label:'IP地址',
+          width: '200px'
+        },
+        {
+          value:'macAddress',
+          label:'Mac地址',
+          width: '200px'
+        },
+
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -478,6 +500,20 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
+        //新添IP地址Mac地址
+        {
+          value:'ipAddress',
+          label:'IP地址',
+          width: '200px'
+        },
+        {
+          value:'macAddress',
+          label:'Mac地址',
+          width: '200px'
+        },
+
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -573,6 +609,12 @@ export default {
       this.infoInput=infoInput;
       this.list = searchAllData.items;
       this.total = searchAllData.total;
+      this.dialogVisible = false;
+    },
+    receiveIpOrMacSearchAllData(IpOrMacSearchAllData){
+      //将从子组件获取到的数据渲染到页面上
+      this.list = IpOrMacSearchAllData
+      this.total = IpOrMacSearchAllData.length
       this.dialogVisible = false;
     },
     querySearch(queryString, cb) {
@@ -683,31 +725,48 @@ export default {
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         // console.log(JSON.parse(JSON.stringify(this.DataName)))
-        if (this.eselect == true) {
-          this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
-        }
+        // if (this.eselect == true) {
+        //   this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
+        // }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
+        // console.log('@@',this.initname)
       }
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        dataValue2: this.inputValue2,
         status: "0",
         start: this.start,
         limit: this.limit
       }
-      // console.log(this.initdata)
-      getList(params).then((response) => {
-        this.list = response.data.items
-        this.total = response.data.total
-        //console.log("List---------");
-        //console.log(this.list)
-        this.listLoading = false
-      })
+      console.log('11',this.initname)
+      var flog = false
+      for(let i = 0; i <= this.initname.length; i++){
+        if(this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress'){
+          console.log("参数1",params)
+          solelySearchIdAndMacAddress(params).then((response) => {
+            let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
+            console.log(IpOrMacSearchAllData)
+            this.list = IpOrMacSearchAllData
+            this.total = IpOrMacSearchAllData.length
+            // this.$emit('changList2', IpOrMacSearchAllData); //$emit()--将子组件的数据传递给父组件
+            this.listLoading = false
+          })
+          flog = true
+          break
+        }
+      }
+      if(flog === false){
+        console.log("参数2",params)
+        getList(params).then((response) => {
+          this.list = response.data.items
+          this.total = response.data.total
+          //console.log(this.list)
+          this.listLoading = false
+        })
+      }
     },
 
     addInfo() {

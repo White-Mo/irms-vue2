@@ -114,3 +114,12 @@ export function searchComprehensiveInfoByMultipleConditions(data) {
   })
 }
 
+//综合信息管理-新添IP地址、Mac地址查询
+export function solelySearchIdAndMacAddress(data){
+  return request({
+    params: data,
+    url: '/home/inforesources/solelySearchIdAndMacAddress',
+    method: 'post',
+    responseType: 'json',
+  })
+}
