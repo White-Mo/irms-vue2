@@ -171,7 +171,6 @@ export function updatePostAction(data) {
     responseType: 'json'
   })
 }
-
 //修改部门
 export function updatePostDepartmentAction(data) {
   return request({
@@ -301,6 +300,24 @@ export function addMachineRoom(data) {
   return request({
     params: data,
     url: '/home/baseparameter/addMachineRoom',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//修改机房
+export function updataMachineRoomAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updataMachineRoomAction',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//检查机房名称是否重复
+export function checkMachineRoomName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkMachineRoomName',
     method: 'post',
     responseType: 'json'
   })
