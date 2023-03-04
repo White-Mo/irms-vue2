@@ -15,7 +15,7 @@
         >
           <af-table-column v-for="(value,key,index) in lable" :key="index" align="center" :label="value">
             <template slot-scope="scope">
-              <el-input v-model="scope.row[key]" :disabled="hh==='2'" />
+              <el-input v-model="scope.row[key]" :disabled="hh==='2'" @blur="checkData(scope.row)" />
             </template>
           </af-table-column>
         </el-table>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import {validateIP, validateMAC} from '@/api/validate'
+
 export default {
   props: {
     hh: {
@@ -44,10 +46,17 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {  }
   },
   methods: {
+    async checkData(row) {
+      const checkSwitch = validateMAC(row.macAddress)
+      const checkIp = validateIP(row.ipAddress)
+      if(!checkIp){await this.$message({message:"IP地址填写错误",type:"error"})}
+      else{}
+      if(!checkSwitch){await this.$message({message:"MAC地址填写错误",type:"error"})}
+      else{}
+    },
     addLine() {
       const obj = this.form[0]
       const newObj = {}
@@ -82,5 +91,8 @@ export default {
 .table{
   border: 1px solid #c7c3c3b8;
   margin-top: 10px;
+}
+.active{
+  border-color: red;
 }
 </style>

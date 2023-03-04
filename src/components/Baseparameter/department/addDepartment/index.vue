@@ -39,11 +39,21 @@
 <script>
 import { createDepartment, checkDepartmentName, checkDepartmentCode } from '@/api/baseparameter'
 import {getPost} from "@/api/select";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'addDepartment',
+  computed:{
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
-    getPost().then(response => {
+    const data = {
+      role:this.roles[0],
+      postid:this.$store.state.user.roleid,
+    }
+    getPost(data).then(response => {
       console.log(response)
       this.postAll = response.data.items
       this.postAll.forEach(element => {

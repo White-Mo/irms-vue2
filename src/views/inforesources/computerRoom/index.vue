@@ -1,5 +1,5 @@
 <template>
-  <div class = "main">
+  <div class = "mains">
     <dv-loading>Loading...</dv-loading>
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
@@ -45,18 +45,17 @@
           <tr style="height: 60px">
             <th>设备总数:</th>
             <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.total}}</th>
-            <th>服务器数量:</th>
-            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.serverCount}}</th>
+            <th>单位机房数:</th>
+            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.machineRoomCount}}</th>
           </tr>
           <tr style="height: 60px" >
-            <th>设备种类:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.typeCount}}</th>
-            <th>交换机数量:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.switchCount}}</th>
+            <th>机房机柜数:</th>
+            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.cabinetCount}}</th>
+            <th>机房设备数:</th>
+            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.equipmentCount}}</th>
           </tr>
         </table>
       </div>
-      </table>
     </dv-border-box-11>
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background: #142437" v-show="datacard">
       <el-row style="position: relative;top:5%">
@@ -76,6 +75,20 @@
         <!--          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>-->
         <!--          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>-->
         <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          width="250px"
+        >
+          <template slot-scope="scope">
+            <el-button
+              type="success" plain
+              size="mini"
+              @click="cabinetDetail(scope.$index, scope.row)"
+            >详情</el-button>
+          </template>
+        </el-table-column>
         <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
       </el-table>
 <!--      <el-popover-->
@@ -85,6 +98,13 @@
 <!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
 <!--      </el-popover>-->
     </dv-border-box-12>
+    <el-dialog
+      :visible.sync="showEquipment"
+      v-if="showEquipment"
+      width="100%"
+      :with-header="false">
+      <InfoTemplate :pre-row="row" @changeDiv="changeDiv" />
+    </el-dialog>
   </div>
 </template>
 
@@ -94,8 +114,16 @@ import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
+import InfoTemplate from '@/components/Infomanage/InfoTemplate'
+import {getEquipmentByCabinetId} from "@/api/baseparameter";
+import {getEquipmentCount} from "@/api/cockpit_data";
+import {getPostMachineRoom} from "@/api/dashboard";
+import {getList} from "@/api/table";
 export default {
   name:'computerRoom',
+  components: {
+    InfoTemplate
+  },
   data() {
     return {
       datavcolor:['#0e94eb','#0e94eb'],
@@ -103,6 +131,7 @@ export default {
       datacard:true,
       showButton:false,
       loading:true,
+      showEquipment:false,
       logosrc:'',
       roomBasicInfo:{ // 左上角机房信息概况
         manager_name: '',
@@ -110,10 +139,10 @@ export default {
         UnitDepartment: '',
       } ,
       equipmentBaseInfo:{
-        total:25,
-        typeCount:4,
-        serverCount:5,
-        switchCount:6
+        total:0,
+        machineRoomCount:0,
+        cabinetCount:0,
+        equipmentCount:0
       },
       tableData:[],
       camera: null,
@@ -137,21 +166,23 @@ export default {
       this.unitid = this.$store.state.machineRoom.unitid
       var machineRoomId = this.$store.state.machineRoom.machineRoomId
       getCabinet(machineRoomId).then((res) =>{
-        // console.log(res)
+        // //console.log(res)
         this.tableData = res.data.items
       })
     }
     var that = this
     setTimeout(function () {
       that.echartsDraw()
+      that.initCount()
       that.init();
       that.animate();
       that.loadGltf()
+
     }, 200);
   },
   methods: {
     full () {
-      // console.log(this.$store.state.machineRoom.department)
+      // //console.log(this.$store.state.machineRoom.department)
       screenfull.toggle()
     },
     //初始化
@@ -207,6 +238,38 @@ export default {
       //创建控件对象
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     },
+
+    //右上角数据
+    initCount(){
+      // equipmentBaseInfo:{
+      //   total:0,
+      //     typeCount:0,
+      //     serverCount:0,
+      //     switchCount:0
+      // },
+      // this.equipmentBaseInfo.
+
+      getEquipmentCount().then((response)=> {
+        this.equipmentBaseInfo.total = response.data.total
+      })
+      getPostMachineRoom(this.$store.state.machineRoom.unitid).then((response)=> {
+        this.equipmentBaseInfo.machineRoomCount = response.data.total
+      })
+      getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) =>{
+        this.equipmentBaseInfo.cabinetCount = response.data.total
+      })
+      const params = {
+        dataName: ['machineRoomId'],
+        dataValue: this.$store.state.machineRoom.machineRoomId,
+        status: "0",
+        start: 0,
+        limit: 99999
+      }
+      getList(params).then((response)=> {
+        this.equipmentBaseInfo.equipmentCount = response.data.total
+      })
+    },
+
     // 动画
     animate() {
       if (this.mesh) {
@@ -222,7 +285,7 @@ export default {
       let loader = new GLTFLoader();
       //本地模型路径：public/static/mod/Xbot.glb
       loader.load("static/c.glb", function (gltf) {
-        console.log(gltf)
+        //console.log(gltf)
         self.isLoading = false;//关闭载入中效果
         self.mesh = gltf.scene;
         // self.mesh.scale.set(5,5,5);//设置大小比例
@@ -319,13 +382,23 @@ export default {
         ]
       };
       myChart.setOption(option);
-    }
+    },
+
+    changeDiv(value) {
+      this.showEquipment =false
+    },
+
+    cabinetDetail(index, row) {
+      this.row = row
+      console.log(row.cabinetId)
+      this.showEquipment =true
+    },
   }
 };
 </script>
 
 <style>
-.main{
+.mains{
   cursor: pointer;
   position:absolute;
   left:0;

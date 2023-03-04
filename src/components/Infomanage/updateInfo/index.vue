@@ -140,9 +140,9 @@
                     <el-col :span="2"><div class="label-style">保修期</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                     <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
                     <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy年MM月dd日" value-format="yyyy-MM-dd"/></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
                   </el-row>
                 </el-form>
                 <el-row :gutter="20">
@@ -170,7 +170,7 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appAccessRights" :lable="appAccessRightsLable">访问权限</othertable></el-col>
-                <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appLinksInfo" :lable="appLinksInfoLable">链接（服务）用户信息</othertable></el-col>
+                <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appLinksInfo" :lable="appLinksInfoLable">服务用户信息</othertable></el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="12"><othertable :hh="currentShow" :form="equipment.appStore" :lable="appStoreLable">存 储</othertable></el-col>
@@ -194,7 +194,7 @@
       <div style="height:450px;text-align:center">
         <!--需要弹出的内容部分-->
         <el-descriptions  :column="3"  border>
-          <el-descriptions-item v-for="item in replayData">
+          <el-descriptions-item v-for="item in replayData" :key="index">
             <template slot="label">
               <i></i>
               {{item.key}}
@@ -245,16 +245,16 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
+        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
-        config: [{ projectName: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
+        config: [{ projectName: '', type:'',frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
@@ -273,9 +273,9 @@ export default {
       // appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       // appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       // appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
-      configLable: { projectName: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
+      configLable: { projectName: '项目',type:'类型', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量', },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', switchInfo: '端口', networkCardPort: '交换机', macAddress: 'MAC地址' },
+      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', networkCardPort: '交换机',macAddress: 'MAC地址',switchInfo: '端口', },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
       appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
@@ -298,7 +298,7 @@ export default {
       //   appNativeStore: ['total_capacity', 'used_space', 'unused_space', 'annual_growth_space' ]
       // },
       KeySet: {
-        config: ['projectName', 'frequency', 'corenessOrCapacity', 'quantity'],
+        config: ['projectName', 'type','frequency', 'corenessOrCapacity', 'quantity'],
         software: ['project', 'projectName', 'edition', 'type'],
         network: ['networkCardName', 'ipAddress', 'switchInfo', 'networkCardPort', 'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
@@ -315,14 +315,15 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end' }
+        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位' }
+     {'basicInfoId': '设备编号' ,'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位'}
     }
   },
   // watch: {
   //   currentShow(val, oldVal) {
   //     const inputDom = document.getElementsByTagName('input')
-  //     console.log(val)
+  //     //console.log(val)
   //     if (val === '2') {
   //       inputDom.forEach(e => {
   //         const parentNode = e.parentNode
@@ -400,7 +401,7 @@ export default {
       const equipments = []
       console.log('&',this.form)
       const equip = { ...this.equipment }
-      console.log(equip)
+      //console.log(equip)
       const equipmentBaseInfo = equip.equipmentBaseInfo
       Object.keys(equipmentBaseInfo).forEach(key => {
         equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
@@ -410,14 +411,19 @@ export default {
       equipments.push(equip)
 
       addEquipment({ equipments: equipments }).then(res => {
-        //获得数据
-        //console.log('#',res)
-        console.log('@@',res)
-        const result = analysisReply(res.data)
-        console.log('#',result)
-        this.replayData = result
-        this.showDialog=true
-        console.log('@@@',res.message)
+        if(res.message === '填写错误'){
+          this.$message({
+            message: '填写错误',
+            type: 'error'
+          });
+          this.showDialog=false
+        }else {
+          const result = analysisReply(res.data)
+          console.log('#',result)
+          this.replayData = result
+          this.showDialog=true
+
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -426,7 +432,7 @@ export default {
 
 
     changePost(val) {
-      console.log(val)
+      //console.log(val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {
@@ -442,7 +448,6 @@ export default {
       this.$emit('changeDiv', '0')
     },
     checkKey(listname, value) {
-      console.log(value)
       const a = this.handleList(listname)
       const arr = []
       if (a !== -1) {
@@ -454,7 +459,7 @@ export default {
               obj[k] = e[k] === undefined ? '' : e[k]
             }
           }
-          console.log(obj)
+          //console.log(obj)
           arr.push(obj)
         })
         this.equipment[a] = arr

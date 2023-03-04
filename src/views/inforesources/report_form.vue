@@ -42,17 +42,38 @@
               @click="get_data2()"
             >搜索</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
           </el-col>
-          <el-col :xs="1" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
+          <el-col
+            :xs="1"
+            :sm="1"
+            :md="1"
+            :lg="1"
+            :xl="1"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              style="margin-left: 100px"
+              @click="search()"
+            >筛选</el-button>
+          </el-col>
         </el-row>
-
+        <el-dialog
+          title="多条件搜索"
+          :visible.sync="dialogVisible"
+          width="55%"
+          style="margin-top: -80px;"
+          custom-class="transparent-dialog">
+          <dataStatementMakeSearchTemplate @changList="receiveAllSearchData"></dataStatementMakeSearchTemplate>
+        </el-dialog>
         <div class="grid-content form_table_class" >
           <el-table
             ref="multipleTable"
@@ -65,8 +86,11 @@
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
+            v-loading="listLoading"
+
           >
             <el-table-column label="" width="40" type="selection" />
+            <el-table-column label="" width="40" type="index" />
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -140,12 +164,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
-import { getStatisticsData } from '@/api/table'
+import {getStatisticsData, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
+import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
 export default {
+
   data() {
     return {
+      listLoading:false,
+      dialogVisible: false,
       // 总数据
       tableData: [],
       // 默认显示第几页
@@ -169,9 +197,6 @@ export default {
       basic_info_id: '',
       dataname: [
         {
-          value: 'num',
-          label: '#'
-        },{
           value: 'basicInfoId',
           label: '设备编号'
         },
@@ -301,16 +326,20 @@ export default {
       // 统计数据
       StatisticsData: [],
       // 全选事件
-      is_select_all:false
+      is_select_all:false,
+      isMultiline:false,//是否多条件筛选
     }
   },
   components:{
-    Progress
+    Progress,
+    dataStatementMakeSearchTemplate
   },
   computed: {
     ...mapGetters(['name', 'roles']),
   },
-
+  created() {
+    this.listLoading=true
+  },
   mounted() {
     this.get_data()
     document.getElementsByClassName('el-table__body-wrapper')[0].addEventListener('scroll',this.load)
@@ -320,43 +349,93 @@ export default {
   },
   watch:{
     'ClientHeight':function(curVal,oldVal){
-      console.log(curVal,oldVal,'----------------------')
-      console.log(this.tableData.length , this.totalCount)
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
-        this.initname = ['111']
-      } else {
-        this.initname = JSON.parse(JSON.stringify(this.DataName))
-      }
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        start: this.tableData.length ? this.tableData.length : 0,
-        limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-        status: ''
-      }
-      if(this.tableData.length < this.totalCount){
-        console.log("提交请求",params)
-        getList(params).then((response) => {
-          this.isflag = false
-          console.log(response)
-          if(this.tableData.length < this.totalCount){
-            let num = this.tableData.length + 1
-            for(let i of response.data.items){
-              i["num"] = num
-              num++
+      this.isflag = true
+      //console.log(curVal,oldVal,'----------------------')
+      //console.log(this.tableData.length , this.totalCount)
+      if(this.isMultiline){
+        const params=JSON.parse(JSON.stringify(this.infoInput));
+        params.start=this.tableData.length ? this.tableData.length : 0;
+        params.limit=this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15;
+        if(this.tableData.length < this.totalCount){
+          this.isMore=false
+          searchComprehensiveInfoByMultipleConditions(params).then(response=>{
+            //console.log(response)
+            this.isflag = false
+            if(this.tableData.length < this.totalCount){
+              let num = this.tableData.length + 1
+              for(let i of response.data.items){
+                i["num"] = num
+                num++
+              }
+              this.tableData = this.tableData.concat(response.data.items)
+              this.listLoading=false;
             }
-            this.tableData = this.tableData.concat(response.data.items)
-            }
-        })
-      }
+          })
+        }else {
+          this.isflag=false
+          this.isMore=true
+        }
 
+      }else {
+        if (this.DataName === 'all' || this.DataName.length === 0) {
+          //console.log(this.DataName)
+          this.initname = ['111']
+        } else {
+          this.initname = JSON.parse(JSON.stringify(this.DataName))
+        }
+        const params = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          start: this.tableData.length ? this.tableData.length : 0,
+          limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
+          status: ''
+        }
+        if(this.tableData.length < this.totalCount){
+
+          this.isMore=false
+          //console.log("提交请求",params)
+          getList(params).then((response) => {
+            //console.log(response)
+            this.isflag = false
+            if(this.tableData.length < this.totalCount){
+              let num = this.tableData.length + 1
+              for(let i of response.data.items){
+                i["num"] = num
+                num++
+              }
+              this.tableData = this.tableData.concat(response.data.items)
+            }
+          })
+        }else {
+          this.isflag=false
+          this.isMore=true
+        }
+      }
     }
   },
   methods: {
+    receiveAllSearchData(searchAllData,infoInput){
+      this.dialogVisible = false;
+      this.isMultiline=true;
+      this.infoInput=infoInput;
+      this.listLoading=true;
+      this.tableData=[];
+      let num = 1
+      for(let i of searchAllData.items){
+        i["num"] = num
+        num++
+      }
+      this.tableData = this.tableData.concat(searchAllData.items)
+      this.totalCount=searchAllData.total;
+      this.listLoading=false;
+    },
+    search(){
+      this.dialogVisible = true
+    },
     get_data() {
+      this.isMultiline=false
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -376,23 +455,26 @@ export default {
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
       })
-      console.log("提交请求",params)
+      //console.log("提交请求",params)
 
       getList(params).then((response) => {
-        console.log(response)
+
+        //console.log(response)
         let num = this.tableData.length + 1
         for(let i of response.data.items){
           i["num"] = num
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
+        this.listLoading=false
       })
 
     },
     get_data2() {
+      this.isMultiline=false
       this.tableData = []
       if (this.DataName === 'all' || this.DataName.length === 0) {
-        console.log(this.DataName)
+        //console.log(this.DataName)
         this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -414,23 +496,24 @@ export default {
         this.totalCount = response.data.total
       })
       getList(params).then((response) => {
-        console.log(response)
+        //console.log(response)
         let num = this.tableData.length + 1
         for(let i of response.data.items){
           i["num"] = num
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
+        this.listLoading=false
       })
 
     },
     load (e) {
       if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
-        console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
+        //console.log("滚动到底了",this.tableData.length , this.totalCount,e.target.scrollHeight)
         if(this.ClientHeight == e.target.scrollHeight){
-          this.isMore = true
+          this.isflag = true
           setTimeout(()=>{
-            this.isMore = false
+            this.isflag = false
           },1000)
         }
         this.ClientHeight = e.target.scrollHeight
@@ -448,13 +531,13 @@ export default {
       const trigger_fun = (data) => {
         this.StatisticsData.push(data)
         if (this.StatisticsData.length > 5) {
-          console.log('ok')
+          //console.log('ok')
           getExcelDemo3(this.StatisticsData)
         }
       }
       for (const i of item_list) {
         getStatisticsData(i).then((res) => {
-          // console.log(res,i)
+          // //console.log(res,i)
           // StatisticsData.push(res)
           if (typeof res === 'object') {
             trigger_fun(res.data)
@@ -462,7 +545,7 @@ export default {
             trigger_fun(res)
           }
         }).catch(err=>{ // 如果接口失效则添加零
-          console.log(err)
+          //console.log(err)
           trigger_fun(0)
         })
       }
@@ -476,12 +559,12 @@ export default {
       }else {
         this.is_select_all = false;
       }
-      console.log(this.is_select_all)
+      //console.log(this.is_select_all)
     },
     async exportEscel(model) {
       if (model === 0) {
         if (this.DataName === 'all' || this.DataName.length === 0) {
-          console.log(this.DataName)
+          //console.log(this.DataName)
           this.initname = ['111']
         } else {
           this.initname = JSON.parse(JSON.stringify(this.DataName))
@@ -511,7 +594,7 @@ export default {
           getExcelDemo2(this.selectData)
           // 取消表格选择
           this.$refs.multipleTable.clearSelection();
-          // console.log('this')
+          // //console.log('this')
         } else {
           this.$message.error('请选择需要导出的信息')
         }
@@ -575,7 +658,7 @@ export default {
               offset: 100,  // 向下偏移100
               duration: 0  // 设置不会自动关闭
           })
-          // console.log("退出弹窗")
+          // //console.log("退出弹窗")
           this.centerDialogVisible = false
           this.select_teble_radio = -1
           this.select_teble_type = -1
@@ -597,13 +680,13 @@ export default {
      * @param table_data: 表格数据
      */
     flexColumnWidth(label, prop) {
-      // console.log('label', label)
-      // console.log('prop', prop)
+      // //console.log('label', label)
+      // //console.log('prop', prop)
       // 1.获取该列的所有数据
       const arr = this.tableData.map((x) => x[prop])
       // arr.push(label) // 把每列的表头也加进去算
       arr.push(prop) // 把每列的表头也加进去算
-      // console.log(arr)
+      // //console.log(arr)
       // // 2.计算每列内容最大的宽度 + 表格的内间距（依据实际情况而定）
       return this.getMaxLength(arr)*1.7 + 40 + 'px'
     },
@@ -644,7 +727,7 @@ export default {
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       // this.currentPage = 1;
       // this.getData_plus(0, this.currentPage * this.PageSize, this.par_str);
-      // console.log(val);
+      // //console.log(val);
     }
     // 显示第几页
     // handleCurrentChange(val) {
@@ -659,7 +742,7 @@ export default {
     //     this.PageSize * this.currentPage
     //     // this.par_str
     //   )
-    //   // console.log(val);
+    //   // //console.log(val);
     // }
   }
 }
@@ -669,7 +752,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
@@ -761,7 +846,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }
@@ -792,8 +877,5 @@ export default {
   display:inline-block;
   height:2rem;
   width:100%;
-}
-.el-button--primary {
-    height: 40px;
 }
 </style>

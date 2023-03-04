@@ -71,7 +71,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
         </el-row>
@@ -96,10 +96,10 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleScrap(scope.$index, scope.row)"
@@ -128,10 +128,10 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleDetail(scope.$index, scope.row)"
-                  >详情</el-button>
+<!--                  <el-button-->
+<!--                    size="mini"-->
+<!--                    @click="handleDetail(scope.$index, scope.row)"-->
+<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRecover(scope.$index, scope.row)"
@@ -188,6 +188,10 @@ export default {
       singalInfo: {},
       dataname: [
         {
+          value: 'basicInfoId',
+          label: '设备ID'
+        },
+        {
           value: 'postName',
           label: '所属单位'
         },
@@ -236,13 +240,16 @@ export default {
     }
   },
   created() {
-    console.log('=======')
+    //console.log('=======')
     this.fetchData()
   },
   methods: {
-
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     handleDetail(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
     },
     handleScrap(index, row) {
       changeStatus({ id: row.equipmentId, status: '2' }).then(res => {
@@ -252,11 +259,11 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleRecover(index, row) {
-      console.log(index, row)
+      //console.log(index, row)
       changeStatus({ id: row.equipmentId, status: '0' }).then(res => {
         // this.$router.go(0)
         this.$message({
@@ -265,7 +272,7 @@ export default {
         })
         this.fetchData()
       }).catch(err => {
-        console.log(err)
+        //console.log(err)
       })
     },
     handleCurrentChange(val) {
@@ -273,7 +280,7 @@ export default {
       this.fetchData()
     },
     changeTab(name) {
-      console.log(this.tab_name)
+      //console.log(this.tab_name)
       this.fetchData()
     }
   }
@@ -284,7 +291,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
@@ -373,7 +382,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }

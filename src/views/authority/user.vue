@@ -72,7 +72,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="get_user()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2" >
@@ -119,7 +119,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-dialog
+<!--        <el-dialog
             title="请确认要删除这条记录吗?"
             :visible.sync="centerDialogVisible"
             width="30%"
@@ -129,7 +129,7 @@
               <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
               <el-button type="primary" style="height: 2.8rem;" @click="deleteUserPlus">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog>-->
         <el-dialog
             :title="headInfo"
             :visible.sync="userDialogDisplay"
@@ -195,7 +195,7 @@
               </el-select>
             </div>
             <div>
-              
+
             </div>
           </div>
             <span slot="footer" class="dialog-footer">
@@ -225,6 +225,7 @@
 import { mapGetters } from 'vuex'
 import { getQComSelect, getFosUserByPage, getPostDepartmentAll, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
+import {delMachineRoom} from "@/api/baseparameter";
 export default {
   name: 'Dashboard',
   computed: {
@@ -306,6 +307,7 @@ export default {
     }
   },
   mounted() {
+
     for (let i of ['getRealnameAll','getPostAll','getFosGroupAll']){
       getQComSelect(i).then(res => {
         if(i == 'getRealnameAll'){
@@ -318,10 +320,15 @@ export default {
     })
     }
     this.get_user()
+
   },
   destroyed() {
   },
   methods: {
+    search(){
+      this.currentPage = 0
+      this.get_user()
+    },
     querySearchName(queryString, cb){
       return this.querySearch(this.RealnameAll,0,queryString,cb)
     },
@@ -358,23 +365,23 @@ export default {
       };
     },
     handleSelectUsername(item) {
-      console.log(item);
+      //console.log(item);
       this.user_input.username_id = item.id
-    },    
+    },
     handleSelectUnit(item) {
-      console.log(item);
+      //console.log(item);
       this.user_input.Unit_id = item.id
     },
     handleSelectRoles(item) {
-      console.log(item);
+      //console.log(item);
       this.user_input.Roles_id = item.id
     },
     handleSelectStatus(item) {
-      console.log(item);
+      //console.log(item);
       this.user_input.Status_id = item.id
     },
     async get_user(){
-      // console.log(this.FosGroupAll)
+      // //console.log(this.FosGroupAll)
       const get_roles = (id) => {
         let item = ''
         for(let i of this.FosGroupAll){
@@ -386,17 +393,17 @@ export default {
         return item
       }
 
-			let params = { 
+			let params = {
 					realname:this.user_input.username == "" ? "all" : this.user_input.username_id,
 					username:this.user_input.account,
 					use_post:this.user_input.Unit == "" ? "all" : this.user_input.Unit_id,
 					groupid:this.user_input.Roles == "" ? "all" : this.user_input.Roles_id,
 					isdel:this.user_input.Status == "" ? "all" : this.user_input.Status_id
 			};
-      console.log(params)
+      //console.log(params)
       this.totalCount = (await getFosUserCount(params)).data
       params["start"] = this.currentPage - 1
-      params["limit"] = this.PageSize 
+      params["limit"] = this.PageSize
       getFosUserByPage(params).then(res =>{
         for(let i of res.data.items){
           i.roles = get_roles(i.groupid)
@@ -411,7 +418,7 @@ export default {
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1;
       this.get_user()
-    },  
+    },
     // 显示第几页
     handleCurrentChange(val) {
       // 改变默认的页数
@@ -440,23 +447,28 @@ export default {
       })
     },
     deleteUser(row){
-      this.deleteUseRparams = {
-        id:row.id
-      }
-      this.centerDialogVisible = true
+        this.$alert(`是否永久删除用户：\"${row.realname}\"信息`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback: (action, instance) => {
+            if (action === 'confirm') {
+              deleteFosUser(row.id).then((response)=>{
+                this.$alert(response.data, '提示', {
+                  confirmButtonText: '确定',
+                  type: 'info',
+                  showClose: false
+                }).then(()=>{
+                  this.get_user()
+                })
+              })
+            }
+          }
+        })
     },
-    deleteUserPlus(){
-      let _this = this
-      deleteFosUser(this.deleteUseRparams).then(()=>{
-        _this.centerDialogVisible = false
-        _this.get_user()
-        _this.$message({
-          message: '删除成功',
-          type: 'success'
-        });
-      })
-    },
+
     async updateUser(row){
+      console.log(row)
       let temp = row.role.split("/")
       this.userDialogDisplay = true
       this.updateOrAdd = true
@@ -465,22 +477,25 @@ export default {
       this.update_data.account = row.username
       this.update_data.password = row.password
       this.update_data.Unit = temp[0]
-      this.update_data.department = ""
-      this.update_data.Roles = ""
-      this.update_data.Status = ""
+      this.update_data.department =""
+
+      this.update_data.Roles = row.roles
+      this.update_data.Status = row.status==="激活" ? '0':'1'
+      // this.update_data.Status = row.status==="激活" ? '0':'1'
       this.update_data.row = row
-      console.log(row)
-      console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
+      //console.log(row)
+      //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
       // this.departmentAll = (await getDepartment(row.roleid)).data.items
       getPostDepartmentAll({groupid:row.groupid}).then(res=>{
-        console.log(res)
+        //console.log(res)
       })
     },
     changeGroupID(groupid){
-      console.log(groupid)
+      //console.log(groupid)
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
+      // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
@@ -507,13 +522,13 @@ export default {
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
-        password:this.update_data.password, // 
+        password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
       console.log(params)
       let _this = this
       updateFosUserAction(params).then((res)=>{
-        console.log(res)
+        //console.log(res)
         _this.$message({
           message: '更改成功',
           type: 'success'
@@ -521,7 +536,7 @@ export default {
         _this.get_user()
         _this.userDialogDisplay = false
       }).catch((err)=>{
-        console.log(err)
+        //console.log(err)
         _this.$message.error('更改失败');
       })
     },
@@ -545,21 +560,22 @@ export default {
         isdel: this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
-        password:this.update_data.password, // 
+        password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
-      console.log(params)
+      //console.log(params)
       let _this = this
       createFosUser(params).then((res)=>{
-        console.log(res)
+        //console.log(res)
         _this.$message({
           message: '添加成功',
           type: 'success'
         });
         _this.get_user()
+        location.reload();
         _this.userDialogDisplay = false
       }).catch((err)=>{
-        console.log(err)
+        //console.log(err)
         _this.$message.error('添加失败');
       })
     },

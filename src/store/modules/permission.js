@@ -60,7 +60,7 @@ const actions = {
         resolve(accessedRoutes)
       }
       ).catch(error => {
-        console.log(error)
+        //console.log(error)
       })
     })
   }

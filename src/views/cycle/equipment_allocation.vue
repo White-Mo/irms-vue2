@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
               >搜索</el-button
             >
           </el-col>
@@ -77,7 +77,7 @@
           </af-table-column>
           <el-table-column align="center" label="操作" width="200px">
             <template slot-scope="scope">
-              <el-button
+              <el-button v-if="scope.row.isEdit"
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
                 >{{scope.row.isEdit ? '取消' : '详情'}}</el-button
@@ -177,6 +177,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     handleDetail(index, row) {
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
@@ -197,7 +201,7 @@ export default {
           departmentId
         }
         updateDepartment(params).then( res=>{
-          console.log(res);
+          //console.log(res);
         } )
       }else{
         getDepartment(row.postId).then(response => {
@@ -217,7 +221,9 @@ export default {
 //*{
 //  font-size: 18px;
 //}
-
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
@@ -306,7 +312,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }

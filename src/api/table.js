@@ -46,7 +46,7 @@ export function getStatisticsData(par) {
   })
 }
 export function addEquipment(eq) {
-  console.log('$$$',eq,message)
+  console.log(eq)
   return request({
     data: eq,
     url: '/home/inforesources/AddEquipment',
@@ -102,3 +102,24 @@ console.log(initdata);
   })
 }
 
+
+
+//综合信息管理表多条件查询
+export function searchComprehensiveInfoByMultipleConditions(data) {
+  return request({
+    params: data,
+    url: '/home/inforesources/searchComprehensiveInfoByMultipleConditions',
+    method: 'post',
+    responseType: 'json',
+  })
+}
+
+//综合信息管理-新添IP地址、Mac地址查询
+export function solelySearchIdAndMacAddress(data){
+  return request({
+    params: data,
+    url: '/home/inforesources/solelySearchIdAndMacAddress',
+    method: 'post',
+    responseType: 'json',
+  })
+}

@@ -126,17 +126,17 @@
         <el-button type="primary" @click="addAuthor">新 增</el-button>
       </div>
     </el-dialog>
-<!--    <el-dialog-->
-<!--      title="删除角色"-->
-<!--      :visible.sync="centerDialogVisible"-->
-<!--      width="30%"-->
-<!--      center>-->
-<!--      <span>请确认要删除这条记录吗?</span>-->
-<!--      <span slot="footer" class="dialog-footer">-->
-<!--    <el-button @click="centerDialogVisible = false">取 消</el-button>-->
-<!--    <el-button type="primary" @click="handdelAuthor">确 定</el-button>-->
-<!--      </span>-->
-<!--    </el-dialog>-->
+<!--    <el-dialog
+      title="删除角色"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <span>请确认要删除这条记录吗?</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="handdelAuthor">确 定</el-button>
+  </span>
+    </el-dialog>-->
     <el-dialog
       title="编辑"
       :visible.sync="editdialogVisible"
@@ -163,7 +163,7 @@
 <script>
 import {addAithor, delAuthor, editAuthor, getAuthorData, getAuthority, updateAuthority} from "@/api/Sys_info_manage";
 import {getAutherCount} from "@/api/Sys_info_manage";
-import { delPost, getPostByPage } from '@/api/baseparameter'
+import {delMachineRoom, getPostByPage} from "@/api/baseparameter";
 
 export default {
   name: 'Dashboard',
@@ -191,7 +191,6 @@ export default {
       tableData: [],
       tableDatas: []
     }
-
   },
   mounted() {
     this.datainit()
@@ -219,12 +218,13 @@ export default {
       this.addDialog = false
       const data = this.addForm
       addAithor(data).then((res) => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 20000) {
           this.$message({
             type:'success',
             message:"新增成功"
           })
+          this.datainit()
         }else {
           this.$message({
             type:'error',
@@ -264,39 +264,50 @@ export default {
     // 删除角色 确认弹窗
     handleDelete(index, row) {
       this.delform = row
-      this.centerDialogVisible = true
-      const h = this.$createElement;
-      this.$msgbox({
-        title: '删除提示',
-        type: 'warning',
-        message: h('h3', null, [
-          h('span', null, '是否确定删除：'),
-          h('span', null, ' " '+ row.name + ' " '+ '角色信息？')
-        ]),
-        showCancelButton: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        callback: (action) => {
-          if (action === 'confirm') {
-            this.handdelAuthor(row.name)
-          }
-        }
-      })
-    },
-    // 删除角色 提交
-    handdelAuthor(){
-      this.centerDialogVisible = false
       const data = {id:this.delform.id}
       delAuthor(data).then((res) => {
-        if(res.code === 20000) {
+/*        if(res.code === 20000) {
           this.$message({
             type:'success',
             message:'删除成功'
           })
           this.datainit()
-        }
+        }*/
+
+        this.$alert(`是否永久删除角色：\"${row.name}\"`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback: (action, instance) => {
+            if (action === 'confirm') {
+              delAuthor(data).then((res) => {
+                this.$alert(res.data, '提示', {
+                  confirmButtonText: '确定',
+                  type: 'info',
+                  showClose: false
+                }).then(() => {
+                  this.datainit()
+                })
+              })
+            }
+          }
+        })
       })
     },
+    // 删除角色 提交
+    // handdelAuthor(){
+    //   this.centerDialogVisible = false
+    //   const data = {id:this.delform.id}
+    //   delAuthor(data).then((res) => {
+    //     if(res.code === 20000) {
+    //       this.$message({
+    //         type:'success',
+    //         message:'删除成功'
+    //       })
+    //       this.datainit()
+    //     }
+    //   })
+    // },
     // 获取 设置菜单权限
     setPermission(index,row) {
       this.mainStatus = false
@@ -304,7 +315,7 @@ export default {
       const data = {id:row.id}
       getAuthority(data).then((res) => {
         this.tableDatas = res.data.items
-        console.log(this.tableDatas)
+        //console.log(this.tableDatas)
       })
     },
     // 表格合并
@@ -350,7 +361,7 @@ export default {
   },
     //
     upAuthority(){
-      console.log(this.tableDatas)
+      //console.log(this.tableDatas)
       const checkList = []
       for(var i = 0;i < this.tableDatas.length;i++){
         if (this.tableDatas[i].ischeck === true){
@@ -372,7 +383,7 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       // this.fetchData()
     },
@@ -457,8 +468,5 @@ export default {
   display:inline-block;
   height:2rem;
   width:100%;
-}
-.el-button--primary {
-  height: 40px;
 }
 </style>

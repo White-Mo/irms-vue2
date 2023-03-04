@@ -254,8 +254,8 @@ function getPortagreement(outdata, excelIndex) {
       if (Object.values(outdata[indexs])[0] !== '') {
         networkCoinfig.networkCardName = Object.values(outdata[indexs])[0]
         networkCoinfig.ipAddress = Object.values(outdata[indexs])[1]
-        networkCoinfig.macAddress = Object.values(outdata[indexs])[2]
-        networkCoinfig.switchInfo = Object.values(outdata[indexs])[3]
+        networkCoinfig.switchInfo = Object.values(outdata[indexs])[2]
+        networkCoinfig.macAddress = Object.values(outdata[indexs])[3]
         networkCoinfig.networkCardPort = Object.values(outdata[indexs])[4]
         networks.push(networkCoinfig)
       }

@@ -51,6 +51,9 @@
         <el-col :span="2"><el-button type="primary" @click="next">下一步</el-button></el-col>
       </el-row>
     </div>
+    
+
+
     <div v-show="active==1">
       <div class="detail-content">
         <div class="detail-table">
@@ -124,13 +127,13 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2"><div class="label-style">序列号</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.serialNumber" size="medium" /></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-input v-model="form.serialNumber" size="medium" /></div></el-col> 
                   <el-col :span="2"><div class="label-style">保修期</div></el-col>
                   <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                   <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.onlineTime" size="medium" /></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                   <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.offlineTime" size="medium" /></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                 </el-row>
               </el-form>
               <el-row :gutter="20">
@@ -180,6 +183,7 @@ import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
 import { addEquipment } from '@/api/table'
 import user from '@/store/modules/user'
+import { TrianglesDrawMode } from 'three'
 
 export default {
   components: {
@@ -191,7 +195,7 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
-        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
+        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
@@ -204,7 +208,7 @@ export default {
         appSystemUser: [{ userName: '', realName: '', userLevel: '', localAccessMode: '', remoteAccessMode: '', createDate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
-        appLinksInfo: [{ company: '', userName: '', ipAddress: '', other: '' }],
+        appLinksInfo: [{ company: '', userName: '', other : '', ipAddress : '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
       },
@@ -216,7 +220,7 @@ export default {
       appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
       appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行业网', internet: '互联网', other: '预警网' },
-      appLinksInfoLable: { company: '单位', userName: '用户名', ipAddress: '其他', other: 'IP地址' },
+      appLinksInfoLable: { company: '单位', userName: '用户名', other: '其他', ipAddress: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
       postAll: [],
@@ -224,8 +228,9 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位start', 'shelfOff': '是否可下架',
-          'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位end', 'basicInfoId': '设备编号' }
+        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
+        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
     }
   },
   created() {
@@ -235,11 +240,11 @@ export default {
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        console.log(response)
+        //console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            console.log(element.postName)
+            //console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
           }
         })
@@ -250,15 +255,15 @@ export default {
       })
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
-        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentTypeCode
+        this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
       })
     },
     onSubmit() {
-      console.log('submit!')
+      //console.log('submit!')
     },
     prev() {
       if (--this.active < 0) {
-        console.log(this.active)
+        //console.log(this.active)
         this.active = 0
       }
     },
@@ -266,12 +271,12 @@ export default {
       this.active++
       const equipments = []
       if (this.active === 2) {
-        console.log(this.form)
+        //console.log(this.form)
         const equip = { ...this.equipment }
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
-        console.log(equipments)
+        //console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           this.$alert(res.message, '提示', {
@@ -281,15 +286,15 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          console.log(res)
+          //console.log(res)
         }).catch(err => {
           this.active = 0
-          console.log(err)
+          //console.log(err)
         })
       }
     },
     changePost(val) {
-      console.log(val)
+      //console.log(val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {

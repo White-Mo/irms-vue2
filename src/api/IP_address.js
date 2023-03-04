@@ -3,8 +3,8 @@ import request from '@/utils/request'
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  // console.log(params)
-  // console.log(typeof (params))
+  // //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/inforesources/getCompreDataAll',
@@ -16,8 +16,8 @@ export function getList(obj) {
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/IPaddress/getBasicInfoNetworkByPage1',
@@ -29,8 +29,8 @@ export function getNetWorkList(obj) {
 export function updateBasicInfoNetwork(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
-  // console.log(typeof (params))
+  //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/IPaddress/updateIPaddressAction',
@@ -41,8 +41,8 @@ export function updateBasicInfoNetwork(obj) {
 export function getdataCount(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  // console.log(params)
-  // console.log(typeof (params))
+  // //console.log(params)
+  // //console.log(typeof (params))
   return request({
     params,
     url: '/home/IPaddress/getBasicInfoNetworkCount1',
@@ -59,9 +59,8 @@ export function getStatisticsData(par) {
   })
 }
 export function addEquipment(eq) {
-  console.log(eq)
+  //console.log(eq)
   return request({
-
     data: eq,
     url: '/home/inforesources/AddEquipment',
     method: 'post',
@@ -69,7 +68,7 @@ export function addEquipment(eq) {
   })
 }
 export function delEquipment(equipmentId) {
-  console.log(typeof (equipmentId))
+  //console.log(typeof (equipmentId))
   return request({
 
     params: { equipmentId: equipmentId },
@@ -79,7 +78,7 @@ export function delEquipment(equipmentId) {
   })
 }
 export function getbasic(equipmentId) {
-  console.log(equipmentId)
+  //console.log(equipmentId)
   return request({
     params: { equipmentId: equipmentId },
     url: '/home/inforesources/getBasicInfoById',

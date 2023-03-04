@@ -1,7 +1,7 @@
 <template>
   <div class="update_detail">
     <div class="source">
-      <el-page-header content="编辑单位" @back="back" />
+      <el-page-header content="单位信息" @back="back" />
     </div>
     <div class="source">
       <el-row>
@@ -29,7 +29,7 @@
 import { checkPostName, checkPostCode, updatePostAction} from '@/api/baseparameter'
 
 export default {
-  name: 'addPost',
+  name: 'updatePost',
   props: {
     row: {
       type: Object,
@@ -92,12 +92,12 @@ export default {
     }
   },
   created() {
-    console.log(this.row)
-    console.log(this.currentShow)
+    //console.log(this.row)
+    //console.log(this.currentShow)
     this.initPostData()
   },
   mounted() {
-    console.log(this.currentShow+"---------------------------------")
+    //console.log(this.currentShow+"---------------------------------")
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -131,10 +131,10 @@ export default {
               this.back()
             })
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
           })
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });

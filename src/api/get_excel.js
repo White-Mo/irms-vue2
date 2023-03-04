@@ -5,7 +5,7 @@ export async function getExcelDemo1(data){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
-    workbook.creator = '中国地震局信息管理系统';
+    workbook.creator = '中国地震台网中心信息资源管理系统';
     // workbook.lastModifiedBy = 'Her';
     workbook.created = new Date();
     workbook.modified = new Date();
@@ -92,7 +92,7 @@ export async function getExcelDemo1(data){
     const header_row = sheet.getRow(1);
     header_row.values = header
     header_row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
-        // console.log('Cell ' + colNumber + ' = ' + cell.value);
+        // //console.log('Cell ' + colNumber + ' = ' + cell.value);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
         cell.font = {
             name: 'Arial Black',
@@ -110,7 +110,7 @@ export async function getExcelDemo1(data){
         row.values = items[i]
         row.numFmt = '0'
         row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
-            // console.log('Cell ' + colNumber + ' = ' + cell.value);
+            // //console.log('Cell ' + colNumber + ' = ' + cell.value);
             cell.alignment = { vertical: 'middle', horizontal: 'center' };
             cell.font = {
                 name: 'Black',
@@ -208,14 +208,14 @@ export async function getExcelDemo2(data_list, data_num = 1){
     for (let file_num of file_list){
         let workbook = new ExcelJS.Workbook();
         //设置工作簿属性↓
-        workbook.creator = '中国地震局信息管理系统';
+        workbook.creator = '中国地震台网中心信息资源管理系统';
         // workbook.lastModifiedBy = 'Her';
         workbook.created = new Date();
         workbook.modified = new Date();
         workbook.lastPrinted = new Date();
         workbook.properties.date1904 = true;
         workbook.calcProperties.fullCalcOnLoad = true;
-        //工作簿视图 ？？啥玩意
+        //工作簿视图
         workbook.views = [{
                 x: 0,
                 y: 0,
@@ -242,7 +242,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             // basicInfoNetwork_list 网络信息
             // basicInfoProtocolPort_list 协议端口信息
             // basicInfoSoftware_list 通用软件信息
-            // console.log(basic_data,"-------244----",item_data['equipmentId'])
+            // //console.log(basic_data,"-------244----",item_data['equipmentId'])
             // if(!basic_data.basicInfo) continue
             let n = basic_data['basicInfoSoftware_list'].length > basic_data['basicInfoConfig_list'].length ? basic_data['basicInfoSoftware_list'].length : basic_data['basicInfoConfig_list'].length  // n是配置信息或者通用软件信息中的信息最大条数
             let x = 1 + basic_data['basicInfoAppSoftware_list'].length // x是专用软件信息中信息最大条数 第一行是表头
@@ -694,7 +694,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 item_cell.fill = table_fill4
                 C14.push(item_cell)
             }
-            let tables = ['项  目','频率','性能指标','通用软件信息','核数/容量','项  目','名称','版本','类型']
+            let tables = ['项  目','类型','性能指标','数量指标','实配数量','项  目','名称','版本','类型']
             for (let i in tables){
                 C14[i].value = tables[i]
             }
@@ -827,6 +827,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for(let i in C18){
                 l.push(C18[i][0])
             }
+
             for(let i of l){
                 i.border = {
                     top: white,
@@ -1449,7 +1450,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
                 }
             }else{
                 for(let item in C38[C38.length-1]){
-                    // console.log(item)
+                    // //console.log(item)
                     if(item > 0 || item < 4){
                         C38[C38.length-1][item].border =  {
                             bottom: black,
@@ -1498,10 +1499,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             G5.value = item_data['equipmentAdminPhone']
             I5.value = item_data['appAdminName']
             K5.value = item_data['appAdminPhone']
-            D6.value = item_data['businessOrExperimental'] == '0' ? '√\n□' : '□\n√'
-            G6.value = item_data['mainOrBackup'] == '0' ? '√\n□' : '□\n√'
-            I6.value = item_data['tureOrVirtual'] == '0' ? '√\n□' : '□\n√'
-            K6.value = item_data['migratable'] == '0' ? '是√\n否□' : '是□\n否√'
+            D6.value = item_data['businessOrExperimental'] == '0' ? '■\n□' : '□\n■'
+            G6.value = item_data['mainOrBackup'] == '0' ? '■\n□' : '□\n■'
+            I6.value = item_data['tureOrVirtual'] == '0' ? '■\n□' : '□\n■'
+            K6.value = item_data['migratable'] == '0' ? '是■\n否□' : '是□\n否■'
             C9.value = item_data['brandName']
             F9.value = item_data['brandModelName']
             H9.value = item_data['machineRoomName']
@@ -1521,9 +1522,10 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for (let i = 0;i < n;i++){
                 let item = []
                 if(typeof basic_data['basicInfoConfig_list'][i] == 'undefined'){
-                    item = item.concat(['','','',''])
+                    item = item.concat(['','','','',''])
                 }else{
                     item.push(basic_data['basicInfoConfig_list'][i]['projectName'])
+                    item.push(basic_data['basicInfoConfig_list'][i]['type'])
                     item.push(basic_data['basicInfoConfig_list'][i]['frequency'])
                     item.push(basic_data['basicInfoConfig_list'][i]['quantity'])
                     item.push(basic_data['basicInfoConfig_list'][i]['corenessOrCapacity'])
@@ -1547,16 +1549,16 @@ export async function getExcelDemo2(data_list, data_num = 1){
             for(let i in basic_data['basicInfoNetwork_list']){
                 i = parseInt(i)
                 C18[i][0].value = basic_data['basicInfoNetwork_list'][i]['networkCardName']
-                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
-                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][1].value = basic_data['basicInfoNetwork_list'][i]['ipAddress']
+                C18[i][2].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
                 C18[i][3].value = basic_data['basicInfoNetwork_list'][i]['macAddress']
-                C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['switchInfo']
+                C18[i][4].value = basic_data['basicInfoNetwork_list'][i]['networkCardPort']
             }
             // 协议端口信息
-          console.log(basic_data['basicInfoProtocolPort_list'])
+          //console.log(basic_data['basicInfoProtocolPort_list'])
             for(let i in basic_data['basicInfoProtocolPort_list']){
                 i = parseInt(i)
-              console.log(C18)
+              //console.log(C18)
                 C18[i][5].value = basic_data['basicInfoProtocolPort_list'][i]['protocolName']
                 C18[i][6].value = basic_data['basicInfoProtocolPort_list'][i]['appName']
                 C18[i][7].value = basic_data['basicInfoProtocolPort_list'][i]['networkCardPort']
@@ -1699,7 +1701,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
 
             data_index ++
             progress_list[progress_item_num] ++
-            // console.log(progress_list)
+            // //console.log(progress_list)
             window.localStorage.setItem("report_form_info",file_list.toString() + ";"+ progress_list.toString())
         }
         //导出下载
@@ -1708,7 +1710,7 @@ export async function getExcelDemo2(data_list, data_num = 1){
         let link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
-        link.download = data_list[0]["basicInfoId"]+".xlsx";
+        link.download = data_list[progress_item_num]["basicInfoId"]+".xlsx";
         link.click();
         document.body.removeChild(link);
 
@@ -1724,7 +1726,7 @@ export async function getExcelDemo3(StatisticsData){
     //创建工作簿↓
     const workbook = new ExcelJS.Workbook();
     //设置工作簿属性↓
-    workbook.creator = '中国地震局信息管理系统';
+    workbook.creator = '中国地震台网中心信息资源管理系统';
     // workbook.lastModifiedBy = 'Her';
     workbook.created = new Date();
     workbook.modified = new Date();

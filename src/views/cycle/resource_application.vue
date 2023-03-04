@@ -44,7 +44,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button
             >
           </el-col>
@@ -80,9 +80,13 @@
 <!--&lt;!&ndash;                  :value="item.cabinetName"&ndash;&gt;-->
 <!--&lt;!&ndash;                />&ndash;&gt;-->
 <!--              </el-select>-->
-              <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
-              </el-input>
-              <span v-else>{{ scope.row[key] }}</span>
+              <el-form :ref="labels" :model="labels">
+                <el-form-item style="height:20px">
+                  <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
+                  </el-input>
+                  <span v-else>{{ scope.row[key] }}</span>
+                </el-form-item>
+              </el-form>
             </template>
           </af-table-column>
           <el-table-column align="center" label="操作" width="200px"  fixed="right">
@@ -119,6 +123,8 @@ import { hunhe1 } from '@/layout/mixin/IP_address_Mix'
 import { updateBasicInfoNetwork } from '@/api/IP_address'
 import user from '@/store/modules/user'
 import { getMachineRoom,getCabinet } from '@/api/select'
+
+import {validateIP, validateMAC} from '@/api/validate'
 
 export default {
   filters: {
@@ -238,6 +244,10 @@ export default {
     // console.log(this.list)
   },
   methods: {
+    search(){
+      this.start = 0
+      this.fetchData()
+    },
     async handleAsync(val){
       return new Promise((resolve,reject)=>{
         let arr = [1,2,3]
@@ -260,6 +270,7 @@ export default {
       if (row.isEdit) {
         row.isEdit = !row.isEdit;
       }
+      this.fetchData()
     },
     handleMove(index, row) {
       this.visiblePublish=true
@@ -285,14 +296,24 @@ export default {
           switch_info: row.switch_info,
           cabinetUStart: row.cabinetUStart,
           cabinetUEnd: row.cabinetUEnd
-        }
-        updateBasicInfoNetwork(params).then( res=>{
+        };
+        const checkIp = validateIP(params.ip_address)
+        const checkSwitch = validateMAC(params.switch_info)
+        if(checkIp && checkSwitch){
+          updateBasicInfoNetwork(params).then( res=>{
           console.log(res);
           this.$message({
             message: '申请成功',
             type: 'success'
           })
-        } )
+        } )}
+        else if(checkIp == false || checkSwitch == false){
+          this.$message({
+          message: '申请失败，IP地址或MAC地址有误',
+          type: 'error'
+        });
+        this.fetchData()}
+        else {};
       }else{
         //
         // getMachineRoom(row.postId).then(response => {
@@ -424,7 +445,7 @@ export default {
   align-items: stretch;
 }
 .el-scrollbar {
-  height: 380px;
+  // height: 380px;
   overflow: hidden;
   position: relative;
 }

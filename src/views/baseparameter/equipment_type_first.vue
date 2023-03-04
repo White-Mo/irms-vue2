@@ -40,7 +40,7 @@
               size="medium"
             >
               <el-option
-                v-for="(item,index) in basicvalue"
+                v-for="(item,index) in basicValue"
                 :key="index"
                 :label="item.label"
                 :value="item.value"
@@ -86,27 +86,11 @@
           >
             <el-button
               size="medium"
-              type="info"
+              type="primary"
               @click="addEquipmentType()"
             >添加一级设备类型</el-button>
           </el-col>
         </el-row>
-
-        <el-dialog title="新增一级设备类型" :visible.sync="dialogFormVisible">
-          <el-form :model="form">
-            <el-form-item label="一级设备类型名称" :label-width="formLabelWidth">
-              <el-input v-model="form.equipmentFirstTypeName"  ></el-input>
-            </el-form-item>
-            <el-form-item label="一级设备类型代码" :label-width="formLabelWidth">
-              <el-input v-model="form.equipmentFirstTypeCode"  ></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="createEquipmentType">确 定</el-button>
-          </div>
-        </el-dialog>
-
         <el-table
           height="70vh"
           :row-style="{height:'6.26vh'}"
@@ -121,7 +105,7 @@
         >
           <el-table-column align="center" type="index" />
           <el-table-column
-            v-for="(item,index) in basicvalue"
+            v-for="(item,index) in basicValue"
             :key="index"
             :label="item.label"
             :prop="item.value"
@@ -131,12 +115,9 @@
           </el-table-column>
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleDetail(scope.$index, scope.row)"-->
-<!--              >详情</el-button>-->
               <el-button
                 size="mini"
+                type="primary"
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button
@@ -157,12 +138,12 @@
           />
         </div>
       </div>
-      <!-- <div v-if="ifUpdate === '1'">
-        <addEquipmentType @changeDiv="changeDiv" />
+       <div v-if="ifUpdate === '1'">
+        <addEquipmentFirstType @changeDiv="changeDiv" />
       </div>
-      <div v-if="ifUpdate === '2' || ifUpdate === '3'">
-        <updateEquipmentType :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
-      </div> -->
+      <div v-if="ifUpdate === '2'">
+        <updateEquipmentFirstType :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+      </div>
     </div>
   </div>
 </template>
@@ -171,14 +152,16 @@
 import {
   getEquipmentFirstTypeByPage,
   getEquipmentTypeByPage,
-  addEquipmentFirstType,
-  delPost, delEquipmentFirstType
+  delEquipmentFirstType
 } from '@/api/baseparameter'
-import updateEquipmentType from '@/components/Baseparameter/equipmentType/updateEquipmentType'
+import addEquipmentFirstType from "@/components/Baseparameter/equipmentTypeFirst/addEquipmentFirstType";
+import updateEquipmentFirstType from "@/components/Baseparameter/equipmentTypeFirst/updateEquipmentFirstType";
 
 export default {
   components: {
-    updateEquipmentType
+    addEquipmentFirstType,
+    updateEquipmentFirstType,
+
   },
   filters: {
     statusFilter(status) {
@@ -192,23 +175,16 @@ export default {
   },
   data() {
     return {
-      form: {
-        equipmentFirstTypeName: '',
-        equipmentFirstTypeCode: '',
-      },
-      formLabelWidth: '150px',
-      dialogFormVisible:false,
       list: null,
       total: 0,
       currentPage: 0,
       limit:10,
-      basicValue: '',
       initName:'',
       inputValue: '',
       dataName: 'all',
       ifUpdate: '0',
       listLoading: true,
-      basicvalue: [
+      basicValue: [
         {
           value: 'equipmentFirstTypeName',
           label: '一级设备类型名称'
@@ -225,26 +201,20 @@ export default {
     this.fetchData()
   },
   methods: {
-
-    restart(){
-      this.form.equipmentFirstTypeName=''
-      this.form.equipmentFirstTypeCode=''
-    },
-
     // 综合数据管理展示与查询--lry
     fetchData() {
-      // console.log(this.basicValue)
+      // //console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       this.listLoading = true
-      // console.log(this.basicValue)
+      // //console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.dataName === 'all' || this.dataName.length === 0) {
-        console.log("空值或逻辑不合",this.dataName)
+        //console.log(this.dataName)
         this.initName = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.dataName)))
+        console.log("********************************")
+        console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
-        console.log("不为空值",this.initName)
       }
       const params = {
         dataName: this.initName,
@@ -252,8 +222,9 @@ export default {
         start: this.currentPage,
         limit: this.limit
       }
-      console.log(params)
+      // //console.log(this.initName)
       getEquipmentFirstTypeByPage(params).then((response) => {
+        console.log(response)
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -261,54 +232,29 @@ export default {
     },
 
     addEquipmentType() {
-      // this.ifUpdate ='1'
-      // this.from.equipmentFirstTypeName=''
-      // this.from.equipmentFirstTypeCode=''
-      this.dialogFormVisible = true
+      this.ifUpdate ='1'
+      this.dataName = ""
     },
-    createEquipmentType(){
-      console.log(this.form);
-      addEquipmentFirstType(this.form).then(response => {
-        console.log(response)
-        this.$alert("新增成功", '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.dataName="all"
-          this.dialogFormVisible = false
-          this.fetchData()
-          this.restart()
-        })
-      })
-    },
-    handleDetail(index, row) {
+    handleEdit(index, row) {
       this.ifUpdate ='2'
       this.row = row
     },
-
-    //修改一级设备类型
-    handleEdit(index, row) {
-      // this.ifUpdate ='3'
-      console.log(1,row)
-      this.form.equipmentFirstTypeName=this.row.equipmentFirstTypeName
-      this.form.equipmentFirstTypeCode=this.row.equipmentFirstTypeCode
-      this.dialogFormVisible=true
-    },
     handleDelete(index, row) {
-      this.$alert("是否永久删除该一级设备类型", '提示', {
+      console.log("**********",row.equipmentFirstTypeId)
+      this.$alert(`是否永久删除:\"${row.equipmentFirstTypeName}\"设备类型`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'info',
+        type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
             delEquipmentFirstType(row.equipmentFirstTypeId).then((response) => {
+              console.log("**********",row.equipmentFirstTypeId)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
-                showClose: false
+                showClose: true
               }).then(() => {
-                this.dataName="all"
+                this.dataName=""
                 this.fetchData()
               })
             })
@@ -317,7 +263,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      //console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
@@ -343,10 +289,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-//*{
-//  font-size: 18px;
-//}
-
+/**{
+  font-size: 18px;
+}*/
+.el-select-dropdown .el-scrollbar {
+  position: relative;
+}
 .searchInput {
   height: 40px;
   text-align: center;
