@@ -57,7 +57,6 @@
             :lg="3"
             :xl="3"
           >
-
             <el-autocomplete
               style="width: 240px;"
               autosize
@@ -66,6 +65,7 @@
               v-model="inputValue"
               :fetch-suggestions="querySearch"
               placeholder="请输入内容"
+              clearable
               @select="handleSelect"
             ></el-autocomplete>
           </el-col>
@@ -588,7 +588,12 @@ export default {
       isGuaranteePeriodSearch:false,
       infoInput:[],
       guaranteePeriodSearchCondition:'',
-      guaranteePeriodSearchValue:'',
+      tempGuaranteePeriodSearchCondition:'',
+      guaranteePeriodParams:{
+        start:'',
+        limit:'',
+        searchCondition:''
+      },
       guaranteePeriodSearchConditionData:[
         {
           value:'oneYearOverGuaranteePeriod',
@@ -695,7 +700,6 @@ export default {
     getInitValue(name, initdatas) {
       InitValue(initdatas).then((response) => {
         this.initval = response.data.items
-
         for (let i = 0; i < this.initval.length; i++) {
           this.foad.push({label: name, value: name + this.initval[i]})
         }
@@ -733,6 +737,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.isMultiline=false
+      this.isGuaranteePeriodSearch = false
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
@@ -753,7 +758,6 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      // console.log(this.initdata)
       getList(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
@@ -802,8 +806,8 @@ export default {
     },
 
 
-    handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`)
+  /*  handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
         this.infoInput.start=this.start
@@ -818,8 +822,7 @@ export default {
       }else {
         this.fetchData()
       }
-
-    },
+    },*/
     handleCurrentChange(val) {
       this.listLoading=true
       this.currentPage=val
@@ -827,19 +830,29 @@ export default {
         this.infoInput.start=val - 1
         this.infoInput.limit=this.limit
         const params=this.infoInput
-
         searchComprehensiveInfoByMultipleConditions(params).then(res=>{
           this.list=res.data.items
           this.total=res.data.total
           this.listLoading = false
         })
-      }else {
+      }else if(this.isGuaranteePeriodSearch){
+        const params ={
+          start:(val - 1) * this.limit,
+          limit:this.limit,
+          searchCondition:this.tempGuaranteePeriodSearchCondition,
+        }
+        guaranteePeriodSearchByTime(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading=false
+        })
+      }
+      else {
         const params = {
           dataName: this.initname,
           dataValue: this.inputValue,
           status: "0",
           start: (val - 1) * this.limit,
-          // start: val - 1,
           limit: this.limit
         }
         getList(params).then((response) => {
@@ -852,6 +865,7 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    //弹出保修期查询框
     guaranteePeriodSearchPanel(){
       this.guaranteePeriodSearchDialogVisible = true
     },
@@ -877,7 +891,10 @@ export default {
     },
 
    guaranteePeriodSearchHandel(){
-     this.currentPage=1;
+      this.currentPage = 1
+      this.tempGuaranteePeriodSearchCondition = this.guaranteePeriodSearchCondition
+     // this.guaranteePeriodParams.start = this.start
+     // this.guaranteePeriodParams.limit = this.limit
      const params ={
        start:this.start,
        limit:this.limit,

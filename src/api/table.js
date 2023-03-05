@@ -3,7 +3,6 @@ import request from '@/utils/request'
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
   // console.log(typeof (params))
   return request({
     params,
@@ -16,7 +15,6 @@ export function getList(obj) {
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
   // console.log(typeof (params))
   return request({
     params,
