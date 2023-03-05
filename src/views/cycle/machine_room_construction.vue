@@ -96,7 +96,7 @@
               highlight-current-row
               stripe
             >
-              <el-table-column align="center" type="index" />
+              <el-table-column align="center" type="index" :index="typeIndex"/>
               <el-table-column
                 v-for="(item,index) in basicvalue"
                 :key="index"
@@ -142,7 +142,7 @@
               highlight-current-row
               stripe
             >
-              <el-table-column align="center" type="index" />
+              <el-table-column align="center" type="index" :index="typeIndex"/>
               <el-table-column
                 v-for="(item,index) in basicvalue"
                 :key="index"
@@ -173,6 +173,7 @@
         <div class="block">
           <el-pagination
             :page-size="limit"
+            :current-page="currentPage"
             layout="total, prev, pager, next, jumper"
             :total="total"
             @current-change="handleCurrentChange"
@@ -201,10 +202,10 @@ export default {
     return {
       start:0,
       limit:10,
+      currentPage: 1,
       tab_name: '0',
       list: null,
       total: 0,
-      currentPage1: 5,
       DataName: 'all',
       initname: ['123'],
       department: '',
@@ -252,6 +253,7 @@ export default {
   methods: {
     search(){
       this.start = 0
+      this.currentPage=1
       this.fetchData()
     },
     fetchData() {
@@ -274,10 +276,11 @@ export default {
         dataValue: this.inputValue,
         status: this.tab_name
       }
-      getMachineRoomTotal(numparams).then((response) => {
-        this.total = response.data
-      })
+      // getMachineRoomTotal(numparams).then((response) => {
+      //   this.total = response.data
+      // })
       getMachineRoomByPage(params).then((response) => {
+        this.total = response.data.total
         this.list = response.data.items
         this.listLoading = false
       })
@@ -316,12 +319,19 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       this.start = (val - 1)
       this.fetchData()
     },
     changeTab(name) {
       //console.log(this.tab_name)
+      this.start=0
+      this.currentPage=1
       this.fetchData()
+    },
+    //序号排序
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit +1
     }
   }
 }

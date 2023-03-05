@@ -57,7 +57,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column type="index" />
+          <el-table-column align="center" type="index" :index="typeIndex"/>
           <af-table-column
             v-for="(value, key, index) in labels"
             :key="index"
@@ -108,6 +108,7 @@
         <div class="block">
           <el-pagination
             :page-size="limit"
+            :current-page="currentPage"
             layout="total, prev, pager, next, jumper"
             :total="total_N"
             @current-change="handleCurrentChange"
@@ -152,7 +153,7 @@ export default {
       list_network:null,
       total: 0,
       total_N:0,
-      currentPage1: 10,
+      currentPage: 1,
       DataName: 'all',
       initname: ['123'],
       department: '',
@@ -246,6 +247,7 @@ export default {
   methods: {
     search(){
       this.start = 0
+      this.currentPage=1
       this.fetchData()
     },
     async handleAsync(val){
@@ -325,6 +327,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.start = (val - 1) * this.limit
+      this.currentPage=val
       this.fetchData()
     },
     async changeRoom(row) {
@@ -345,8 +348,10 @@ export default {
           }
         })
       })
-
-
+    },
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
     }
   }
 }

@@ -84,7 +84,7 @@
               icon="el-icon-search"
               clearable="true"
               style="margin-left: 40px"
-              @click="fetchData()"
+              @click="searchOne()"
             >搜索</el-button>
           </el-col>
           <el-col
@@ -132,7 +132,9 @@
           <el-table-column
             type="index"
             align="center"
-          />
+            :index="typeIndex"
+          >
+          </el-table-column>
           <el-table-column
             v-for="(item,index) in dataname"
             :key="index"
@@ -183,11 +185,11 @@
         <div class="block">
           <el-pagination
             :page-size="10"
+            :current-page.sync="currentPage"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
           />
         </div>
       </div>
@@ -589,11 +591,12 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput){
+    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.isMultiline=true;
       this.start=0;
       this.currentPage=1;
       this.infoInput=infoInput;
+      this.infoInput.postName=postNameReturn
       this.list = searchAllData.items;
       this.total = searchAllData.total;
       this.dialogVisible = false;
@@ -705,6 +708,12 @@ export default {
         cancelButtonText: '取消'
       })
     },
+    //单条件搜索
+    searchOne(){
+      this.start=0
+      this.currentPage=1
+      this.fetchData()
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
@@ -799,7 +808,7 @@ export default {
       //console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
-        this.infoInput.start=this.start
+        this.infoInput.start=this.start*this.limit
         this.infoInput.limit=this.limit
         this.listLoading=true
         const params=this.infoInput
@@ -817,10 +826,9 @@ export default {
       this.listLoading=true
       this.currentPage=val
       if(this.isMultiline){
-        this.infoInput.start=val - 1
+        this.infoInput.start=(val - 1)*this.limit
         this.infoInput.limit=this.limit
         const params=this.infoInput
-
         searchComprehensiveInfoByMultipleConditions(params).then(res=>{
           this.list=res.data.items
           this.total=res.data.total
@@ -832,7 +840,6 @@ export default {
           dataValue: this.inputValue,
           status: "0",
           start: (val - 1) * this.limit,
-          // start: val - 1,
           limit: this.limit
         }
         getList(params).then((response) => {
@@ -847,6 +854,10 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+    },
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
     }
   }
 }
@@ -932,60 +943,5 @@ export default {
 .block {
   text-align: center;
 }
-</style>
-
-<style  lang="less">
-//覆盖样式
-
-
-.el-autocomplete-suggestion.el-scrollbar {
-  //  height: 420px;
-  //  overflow: hidden;
-  overflow-y: scroll;
-  position: relative;
-}
-.el-select-dropdown__item {
-  height: 30px;
-  flex: 1 0 25%;
-  margin: 10px;
-}
-.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px;
-  height: auto;
-  width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-}
-
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: auto;
-  height: 100%;
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #1d1e1f;
-  background-color: #d2d2d2;
-  .el-select-dropdown__wrap {
-    max-height: none;
-  }
-}
-.el-button--primary {
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.searchInput[data-v-35ac1005] {
-    background-color: #d3dce6;
-}
-.transparent-dialog{
-  background-color: rgba(300,300,300,0.8)
-}
-
-//.transparent-dialog .el-dialog__body {
-//  background: transparent;
-//}
 </style>
 
