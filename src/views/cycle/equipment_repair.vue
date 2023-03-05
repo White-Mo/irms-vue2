@@ -86,20 +86,16 @@
               stripe
             >
               <el-table-column align="center" type="index" :index="typeIndex "/>
-              <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+              <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
                 </template>
-              </el-table-column>
+              </af-table-column>
               <el-table-column prop="tag" align="center" label="状态" width="100">
                 <el-tag type="primary">正常</el-tag>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200px">
+              <el-table-column fixed="right" align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-<!--                  <el-button-->
-<!--                    size="mini"-->
-<!--                    @click="handleDetail(scope.$index, scope.row)"-->
-<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRepair(scope.$index, scope.row)"
@@ -118,20 +114,16 @@
               stripe
             >
               <el-table-column align="center" type="index" :index="typeIndex"/>
-              <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+              <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
                 </template>
-              </el-table-column>
+              </af-table-column>
               <el-table-column prop="tag" label="标签" width="100">
                 <el-tag type="danger">维修中</el-tag>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200px">
+              <el-table-column fixed="right" align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-<!--                  <el-button-->
-<!--                    size="mini"-->
-<!--                    @click="handleDetail(scope.$index, scope.row)"-->
-<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRecover(scope.$index, scope.row)"
