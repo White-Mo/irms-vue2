@@ -1,5 +1,6 @@
 <template>
-  <div >
+  <div>
+    <div v-show="ifUpdate==='0'" >
     <el-row>
       <el-col :span="24">
         <div class="grid-content bg-purple-dark">
@@ -7,118 +8,137 @@
         </div>
       </el-col>
     </el-row>
-    <el-row
-      :gutter="10"
-      class="bg-condition"
-    >
-<!--      <el-col
-        :xs="2"
-        :sm="2"
-        :md="2"
-        :lg="2"
-        :xl="2"
+      <el-row
+        :gutter="10"
+        class="bg-condition"
       >
-        <span>查询条件：</span>
-      </el-col>
-      <el-col
-        :xs="3"
-        :sm="3"
-        :md="3"
-        :lg="3"
-        :xl="3"
+        <!--      <el-col
+                :xs="2"
+                :sm="2"
+                :md="2"
+                :lg="2"
+                :xl="2"
+              >
+                <span>查询条件：</span>
+              </el-col>
+              <el-col
+                :xs="3"
+                :sm="3"
+                :md="3"
+                :lg="3"
+                :xl="3"
+              >
+                <el-select
+                  v-model="dataName"
+                  placeholder="详细字段查询"
+                  multiple
+                  size="medium"
+                >
+                  <el-option
+                    v-for="(item,index) in basicValue"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                    class="searchInput"
+                  />
+                </el-select>
+              </el-col>
+              <el-col
+                :xs="3"
+                :sm="3"
+                :md="3"
+                :lg="3"
+                :xl="3"
+              >
+                <el-input
+                  v-model="inputValue"
+                  placeholder="输入查询内容"
+                  clearable
+                  size="medium"
+                />
+              </el-col>
+              <el-col
+                :xs="2"
+                :sm="2"
+                :md="2"
+                :lg="2"
+                :xl="2"
+              >
+                <el-button
+                  size="medium"
+                  type="primary"
+                  icon="el-icon-search"
+                  clearable="true"
+                  @click="fetchData()"
+                >搜索</el-button>
+              </el-col>-->
+        <el-col
+          :xs="1"
+          :sm="1"
+          :md="1"
+          :lg="1"
+          :xl="1">
+          <el-button
+            size="medium"
+            :plain="true"
+            @click="Refresh()"
+          >返回</el-button>
+        </el-col>
+      </el-row>
+      <el-table
+        height="76.5vh"
+        :row-style="{height:'6.26vh'}"
+        :cell-style="{padding:'0px'}"
+        v-loading="listLoading"
+        :disable="true"
+        :data="list"
+        element-loading-text="Loading"
+        border
+        highlight-current-row
+        stripe
       >
-        <el-select
-          v-model="dataName"
-          placeholder="详细字段查询"
-          multiple
-          size="medium"
-        >
-          <el-option
-            v-for="(item,index) in basicValue"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-            class="searchInput"
-          />
-        </el-select>
-      </el-col>
-      <el-col
-        :xs="3"
-        :sm="3"
-        :md="3"
-        :lg="3"
-        :xl="3"
-      >
-        <el-input
-          v-model="inputValue"
-          placeholder="输入查询内容"
-          clearable
-          size="medium"
-        />
-      </el-col>
-      <el-col
-        :xs="2"
-        :sm="2"
-        :md="2"
-        :lg="2"
-        :xl="2"
-      >
-        <el-button
-          size="medium"
-          type="primary"
-          icon="el-icon-search"
-          clearable="true"
-          @click="fetchData()"
-        >搜索</el-button>
-      </el-col>-->
-      <el-col
-        :xs="1"
-        :sm="1"
-        :md="1"
-        :lg="1"
-        :xl="1">
-        <el-button
-          size="medium"
-          :plain="true"
-          @click="Refresh()"
-        >返回</el-button>
-      </el-col>
-    </el-row>
-<!--    <div style="height: 76.5vh; background-color: #5db2ff; line-height: 76.5vh; text-align: center; font-size: 80px" >
-      我是通过业务系统查找设备页面</div>-->
-    <el-table
-      height="76.5vh"
-      :row-style="{height:'6.26vh'}"
-      :cell-style="{padding:'0px'}"
-      v-loading="listLoading"
-      :disable="true"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      highlight-current-row
-      stripe
-    >
-      <el-table-column align="center" type="index" />
-      <el-table-column  prop="BasicInfoId" label="设备编号" ></el-table-column>
-      <el-table-column  prop="equipmentName" label="设备名称" ></el-table-column>
-      <el-table-column  prop="postName" label="设备所属单位" ></el-table-column>
-      <el-table-column  prop="departmentName" label="设备所属部门" ></el-table-column>
-    </el-table>
+        <el-table-column align="center" type="index" />
+        <el-table-column  prop="BasicInfoId" label="设备编号" ></el-table-column>
+        <el-table-column  prop="equipmentName" label="设备名称" ></el-table-column>
+        <el-table-column  prop="postName" label="设备所属单位" ></el-table-column>
+        <el-table-column  prop="departmentName" label="设备所属部门" ></el-table-column>
+        <el-table-column  fixed="right" align="center" label="操作" width="200px">
+          <template slot-scope="scope">
+            <el-button
+              type="success"
+              size="mini"
+              @click="handleDetail(scope.$index, scope.row)"
+            >详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div v-if="ifUpdate === '2'">
+      <updateInfo
+        :row="row"
+        :current-show="ifUpdate"
+        @changeDiv="changeDiv"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import {getEquipmentByBusinessSystemId} from "@/api/baseparameter";
-
+import updateInfo from "@/components/Infomanage/updateInfo";
 export default {
   name:'searchEquipmentByBusinessSystem',
   props:['tempBusinessSystemNameId'],
+  components: {
+    updateInfo,
+  },
   data(){
     return{
       // listLoading: true,
       list:null,
       listLoading:true,
-
+      row:{},
+      ifUpdate:'0',
     }
   },
   mounted() {
@@ -139,6 +159,14 @@ export default {
       location.reload();
     },
     //--------------刷新功能结束---------------------
+
+    handleDetail(index, row) {
+      this.row = row
+      this.ifUpdate = '2'
+    },
+    changeDiv(value) {
+      this.ifUpdate = value
+    }
 
   }
 }

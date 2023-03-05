@@ -74,6 +74,34 @@
               @click="search()"
             >搜索</el-button>
           </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              clearable="true"
+              @click="batchScrap()"
+            >批量报废</el-button>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              clearable="true"
+              @click="batchRecoverNormal()"
+            >批量恢复正常</el-button>
+          </el-col>
         </el-row>
         <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
           <el-tab-pane label="正常设备" name="0">
@@ -84,22 +112,25 @@
               border
               highlight-current-row
               stripe
+              @selection-change="handleSelectionNormalChange"
             >
-              <el-table-column align="center" type="index" :index="typeIndex"/>
-              <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+              <el-table-column align="center" type="selection" />
+              <el-table-column align="center" type="index" :index="typeIndex" />
+              <af-table-column
+                v-for="(value,key,index) in labels"
+                :key="index"
+                align="center"
+                :label="value"
+              >
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
                 </template>
-              </el-table-column>
+              </af-table-column>
               <el-table-column prop="tag" align="center" label="标签" width="100">
                 <el-tag type="primary">正常</el-tag>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200px">
+              <el-table-column  fixed="right" align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-<!--                  <el-button-->
-<!--                    size="mini"-->
-<!--                    @click="handleDetail(scope.$index, scope.row)"-->
-<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleScrap(scope.$index, scope.row)"
@@ -116,22 +147,20 @@
               border
               highlight-current-row
               stripe
+              @selection-change="handleSelectionNormalChange"
             >
+              <el-table-column align="center" type="selection" />
               <el-table-column align="center" type="index" :index="typeIndex"/>
-              <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
+              <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
                 </template>
-              </el-table-column>
+              </af-table-column>
               <el-table-column prop="tag" align="center" label="标签" width="100">
                 <el-tag type="danger">报废</el-tag>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200px">
+              <el-table-column fixed="right" align="center" label="操作" width="200px">
                 <template slot-scope="scope">
-<!--                  <el-button-->
-<!--                    size="mini"-->
-<!--                    @click="handleDetail(scope.$index, scope.row)"-->
-<!--                  >详情</el-button>-->
                   <el-button
                     size="mini"
                     @click="handleRecover(scope.$index, scope.row)"
@@ -157,7 +186,7 @@
 
 <script>
 import { hunhe1 } from '@/layout/mixin/cycleMix'
-import { changeStatus } from '@/api/table'
+import {batchChangeEquipmentStatus,changeStatus} from '@/api/table'
 
 export default {
   filters: {
@@ -237,7 +266,9 @@ export default {
         cabinetName: '机柜编号',
         onlineTime: '上线时间',
         guaranteePeriod: '保修期',
-      }
+      },
+      selectedData:[],
+      tempEquipmentId:[],
     }
   },
   created() {
@@ -291,6 +322,53 @@ export default {
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit+1
+    },
+    handleSelectionNormalChange(val){
+      this.selectedData = val
+    },
+    //批量报废
+    batchScrap(){
+      if(this.selectedData.length>=1){
+        this.selectedData.forEach(element=>{
+          this.tempEquipmentId.push(element.equipmentId)
+        })
+        const params = {
+          id:this.tempEquipmentId,
+          status:'2'
+        }
+        batchChangeEquipmentStatus(params).then(res=>{
+          this.$message.success(res.message)
+        })
+        this.tempEquipmentId = []
+        //报废成功，等待2秒后重新刷新数据，重新渲染批量报废成功后的数据
+        setTimeout(() => {
+          location.reload();
+        }, 2000)
+      }else {
+        this.$message.error('请选择要报废的设备')
+      }
+    },
+    //批量恢复正常
+    batchRecoverNormal(){
+      if(this.selectedData.length>=1){
+        this.selectedData.forEach(element=>{
+          this.tempEquipmentId.push(element.equipmentId)
+        })
+        const params = {
+          id:this.tempEquipmentId,
+          status:'0'
+        }
+        batchChangeEquipmentStatus(params).then(res=>{
+          this.$message.success(res.message)
+        })
+        this.tempEquipmentId = []
+        //报废成功，等待2秒后重新刷新数据，重新渲染批量报废成功后的数据
+        setTimeout(() => {
+          location.reload();
+        }, 2000)
+      }else {
+        this.$message.error('请选择要恢复正常的设备')
+      }
     }
   }
 }

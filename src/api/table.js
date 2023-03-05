@@ -3,7 +3,6 @@ import request from '@/utils/request'
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
   // console.log(typeof (params))
   return request({
     params,
@@ -16,7 +15,6 @@ export function getList(obj) {
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
-  console.log(params)
   // console.log(typeof (params))
   return request({
     params,
@@ -92,6 +90,17 @@ export function changeStatus(eq) {
     responseType: 'json'
   })
 }
+
+export function batchChangeEquipmentStatus(params) {
+  return request({
+    params,
+    url: '/home/inforesources/batchChangeEquipmentStatus',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
 export function InitValue(initdata) {
 console.log(initdata);
   return request({
@@ -109,6 +118,16 @@ export function searchComprehensiveInfoByMultipleConditions(data) {
   return request({
     params: data,
     url: '/home/inforesources/searchComprehensiveInfoByMultipleConditions',
+    method: 'post',
+    responseType: 'json',
+  })
+}
+
+//保修期查询
+export function guaranteePeriodSearchByTime(data) {
+  return request({
+    params: data,
+    url: '/home/inforesources/guaranteePeriodSearchByTime',
     method: 'post',
     responseType: 'json',
   })

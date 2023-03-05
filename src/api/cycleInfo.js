@@ -3,7 +3,7 @@
  * @Author:  wr
  * @Date: 2022-11-5 15:13:06
  * @LastEditTime: 2022-11-05 23:29:06
- * @LastEditors:  
+ * @LastEditors:
  */
 import request from '@/utils/request'
 
@@ -24,3 +24,15 @@ export function updateDepartment(params) {
       responseType: 'json'
     })
   }
+
+
+export function batchUpdateDepartment(params) {
+  return request({
+    params,
+    url: '/home/cycle/batchUpdateDepartment',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+

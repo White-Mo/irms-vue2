@@ -4,7 +4,7 @@
       <i class="el-icon-s-order" /><span>信息管理</span>
     </div>
     <div class="app-container">
-      <div class="table_end">
+      <div class="table_start">
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">数据报表制作</div>
@@ -90,7 +90,7 @@
 
           >
             <el-table-column label="" width="40" type="selection" />
-            <el-table-column label="" width="40" type="index" />
+            <el-table-column label="" width="50" type="index" />
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -106,18 +106,6 @@
           </el-table>
           <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
           <el-alert v-if="isMore" title="没有更多数据" type="warning" center show-icon></el-alert>
-          <!-- <div class="tabListPage" style="text-align: center">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="pageSizes"
-              :page-size="PageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount"
-            >
-            </el-pagination>
-          </div> -->
           <el-dialog
             title="详表导出模式选择"
             :visible.sync="centerDialogVisible"
@@ -388,7 +376,7 @@ export default {
           dataValue: this.inputValue,
           start: this.tableData.length ? this.tableData.length : 0,
           limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-          status: ''
+          status: '0'
         }
         if(this.tableData.length < this.totalCount){
 
@@ -445,12 +433,12 @@ export default {
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: ''
+        status: '0'
       }
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: ''
+        status: '0'
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -483,14 +471,14 @@ export default {
       const numparams = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: ''
+        status: '0'
       }
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: ''
+        status: '0'
       }
       getdataCount(numparams).then((response) => {
         this.totalCount = response.data.total
@@ -572,7 +560,7 @@ export default {
         const numparams = {
           dataName: this.initname,
           dataValue: this.inputValue,
-          status: ''
+          status: '0'
         }
         let item_count = (await getdataCount(numparams)).data.total
         const params = {
@@ -580,7 +568,7 @@ export default {
           dataValue: this.inputValue,
           start: 0,
           limit: item_count,
-          status: ''
+          status: '0'
         }
         getList(params).then((response) => {
           getExcelDemo1(response.data.items)
@@ -632,7 +620,7 @@ export default {
             const numparams = {
               dataName: this.initname,
               dataValue: this.inputValue,
-              status: ''
+              status: '0'
             }
             let item_count = (await getdataCount(numparams)).data.total
             const params = {
@@ -640,7 +628,7 @@ export default {
               dataValue: this.inputValue,
               start: 0,
               limit: item_count,
-              status: ''
+              status: '0'
             }
             item = (await getList(params)).data.items
           }
@@ -879,3 +867,56 @@ export default {
   width:100%;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
