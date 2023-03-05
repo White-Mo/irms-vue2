@@ -84,7 +84,7 @@
               icon="el-icon-search"
               clearable="true"
               style="margin-left: 40px"
-              @click="fetchData()"
+              @click="searchOne()"
             >搜索</el-button>
           </el-col>
 <!--          <el-col-->
@@ -198,11 +198,11 @@
         <div class="block">
           <el-pagination
             :page-size="10"
+            :current-page.sync="currentPage"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
           />
         </div>
       </div>
@@ -721,6 +721,12 @@ export default {
         cancelButtonText: '取消'
       })
     },
+    //单条件搜索
+    searchOne(){
+      this.start=0
+      this.currentPage=1
+      this.fetchData()
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
@@ -847,7 +853,6 @@ export default {
           dataValue: this.inputValue,
           status: "0",
           start: (val - 1) * this.limit,
-          // start: val - 1,
           limit: this.limit
         }
         getList(params).then((response) => {

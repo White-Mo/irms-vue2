@@ -74,7 +74,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="fetchData()"
+              @click="search()"
             >搜索</el-button>
           </el-col>
           <el-col
@@ -132,7 +132,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" />
+          <el-table-column align="center" type="index" :index="typeIndex"/>
           <el-table-column
             v-for="(item,index) in basicvalue"
             :key="index"
@@ -167,6 +167,7 @@
         <div class="block">
           <el-pagination
             :page-size="10"
+            :current-page="currentPage"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
@@ -274,7 +275,7 @@ export default {
       drawer: false,
       list: null,
       total: 0,
-      currentPage: 0,
+      currentPage: 1,
       limit:10,
       initName:'',
       inputValue: '',
@@ -315,6 +316,11 @@ export default {
 
   },
   methods: {
+    search(){
+      this.start=0
+      this.currentPage=1
+      this.fetchData()
+    },
     // 综合数据管理展示与查询--lry
     fetchData() {
       // console.log(this.basicValue)
@@ -333,7 +339,7 @@ export default {
         dataName: this.initName,
         dataValue: this.inputValue,
         status:"",
-        start: this.currentPage,
+        start: this.currentPage-1,
         limit: this.limit
       }
       const numparams = {
@@ -429,17 +435,17 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
       this.limit=val
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
         status:"",
         start: val-1,
-        limit: 10
+        limit: this.limit
       }
       getMachineRoomByPage(params).then((response) => {
         this.list = response.data.items
@@ -488,6 +494,9 @@ export default {
       console.log("============");
         this.$forceUpdate();
       },
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit+1
+    }
   }
 }
 </script>
@@ -548,67 +557,5 @@ export default {
 }
 .block{
   text-align: center;
-}
-</style>
-<style  lang="less">
-//覆盖样式
-.el-select-dropdown__item {
-  height: 30px;
-  flex: 1 0 25%;
-  margin: 10px;
-}
-.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px;
-  height: auto;
-  width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-}
-.el-select-dropdown__wrap{
-  max-height: none;
-}
-.el-scrollbar {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: auto;
-  height: 100%;
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #1d1e1f;
-  background-color: #d2d2d2;
-}
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
-}
-
-.el-button--primary {
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
-}
-.myel_row {
-  margin-bottom: 2px !important;
-  background-color: #d3dce6;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-.radio_class{
-  display:inline-block;
-  height:2rem;
-  width:100%;
-}
-.el-input-group{
-  width: 10%;
-  margin: 0px 0px 25px 100px;
-}
-.el-drawer.ttb{
-  height: auto !important;
 }
 </style>

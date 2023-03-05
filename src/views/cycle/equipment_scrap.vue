@@ -85,7 +85,7 @@
               highlight-current-row
               stripe
             >
-              <el-table-column type="index" />
+              <el-table-column align="center" type="index" :index="typeIndex"/>
               <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
@@ -117,7 +117,7 @@
               highlight-current-row
               stripe
             >
-              <el-table-column type="index" />
+              <el-table-column align="center" type="index" :index="typeIndex"/>
               <el-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
@@ -144,6 +144,7 @@
         <div class="block">
           <el-pagination
             :page-size="limit"
+            :current-page="currentPage"
             layout="total, prev, pager, next, jumper"
             :total="total"
             @current-change="handleCurrentChange"
@@ -177,7 +178,7 @@ export default {
       tab_name: '0',
       list: null,
       total: 0,
-      currentPage1: 5,
+      currentPage: 1,
       DataName: 'all',
       initname: ['123'],
       department: '',
@@ -246,6 +247,7 @@ export default {
   methods: {
     search(){
       this.start = 0
+      this.currentPage=1
       this.fetchData()
     },
     handleDetail(index, row) {
@@ -276,12 +278,19 @@ export default {
       })
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       this.start = (val - 1) * this.limit
       this.fetchData()
     },
     changeTab(name) {
       //console.log(this.tab_name)
+      this.start=0
+      this.currentPage=1
       this.fetchData()
+    },
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit+1
     }
   }
 }

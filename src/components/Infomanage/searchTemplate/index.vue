@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 550px">
+  <div style="height: auto">
     <el-row :gutter="20" style="margin-bottom: 10px;">
       <el-col  :span="12">
         <el-label>所属单位：</el-label>
