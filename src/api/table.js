@@ -125,3 +125,13 @@ export function searchComprehensiveInfoByMultipleConditions(data) {
   })
 }
 
+//保修期查询
+export function guaranteePeriodSearchByTime(data) {
+  return request({
+    params: data,
+    url: '/home/inforesources/guaranteePeriodSearchByTime',
+    method: 'post',
+    responseType: 'json',
+  })
+}
+

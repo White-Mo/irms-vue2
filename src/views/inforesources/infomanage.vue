@@ -51,11 +51,11 @@
 
           </el-col>
           <el-col
-            :xs="4"
-            :sm="4"
-            :md="4"
-            :lg="4"
-            :xl="4"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
 
             <el-autocomplete
@@ -87,18 +87,32 @@
             >搜索</el-button>
           </el-col>
           <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="3"
-            :xl="1"
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
           >
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 50px"
+              style="margin-left: 10px"
               @click="addInfo()"
             >添加设备信息</el-button>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            <el-button
+              size="medium"
+              type="primary"
+              style="margin-left: 10px"
+              @click="guaranteePeriodSearchPanel()"
+            >保修期查询</el-button>
           </el-col>
           <el-col
             :xs="1"
@@ -110,7 +124,7 @@
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 420px"
+              style="margin-left:400px"
               @click="search()"
             >筛选</el-button>
           </el-col>
@@ -179,6 +193,29 @@
           custom-class="transparent-dialog">
           <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
         </el-dialog>
+
+        <el-dialog
+          title="保修期查询"
+          :visible.sync="guaranteePeriodSearchDialogVisible"
+          width="30%"
+          style="margin-top: -80px;"
+          custom-class="transparent-dialog">
+          <div align="center" style="margin-bottom: 20px;">
+            <span>查询条件：</span>
+            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
+              <el-option
+               v-for="(item, index) in guaranteePeriodSearchConditionData"
+               :key="index"
+               :value="item.value"
+               :label="item.label"
+               class="searchInput"
+              ></el-option>
+            </el-select>
+<!--            <el-input v-model="guaranteePeriodSearchValue" placeholder="请输入查询时间 (格式20230101)" style="width: 260px;" clearable></el-input>-->
+            <el-button type="primary" style="margin-left: 10px" @click="guaranteePeriodSearch">查询</el-button>
+          </div>
+        </el-dialog>
+
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -205,7 +242,14 @@
 </template>
 
 <script>
-import {getList, getdataCount, delEquipment, InitValue, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
+import {
+  getList,
+  getdataCount,
+  delEquipment,
+  InitValue,
+  searchComprehensiveInfoByMultipleConditions,
+  guaranteePeriodSearchByTime
+} from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import searchTemplate from "@/components/Infomanage/searchTemplate";
@@ -242,6 +286,7 @@ export default {
       cpu_middle_guar: 'all',
       initdata: [],
       dialogVisible: false,
+      guaranteePeriodSearchDialogVisible:false,
       row: {},
       list: null,
       total: 0,
@@ -540,7 +585,28 @@ export default {
       ],
       value: '',
       isMultiline:false,
+      isGuaranteePeriodSearch:false,
       infoInput:[],
+      guaranteePeriodSearchCondition:'',
+      guaranteePeriodSearchValue:'',
+      guaranteePeriodSearchConditionData:[
+        {
+          value:'oneYearOverGuaranteePeriod',
+          label:'一年后过保'
+        },
+        {
+          value:'sixMonthsOverGuaranteePeriod',
+          label:'半年后过保'
+        },
+        {
+          value:'threeMonthsOverGuaranteePeriod',
+          label:'三个月后过保'
+        },
+        {
+          value:'OverGuaranteePeriod',
+          label:'已过保'
+        },
+      ]
     }
   },
   created() {
@@ -786,9 +852,49 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    guaranteePeriodSearchPanel(){
+      this.guaranteePeriodSearchDialogVisible = true
+    },
+    //保修期搜索
+    guaranteePeriodSearch(){
+      console.log("查询的条件:",this.guaranteePeriodSearchCondition)
+      //一年后过保
+      if(this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod'){
+        this.guaranteePeriodSearchHandel()
+      }
+      //半年后过保
+      else if(this.guaranteePeriodSearchCondition === 'sixMonthsOverGuaranteePeriod'){
+        this.guaranteePeriodSearchHandel()
+      }
+      //三个月后过保
+      else if(this.guaranteePeriodSearchCondition === 'threeMonthsOverGuaranteePeriod'){
+        this.guaranteePeriodSearchHandel()
+      }
+      //已过保
+      else if(this.guaranteePeriodSearchCondition === 'OverGuaranteePeriod'){
+        this.guaranteePeriodSearchHandel()
+      }
+    },
+
+   guaranteePeriodSearchHandel(){
+     this.currentPage=1;
+     const params ={
+       start:this.start,
+       limit:this.limit,
+       searchCondition:this.guaranteePeriodSearchCondition,
+     }
+     guaranteePeriodSearchByTime(params).then(res=>{
+       this.list=res.data.items
+       this.total=res.data.total
+       this.guaranteePeriodSearchDialogVisible = false
+       this.guaranteePeriodSearchCondition = ''
+       this.isGuaranteePeriodSearch = true
+       this.listLoading=false
+     })
+   },
     changeDiv(value) {
       this.ifUpdate = value
-    }
+    },
   }
 }
 </script>
