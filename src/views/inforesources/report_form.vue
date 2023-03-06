@@ -402,10 +402,11 @@ export default {
     }
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput){
+    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.dialogVisible = false;
       this.isMultiline=true;
       this.infoInput=infoInput;
+      this.infoInput.postName=postNameReturn
       this.listLoading=true;
       this.tableData=[];
       let num = 1
@@ -415,7 +416,7 @@ export default {
       }
       this.tableData = this.tableData.concat(searchAllData.items)
       this.totalCount=searchAllData.total;
-      this.listLoading=false;
+      this.listLoading=false
     },
     search(){
       this.dialogVisible = true

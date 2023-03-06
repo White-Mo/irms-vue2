@@ -669,10 +669,11 @@ export default {
   },
   methods: {
     //接收多条件搜索的数据重新渲染
-    receiveAllSearchData(searchAllData,infoInput){
+    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.dialogVisible = false;
       this.isMultiline=true;
       this.infoInput=infoInput;
+      this.infoInput.postName=postNameReturn;
       this.listLoading=true;
       this.tableData=[];
       let num = 1
