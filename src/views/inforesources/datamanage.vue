@@ -130,7 +130,7 @@
 
 
 
-<!--    查看导入反馈-->
+<!--    查看导入反馈-第一版        -->
     <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
       <el-descriptions class="margin-top" title="" :column="2" border>
         <el-descriptions-item v-for="item in repalyData">
@@ -145,6 +145,30 @@
       </el-descriptions>
       <el-button @click="resultBtn()" type="primary">确定</el-button>
     </el-dialog>
+
+    <!--    查看导入反馈-第二版        -->
+<!--    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">-->
+<!--      <el-table-->
+<!--        :data="tableUpdateData"-->
+<!--        highlight-current-row-->
+<!--        style="width: 100%" border>-->
+<!--        <el-table-column type="expand" :data="detailedTableUpdateData">-->
+<!--          <template slot-scope="props">-->
+<!--            <el-form label-position="left" inline class="demo-table-expand" v-for="item in detailedTableUpdateData">-->
+<!--              <el-form-item label="字段名">-->
+<!--                <span>{{ item.key() }}</span>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="更新状态">-->
+<!--                <span>{{ props.row.name }}</span>-->
+<!--              </el-form-item>-->
+<!--            </el-form>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column label="小表名" prop="tableName"></el-table-column>-->
+<!--        <el-table-column prop="operation" label="" ></el-table-column>-->
+<!--      </el-table>-->
+<!--    </el-dialog>-->
+
 
 
 
@@ -199,6 +223,11 @@ export default {
       //   value: '汇总表',
       //   label: '汇总表'
       // }],
+
+      //导入结果反馈
+      tableUpdateData:[],
+      detailedTableUpdateData:[],
+
       showDialog:false,
       disabled:false,
       name: '',
@@ -406,15 +435,12 @@ export default {
       }).catch((error) => {
         this.tableData[index].uploadStatus = "上传失败"
         this.uploadResult.fail = this.uploadResult.fail + 1
-        // this.uploadSumxx.failure = this.uploadSumxx.failure + this.checkList[index].value.name + ";  "
         AddExcel({ equipments: equipments }).then(res => {
           //获得数据
           console.log('@@',res)
         }).catch(err => {
           console.log(err)
         })
-        //this.uploadOutcome.上传失败 = this.uploadOutcome.上传失败 + this.checkList[index].value.name + ";" + "\n"
-
       }).finally(() =>{
         this.disabled = false
         console.log('*',this.tableData[index].uploadStatus)

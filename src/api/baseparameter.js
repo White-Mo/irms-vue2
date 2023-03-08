@@ -264,7 +264,7 @@ export function addEquipmentFirstType(data) {
   })
 }
 
-//修改一级设备类型
+/* //修改一级设备类型
 export function  updateEquipmentFirstType(data){
   return request({
     params:data,
@@ -272,7 +272,7 @@ export function  updateEquipmentFirstType(data){
     method: 'post',
     responseType: 'json'
   })
-}
+} */
 
 //新增二级设备类型
 export function addEquipmentSecondType(data) {
