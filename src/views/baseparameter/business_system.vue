@@ -236,7 +236,7 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage-1,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit,
         status:"0"
       }

@@ -764,7 +764,7 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: "0",
-        start: this.start,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit
       }
       console.log('11',this.initname)
@@ -838,7 +838,7 @@ export default {
       // console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
-        this.infoInput.start=this.start*this.limit
+        this.infoInput.start=(this.currentPage-1)*this.limit,
         this.infoInput.limit=this.limit
         this.listLoading=true
         const params=this.infoInput
