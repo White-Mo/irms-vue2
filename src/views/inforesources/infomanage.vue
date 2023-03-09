@@ -148,6 +148,7 @@
             type="index"
             align="center"
             :index="typeIndex"
+            show-overflow-tooltip
           >
           </el-table-column>
           <el-table-column
