@@ -46,6 +46,8 @@
                 :label="item.label"
                 :value="item.value"
                 class="searchInput"
+                :disabled="item.isDisabled"
+                clearable
               />
             </el-select>
 
@@ -283,6 +285,9 @@ export default {
       type: 0,
       edition: 0,
       guaranteePeriod: 0,
+      ipAddress:0,
+      macAddress:0,
+      remains:0,
       restaurants: [],
       foad: [],
       cpu_middle_guar: 'all',
@@ -324,6 +329,7 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -480,6 +486,7 @@ export default {
           width: '200px'
         },
       ],
+
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
         {
@@ -512,6 +519,22 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
+        //新添IP地址Mac地址
+        // PS：搜索框中使用了dataname_option这个数组中IP地址、Mac地址的索引
+        // //若要改此数组元素的顺序，务必修改handleSelectChange()方法中的代码！！！
+        {
+          value:'ipAddress',
+          label:'IP地址',
+          width: '200px',
+        },
+        {
+          value:'macAddress',
+          label:'Mac地址',
+          width: '200px',
+        },
+
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -626,12 +649,11 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
+    receiveAllSearchData(searchAllData,infoInput){
       this.isMultiline=true;
       this.start=0;
       this.currentPage=1;
       this.infoInput=infoInput;
-      this.infoInput.postName=postNameReturn
       this.list = searchAllData.items;
       this.total = searchAllData.total;
       this.dialogVisible = false;
@@ -664,8 +686,50 @@ export default {
     },
 
     // change的处理事件
-
     handleSelectChange(val) {
+      //ip地址、mac地址单独选择事件-选择ip或mac一者，其他所有禁选；选择其他任何，ip和mac二者都禁选
+      if(val.indexOf('ipAddress') !== -1){
+        this.ipAddress = 1
+        for(const a in this.dataname_option){
+          if(this.dataname_option[a].value !== 'ipAddress')
+            this.dataname_option[a].isDisabled = true
+        }
+      }else if(val.indexOf('macAddress') !==-1){
+        this.macAddress = 1
+        for(const b in this.dataname_option){
+          if(this.dataname_option[b].value !== 'macAddress')
+            this.dataname_option[b].isDisabled = true
+        }
+      }else{
+        if(val.length !== 0){
+          this.remains = 1
+          this.dataname_option[6].isDisabled = true
+          this.dataname_option[7].isDisabled = true
+        }
+      }
+      //当ip地址、mac地址取消勾选，恢复正常
+      if(val.indexOf('ipAddress') === -1 && this.ipAddress === 1){
+        for(const c in this.dataname_option){
+          if(this.dataname_option[c].value !== 'ipAddress'){
+            this.dataname_option[c].isDisabled = false
+            this.ipAddress = 0
+          }
+        }
+      }else if(val.indexOf('macAddress') === -1 && this.macAddress === 1){
+        for(const d in this.dataname_option){
+          if(this.dataname_option[d].value !== 'macAddress'){
+            this.dataname_option[d].isDisabled = false
+            this.macAddress = 0
+          }
+        }
+      }else{
+        if(val.length === 0){
+          for(const e in this.dataname_option){
+            this.dataname_option[e].isDisabled = false
+            this.remains = 0
+          }
+        }
+      }
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') == -1 && this.type == 1) {
@@ -684,7 +748,7 @@ export default {
         this.deleteSelect(this.guaranteePeriodID)
         this.guaranteePeriod = 0
       }
-// 特殊字段下拉框进行初始化
+      // 特殊字段下拉框进行初始化
       var key = 0
       for (key = 0; key < val.length; key++) {
         if (val[key] == 'type' && this.type == 0) {
@@ -765,11 +829,11 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      console.log('11',this.initname)
+      // console.log('11',this.initname)
       var flog = false
       for(let i = 0; i <= this.initname.length; i++){
         if(this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress'){
-          console.log("参数1",params)
+          // console.log("参数1",params)
           solelySearchIdAndMacAddress(params).then((response) => {
             let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
             console.log(IpOrMacSearchAllData)
