@@ -146,6 +146,7 @@
             type="index"
             align="center"
             :index="typeIndex"
+            show-overflow-tooltip
           >
           </el-table-column>
           <el-table-column
@@ -197,6 +198,7 @@
         </el-dialog>
 
         <el-dialog
+
           title="保修期查询"
           :visible.sync="guaranteePeriodSearchDialogVisible"
           width="30%"
@@ -832,7 +834,7 @@ export default {
     },
 
 
-  /*  handleSizeChange(val) {
+    handleSizeChange(val) {
       // console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
@@ -848,7 +850,7 @@ export default {
       }else {
         this.fetchData()
       }
-    },*/
+    },
     handleCurrentChange(val) {
       this.listLoading=true
       this.currentPage=val

@@ -142,7 +142,7 @@
               highlight-current-row
               stripe
             >
-              <el-table-column align="center" type="index" :index="typeIndex"/>
+              <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <el-table-column
                 v-for="(item,index) in basicvalue"
                 :key="index"

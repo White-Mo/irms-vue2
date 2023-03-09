@@ -57,7 +57,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" :index="typeIndex"/>
+          <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
           <af-table-column
             v-for="(value, key, index) in labels"
             :key="index"
