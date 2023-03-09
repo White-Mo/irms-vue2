@@ -532,9 +532,9 @@ export function analysisReply(data) {
   analysisData.push(getReplayData(data.AddNetWork))
   analysisData.push(getReplayData(data.AddPortocolPort))
   analysisData.push(getReplayData(data.AddNativeStore))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
 
   console.log('大数组',analysisData)
   analysisData.forEach(function(items){
