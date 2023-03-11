@@ -255,7 +255,7 @@ import {
   delEquipment,
   InitValue,
   searchComprehensiveInfoByMultipleConditions,
-  guaranteePeriodSearchByTime
+  guaranteePeriodSearchByTime, solelySearchIdAndMacAddress
 } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
