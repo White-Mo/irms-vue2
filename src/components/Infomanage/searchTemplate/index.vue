@@ -549,8 +549,6 @@ export default{
       console.log(params)
       params.postName = this.DataName
       params.status='0'
-      // params.postName = (params.postName).replace(/\[\]/g, '\\"\\"')
-      // console.log(this.DataName)
       await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
         this.backDataAll = [];
         this.backDataAll = res.data
@@ -562,11 +560,10 @@ export default{
       this.infoInput.limit=this.limit
       this.infoInput.mark = '';
       const params={ ...this.infoInput}
-      const postNameReturn=this.DataName
-      // console.log(params)
       await this.getSearchData(params)
+      params.postName = this.DataName
       let searchAllData = this.backDataAll;
-      this.$emit('changList', searchAllData,params,postNameReturn);
+      this.$emit('changList', searchAllData,params);
       this.DataName=[];
       for (const key in this.infoInput) {  //每次点击查询后清空输入框里的值
         if (Object.hasOwnProperty.call(this.infoInput, key)) {

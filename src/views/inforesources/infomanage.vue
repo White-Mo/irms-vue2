@@ -32,7 +32,6 @@
             :lg="3"
             :xl="3"
           >
-
             <el-select
               @change="handleSelectChange"
               v-model="DataName"
@@ -848,7 +847,7 @@ export default {
         }
       }
       if(flog === false){
-        console.log("参数2",params)
+        // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
           this.total = response.data.total
@@ -897,8 +896,8 @@ export default {
     },
 
 
-  /*  handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`)
+    handleSizeChange(val) {
+       console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
         this.infoInput.start=this.start*this.limit
@@ -910,10 +909,22 @@ export default {
           this.total=res.data.total
           this.listLoading=false
         })
-      }else {
+      }else if(this.isGuaranteePeriodSearch){
+        const params ={
+          start:this.start*this.limit,
+          limit:this.limit,
+          searchCondition:this.tempGuaranteePeriodSearchCondition,
+        }
+        guaranteePeriodSearchByTime(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading=false
+        })
+      }
+      else {
         this.fetchData()
       }
-    },*/
+    },
     handleCurrentChange(val) {
       this.listLoading=true
       this.currentPage=val
