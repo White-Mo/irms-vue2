@@ -22,8 +22,7 @@
             :lg="2"
             :xl="2"
           >
-
-            <span>查询条件：</span>
+            <span>查询条件:</span>
           </el-col>
           <el-col
             :xs="3"
@@ -37,7 +36,6 @@
               v-model="DataName"
               placeholder="详细字段查询"
               multiple
-              size="medium"
             >
               <el-option
                 v-for="item in dataname_option"
@@ -94,12 +92,40 @@
             :lg="2"
             :xl="2"
           >
+            保修期查询条件:
+          </el-col>
+          <el-col
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
+          >
+            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
+              <el-option
+                v-for="(item, index) in guaranteePeriodSearchConditionData"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+                class="searchInput"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 10px"
-              @click="addInfo()"
-            >添加设备信息</el-button>
+              icon="el-icon-search"
+              clearable="true"
+              @click="guaranteePeriodSearch()"
+            >保修期查询</el-button>
           </el-col>
           <el-col
             :xs="2"
@@ -112,8 +138,8 @@
               size="medium"
               type="primary"
               style="margin-left: 10px"
-              @click="guaranteePeriodSearchPanel()"
-            >保修期查询</el-button>
+              @click="addInfo()"
+            >添加设备信息</el-button>
           </el-col>
           <el-col
             :xs="1"
@@ -125,7 +151,7 @@
             <el-button
               size="medium"
               type="primary"
-              style="margin-left:400px"
+              style="margin-left:250px"
               @click="search()"
             >筛选</el-button>
           </el-col>
@@ -197,29 +223,6 @@
           custom-class="transparent-dialog">
           <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
         </el-dialog>
-
-        <el-dialog
-          title="保修期查询"
-          :visible.sync="guaranteePeriodSearchDialogVisible"
-          width="30%"
-          style="margin-top: -80px;"
-          custom-class="transparent-dialog">
-          <div align="center" style="margin-bottom: 20px;">
-            <span>查询条件：</span>
-            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
-              <el-option
-               v-for="(item, index) in guaranteePeriodSearchConditionData"
-               :key="index"
-               :value="item.value"
-               :label="item.label"
-               class="searchInput"
-              ></el-option>
-            </el-select>
-<!--            <el-input v-model="guaranteePeriodSearchValue" placeholder="请输入查询时间 (格式20230101)" style="width: 260px;" clearable></el-input>-->
-            <el-button type="primary" style="margin-left: 10px" @click="guaranteePeriodSearch">查询</el-button>
-          </div>
-        </el-dialog>
-
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -293,7 +296,6 @@ export default {
       cpu_middle_guar: 'all',
       initdata: [],
       dialogVisible: false,
-      guaranteePeriodSearchDialogVisible:false,
       row: {},
       list: null,
       total: 0,
@@ -967,10 +969,6 @@ export default {
     search(){
       this.dialogVisible = true
     },
-    //弹出保修期查询框
-    guaranteePeriodSearchPanel(){
-      this.guaranteePeriodSearchDialogVisible = true
-    },
     //保修期搜索
     guaranteePeriodSearch(){
       console.log("查询的条件:",this.guaranteePeriodSearchCondition)
@@ -1005,7 +1003,6 @@ export default {
      guaranteePeriodSearchByTime(params).then(res=>{
        this.list=res.data.items
        this.total=res.data.total
-       this.guaranteePeriodSearchDialogVisible = false
        this.guaranteePeriodSearchCondition = ''
        this.isGuaranteePeriodSearch = true
        this.listLoading=false
