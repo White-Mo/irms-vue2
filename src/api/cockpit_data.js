@@ -15,6 +15,11 @@ export const getGuaranteePeriodCount= () =>{
   return request.get('/home/inforesources/getGuaranteePeriodCount')
 }
 
+//过保设备数据量
+export const getOverGuaranteePeriodCount= () =>{
+  return request.get('/home/inforesources/getOverGuaranteePeriodCount')
+}
+
 //总应用系统数量
 export const getBusinessSystemCount= () =>{
   return request.get('/home/baseparameter/getBusinessSystemCount')

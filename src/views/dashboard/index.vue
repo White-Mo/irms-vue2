@@ -40,7 +40,7 @@
           </div>
           <div class="child_count_box_p">
             <p class="mainfont">过保设备数量</p>
-            <p id="equipmentAllIndate">{{periodEquipmentNumber}}</p>
+            <p id="equipmentAllIndate">{{overPeriodEquipmentNumber}}</p>
           </div>
         </div>
 
@@ -152,7 +152,7 @@ import {
   getApplicationUserCount,
   getEquipmentCount, getEquipmentTypeCount, getEquipmentUserCount,
   getGuaranteePeriodCount,
-  getBusinessSystemCount
+  getBusinessSystemCount, getOverGuaranteePeriodCount
 } from "@/api/cockpit_data";
 import elementResizeDetectorMaker from "element-resize-detector";
 export default {
@@ -165,7 +165,7 @@ export default {
       IPtotal: 0,
       allEquipmentNumber:'',
       equipmentTypeNumber:'',
-      periodEquipmentNumber:'',
+      overPeriodEquipmentNumber:'',
       allApplicationSystemNumber:'',
       applicationUserNumber:'',
       equipmentUserNumber:'',
@@ -207,9 +207,9 @@ export default {
           // //console.log("************设备类型数据量:"+ res.data +"*********************")
           that.equipmentTypeNumber = res.data;
         }),
-        getGuaranteePeriodCount().then(function (res){
+        getOverGuaranteePeriodCount().then(function (res){
           // //console.log("************过保设备数据量:"+ res +"*********************")
-          that.periodEquipmentNumber = res;
+          that.overPeriodEquipmentNumber = res;
         }),
         getBusinessSystemCount().then(function (res){
           // //console.log("************总应用系统数量:"+ res +"*********************")
