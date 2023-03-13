@@ -1,3 +1,4 @@
+<!--
 <template>
   <div class="dashboard-container">
     <el-col :span="24">
@@ -177,8 +178,8 @@ export default {
     line-height: 46px;
   }
 }
-.el-table--border::after,
-.el-table--group::after,
+.el-table&#45;&#45;border::after,
+.el-table&#45;&#45;group::after,
 .el-table::before {
   background-color: transparent !important;
 }
@@ -192,3 +193,4 @@ export default {
 }
 
 </style>
+-->

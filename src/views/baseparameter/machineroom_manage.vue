@@ -148,14 +148,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
-              <el-button
+<!--              <el-button
                 size='mini'
                 @click='handleEdit(scope.$index, scope.row)'
-                >编辑</el-button>
+                >编辑</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
@@ -239,7 +235,6 @@ import {
   getMachineRoomTotal,
   delCabinet,
   addMachineRoom,
-  getEquipmentByCabinetId
 } from '@/api/baseparameter'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
@@ -461,7 +456,6 @@ export default {
     cabinetDetail(index, row) {
       this.row = row
       console.log(row.cabinetId)
-      getEquipmentByCabinetId(row.cabinetId)
       this.drawer =false
       this.ifUpdate ='1'
     },

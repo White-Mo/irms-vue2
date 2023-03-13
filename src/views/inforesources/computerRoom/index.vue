@@ -115,7 +115,6 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
-import {getEquipmentByCabinetId} from "@/api/baseparameter";
 import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom} from "@/api/dashboard";
 import {getList} from "@/api/table";
