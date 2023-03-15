@@ -971,6 +971,7 @@ export default {
     },
     //保修期搜索
     guaranteePeriodSearch(){
+      this.isMultiline = false
       console.log("查询的条件:",this.guaranteePeriodSearchCondition)
       //一年后过保
       if(this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod'){

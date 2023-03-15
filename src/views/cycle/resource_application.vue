@@ -66,20 +66,6 @@
             width="180px"
           >
             <template slot-scope="scope">
-<!--              <el-select v-if="scope.row.isEdit && key ==='ip_address'" @change="changeRoom(scope.row)" v-model="scope.row[key]" placeholder="请选择">-->
-<!--                <el-option-->
-<!--                  v-for="item in machineRoomAll"-->
-<!--                  :key="item.value"-->
-<!--                  :value="item.ip_address"-->
-<!--                />-->
-<!--              </el-select>-->
-<!--              <el-select v-else-if="scope.row.isEdit && key ==='mAC_address'" v-model="scope.row[key]" placeholder="请选择">-->
-<!--&lt;!&ndash;                <el-option&ndash;&gt;-->
-<!--&lt;!&ndash;                  v-for="item in cabinetAll"&ndash;&gt;-->
-<!--&lt;!&ndash;                  :key="item.value"&ndash;&gt;-->
-<!--&lt;!&ndash;                  :value="item.cabinetName"&ndash;&gt;-->
-<!--&lt;!&ndash;                />&ndash;&gt;-->
-<!--              </el-select>-->
               <el-form :ref="labels" :model="labels">
                 <el-form-item style="height:20px">
                   <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
@@ -148,6 +134,7 @@ export default {
       start:0,
       limit:10,
       isEdit:false,
+      tempIndex:0,
       tab_name: '0',
       list: null,
       list_network:null,
@@ -279,19 +266,6 @@ export default {
       row.isEdit = !row.isEdit;
       console.log(row.isEdit)
       if (!row.isEdit) {
-        // let machineRoomId = ''
-        // let cabinetId = ''
-        // this.machineRoomAll.forEach(element => {
-        //   if (element.machineRoomName === row.machineRoomName) {
-        //     machineRoomId = element.machineRoomId;
-        //   }
-        // })
-        // this.cabinetAll.forEach(element => {
-        //   if (element.cabinetName === row.cabinetName) {
-        //     cabinetId = element.cabinetId;
-        //   }
-        // })
-        // console.log(machineRoomId,cabinetId);
         const params = {
           equipmentId: row.equipmentId,
           ip_address:row.ip_address,
