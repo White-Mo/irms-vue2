@@ -81,7 +81,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              style="margin-left: 40px"
+              style="margin-left: 45px"
               @click="searchOne()"
             >搜索</el-button>
           </el-col>
@@ -161,7 +161,7 @@
           :diisable="true"
           :data="list"
           element-loading-text="Loading"
-          height="70vh"
+          height="72vh"
           :row-style="{height:'6.26vh'}"
           :cell-style="{padding:'0px'}"
           border
