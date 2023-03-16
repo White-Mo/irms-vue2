@@ -24,9 +24,11 @@ Vue.use(dataV)
 
 
 
+/*
 import { detectZoom } from '@/utils/detectZoom.js';
 const m = detectZoom();
 document.body.style.zoom = 100 / Number(m);
+*/
 
 
 

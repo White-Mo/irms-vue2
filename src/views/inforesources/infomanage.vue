@@ -623,21 +623,22 @@ export default {
       },
       guaranteePeriodSearchConditionData:[
         {
-          value:'oneYearOverGuaranteePeriod',
-          label:'一年后过保'
-        },
-        {
-          value:'sixMonthsOverGuaranteePeriod',
-          label:'半年后过保'
+          value:'OverGuaranteePeriod',
+          label:'已过保'
         },
         {
           value:'threeMonthsOverGuaranteePeriod',
           label:'三个月后过保'
         },
         {
-          value:'OverGuaranteePeriod',
-          label:'已过保'
+          value:'sixMonthsOverGuaranteePeriod',
+          label:'半年后过保'
         },
+        {
+          value:'oneYearOverGuaranteePeriod',
+          label:'一年后过保'
+        }
+
       ]
     }
   },
