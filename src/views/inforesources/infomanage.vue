@@ -107,6 +107,7 @@
                 :key="index"
                 :value="item.value"
                 :label="item.label"
+                :class="getColorClass(item.value)"
                 class="searchInput"
               ></el-option>
             </el-select>
@@ -1016,7 +1017,12 @@ export default {
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1
+    },
+    getColorClass(value){
+       if (value === "OverGuaranteePeriod") {
+      { return "red" }}
     }
+
   }
 }
 </script>
@@ -1038,6 +1044,7 @@ export default {
 }
 .searchInput {
   height: 40px;
+  line-height: 40px;
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
@@ -1101,5 +1108,14 @@ export default {
 .block {
   text-align: center;
 }
+
+
+
+.red {
+  background-color: red ;
+  color: #FFFFFF;
+}
+
+
 </style>
 
