@@ -148,10 +148,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-<!--              <el-button
-                size='mini'
-                @click='handleEdit(scope.$index, scope.row)'
-                >编辑</el-button>-->
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                @click="handleEdit(scope.$index, scope.row)"-->
+<!--              >编辑</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
@@ -455,7 +455,6 @@ export default {
 
     cabinetDetail(index, row) {
       this.row = row
-      console.log(row.cabinetId)
       this.drawer =false
       this.ifUpdate ='1'
     },
@@ -484,10 +483,6 @@ export default {
         this.cabinetLoading = false;
       })
     },
-    changeSelect() {
-      console.log("============");
-        this.$forceUpdate();
-      },
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit+1
     }

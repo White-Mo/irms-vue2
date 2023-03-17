@@ -31,12 +31,6 @@ export const hunhe1 = {
         qinfo_input:'.',
         limit: this.limit
       }
-      const numparams = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: this.tab_name,
-        qinfo_input:'.',
-      }
       getdataCount(NetWork_params).then((response) => {
         this.total_N = response.data.total
         //console.log(this.total_N)
@@ -66,14 +60,9 @@ export const hunhe1 = {
           if(list_n[i][0]==null){
             list_n[i][0]=list_n[i-1][0]
           }
-
           list_n[i][0]["isEdit"]=false
-          //console.log(list_n[i][0])
          let tryss = Object.assign(list_n[i][0],list_n[i][1])
-          // list_n[i][0].push(list_n[i][1])
           arr.push(tryss)
-          // arr.push({isEdit:list_n[i].isEdit})
-          // arr1.concat(arr2);
         }
         //console.log(arr)
         this.list_network = arr
