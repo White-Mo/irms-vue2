@@ -11,6 +11,8 @@
         </el-row>
         <el-row :gutter="10" class="bg-condition">
           <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="DownHelpDocument()">点击下载用户手册</el-button>
+          <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="checkSecretKey()">显示密钥</el-button>
+          <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="copySecretKey(SecretKey)">复制密钥</el-button>
         </el-row>
     </div>
     <footer>
@@ -21,14 +23,49 @@
 
 <script>
 
+import { getSecret } from '@/api/select'
+
 export default {
   name: 'help',
   data() {
     return {
-
+      SecretKey: '',
     }
   },
+  created() {
+    this.getSecretKey()
+  },
   methods:{
+    getSecretKey(){
+      getSecret().then(res=>{
+        this.SecretKey = res.data.secretKey
+      })
+    },
+    checkSecretKey(){
+        this.$message({
+          type: 'info',
+          message: this.SecretKey,
+        })
+    },
+    copySecretKey(val) {
+      // 模拟 输入框
+      var cInput = document.createElement("input");
+      cInput.value = val;
+      document.body.appendChild(cInput);
+      cInput.select(); // 选取文本框内容
+      // 执行浏览器复制命令
+      // 复制命令会将当前选中的内容复制到剪切板中（这里就是创建的input标签）
+      // Input要在正常的编辑状态下原生复制方法才会生效
+
+      document.execCommand("copy");
+
+      this.$message({
+        type: "success",
+        message: "复制成功"
+      });
+      // 复制成功后再将构造的标签 移除
+      document.body.removeChild(cInput);
+    },
     //点击下载使用说明文档
     DownHelpDocument() {
       // specification.docx文件存储在public文件夹下
@@ -41,8 +78,6 @@ export default {
       a.remove() //下载完成移除元素
     },
   }
-
-
 }
 </script>
 
