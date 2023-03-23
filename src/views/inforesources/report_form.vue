@@ -481,9 +481,7 @@ export default {
         limit: 15,
         status: '0'
       }
-      getdataCount(numparams).then((response) => {
-        this.totalCount = response.data.total
-      })
+      this.totalCount=0;
       getList(params).then((response) => {
         //console.log(response)
         let num = this.tableData.length + 1
@@ -493,6 +491,9 @@ export default {
         }
         this.tableData = this.tableData.concat(response.data.items)
         this.listLoading=false
+        getdataCount(numparams).then((response) => {
+          this.totalCount = response.data.total
+        })
       })
 
     },

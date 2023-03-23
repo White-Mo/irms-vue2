@@ -22,8 +22,7 @@
             :lg="2"
             :xl="2"
           >
-
-            <span>查询条件：</span>
+            <span>查询条件:</span>
           </el-col>
           <el-col
             :xs="3"
@@ -32,13 +31,11 @@
             :lg="3"
             :xl="3"
           >
-
             <el-select
               @change="handleSelectChange"
               v-model="DataName"
               placeholder="详细字段查询"
               multiple
-              size="medium"
             >
               <el-option
                 v-for="item in dataname_option"
@@ -46,6 +43,8 @@
                 :label="item.label"
                 :value="item.value"
                 class="searchInput"
+                :disabled="item.isDisabled"
+                clearable
               />
             </el-select>
 
@@ -82,9 +81,52 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              style="margin-left: 40px"
+              style="margin-left: 45px"
               @click="searchOne()"
             >搜索</el-button>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+            保修期查询条件:
+          </el-col>
+          <el-col
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
+          >
+            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
+              <el-option
+                v-for="(item, index) in guaranteePeriodSearchConditionData"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+                :class="getColorClass(item.value)"
+                class="searchInput"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col
+            :xs="2"
+            :sm="2"
+            :md="2"
+            :lg="2"
+            :xl="2"
+          >
+
+            <el-button
+              size="medium"
+              type="primary"
+              icon="el-icon-search"
+              clearable="true"
+              @click="guaranteePeriodSearch()"
+            >保修期查询</el-button>
           </el-col>
           <el-col
             :xs="2"
@@ -101,20 +143,6 @@
             >添加设备信息</el-button>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
-            <el-button
-              size="medium"
-              type="primary"
-              style="margin-left: 10px"
-              @click="guaranteePeriodSearchPanel()"
-            >保修期查询</el-button>
-          </el-col>
-          <el-col
             :xs="1"
             :sm="1"
             :md="1"
@@ -124,7 +152,7 @@
             <el-button
               size="medium"
               type="primary"
-              style="margin-left:400px"
+              style="margin-left:250px"
               @click="search()"
             >筛选</el-button>
           </el-col>
@@ -134,7 +162,7 @@
           :diisable="true"
           :data="list"
           element-loading-text="Loading"
-          height="70vh"
+          height="72vh"
           :row-style="{height:'6.26vh'}"
           :cell-style="{padding:'0px'}"
           border
@@ -196,30 +224,6 @@
           custom-class="transparent-dialog">
           <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
         </el-dialog>
-
-        <el-dialog
-
-          title="保修期查询"
-          :visible.sync="guaranteePeriodSearchDialogVisible"
-          width="30%"
-          style="margin-top: -80px;"
-          custom-class="transparent-dialog">
-          <div align="center" style="margin-bottom: 20px;">
-            <span>查询条件：</span>
-            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
-              <el-option
-               v-for="(item, index) in guaranteePeriodSearchConditionData"
-               :key="index"
-               :value="item.value"
-               :label="item.label"
-               class="searchInput"
-              ></el-option>
-            </el-select>
-<!--            <el-input v-model="guaranteePeriodSearchValue" placeholder="请输入查询时间 (格式20230101)" style="width: 260px;" clearable></el-input>-->
-            <el-button type="primary" style="margin-left: 10px" @click="guaranteePeriodSearch">查询</el-button>
-          </div>
-        </el-dialog>
-
         <div class="block">
           <el-pagination
             :page-size="10"
@@ -252,7 +256,7 @@ import {
   delEquipment,
   InitValue,
   searchComprehensiveInfoByMultipleConditions,
-  guaranteePeriodSearchByTime
+  guaranteePeriodSearchByTime, solelySearchIdAndMacAddress
 } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
@@ -285,12 +289,14 @@ export default {
       type: 0,
       edition: 0,
       guaranteePeriod: 0,
+      ipAddress:0,
+      macAddress:0,
+      remains:0,
       restaurants: [],
       foad: [],
       cpu_middle_guar: 'all',
       initdata: [],
       dialogVisible: false,
-      guaranteePeriodSearchDialogVisible:false,
       row: {},
       list: null,
       total: 0,
@@ -326,6 +332,7 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -482,6 +489,7 @@ export default {
           width: '200px'
         },
       ],
+
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
         {
@@ -514,6 +522,22 @@ export default {
           label: '所属部门',
           width: '200px'
         },
+
+        //新添IP地址Mac地址
+        // PS：搜索框中使用了dataname_option这个数组中IP地址、Mac地址的索引
+        // //若要改此数组元素的顺序，务必修改handleSelectChange()方法中的代码！！！
+        {
+          value:'ipAddress',
+          label:'IP地址',
+          width: '200px',
+        },
+        {
+          value:'macAddress',
+          label:'Mac地址',
+          width: '200px',
+        },
+
+
         {
           value: 'equipmentName',
           label: '设备名',
@@ -600,21 +624,22 @@ export default {
       },
       guaranteePeriodSearchConditionData:[
         {
-          value:'oneYearOverGuaranteePeriod',
-          label:'一年后过保'
-        },
-        {
-          value:'sixMonthsOverGuaranteePeriod',
-          label:'半年后过保'
+          value:'OverGuaranteePeriod',
+          label:'已过保'
         },
         {
           value:'threeMonthsOverGuaranteePeriod',
           label:'三个月后过保'
         },
         {
-          value:'OverGuaranteePeriod',
-          label:'已过保'
+          value:'sixMonthsOverGuaranteePeriod',
+          label:'半年后过保'
         },
+        {
+          value:'oneYearOverGuaranteePeriod',
+          label:'一年后过保'
+        }
+
       ]
     }
   },
@@ -628,12 +653,11 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput,postNameReturn){
+    receiveAllSearchData(searchAllData,infoInput){
       this.isMultiline=true;
       this.start=0;
       this.currentPage=1;
       this.infoInput=infoInput;
-      this.infoInput.postName=postNameReturn
       this.list = searchAllData.items;
       this.total = searchAllData.total;
       this.dialogVisible = false;
@@ -666,8 +690,50 @@ export default {
     },
 
     // change的处理事件
-
     handleSelectChange(val) {
+      //ip地址、mac地址单独选择事件-选择ip或mac一者，其他所有禁选；选择其他任何，ip和mac二者都禁选
+      if(val.indexOf('ipAddress') !== -1){
+        this.ipAddress = 1
+        for(const a in this.dataname_option){
+          if(this.dataname_option[a].value !== 'ipAddress')
+            this.dataname_option[a].isDisabled = true
+        }
+      }else if(val.indexOf('macAddress') !==-1){
+        this.macAddress = 1
+        for(const b in this.dataname_option){
+          if(this.dataname_option[b].value !== 'macAddress')
+            this.dataname_option[b].isDisabled = true
+        }
+      }else{
+        if(val.length !== 0){
+          this.remains = 1
+          this.dataname_option[6].isDisabled = true
+          this.dataname_option[7].isDisabled = true
+        }
+      }
+      //当ip地址、mac地址取消勾选，恢复正常
+      if(val.indexOf('ipAddress') === -1 && this.ipAddress === 1){
+        for(const c in this.dataname_option){
+          if(this.dataname_option[c].value !== 'ipAddress'){
+            this.dataname_option[c].isDisabled = false
+            this.ipAddress = 0
+          }
+        }
+      }else if(val.indexOf('macAddress') === -1 && this.macAddress === 1){
+        for(const d in this.dataname_option){
+          if(this.dataname_option[d].value !== 'macAddress'){
+            this.dataname_option[d].isDisabled = false
+            this.macAddress = 0
+          }
+        }
+      }else{
+        if(val.length === 0){
+          for(const e in this.dataname_option){
+            this.dataname_option[e].isDisabled = false
+            this.remains = 0
+          }
+        }
+      }
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') == -1 && this.type == 1) {
@@ -686,7 +752,7 @@ export default {
         this.deleteSelect(this.guaranteePeriodID)
         this.guaranteePeriod = 0
       }
-// 特殊字段下拉框进行初始化
+      // 特殊字段下拉框进行初始化
       var key = 0
       for (key = 0; key < val.length; key++) {
         if (val[key] == 'type' && this.type == 0) {
@@ -764,14 +830,14 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: "0",
-        start: (this.currentPage-1)*this.limit,
+        start: this.start,
         limit: this.limit
       }
-      console.log('11',this.initname)
+      // console.log('11',this.initname)
       var flog = false
       for(let i = 0; i <= this.initname.length; i++){
         if(this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress'){
-          console.log("参数1",params)
+          // console.log("参数1",params)
           solelySearchIdAndMacAddress(params).then((response) => {
             let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
             console.log(IpOrMacSearchAllData)
@@ -785,7 +851,7 @@ export default {
         }
       }
       if(flog === false){
-        console.log("参数2",params)
+        // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
           this.total = response.data.total
@@ -835,10 +901,10 @@ export default {
 
 
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`)
+       console.log(`每页 ${val} 条`)
       this.limit = val
       if(this.isMultiline){
-        this.infoInput.start=(this.currentPage-1)*this.limit,
+        this.infoInput.start=this.start*this.limit
         this.infoInput.limit=this.limit
         this.listLoading=true
         const params=this.infoInput
@@ -847,7 +913,19 @@ export default {
           this.total=res.data.total
           this.listLoading=false
         })
-      }else {
+      }else if(this.isGuaranteePeriodSearch){
+        const params ={
+          start:this.start*this.limit,
+          limit:this.limit,
+          searchCondition:this.tempGuaranteePeriodSearchCondition,
+        }
+        guaranteePeriodSearchByTime(params).then(res=>{
+          this.list=res.data.items
+          this.total=res.data.total
+          this.listLoading=false
+        })
+      }
+      else {
         this.fetchData()
       }
     },
@@ -893,12 +971,9 @@ export default {
     search(){
       this.dialogVisible = true
     },
-    //弹出保修期查询框
-    guaranteePeriodSearchPanel(){
-      this.guaranteePeriodSearchDialogVisible = true
-    },
     //保修期搜索
     guaranteePeriodSearch(){
+      this.isMultiline = false
       console.log("查询的条件:",this.guaranteePeriodSearchCondition)
       //一年后过保
       if(this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod'){
@@ -931,7 +1006,6 @@ export default {
      guaranteePeriodSearchByTime(params).then(res=>{
        this.list=res.data.items
        this.total=res.data.total
-       this.guaranteePeriodSearchDialogVisible = false
        this.guaranteePeriodSearchCondition = ''
        this.isGuaranteePeriodSearch = true
        this.listLoading=false
@@ -943,7 +1017,12 @@ export default {
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1
+    },
+    getColorClass(value){
+       if (value === "OverGuaranteePeriod") {
+      { return "red" }}
     }
+
   }
 }
 </script>
@@ -965,6 +1044,7 @@ export default {
 }
 .searchInput {
   height: 40px;
+  line-height: 40px;
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
@@ -1028,5 +1108,14 @@ export default {
 .block {
   text-align: center;
 }
+
+
+
+.red {
+  background-color: red ;
+  color: #FFFFFF;
+}
+
+
 </style>
 

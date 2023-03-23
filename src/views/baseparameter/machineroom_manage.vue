@@ -153,10 +153,6 @@
 <!--                @click="handleEdit(scope.$index, scope.row)"-->
 <!--              >编辑</el-button>-->
               <el-button
-                size='mini'
-                @click='handleEdit(scope.$index, scope.row)'
-                >编辑</el-button>
-              <el-button
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
@@ -239,7 +235,6 @@ import {
   getMachineRoomTotal,
   delCabinet,
   addMachineRoom,
-  getEquipmentByCabinetId
 } from '@/api/baseparameter'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
@@ -460,8 +455,6 @@ export default {
 
     cabinetDetail(index, row) {
       this.row = row
-      console.log(row.cabinetId)
-      getEquipmentByCabinetId(row.cabinetId)
       this.drawer =false
       this.ifUpdate ='1'
     },
@@ -490,10 +483,6 @@ export default {
         this.cabinetLoading = false;
       })
     },
-    changeSelect() {
-      console.log("============");
-        this.$forceUpdate();
-      },
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit+1
     }

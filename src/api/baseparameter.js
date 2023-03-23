@@ -263,6 +263,16 @@ export function addEquipmentFirstType(data) {
   })
 }
 
+/* //修改一级设备类型
+export function  updateEquipmentFirstType(data){
+  return request({
+    params:data,
+    url:'/home/baseparameter/updateEquipmentFirstType',
+    method: 'post',
+    responseType: 'json'
+  })
+} */
+
 //新增二级设备类型
 export function addEquipmentSecondType(data) {
   return request({
@@ -338,16 +348,6 @@ export function delCabinet(data) {
     url: '/home/baseparameter/delCabinet',
     method: 'delete',
     params: {cabinetId : data}
-  })
-}
-
-//根据机房获取设备
-export function getEquipmentByCabinetId(cabinetId) {
-  return request({
-    params: { cabinetId: cabinetId },
-    url: '/home/baseparameter/getEquipmentByCabinetId',
-    method: 'get',
-    responseType: 'json'
   })
 }
 

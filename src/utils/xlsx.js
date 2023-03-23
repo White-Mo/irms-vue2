@@ -532,15 +532,17 @@ export function analysisReply(data) {
   analysisData.push(getReplayData(data.AddNetWork))
   analysisData.push(getReplayData(data.AddPortocolPort))
   analysisData.push(getReplayData(data.AddNativeStore))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
-  analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.cabinetU))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.equipment))
+  // analysisData.push(getReplayData(data.equipmentBasicInfo.equipmentBusinessRelInfo))
 
-  console.log('*',analysisData)
+  console.log('大数组',analysisData)
   analysisData.forEach(function(items){
     if(items !== undefined){
       items.forEach(function(item){ // 少写了item
-        result_data.push(item)
+        if(item.key !== "" && item.key !== " "){
+          result_data.push(item)
+        }
       })
     }
     // console.log('!',result_data)
@@ -548,19 +550,17 @@ export function analysisReply(data) {
   return result_data
 }
 export function getReplayData(data) {
-  // console.log(data)
+  console.log("data",data)
   let backdata = []
   if (data !== undefined) {
     //keys是数组
-    const keys = Object.keys(data)
-    const values = Object.values(data)
+    const keys = Object.keys(data) //硬盘、电源
+    const values = Object.values(data)  //update、update
     // debugger
     if (keys !== undefined) {
       keys.forEach(function(key, index) {
         const obj = {
-          //AddAppAccessRights
           key: keys[index],
-          //0
           values: values[index]
         }
         backdata.push(obj)

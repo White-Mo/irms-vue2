@@ -57,7 +57,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column type="index" />
+          <el-table-column type="index"  :index="typeIndex" align="center" />
           <af-table-column
             v-for="(value, key, index) in labels"
             :key="index"
@@ -101,6 +101,7 @@
         </el-table>
         <div class="block">
           <el-pagination
+            :current-page.sync="currentPage"
             :page-size="limit"
             layout="total, prev, pager, next, jumper"
             :total="total"
@@ -141,7 +142,7 @@ export default {
       tab_name: '0',
       list: null,
       total: 0,
-      currentPage1: 5,
+      currentPage: 1,
       DataName: 'all',
       initname: ['123'],
       department: '',
@@ -295,6 +296,9 @@ export default {
           }
         })
       })
+    },
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
     }
   }
 }

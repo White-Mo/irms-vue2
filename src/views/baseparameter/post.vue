@@ -33,7 +33,6 @@
             :lg="3"
             :xl="3"
           >
-<!--            <div class="select-container">-->
             <el-select
               v-model="dataName"
               placeholder="详细字段查询"
@@ -49,7 +48,6 @@
                 class="searchInput"
               />
             </el-select>
-<!--              </div>-->
           </el-col>
           <el-col
             :xs="4"
@@ -106,7 +104,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
+          <el-table-column align="center" type="index" :index="typeIndex"/>
           <el-table-column
             v-for="(item,index) in basicvalue"
             :key="index"

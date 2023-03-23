@@ -127,6 +127,8 @@
           <el-table-column prop="postCode"  label="" ></el-table-column>
           <el-table-column prop="operation" label="" ></el-table-column>
       </el-table>
+
+
       </div>
       <div v-if="ifUpdate === '1'">
         <addDepartment @changeDiv="changeDiv" />

@@ -174,7 +174,7 @@
             </div>
             <div>
               部门
-              <el-select v-model="update_data.department" placeholder="请选择" style="width: 20rem;left:2.8rem;">
+              <el-select v-model="update_data.department" placeholder="请选择"  style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in departmentAll"
                   :key="item.departmentId"
@@ -324,6 +324,9 @@ export default {
   },
   destroyed() {
   },
+/*  created() {
+    this.changeGroupID()
+  },*/
   methods: {
     search(){
       this.currentPage = 0
@@ -488,6 +491,10 @@ export default {
       // this.departmentAll = (await getDepartment(row.roleid)).data.items
       getPostDepartmentAll({groupid:row.groupid}).then(res=>{
         //console.log(res)
+        for(let i of res.data.items){
+          i["postAnddepartment"] = i.postName + '/' + i.departmentName
+        }
+        this.departmentAll = res.data.items
       })
     },
     changeGroupID(groupid){
