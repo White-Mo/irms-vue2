@@ -1,204 +1,208 @@
 <template>
-  <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
-    <div class="app-container">
-      <div class="show">
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">信息数据导入</div>
-          </el-col>
-        </el-row>
-        <el-row
-          :gutter="10"
-          class="bg-condition"
-        >
-          <el-button-group style='position: absolute;left: 10px;top:5px'>
-            <el-button type="primary" size="large" @click="dialogFormVisible = true" icon='el-icon-printer'>导入Excel文件</el-button>
-            <el-button type="primary" size="large" @click="downloadFile()" icon='el-icon-download'>下载模板</el-button>
-            <el-button size="larger" type="success" @click="upLoadTableData" icon='el-icon-upload el-icon--right'>上传所有文件</el-button>
-            <el-button size="larger" type="danger" @click="clearTable" icon='el-icon-s-release'>清空列表</el-button>
-          </el-button-group>
-        </el-row>
-        <el-table
-          :header-cell-style="headStyle"
-          :cell-style="headStyle"
-          :data="tableData"
-          style="width: 100%">
-          <el-table-column
-            prop="name"
-            label="文件名称"
-            width="170">
-          </el-table-column>
-          <el-table-column
-            prop="data"
-            label="设备名称"
-            width="240"
+    <div class="infobody" >
+      <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
+      <horizontalTable v-if="showButton" />
+      <div class="app-container" v-if='!showButton'>
+        <div class="show">
+          <el-row>
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">信息数据导入</div>
+            </el-col>
+          </el-row>
+          <el-row
+            :gutter="10"
+            class="bg-condition"
           >
-            <template slot-scope="scope">
-              <el-tag
-                class="statusTg"
-                size="medium"
-                type="primary"
-                disable-transitions>{{scope.row.data.equipmentBaseInfo.equipmentName}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="data"
-            label="设备编号"
-            width="170">
-            <template slot-scope="scope">
-              <el-tag
-                class="statusTg"
-                type="primary"
-                disable-transitions>{{scope.row.data.equipmentBaseInfo.basicInfoId}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="data"
-            label="部门"
-            width="180">
-            <template slot-scope="scope">
-              <el-tag
-                class="statusTg"
-                type="primary"
-                disable-transitions>{{scope.row.data.equipmentBaseInfo.departmentName}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="status"
-            label="文件状态"
-            width="130">
-          <template slot-scope="scope">
-            <el-tag
-              class="statusTg"
-              :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
-              disable-transitions>{{scope.row.status}}</el-tag>
-          </template>
-          </el-table-column>
-          <el-table-column
-            prop="uploadStatus"
-            label="上传状态"
-            width="130">
-            <template slot-scope="scope">
-              <el-tag
-                class="statusTg"
-                :type="scope.row.uploadStatus === '待上传' ? 'warning' : (scope.row.uploadStatus === '上传成功' ?'success': (scope.row.uploadStatus === '上传中' ?'primary': 'danger'))"
-                disable-transitions>{{scope.row.uploadStatus}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button
-                @click="handupload(scope.$index, scope.row)" :disabled = 'disabled' size="small">上传</el-button>
-              <el-button
-                type="danger"
-                @click="handleDelete(scope.$index)" :disabled = 'disabled' size="small">删除</el-button>
-              <el-button
-                @click="checkReplay(scope.$index, scope.row)" :visible.sync="showDialog">查看反馈信息</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-col :span="21">
+              <el-button-group style='float: left;margin-left: 0px;margin-top:5px'>
+                <el-button type="primary" size="large" @click="dialogFormVisible = true" icon='el-icon-printer'>导入详细表文件</el-button>
+                <el-button type="primary" size="large" @click="downloadFile()" icon='el-icon-download'>下载模板</el-button>
+                <el-button size="larger" type="success" @click="upLoadTableData" icon='el-icon-upload el-icon--right'>上传所有文件</el-button>
+                <el-button size="larger" type="danger" @click="clearTable" icon='el-icon-s-release'>清空列表</el-button>
+              </el-button-group>
+            </el-col>
+            <el-col :span="1.8">
+              <el-button size="larger" type="info" @click="switchPage" icon='el-icon-s-release'>综合表导入</el-button>
+            </el-col>
+          </el-row>
+          <el-table
+            :header-cell-style="headStyle"
+            :cell-style="headStyle"
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+              prop="name"
+              label="文件名称"
+              width="170">
+            </el-table-column>
+            <el-table-column
+              prop="data"
+              label="设备名称"
+              width="240"
+            >
+              <template slot-scope="scope">
+                <el-tag
+                  class="statusTg"
+                  size="medium"
+                  type="primary"
+                  disable-transitions>{{scope.row.data.equipmentBaseInfo.equipmentName}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="data"
+              label="设备编号"
+              width="170">
+              <template slot-scope="scope">
+                <el-tag
+                  class="statusTg"
+                  type="primary"
+                  disable-transitions>{{scope.row.data.equipmentBaseInfo.basicInfoId}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="data"
+              label="部门"
+              width="180">
+              <template slot-scope="scope">
+                <el-tag
+                  class="statusTg"
+                  type="primary"
+                  disable-transitions>{{scope.row.data.equipmentBaseInfo.departmentName}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="文件状态"
+              width="130">
+              <template slot-scope="scope">
+                <el-tag
+                  class="statusTg"
+                  :type="scope.row.status === '读取失败' ? 'danger' : 'success'"
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="uploadStatus"
+              label="上传状态"
+              width="130">
+              <template slot-scope="scope">
+                <el-tag
+                  class="statusTg"
+                  :type="scope.row.uploadStatus === '待上传' ? 'warning' : (scope.row.uploadStatus === '上传成功' ?'success': (scope.row.uploadStatus === '上传中' ?'primary': 'danger'))"
+                  disable-transitions>{{scope.row.uploadStatus}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  @click="handupload(scope.$index, scope.row)" :disabled = 'disabled' size="small">上传</el-button>
+                <el-button
+                  type="danger"
+                  @click="handleDelete(scope.$index)" :disabled = 'disabled' size="small">删除</el-button>
+                <el-button
+                  @click="checkReplay(scope.$index, scope.row)" :visible.sync="showDialog">查看反馈信息</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
-    </div>
-    <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
-      <div class="uploadCard">
-        <el-upload
-          :limit="999"
-          :on-exceed="handleExceed"
-          class="upload-demo"
-          action=""
-          :multiple="true"
-          :on-change="handleChange"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          :auto-upload="false"
-        >
-          <el-button size="larger" type="primary" @click="cleanBtn()">选取文件</el-button>
-          <div slot="tip" style="font-size: 18px;position: relative;top: 15px">
-            <p>注意事项：</p>
-            <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
-            <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
-<!--            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>-->
-          </div>
-        </el-upload>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="checkoutFile()">确 定</el-button>
-        <el-button @click="closeDialog()">取 消</el-button>
-      </div>
-    </el-dialog>
-
-
-
-<!--    查看导入反馈-第一版        -->
-    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
-      <el-descriptions class="margin-top" title="" :column="2" border>
-        <el-descriptions-item v-for="item in repalyData">
-          <template slot="label">
-            {{item.key}}
-          </template>
-          <el-tag :type= " item.values === 'update' ? 'success' : 'primary'">
-            {{item.values === 'update' ? '更新' : item.values}}
-          </el-tag>
-
-        </el-descriptions-item>
-      </el-descriptions>
-      <el-button @click="resultBtn()" type="primary">确定</el-button>
-    </el-dialog>
-
-    <!--    查看导入反馈-第二版        -->
-<!--    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">-->
-<!--      <el-table-->
-<!--        :data="tableUpdateData"-->
-<!--        highlight-current-row-->
-<!--        style="width: 100%" border>-->
-<!--        <el-table-column type="expand" :data="detailedTableUpdateData">-->
-<!--          <template slot-scope="props">-->
-<!--            <el-form label-position="left" inline class="demo-table-expand" v-for="item in detailedTableUpdateData">-->
-<!--              <el-form-item label="字段名">-->
-<!--                <span>{{ item.key() }}</span>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="更新状态">-->
-<!--                <span>{{ props.row.name }}</span>-->
-<!--              </el-form-item>-->
-<!--            </el-form>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="小表名" prop="tableName"></el-table-column>-->
-<!--        <el-table-column prop="operation" label="" ></el-table-column>-->
-<!--      </el-table>-->
-<!--    </el-dialog>-->
-
-
-
-
-    <el-dialog
-      :visible.sync="showDialog"
-      width="40%"
-      title="导入结果反馈">
-      <div style="text-align:center;font-size: 10px">
-        <!--需要弹出的内容部分-->
-        <el-descriptions  :column="1" >
-          <el-descriptions-item v-for="item in tableData">
+      <el-dialog title=" 文件导入详情" :visible.sync="dialogFormVisible">
+        <div class="uploadCard">
+          <el-upload
+            :limit="999"
+            :on-exceed="handleExceed"
+            class="upload-demo"
+            action=""
+            :multiple="true"
+            :on-change="handleChange"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false"
+          >
+            <el-button size="larger" type="primary" @click="cleanBtn()">选取文件</el-button>
+            <div slot="tip" style="font-size: 18px;position: relative;top: 15px">
+              <p>注意事项：</p>
+              <p>1.只能上传填写后的<span style="color: red">模板文件.</span></p>
+              <p>2.文件后缀必须为<span style="color: red">xlsx、xls、csv</span>其中一个。</p>
+              <!--            <p>3.文件数量不超过<span style="color: red">10个</span>。</p>-->
+            </div>
+          </el-upload>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="checkoutFile()">确 定</el-button>
+          <el-button @click="closeDialog()">取 消</el-button>
+        </div>
+      </el-dialog>
+      <!--    查看导入反馈-第一版        -->
+      <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
+        <el-descriptions class="margin-top" title="" :column="2" border>
+          <el-descriptions-item v-for="item in repalyData">
             <template slot="label">
-              <i></i>
-<!--              这里显示文件名-->
-              {{item.name}}
+              {{item.key}}
             </template>
-<!--            这里显示上传成功或者上传失败的原因-->
-            <el-tag
-              size='small'
-              :type = "item.uploadStatus === '上传成功' ? 'success' :'danger' " >
-              {{item.uploadStatus === '上传成功' ? '上传成功' : item.uploadStatus}}
+            <el-tag :type= " item.values === 'update' ? 'success' : 'primary'">
+              {{item.values === 'update' ? '更新' : item.values}}
             </el-tag>
+
           </el-descriptions-item>
         </el-descriptions>
-        <el-button @click="uploadBtn()" type="primary" >确定</el-button>
-      </div>
-    </el-dialog>
+        <el-button @click="resultBtn()" type="primary">确定</el-button>
+      </el-dialog>
+
+      <!--    查看导入反馈-第二版        -->
+      <!--    <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">-->
+      <!--      <el-table-->
+      <!--        :data="tableUpdateData"-->
+      <!--        highlight-current-row-->
+      <!--        style="width: 100%" border>-->
+      <!--        <el-table-column type="expand" :data="detailedTableUpdateData">-->
+      <!--          <template slot-scope="props">-->
+      <!--            <el-form label-position="left" inline class="demo-table-expand" v-for="item in detailedTableUpdateData">-->
+      <!--              <el-form-item label="字段名">-->
+      <!--                <span>{{ item.key() }}</span>-->
+      <!--              </el-form-item>-->
+      <!--              <el-form-item label="更新状态">-->
+      <!--                <span>{{ props.row.name }}</span>-->
+      <!--              </el-form-item>-->
+      <!--            </el-form>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column label="小表名" prop="tableName"></el-table-column>-->
+      <!--        <el-table-column prop="operation" label="" ></el-table-column>-->
+      <!--      </el-table>-->
+      <!--    </el-dialog>-->
 
 
-  </div>
+
+
+      <el-dialog
+        :visible.sync="showDialog"
+        width="40%"
+        title="导入结果反馈">
+        <div style="text-align:center;font-size: 10px">
+          <!--需要弹出的内容部分-->
+          <el-descriptions  :column="1" >
+            <el-descriptions-item v-for="item in tableData">
+              <template slot="label">
+                <i></i>
+                <!--              这里显示文件名-->
+                {{item.name}}
+              </template>
+              <!--            这里显示上传成功或者上传失败的原因-->
+              <el-tag
+                size='small'
+                :type = "item.uploadStatus === '上传成功' ? 'success' :'danger' " >
+                {{item.uploadStatus === '上传成功' ? '上传成功' : item.uploadStatus}}
+              </el-tag>
+            </el-descriptions-item>
+          </el-descriptions>
+          <el-button @click="uploadBtn()" type="primary" >确定</el-button>
+        </div>
+      </el-dialog>
+
+
+    </div>
+
 </template>
 
 <script>
@@ -209,12 +213,17 @@ import {
 } from '@/utils/xlsx'
 import { importExcel } from '@/api/import'
 import { addEquipment, AddExcel, addExcel } from '@/api/table'
+import horizontalTable from '@/components/Infomanage/importExcel/horizontalTable.vue'
 // import { addEquipment, getbasic } from '@/api/table'
 
 export default {
   name: 'Dashboard',
+  components: {
+    horizontalTable,
+  },
   data() {
     return {
+      showButton: false,
       value: '信息资产基础信息表',
       // fileTaypes: [{
       //   value: '信息资产基础信息表',
@@ -270,9 +279,11 @@ export default {
     }
   },
   methods:  {
+    switchPage() {
+      this.showButton = !this.showButton
+    },
     uploadBtn(){
       this.showDialog=false
-
     },
     resultBtn(){
       this.backinfoDialog=false
