@@ -140,7 +140,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const addInformation = { ...this.addInformation }
-          console.log(addInformation)
           createBusinessSystem(addInformation).then(res => {
             this.$alert("提交成功", '提示', {
               confirmButtonText: '确定',

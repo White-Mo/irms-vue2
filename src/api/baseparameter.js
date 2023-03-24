@@ -91,6 +91,25 @@ export function getFirstLevelBusinessSystemByPage(data) {
   })
 }
 
+//删除一级业务系统
+export function deleteFirstLevelBusinessSystem(data){
+  return request({
+    url: '/home/baseparameter/deleteFirstLevelBusinessSystem',
+    method: 'DELETE',
+    params: {businessSystemFirstId:data}
+  })
+}
+
+//搜索查询一级业务系统
+export function SearchBusinessSystemFirstLevel(data){
+  return request({
+    url: '/home/baseparameter/SearchBusinessSystemFirstLevel',
+    method: 'post',
+    params: data
+  })
+}
+
+
 //获取全部一级业务系统数据
 export function getAllFirstLevelBusinessSystem() {
   return request({
@@ -177,6 +196,18 @@ export function delBusinessSystem(data) {
     params: data
   })
 }
+
+//修改一级业务系统
+export function updateFirstLevelBusinessSystem(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateFirstLevelBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
 //修改业务系统----------------赵长开----------------
 export function updateBusinessSystemAction(data) {
   return request({
@@ -186,6 +217,7 @@ export function updateBusinessSystemAction(data) {
     responseType: 'json'
   })
 }
+
 
 //通过业务系统Id获取设备------------赵长开
 export function getEquipmentByBusinessSystemId(data){

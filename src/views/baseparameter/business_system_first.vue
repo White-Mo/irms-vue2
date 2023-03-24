@@ -23,28 +23,7 @@
             :lg="2"
             :xl="2"
           >
-            查询条件：
-          </el-col>
-          <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
-          >
-            <el-select
-              v-model="searchCondition"
-              placeholder="详细字段查询"
-              multiple
-              size="medium"
-            >
-              <el-option
-                v-for="(item,index) in header"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            业务系统查询：
           </el-col>
           <el-col
             :xs="3"
@@ -72,7 +51,7 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click=""
+              @click="businessSystemFirstLevelSearch()"
             >搜索</el-button>
           </el-col>
           <el-col
@@ -129,27 +108,36 @@
       <div v-if="ifShow === '1'">
         <add-first-level-business-system @changeDiv="changeDiv"></add-first-level-business-system>
       </div>
+      <div v-if="ifShow === '2'">
+        <update-first-level-business-system :row="row" @changeDiv="changeDiv"></update-first-level-business-system>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {getFirstLevelBusinessSystemByPage} from "@/api/baseparameter";
+import {
+  delBusinessSystem,
+  deleteFirstLevelBusinessSystem,
+  getFirstLevelBusinessSystemByPage, SearchBusinessSystemFirstLevel
+} from "@/api/baseparameter";
 import addFirstLevelBusinessSystem
   from "@/components/Baseparameter/FirstLevelBusinessSystem/addFirstLevelBusinessSystem";
+import updateFirstLevelBusinessSystem
+  from "@/components/Baseparameter/FirstLevelBusinessSystem/updateFirstLevelBusinessSystem";
 
 export default {
   name: 'business_system_first',
-  components:{addFirstLevelBusinessSystem},
+  components:{addFirstLevelBusinessSystem,updateFirstLevelBusinessSystem},
   data(){
     return{
       ifShow:'0',
       listLoading: false,
       tableData:[],
-      searchCondition:'', //查询条件
       inputValue:'',
       currentPage: 1,
       limit:10,
+      row:{},
       header: [ //表头
         {
           value: 'businessSystemFirstName',
@@ -174,17 +162,53 @@ export default {
         this.tableData = response.data.items
         console.log(response)
       })
-      this.listLoading = false
+      setTimeout(()=>{this.listLoading = false},1000)
     },
     //弹出添加一级业务系统页面
     addFirstLevelBusinessSystem(){
       this.ifShow = '1'
+      this.showData()
     },
+    //删除一级业务系统
+    handleDelete(index, row) {
+      const businessSystemFirstId = row.businessSystemFirstId
+
+      this.$alert(`是否永久删除一级业务系统: \"${row.businessSystemFirstName}\"`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        callback: (action) => {
+          if (action === 'confirm') {
+            deleteFirstLevelBusinessSystem(businessSystemFirstId).then(response=>{
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.showData()
+              })
+            })
+          }
+        }
+      })
+
+    },
+    //查询一级业务系统
+    businessSystemFirstLevelSearch(){
+      const params = {
+        start: this.currentPage-1,
+        limit: this.limit,
+        inputName :this.inputValue
+      }
+      SearchBusinessSystemFirstLevel(params).then(response=>{
+        this.tableData = response.data.items
+      })
+    },
+    //修改一级业务系统
     handleEdit(index, row) {
       this.row = row
-    },
-    handleDelete(index, row) {
-      console.log(row)
+      this.ifShow = '2'
+      this.showData()
     },
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1

@@ -190,6 +190,7 @@ export default {
       inputValue: '',
       dataName: 'all',
       ifShow: '0',
+      row:{},
       listLoading: true,
       businessSystemParams:{
         businessSystem_Name:'',
