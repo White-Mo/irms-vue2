@@ -191,9 +191,10 @@ export default {
       dataName: 'all',
       ifShow: '0',
       listLoading: true,
-      businessSystemNameAndId:{
+      businessSystemParams:{
         businessSystem_Name:'',
-        businessSystem_Id:''
+        businessSystem_Id:'',
+        businessSystemFirstId:''
       },
       basicValue: [
 
@@ -204,6 +205,10 @@ export default {
         {
           value: 'businessSystemLevel',
           label: '业务系统等级',
+        },
+        {
+          value: 'businessSystemFirstName',
+          label: '所属一级业务系统等级',
         },
         {
           value: 'departmentName',
@@ -256,17 +261,18 @@ export default {
       this.row = row
     },
     handleDelete(index, row) {
-      this.businessSystemNameAndId.businessSystem_Name = row.businessSystemName
-      this.businessSystemNameAndId.businessSystem_Id = row.businessSystemId
-      const businessSystemNameAndId = {...this.businessSystemNameAndId}
-      this.$alert(`是否永久删除业务系统: \"${businessSystemNameAndId.businessSystem_Name}\"`, '提示', {
+      this.businessSystemParams.businessSystem_Name = row.businessSystemName
+      this.businessSystemParams.businessSystem_Id = row.businessSystemId
+      this.businessSystemParams.businessSystemFirstId = row.businessSystemFirstId
+      const businessSystemParams = {...this.businessSystemParams}
+      this.$alert(`是否永久删除业务系统: \"${businessSystemParams.businessSystem_Name}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delBusinessSystem(businessSystemNameAndId).then((response) => {
-              console.log(businessSystemNameAndId)
+            delBusinessSystem(businessSystemParams).then((response) => {
+              console.log(businessSystemParams)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
