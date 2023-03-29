@@ -386,6 +386,7 @@ export default {
         this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentTypeName
       })
       getbasic(this.row.equipmentId).then(response => {
+        console.log("hello",this.row)
         const item = response.data.items
         for (const key in item) {
           if (Object.hasOwnProperty.call(item, key)) {

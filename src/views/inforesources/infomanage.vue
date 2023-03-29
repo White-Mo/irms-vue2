@@ -865,7 +865,8 @@ export default {
       this.ifUpdate = '1'
     },
     handleDetail(index, row) {
-      //console.log(index, row)
+      console.log("------------------------------")
+      console.log(index, row)
       this.row = row
       this.ifUpdate = '2'
     },
