@@ -5,7 +5,7 @@
     </div>
     <div class="add-business-system">
       <el-row>
-        <el-form ref="addInformation" :model="addInformation" label-width="120px" :inline="false" :rules="rules">
+        <el-form ref="addInformation" :model="addInformation" label-width="140px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
               <el-select v-model="addInformation.postName" @change="changePost">
@@ -17,13 +17,24 @@
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="部门名称" prop="departmentName">
+          <el-form-item label="所属部门" prop="departmentName">
             <el-col :span="10">
               <el-select v-model="addInformation.departmentName" placeholder="请选择">
                 <el-option
                   v-for="item in departmentAll"
                   :key="item.value"
                   :value="item.departmentName"
+                />
+              </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="所属一级业务系统" prop="businessSystemFirstName">
+            <el-col :span="10">
+              <el-select v-model="addInformation.businessSystemFirstName" placeholder="请选择">
+                <el-option
+                  v-for="item in businessSystemFirst"
+                  :key="item.value"
+                  :value="item.businessSystemFirstName"
                 />
               </el-select>
             </el-col>
@@ -38,7 +49,6 @@
               <el-input v-model="addInformation.businessSystemName" />
             </el-col>
           </el-form-item>
-
           <el-form-item>
             <el-button type="primary" @click="onSubmit('addInformation')">添加业务系统</el-button>
           </el-form-item>
@@ -49,29 +59,12 @@
 </template>
 
 <script>
-import {checkBusinessSystemName, createBusinessSystem} from '@/api/baseparameter'
+import {checkBusinessSystemName, createBusinessSystem, getAllFirstLevelBusinessSystem} from '@/api/baseparameter'
 import {getDepartment, getPost} from "@/api/select";
 import user from "@/store/modules/user";
 
 export default {
   name:'addBusinessSystem',
-  created() {
-    getPost().then(response => {
-      this.postAll = response.data.items
-      console.log(this.postAll)
-      this.postAll.forEach(element => {
-        if (element.postId === this.roleid) {
-          //console.log(element.postName)
-          this.addInformation.postName = element.postName
-        }
-      })
-    })
-    getDepartment(this.roleid).then(response => {
-      this.departmentAll = response.data.items
-      this.addInformation.departmentName = this.departmentAll[0].departmentName
-    })
-  },
-
   data(){
     const checkName = async (rule, value, callback) => {
       if (!value) {
@@ -90,11 +83,13 @@ export default {
       roleid: user.state.roleid,
       postAll: [],
       departmentAll: [],
+      businessSystemFirst:[],
       addInformation:{
         postName:'',
         departmentName:'',
         businessSystemLevel:'',
-        businessSystemName:''
+        businessSystemName:'',
+        businessSystemFirstName:'',
       },
       rules: {
         postName: [
@@ -111,10 +106,31 @@ export default {
           {
             validator: checkName, trigger: 'blur'
           }
+        ],
+        businessSystemFirstName:[
+          { required: true, message: '请输入一级业务系统名称', trigger: 'blur' },
         ]
       }
 
     }
+  },
+  created() {
+    getPost().then(response => {
+      this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          this.addInformation.postName = element.postName
+        }
+      })
+    })
+    getDepartment(this.roleid).then(response => {
+      this.departmentAll = response.data.items
+      this.addInformation.departmentName = this.departmentAll[0].departmentName
+    })
+    getAllFirstLevelBusinessSystem().then(response=>{
+      this.businessSystemFirst = response.data.items
+    })
+
   },
   methods:{
     back() {

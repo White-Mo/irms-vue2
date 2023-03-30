@@ -33,7 +33,7 @@ export function updateEquipmentFirstType(data) {
     responseType: 'json'
   })
 }
-//修改一级设备类型----------------赵长开----------------
+//修改二级设备类型----------------赵长开----------------
 export function updateEquipmentSecondType(data) {
   return request({
     params: data,
@@ -82,6 +82,42 @@ export function getBusinessSystemByPage(data) {
   })
 }
 
+//通过页码获取一级业务系统
+export function getFirstLevelBusinessSystemByPage(data) {
+  return request({
+    url: '/home/baseparameter/getFirstLevelBusinessSystemByPage',
+    method: 'get',
+    params: data
+  })
+}
+
+//删除一级业务系统
+export function deleteFirstLevelBusinessSystem(data){
+  return request({
+    url: '/home/baseparameter/deleteFirstLevelBusinessSystem',
+    method: 'DELETE',
+    params: {businessSystemFirstId:data}
+  })
+}
+
+//搜索查询一级业务系统
+export function SearchBusinessSystemFirstLevel(data){
+  return request({
+    url: '/home/baseparameter/SearchBusinessSystemFirstLevel',
+    method: 'post',
+    params: data
+  })
+}
+
+
+//获取全部一级业务系统数据
+export function getAllFirstLevelBusinessSystem() {
+  return request({
+    url: '/home/baseparameter/getAllFirstLevelBusinessSystem',
+    method: 'get'
+  })
+}
+
 //改变机房状态wr
 export function changeStatus(eq) {
   var params = JSON.parse(JSON.stringify(eq))
@@ -122,11 +158,31 @@ export function createBusinessSystem(data) {
   })
 }
 
+//新增一级业务系统 ----------------------赵长开-------------------
+export function createFirstLevelBusinessSystem(data) {
+  return request({
+    params:data,
+    url: '/home/baseparameter/createFirstLevelBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 //检查业务系统是否重复----------------------赵长开-------------------
 export function checkBusinessSystemName(data) {
   return request({
     params: data,
     url: '/home/baseparameter/checkBusinessSystemName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//检查一级业务系统是否重复----------------------赵长开-------------------
+export function checkFirstLevelBusinessSystemName(data) {
+  return request({
+    params: {businessSystemFirstName: data},
+    url: '/home/baseparameter/checkFirstLevelBusinessSystemName',
     method: 'post',
     responseType: 'json'
   })
@@ -140,6 +196,18 @@ export function delBusinessSystem(data) {
     params: data
   })
 }
+
+//修改一级业务系统
+export function updateFirstLevelBusinessSystem(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateFirstLevelBusinessSystem',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+
 //修改业务系统----------------赵长开----------------
 export function updateBusinessSystemAction(data) {
   return request({
@@ -149,6 +217,7 @@ export function updateBusinessSystemAction(data) {
     responseType: 'json'
   })
 }
+
 
 //通过业务系统Id获取设备------------赵长开
 export function getEquipmentByBusinessSystemId(data){
