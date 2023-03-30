@@ -38,7 +38,11 @@ export default {
   methods:{
     getSecretKey(){
       getSecret().then(res=>{
-        this.SecretKey = res.data.secretKey
+        if (res.data == 'A9sf2se3f4sfeN3fJ1|5'){
+          this.SecretKey = res.data
+        }else {
+          this.SecretKey = res.data.secretKey
+        }
       })
     },
     checkSecretKey(){
