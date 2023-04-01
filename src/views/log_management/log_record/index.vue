@@ -3,33 +3,108 @@
     <div class="grid-content bg-purple">
       <i class="el-icon-s-order" /><span>日志管理</span>
     </div>
-    <div class="app-container" style="height: 47rem">
-      <el-row>
+    <div class="app-container" style="height: 100%">
+      <el-row :gutter="20">
         <el-col>
           <div class="grid-content bg-purple-dark">日志管理</div>
-          <el-calendar v-model="value">
+
+        </el-col>
+        <el-col :span=8 style="margin-top: 10px">
+
+          <el-calendar v-model="value" >
           </el-calendar>
+        </el-col >
+        <el-col :span="15">
+          <div class="block">
+            <el-timeline>
+              <el-timeline-item timestamp="time" placement="top">
+                <el-card>
+                  <el-table
+                    height="70vh"
+                    :row-style="{height:'6.26vh'}"
+                    :cell-style="{padding:'0px'}"
+                    v-loading="listLoading"
+                    :disable="true"
+                    :data="tableData"
+                    element-loading-text="Loading"
+                    border
+                    highlight-current-row
+                    stripe
+                  >
+                    <el-table-column align="center" type="index" :index="typeIndex"/>
+                    <el-table-column
+                      v-for="(item,index) in basicvalue"
+                      :key="index"
+                      :label="item.label"
+                      :prop="item.value"
+                      :formatter="item.formatter"
+                      align="center"
+                    >
+                    </el-table-column>
+                  </el-table>
+                </el-card>
+              </el-timeline-item>
+              <el-timeline-item timestamp="2018/4/3" placement="top">
+                <el-card>
+                  <h4>更新 Github 模板</h4>
+                  <p>王小虎 提交于 2018/4/3 20:46</p >
+                </el-card>
+              </el-timeline-item>
+              <el-timeline-item timestamp="2018/4/2" placement="top">
+                <el-card>
+                  <h4>更新 Github 模板</h4>
+                  <p>王小虎 提交于 2018/4/2 20:46</p >
+                </el-card>
+              </el-timeline-item>
+            </el-timeline>
+          </div>
         </el-col>
       </el-row>
-      <el-row :gutter="10" class="bg-condition">
-        <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="DownHelpDocument()">点击下载用户手册</el-button>
-      </el-row>
+
     </div>
-    <footer>
-      <p style="text-align: center">软件信息-中国地震台网中心信息资源管理系统v1.0 Beta</p>
-    </footer>
   </div>
 </template>
 
 <script>
+import { getLogData } from '@/api/log_management'
+
 export default {
   name: 'help',
   data() {
     return {
-      value: new Date()
+      tableData:[],
+      listLoading:false,
+      value: new Date(),
+      currentPage:1,
+      limit:10,
+      time:[],
+      basicvalue: [
+        {
+          value: 'time',
+          label: '时间'
+        },
+        {
+          value: 'message',
+          label: '操作行为'
+        }
+      ],
     }
   },
+  created() {
+    this.showData()
+  },
   methods:{
+    showData(){
+      const params = {
+        start:this.currentPage-1,
+        limit:this.limit
+      }
+      getLogData(params).then(response=>{
+        this.tableData = response.data
+      })
+    },
+
+
     //点击下载使用说明文档
     DownHelpDocument() {
       // specification.docx文件存储在public文件夹下
@@ -41,6 +116,10 @@ export default {
       a.click() //点击下载
       a.remove() //下载完成移除元素
     },
+
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
+    }
   }
 
 
@@ -67,7 +146,23 @@ export default {
   margin: 0px !important;
   background: #d3dce6;
 }
+.el-timeline{
+  height: 100%;
+  margin-top: 15px;
 
+}
+.el-row{
+   min-height: 100%;
+}
+
+body,html{
+  height:100%;
+
+}
+.box{
+  width: 100%;
+
+}
 
 </style>
 
