@@ -54,7 +54,7 @@ export function addEquipment(eq) {
 }
 
 export function AddExcel(eq) {
-  console.log('$$$',eq)
+  // console.log('$$$',eq)
   return request({
     data: eq,
     url: '/home/inforesources/AddExcel',

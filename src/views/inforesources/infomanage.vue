@@ -57,7 +57,6 @@
             :xl="3"
           >
             <el-autocomplete
-              style="width: 240px;"
               autosize
               type="text"
               class="inline-input"
@@ -81,16 +80,15 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              style="margin-left: 45px"
               @click="searchOne()"
             >搜索</el-button>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs="3"
+            :sm="3"
+            :md="3"
+            :lg="3"
+            :xl="3"
           >
             保修期查询条件:
           </el-col>
@@ -113,11 +111,11 @@
             </el-select>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs="8"
+            :sm="8"
+            :md="8"
+            :lg="8"
+            :xl="8"
           >
 
             <el-button
@@ -127,32 +125,14 @@
               clearable="true"
               @click="guaranteePeriodSearch()"
             >保修期查询</el-button>
-          </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 10px"
               @click="addInfo()"
             >添加设备信息</el-button>
-          </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
             <el-button
               size="medium"
               type="primary"
-              style="margin-left:250px"
               @click="search()"
             >筛选</el-button>
           </el-col>
