@@ -11,7 +11,7 @@
         class='bg-condition'
       >
         <el-row class='grid-content'>
-          <el-col :span='22'>
+          <el-col :span='12'>
             <el-upload
               ref='upload'
               class='upload-demo'
@@ -32,8 +32,8 @@
               <div slot='tip' class='el-upload__tip'>只能上传Excel文件</div>
             </el-upload>
           </el-col>
-          <el-col :span='1'>
-            <el-button size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>详情表导入</el-button>
+          <el-col :span='12'>
+            <el-button style='float: right' size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>详情表导入</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -171,7 +171,8 @@ export default {
             errorType: '',
             errorData: ''
           }
-          const { equipment, readStatus } = getRowEquipment([outdata[index]])
+          const userInfo=this.$store.state.user
+          const { equipment, readStatus } = getRowEquipment([outdata[index]],userInfo)
           // console.log(equipment)
           if (readStatus.length == 0) {
             const equipments = [equipment]

@@ -13,7 +13,7 @@
           :gutter='10'
           class='bg-condition'
         >
-          <el-col :span='21'>
+          <el-col :span='12'>
             <el-button-group style='float: left;margin-left: 0px;margin-top:5px'>
               <el-button type='primary' size='large' @click='dialogFormVisible = true' icon='el-icon-printer'>
                 导入详细表文件
@@ -26,8 +26,8 @@
               <el-button size='larger' type='danger' @click='clearTable' icon='el-icon-s-release'>清空列表</el-button>
             </el-button-group>
           </el-col>
-          <el-col :span='1.8'>
-            <el-button size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>综合表导入</el-button>
+          <el-col :span='12'>
+            <el-button style="margin-top: 5px; float:right" size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>综合表导入</el-button>
           </el-col>
         </el-row>
         <el-table

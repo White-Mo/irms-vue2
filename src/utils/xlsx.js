@@ -37,7 +37,7 @@ export function importfile(obj, head) {
       // 获取 Excel 表头 判断 是否为同一文件类型
       if (head === filetype) {
         if(head === "资产统计综合表"){
-          const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:"无数据"})
+          // const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:"无数据"})
           resolve(outdata)
         }else {
           resolve(outdata)
@@ -602,7 +602,7 @@ function underfindTransRow(status, part, readStatus) {
   if (status === '') {
     const message = {}
     message.erro=part + '不能为空'
-    readStatus.push(message)
+    // readStatus.push(message)
     return { status, readStatus }
   } else {
     // console.log(readStatus)
@@ -682,10 +682,11 @@ export function getUploadData(data, message) {
 /**
  * 横表解析
  */
-export function getRowEquipment(outdata) {
+export function getRowEquipment(outdata,userInfo) {
   // console.log(outdata)
   const equipment = {}
   const { equipmentBaseInfo, readStatus: readStatus } = getRowBaseinfo(outdata)
+  equipmentBaseInfo.insertUserId=userInfo.userid
   equipment.equipmentBaseInfo = equipmentBaseInfo
 
   const { softwares, configs } = getRowConfig(outdata)
@@ -754,12 +755,45 @@ function getRowBaseinfo(outdata) {
     onlineTime: '', // 上线时间
     offlineTime: '', // 下线时间
     //新增字段
-    option: ''
+    accessLocation:'',//接入位置
+    singleAndDoublePowerSupply:'',//单双电源
+    agreedToTemporaryShutdown:'',//是否同意临时关停（是/否）
+    installSafetyMonitoringSoftware:'',//是否安装安全监测软件
+    deployStrongPassword:'',//是否部署强口令
+    cloudServiceUnit:'',//云服务单位
+    leasedComputingResources:'',//租用计算资源情况（CPU核数）（个）
+    leasedStorageResources:'',//租用存储资源情况（TB）
+    leasedNetworkBandwidth:'',//租用网络带宽（兆）
+    termOfLease:'',//租用期限（年）
+    domainName:'',//域名
+    domainNameRegistrationService:'',//域名注册服务商
+    ns:'',//NS记录
+    cname:'',//CNAME记录（别名）
+    useCDN:'',//是否使用CDN
   }
 
-  equipmentBaseInfo.hostName = '无数据'
+  equipmentBaseInfo.hostName = ' '
   equipmentBaseInfo.remarks = Object.values(outdata[0])[27]
   equipmentBaseInfo.dataSources = 'EXCEL批量导入'
+
+  //新增字段
+  equipmentBaseInfo.accessLocation = Object.values(outdata[0])[16]
+  equipmentBaseInfo.singleAndDoublePowerSupply = Object.values(outdata[0])[17]
+  equipmentBaseInfo.agreedToTemporaryShutdown = Object.values(outdata[0])[21]
+  equipmentBaseInfo.installSafetyMonitoringSoftware = Object.values(outdata[0])[22]
+  equipmentBaseInfo.deployStrongPassword = Object.values(outdata[0])[23]
+  equipmentBaseInfo.cloudServiceUnit = Object.values(outdata[0])[36]
+  equipmentBaseInfo.leasedComputingResources = Object.values(outdata[0])[37]
+  equipmentBaseInfo.leasedStorageResources = Object.values(outdata[0])[38]
+  equipmentBaseInfo.leasedNetworkBandwidth = Object.values(outdata[0])[39]
+  equipmentBaseInfo.termOfLease = Object.values(outdata[0])[40]
+  equipmentBaseInfo.domainName = Object.values(outdata[0])[41]
+  equipmentBaseInfo.domainNameRegistrationService = Object.values(outdata[0])[42]
+  equipmentBaseInfo.ns = Object.values(outdata[0])[43]
+  equipmentBaseInfo.cname = Object.values(outdata[0])[44]
+  equipmentBaseInfo.useCDN = Object.values(outdata[0])[45]
+
+
 
 
   let readStatus0=[]
@@ -816,12 +850,12 @@ function getRowBaseinfo(outdata) {
   } = underfindTransRow(Object.values(outdata[0])[6], '应用管理员', readStatus6) // 应用管理员
   equipmentBaseInfo.appAdminName = appAdminName
 
-  const { status: appAdminPhone, readStatus: readStatus8 } = underfindTransRow('无数据', '应用管理员电话号码', readStatus7)
+  const { status: appAdminPhone, readStatus: readStatus8 } = underfindTransRow(' ', '应用管理员电话号码', readStatus7)
   equipmentBaseInfo.appAdminPhone = appAdminPhone
 
   equipmentBaseInfo.businessOrExperimental = Object.values(outdata[0])[11]// 业务机试验机
-  equipmentBaseInfo.mainOrBackup = '无数据' // 主机 备机
-  equipmentBaseInfo.migratable = '无数据' // 是否迁移
+  equipmentBaseInfo.mainOrBackup = ' ' // 主机 备机
+  equipmentBaseInfo.migratable = ' ' // 是否迁移
 
   const {
     status: brandName,
@@ -857,12 +891,12 @@ function getRowBaseinfo(outdata) {
     readStatus: readStatus13
   } = underfindTransRow(Object.values(outdata[0])[26], '上线时间', readStatus12) // 上线时间
 
-  if (dateRegex.test(onlineTime)||onlineTime=="无数据") {
+  if (dateRegex.test(onlineTime)||onlineTime=='') {
     equipmentBaseInfo.onlineTime = onlineTime
   } else {
     const onlineTimeRegex = {}
     onlineTimeRegex.erro="设备上线安装时间格式错误"
-    readStatus14.push(onlineTimeRegex)
+    readStatus13.push(onlineTimeRegex)
   }
 
   const {
@@ -870,7 +904,7 @@ function getRowBaseinfo(outdata) {
     readStatus: readStatus14
   } = underfindTransRow(Object.values(outdata[0])[25], '下线时间', readStatus13) // 下线时间
 
-  if (dateRegex.test(offlineTime)||offlineTime=="无数据") {
+  if (dateRegex.test(offlineTime)||offlineTime=='') {
     equipmentBaseInfo.offlineTime = offlineTime
   } else {
     const offlineTimeRegex = {}
@@ -1078,10 +1112,10 @@ function getRowAppSoftwareFir(outdata) {
   // appNativeStore.unusedSpace = NativeStoredata[4]
   // appNativeStore.annualGrowthSpace = NativeStoredata[5]
 
-  appNativeStore.totalCapacity = "无数据"
-  appNativeStore.usedSpace = "无数据"
-  appNativeStore.unusedSpace = "无数据"
-  appNativeStore.annualGrowthSpace = "无数据"
+  appNativeStore.totalCapacity = " "
+  appNativeStore.usedSpace = " "
+  appNativeStore.unusedSpace = " "
+  appNativeStore.annualGrowthSpace = " "
 
   return {
     appSoftwares,
