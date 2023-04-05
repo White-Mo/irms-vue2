@@ -320,44 +320,44 @@ export default {
     },
     // 表格合并
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        if (rowIndex === 0) {
-          return {
-            rowspan:7,
-            colspan: 1
-          }
-        } else if (rowIndex === 7) {
-          return {
-            rowspan: 4,
-            colspan: 1
-          }
-        } else if (rowIndex === 11) { //  合并第10行到第14行，从第10行开始，共5行
-          return {
-            rowspan: 5,
-            colspan: 1
-          }
-        }else if (rowIndex === 16 ) { //  合并第10行到第14行，从第10行开始，共5行
-          return {
-            rowspan: 7,
-            colspan: 1
-          }
-        } else  if (rowIndex === 23 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
-          return {
-            rowspan: 1,
-            colspan: 1
-          }
-        } else  if (rowIndex === 24 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
-          return {
-            rowspan: 1,
-            colspan: 1
-          }
-        } else {
-          return {
-            rowspan: 0,
-            colspan: 1
-          }
-        }
-      }
+      // if (columnIndex === 0) {
+      //   if (rowIndex === 0) {
+      //     return {
+      //       rowspan:7,
+      //       colspan: 1
+      //     }
+      //   } else if (rowIndex === 7) {
+      //     return {
+      //       rowspan: 4,
+      //       colspan: 1
+      //     }
+      //   } else if (rowIndex === 11) { //  合并第10行到第14行，从第10行开始，共5行
+      //     return {
+      //       rowspan: 5,
+      //       colspan: 1
+      //     }
+      //   }else if (rowIndex === 16 ) { //  合并第10行到第14行，从第10行开始，共5行
+      //     return {
+      //       rowspan: 7,
+      //       colspan: 1
+      //     }
+      //   } else  if (rowIndex === 23 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
+      //     return {
+      //       rowspan: 1,
+      //       colspan: 1
+      //     }
+      //   } else  if (rowIndex === 24 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
+      //     return {
+      //       rowspan: 1,
+      //       colspan: 1
+      //     }
+      //   } else {
+      //     return {
+      //       rowspan: 0,
+      //       colspan: 1
+      //     }
+      //   }
+      // }
   },
     //
     upAuthority(){
