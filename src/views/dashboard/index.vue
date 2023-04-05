@@ -79,7 +79,7 @@
             <img src="../../assets/dashboard_imgs/title_0.png" >
             <span>信息分布图</span>
           </div>
-          <!--          <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}"></div>-->
+<!--                    <div id="myChart" :style="{width:'95%',height:'95%',display: 'inline-block',paddingTop:'2.2%',}"></div>-->
           <div id="el-dialog" class="dialog">
             <div class="xc_layer"></div>
             <div id="printView" :style="{height:'68%'}" class="popBox">
@@ -113,9 +113,7 @@
                       <!--                <p id="pieChart2" style="width: 600px; height: 400px" ></p>-->
                       <p id="equipmentType" class="pieCHart" style="width: 100%; height: 100%;text-align: center"></p>
                     </div>
-
                   </div>
-
                 </div>
               </div>
             </div>

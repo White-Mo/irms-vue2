@@ -12,66 +12,6 @@
         :gutter="10"
         class="bg-condition"
       >
-        <!--      <el-col
-                :xs="2"
-                :sm="2"
-                :md="2"
-                :lg="2"
-                :xl="2"
-              >
-                <span>查询条件：</span>
-              </el-col>
-              <el-col
-                :xs="3"
-                :sm="3"
-                :md="3"
-                :lg="3"
-                :xl="3"
-              >
-                <el-select
-                  v-model="dataName"
-                  placeholder="详细字段查询"
-                  multiple
-                  size="medium"
-                >
-                  <el-option
-                    v-for="(item,index) in basicValue"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                    class="searchInput"
-                  />
-                </el-select>
-              </el-col>
-              <el-col
-                :xs="3"
-                :sm="3"
-                :md="3"
-                :lg="3"
-                :xl="3"
-              >
-                <el-input
-                  v-model="inputValue"
-                  placeholder="输入查询内容"
-                  clearable
-                  size="medium"
-                />
-              </el-col>
-              <el-col
-                :xs="2"
-                :sm="2"
-                :md="2"
-                :lg="2"
-                :xl="2"
-              >
-                <el-button
-                  size="medium"
-                  type="primary"
-                  icon="el-icon-search"
-                  clearable="true"
-                  @click="fetchData()"
-                >搜索</el-button>
-              </el-col>-->
         <el-col
           :xs="1"
           :sm="1"
@@ -134,8 +74,7 @@ export default {
   },
   data(){
     return{
-      // listLoading: true,
-      list:null,
+      list:[],
       listLoading:true,
       row:{},
       ifUpdate:'0',
@@ -147,10 +86,14 @@ export default {
     getEquipmentByBusinessSystemId(tempBusinessSystemNameId).then(res=>{
       console.log("**********",res)
       if(res.data.items[0].message === "该业务系统下没有设备"){
+        this.list = []
+        this.listLoading = false
         alert(res.data.items[0].message)
+      }else {
+        this.list = res.data.items
+        this.listLoading = false
       }
-      this.list = res.data.items
-      this.listLoading = false
+
     })
   },
   methods:{

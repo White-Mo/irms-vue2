@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item label="所属一级业务系统" prop="businessSystemFirstName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" placeholder="请选择">
+              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" filterable placeholder="请选择">
                 <el-option
                   v-for="item in businessSystemFirst"
                   :key="item.value"
@@ -60,19 +60,18 @@
 </template>
 
 <script>
-import {checkBusinessSystemName, getAllFirstLevelBusinessSystem, updateBusinessSystemAction} from '@/api/baseparameter'
+import {
+  checkBusinessSystemName,
+  getAllFirstLevelBusinessSystem,
+  getFirstLevelBusinessSystemByPostId,
+  updateBusinessSystemAction
+} from '@/api/baseparameter'
 import {getDepartment, getPost} from "@/api/select";
 import user from "@/store/modules/user";
 
 export default {
   name:'addBusinessSystem',
   props: ['row'],
-
-
-  mounted() {
-
-  },
-
   data(){
     const checkName = async (rule, value, callback) => {
       if (!value) {
@@ -124,16 +123,14 @@ export default {
     }
   },
   created() {
-    console.log("hhhh",this.row)
     getPost().then(response => {
       this.postAll = response.data.items
     })
     getDepartment(this.roleid).then(response => {
       this.departmentAll = response.data.items
     })
-    getAllFirstLevelBusinessSystem().then(response=>{
+    getFirstLevelBusinessSystemByPostId(this.roleid).then(response =>{
       this.businessSystemFirst = response.data.items
-
     })
   },
   methods:{
@@ -177,12 +174,17 @@ export default {
     },
 
     changePost(val) {
+      this.editInBusinessSystemFormation.businessSystemFirstName = ''
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {
             this.departmentAll = response.data.items
             this.editInBusinessSystemFormation.departmentName = this.departmentAll[0].departmentName
           })
+          getFirstLevelBusinessSystemByPostId(element.postId).then(response =>{
+            this.businessSystemFirst = response.data.items
+          })
+
         }
       })
     },
