@@ -15,6 +15,14 @@ export function getPost(data) { // 接受 data
     params:data //在发送请求的时候把data发送过去
   })
 }
+export function getSecret(data) { // 接受 data
+  return request({
+    url: '/home/baseparameter/getSecret',
+    method: 'post',
+    responseType: 'json',
+    params:data //在发送请求的时候把data发送过去
+  })
+}
 
 //获取拥有嵌套关系的单位和部门（部门所属于单位)
 export function getPostAllWithDepartment(data) {

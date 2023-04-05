@@ -103,7 +103,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" :index="typeIndex"/>
+          <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
           <el-table-column
             v-for="(item,index) in basicValue"
             :key="index"
@@ -242,7 +242,7 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage-1,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit,
         status:"0"
       }

@@ -90,7 +90,7 @@
 
           >
             <el-table-column label="" width="40" type="selection" />
-            <el-table-column label="" width="50" type="index" />
+            <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
