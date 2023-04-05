@@ -55,3 +55,9 @@ export function updateAuthority(data) {
     params:data
   })
 }
+export function helpInfoLogRecord() {
+  return request({
+    url:'home/authority/helpInfoLogRecord',
+    method:'post'
+  })
+}

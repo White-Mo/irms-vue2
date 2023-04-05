@@ -25,6 +25,8 @@
 
 import { getSecret } from '@/api/select'
 
+import { helpInfoLogRecord } from '@/api/Sys_info_manage'
+
 export default {
   name: 'help',
   data() {
@@ -80,6 +82,8 @@ export default {
       document.body.appendChild(a)
       a.click() //点击下载
       a.remove() //下载完成移除元素
+      helpInfoLogRecord().then(res=>{
+      })
     },
   }
 }
