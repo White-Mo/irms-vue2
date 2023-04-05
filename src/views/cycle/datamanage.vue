@@ -133,7 +133,7 @@
     <!--    查看导入反馈-->
     <el-dialog title="反馈信息展示" :visible.sync="backinfoDialog">
       <el-descriptions class="margin-top" title="" :column="2" border>
-        <el-descriptions-item v-for="item in repalyData">
+        <el-descriptions-item v-for="item in repalyData" :key='item.key'>
           <template slot="label">
             {{item.key}}
           </template>
@@ -147,7 +147,6 @@
     </el-dialog>
 
 
-
     <el-dialog
       :visible.sync="showDialog"
       width="40%"
@@ -155,7 +154,7 @@
       <div style="text-align:center;font-size: 10px">
         <!--需要弹出的内容部分-->
         <el-descriptions  :column="1" >
-          <el-descriptions-item v-for="item in tableData">
+          <el-descriptions-item v-for="(item,index) in tableData" :key='index'>
             <template slot="label">
               <i></i>
               <!--              这里显示文件名-->
@@ -312,7 +311,7 @@ export default {
         for (let index = 0; index < this.checkList.length; index++) {
           const outdata = await importfile(this.checkList[index].value, this.value)
           //console.log("@",this.checkList[index].value.name)
-          const postName = this.$store.state.user.roleid
+          const postName = this.$store.state.user.post_name
           const { equipment, readStatus } = getEquipment(outdata, postName)
           //console.log(equipment)
           //console.log(readStatus)

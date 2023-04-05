@@ -37,6 +37,11 @@ const mutations = {
   SET_ROLE_ID: (state, roleid) => {
     state.roleid = roleid
   },
+
+  SET_POST_NAME: (state, post_name) => {
+    state.post_name = post_name
+  },
+
   SET_ROLE_DEPARTMENT_ID: (state, role_department_id) => {
     state.role_department_id = role_department_id
   },
@@ -80,7 +85,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, realname, roleid, role_department_id, role_department_name , username, userid ,role_name } = data
+        const { roles, realname, roleid , post_name , role_department_id, role_department_name , username, userid ,role_name } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -90,6 +95,7 @@ const actions = {
         commit('SET_ROLES', roles) // group_name
         commit('SET_REAL_NAME', realname)
         commit('SET_ROLE_ID', roleid)
+        commit('SET_POST_NAME', post_name)
         commit('SET_ROLE_DEPARTMENT_ID', role_department_id)
         commit('SET_ROLE_DEPARTMENT_NAME', role_department_name)
         commit('SET_USER_NAME', username)

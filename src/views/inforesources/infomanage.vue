@@ -1,248 +1,236 @@
 <template>
-  <div class="infobody">
-    <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>信息资源管理</span></div>
-    <div class="app-container">
+  <div class='infobody'>
+    <div class='grid-content bg-purple'><i class='el-icon-s-order' /><span>信息资源管理</span></div>
+    <div class='app-container'>
       <div
         v-show="ifUpdate === '0'"
-        class="show"
+        class='show'
       >
         <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">综合信息管理</div>
+          <el-col :span='24'>
+            <div class='grid-content bg-purple-dark'>综合信息管理</div>
           </el-col>
         </el-row>
         <el-row
-          :gutter="10"
-          class="bg-condition"
+          :gutter='10'
+          class='bg-condition'
         >
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs='2'
+            :sm='2'
+            :md='2'
+            :lg='2'
+            :xl='2'
           >
             <span>查询条件:</span>
           </el-col>
           <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
+            :xs='3'
+            :sm='3'
+            :md='3'
+            :lg='3'
+            :xl='3'
           >
             <el-select
-              @change="handleSelectChange"
-              v-model="DataName"
-              placeholder="详细字段查询"
+              @change='handleSelectChange'
+              v-model='DataName'
+              placeholder='详细字段查询'
               multiple
             >
               <el-option
-                v-for="item in dataname_option"
-                :key="item.label"
-                :label="item.label"
-                :value="item.value"
-                class="searchInput"
-                :disabled="item.isDisabled"
+                v-for='item in dataname_option'
+                :key='item.label'
+                :label='item.label'
+                :value='item.value'
+                class='searchInput'
+                :disabled='item.isDisabled'
                 clearable
               />
             </el-select>
 
           </el-col>
           <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
+            :xs='3'
+            :sm='3'
+            :md='3'
+            :lg='3'
+            :xl='3'
           >
             <el-autocomplete
-              style="width: 240px;"
               autosize
-              type="text"
-              class="inline-input"
+              type='text'
+              class='inline-input'
               clearable
-              v-model="inputValue"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              @select="handleSelect"
+              v-model='inputValue'
+              :fetch-suggestions='querySearch'
+              placeholder='请输入内容'
+              @select='handleSelect'
             ></el-autocomplete>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs='2'
+            :sm='2'
+            :md='2'
+            :lg='2'
+            :xl='2'
           >
 
             <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-search"
-              clearable="true"
-              style="margin-left: 45px"
-              @click="searchOne()"
-            >搜索</el-button>
+              size='medium'
+              type='primary'
+              icon='el-icon-search'
+              clearable='true'
+              @click='searchOne()'
+            >搜索
+            </el-button>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs='3'
+            :sm='3'
+            :md='3'
+            :lg='3'
+            :xl='3'
           >
             保修期查询条件:
           </el-col>
           <el-col
-            :xs="3"
-            :sm="3"
-            :md="3"
-            :lg="3"
-            :xl="3"
+            :xs='3'
+            :sm='3'
+            :md='3'
+            :lg='3'
+            :xl='3'
           >
-            <el-select v-model="guaranteePeriodSearchCondition" placeholder="请选择查询条件" clearable>
+            <el-select v-model='guaranteePeriodSearchCondition' placeholder='请选择查询条件' clearable>
               <el-option
-                v-for="(item, index) in guaranteePeriodSearchConditionData"
-                :key="index"
-                :value="item.value"
-                :label="item.label"
-                :class="getColorClass(item.value)"
-                class="searchInput"
+                v-for='(item, index) in guaranteePeriodSearchConditionData'
+                :key='index'
+                :value='item.value'
+                :label='item.label'
+                :class='getColorClass(item.value)'
+                class='searchInput'
               ></el-option>
             </el-select>
           </el-col>
           <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
+            :xs='8'
+            :sm='8'
+            :md='8'
+            :lg='8'
+            :xl='8'
           >
 
             <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-search"
-              clearable="true"
-              @click="guaranteePeriodSearch()"
-            >保修期查询</el-button>
-          </el-col>
-          <el-col
-            :xs="2"
-            :sm="2"
-            :md="2"
-            :lg="2"
-            :xl="2"
-          >
+              size='medium'
+              type='primary'
+              icon='el-icon-search'
+              clearable='true'
+              @click='guaranteePeriodSearch()'
+            >保修期查询
+            </el-button>
             <el-button
-              size="medium"
-              type="primary"
-              style="margin-left: 10px"
-              @click="addInfo()"
-            >添加设备信息</el-button>
-          </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
+              size='medium'
+              type='primary'
+              @click='addInfo()'
+            >添加设备信息
+            </el-button>
             <el-button
-              size="medium"
-              type="primary"
-              style="margin-left:250px"
-              @click="search()"
-            >筛选</el-button>
+              size='medium'
+              type='primary'
+              @click='search()'
+            >筛选
+            </el-button>
           </el-col>
         </el-row>
         <el-table
-          v-loading="listLoading"
-          :diisable="true"
-          :data="list"
-          element-loading-text="Loading"
-          height="72vh"
-          :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
+          v-loading='listLoading'
+          :diisable='true'
+          :data='list'
+          element-loading-text='Loading'
+          height='72vh'
           border
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
           highlight-current-row
           stripe
-          @cell-dblclick="tbCellDoubleClick"
+          @cell-dblclick='tbCellDoubleClick'
         >
           <el-table-column
-            type="index"
-            align="center"
-            :index="typeIndex"
+            type='index'
+            align='center'
+            :index='typeIndex'
             show-overflow-tooltip
           >
           </el-table-column>
           <el-table-column
-            v-for="(item,index) in dataname"
-            :key="index"
-            :label="item.label"
-            :prop="item.value"
-            :formatter="item.formatter"
-            :width="item.width"
-            align="center"
+            v-for='(item,index) in dataname'
+            :key='index'
+            :label='item.label'
+            :prop='item.value'
+            :formatter='item.formatter'
+            :width='item.width'
+            align='center'
             show-overflow-tooltip
           >
 
           </el-table-column>
           <el-table-column
-            align="center"
-            fixed="right"
-            label="操作"
-            width="250px"
+            align='center'
+            fixed='right'
+            label='操作'
+            width='250px'
           >
-            <template slot-scope="scope">
+            <template slot-scope='scope'>
               <el-button
-                type="success" plain
-                size="mini"
-                @click="handleDetail(scope.$index, scope.row)"
-              >详情</el-button>
+                type='success' plain
+                size='mini'
+                @click='handleDetail(scope.$index, scope.row)'
+              >详情
+              </el-button>
               <el-button
-                type="primary" plain
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
+                type='primary' plain
+                size='mini'
+                @click='handleEdit(scope.$index, scope.row)'
+              >编辑
+              </el-button>
 
               <el-button
-                size="mini"
-                type="danger"
+                size='mini'
+                type='danger'
                 text
                 @click=handleDelete(scope.row)
-              >删除</el-button>
+              >删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-dialog
-          title="多条件搜索"
-          :visible.sync="dialogVisible"
-          width="55%"
-          style="margin-top: -80px;"
-          custom-class="transparent-dialog">
-          <search-template :start="start" :limit="limit" @changList="receiveAllSearchData"></search-template>
+          title='多条件搜索'
+          :visible.sync='dialogVisible'
+          width='55%'
+          style='margin-top: -80px;'
+          custom-class='transparent-dialog'>
+          <search-template :start='start' :limit='limit' @changList='receiveAllSearchData'></search-template>
         </el-dialog>
-        <div class="block">
+        <div class='block'>
           <el-pagination
-            :page-size="10"
-            :current-page.sync="currentPage"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+            :page-size='10'
+            :current-page.sync='currentPage'
+            layout='total, sizes, prev, pager, next, jumper'
+            :total='total'
+            @size-change='handleSizeChange'
+            @current-change='handleCurrentChange'
           />
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addInfo @changeDiv="changeDiv" />
+        <addInfo @changeDiv='changeDiv' />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateInfo
-          :row="row"
-          :current-show="ifUpdate"
-          @changeDiv="changeDiv"
+          :row='row'
+          :current-show='ifUpdate'
+          @changeDiv='changeDiv'
         />
       </div>
     </div>
@@ -260,7 +248,7 @@ import {
 } from '@/api/table'
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
-import searchTemplate from "@/components/Infomanage/searchTemplate";
+import searchTemplate from '@/components/Infomanage/searchTemplate'
 
 export default {
   // 引用vue reload方法
@@ -282,16 +270,16 @@ export default {
   },
   data() {
     return {
-      currentPage:1,
+      currentPage: 1,
       guaranteePeriodID: '保修期:',
       editionID: '中间件版本:',
       typeID: 'CPU类型:',
       type: 0,
       edition: 0,
       guaranteePeriod: 0,
-      ipAddress:0,
-      macAddress:0,
-      remains:0,
+      ipAddress: 0,
+      macAddress: 0,
+      remains: 0,
       restaurants: [],
       foad: [],
       cpu_middle_guar: 'all',
@@ -307,14 +295,14 @@ export default {
       initname: ['123'],
       department: '',
       inputValue: '',
-      inputValue2:'',
+      inputValue2: '',
       postname: '',
       input3: '',
       ifUpdate: '0',
       listLoading: true,
       singalInfo: {},
       initval: [],
-      tempAllData:null,
+      tempAllData: null,
       dataname: [
 
         {
@@ -366,11 +354,11 @@ export default {
         {
           value: 'onlineTime',
           label: '上线时间',
-          formatter: function (row) {
+          formatter: function(row) {
             var time = row.onlineTime
-            if(time == null){
-              return "无"
-            }else{
+            if (time == null) {
+              return '无'
+            } else {
               //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
               var date = new Date(time)
               var year = date.getFullYear()
@@ -404,11 +392,11 @@ export default {
         {
           value: 'offlineTime',
           label: '下线时间',
-          formatter: function (row) {
+          formatter: function(row) {
             var time = row.offlineTime
-            if(time == null){
-              return "无"
-            }else {
+            if (time == null) {
+              return '无'
+            } else {
               //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
               var date = new Date(time)
               var year = date.getFullYear()
@@ -473,7 +461,7 @@ export default {
           value: 'serialNumber',
           label: '序列号',
           width: '200px'
-        },  {
+        }, {
           value: 'guaranteePeriod',
           label: '保修期',
           width: '200px'
@@ -488,6 +476,22 @@ export default {
           label: '中间件版本',
           width: '200px'
         },
+        { value: 'accessLocation', label: '接入位置', width: '200px' },
+        { value: 'singleAndDoublePowerSupply', label: '单双电源', width: '200px' },
+        { value: 'agreedToATemporaryShutdown', label: '是否同意临时关停（是/否）', width: '200px' },
+        { value: 'installSafetyMonitoringSoftware', label: '是否安装安全监测软件', width: '200px' },
+        { value: 'deployStrongPassword', label: '是否部署强口令', width: '200px' },
+        { value: 'cloudServiceUnit', label: '云服务单位', width: '200px' },
+        { value: 'leasedComputingResources', label: '租用计算资源情况（CPU核数）（个）', width: '200px' },
+        { value: 'leasedStorageResources', label: '租用存储资源情况（TB）', width: '200px' },
+        { value: 'leasedNetworkBandwidth', label: '租用网络带宽（兆）', width: '200px' },
+        { value: 'termOfLease', label: '租用期限（年）', width: '200px' },
+        { value: 'domainName', label: '域名', width: '200px' },
+        { value: 'domainNameRegistrationService', label: '域名注册服务商', width: '200px' },
+        { value: 'ns', label: 'NS记录', width: '200px' },
+        { value: 'cname', label: 'CNAME记录（别名）', width: '200px' },
+        { value: 'useCDN', label: '是否使用CDN', width: '200px' }
+
       ],
 
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
@@ -527,14 +531,14 @@ export default {
         // PS：搜索框中使用了dataname_option这个数组中IP地址、Mac地址的索引
         // //若要改此数组元素的顺序，务必修改handleSelectChange()方法中的代码！！！
         {
-          value:'ipAddress',
-          label:'IP地址',
-          width: '200px',
+          value: 'ipAddress',
+          label: 'IP地址',
+          width: '200px'
         },
         {
-          value:'macAddress',
-          label:'Mac地址',
-          width: '200px',
+          value: 'macAddress',
+          label: 'Mac地址',
+          width: '200px'
         },
 
 
@@ -612,32 +616,32 @@ export default {
         }
       ],
       value: '',
-      isMultiline:false,
-      isGuaranteePeriodSearch:false,
-      infoInput:[],
-      guaranteePeriodSearchCondition:'',
-      tempGuaranteePeriodSearchCondition:'',
-      guaranteePeriodParams:{
-        start:'',
-        limit:'',
-        searchCondition:''
+      isMultiline: false,
+      isGuaranteePeriodSearch: false,
+      infoInput: [],
+      guaranteePeriodSearchCondition: '',
+      tempGuaranteePeriodSearchCondition: '',
+      guaranteePeriodParams: {
+        start: '',
+        limit: '',
+        searchCondition: ''
       },
-      guaranteePeriodSearchConditionData:[
+      guaranteePeriodSearchConditionData: [
         {
-          value:'OverGuaranteePeriod',
-          label:'已过保'
+          value: 'OverGuaranteePeriod',
+          label: '已过保'
         },
         {
-          value:'threeMonthsOverGuaranteePeriod',
-          label:'三个月后过保'
+          value: 'threeMonthsOverGuaranteePeriod',
+          label: '三个月后过保'
         },
         {
-          value:'sixMonthsOverGuaranteePeriod',
-          label:'半年后过保'
+          value: 'sixMonthsOverGuaranteePeriod',
+          label: '半年后过保'
         },
         {
-          value:'oneYearOverGuaranteePeriod',
-          label:'一年后过保'
+          value: 'oneYearOverGuaranteePeriod',
+          label: '一年后过保'
         }
 
       ]
@@ -653,14 +657,14 @@ export default {
     // console.log(this.initval);
   },
   methods: {
-    receiveAllSearchData(searchAllData,infoInput){
-      this.isMultiline=true;
-      this.start=0;
-      this.currentPage=1;
-      this.infoInput=infoInput;
-      this.list = searchAllData.items;
-      this.total = searchAllData.total;
-      this.dialogVisible = false;
+    receiveAllSearchData(searchAllData, infoInput) {
+      this.isMultiline = true
+      this.start = 0
+      this.currentPage = 1
+      this.infoInput = infoInput
+      this.list = searchAllData.items
+      this.total = searchAllData.total
+      this.dialogVisible = false
     },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
@@ -692,43 +696,43 @@ export default {
     // change的处理事件
     handleSelectChange(val) {
       //ip地址、mac地址单独选择事件-选择ip或mac一者，其他所有禁选；选择其他任何，ip和mac二者都禁选
-      if(val.indexOf('ipAddress') !== -1){
+      if (val.indexOf('ipAddress') !== -1) {
         this.ipAddress = 1
-        for(const a in this.dataname_option){
-          if(this.dataname_option[a].value !== 'ipAddress')
+        for (const a in this.dataname_option) {
+          if (this.dataname_option[a].value !== 'ipAddress')
             this.dataname_option[a].isDisabled = true
         }
-      }else if(val.indexOf('macAddress') !==-1){
+      } else if (val.indexOf('macAddress') !== -1) {
         this.macAddress = 1
-        for(const b in this.dataname_option){
-          if(this.dataname_option[b].value !== 'macAddress')
+        for (const b in this.dataname_option) {
+          if (this.dataname_option[b].value !== 'macAddress')
             this.dataname_option[b].isDisabled = true
         }
-      }else{
-        if(val.length !== 0){
+      } else {
+        if (val.length !== 0) {
           this.remains = 1
           this.dataname_option[6].isDisabled = true
           this.dataname_option[7].isDisabled = true
         }
       }
       //当ip地址、mac地址取消勾选，恢复正常
-      if(val.indexOf('ipAddress') === -1 && this.ipAddress === 1){
-        for(const c in this.dataname_option){
-          if(this.dataname_option[c].value !== 'ipAddress'){
+      if (val.indexOf('ipAddress') === -1 && this.ipAddress === 1) {
+        for (const c in this.dataname_option) {
+          if (this.dataname_option[c].value !== 'ipAddress') {
             this.dataname_option[c].isDisabled = false
             this.ipAddress = 0
           }
         }
-      }else if(val.indexOf('macAddress') === -1 && this.macAddress === 1){
-        for(const d in this.dataname_option){
-          if(this.dataname_option[d].value !== 'macAddress'){
+      } else if (val.indexOf('macAddress') === -1 && this.macAddress === 1) {
+        for (const d in this.dataname_option) {
+          if (this.dataname_option[d].value !== 'macAddress') {
             this.dataname_option[d].isDisabled = false
             this.macAddress = 0
           }
         }
-      }else{
-        if(val.length === 0){
-          for(const e in this.dataname_option){
+      } else {
+        if (val.length === 0) {
+          for (const e in this.dataname_option) {
             this.dataname_option[e].isDisabled = false
             this.remains = 0
           }
@@ -772,7 +776,7 @@ export default {
       InitValue(initdatas).then((response) => {
         this.initval = response.data.items
         for (let i = 0; i < this.initval.length; i++) {
-          this.foad.push({label: name, value: name + this.initval[i]})
+          this.foad.push({ label: name, value: name + this.initval[i] })
         }
 
         this.listLoading = false
@@ -805,15 +809,15 @@ export default {
       })
     },
     //单条件搜索
-    searchOne(){
-      this.start=0
-      this.currentPage=1
+    searchOne() {
+      this.start = 0
+      this.currentPage = 1
       this.fetchData()
     },
     // 综合数据管理展示与查询--lry
     fetchData() {
       this.listLoading = true
-      this.isMultiline=false
+      this.isMultiline = false
       this.isGuaranteePeriodSearch = false
       // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
@@ -829,14 +833,14 @@ export default {
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
-        status: "0",
+        status: '0',
         start: this.start,
         limit: this.limit
       }
       // console.log('11',this.initname)
       var flog = false
-      for(let i = 0; i <= this.initname.length; i++){
-        if(this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress'){
+      for (let i = 0; i <= this.initname.length; i++) {
+        if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
           // console.log("参数1",params)
           solelySearchIdAndMacAddress(params).then((response) => {
             let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
@@ -850,7 +854,7 @@ export default {
           break
         }
       }
-      if(flog === false){
+      if (flog === false) {
         // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
@@ -878,7 +882,7 @@ export default {
       this.$confirm(`是否永久删除设备：\"${row.equipmentName}\"信息`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       }).then(() => {
         delEquipment(row.equipmentId).then((response) => {
           this.active = 0
@@ -894,70 +898,68 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        });
-      });
+        })
+      })
 
     },
 
 
     handleSizeChange(val) {
-       console.log(`每页 ${val} 条`)
+      console.log(`每页 ${val} 条`)
       this.limit = val
-      if(this.isMultiline){
-        this.infoInput.start=this.start*this.limit
-        this.infoInput.limit=this.limit
-        this.listLoading=true
-        const params=this.infoInput
-        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
-          this.list=res.data.items
-          this.total=res.data.total
-          this.listLoading=false
+      if (this.isMultiline) {
+        this.infoInput.start = this.start * this.limit
+        this.infoInput.limit = this.limit
+        this.listLoading = true
+        const params = this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res => {
+          this.list = res.data.items
+          this.total = res.data.total
+          this.listLoading = false
         })
-      }else if(this.isGuaranteePeriodSearch){
-        const params ={
-          start:this.start*this.limit,
-          limit:this.limit,
-          searchCondition:this.tempGuaranteePeriodSearchCondition,
+      } else if (this.isGuaranteePeriodSearch) {
+        const params = {
+          start: this.start * this.limit,
+          limit: this.limit,
+          searchCondition: this.tempGuaranteePeriodSearchCondition
         }
-        guaranteePeriodSearchByTime(params).then(res=>{
-          this.list=res.data.items
-          this.total=res.data.total
-          this.listLoading=false
+        guaranteePeriodSearchByTime(params).then(res => {
+          this.list = res.data.items
+          this.total = res.data.total
+          this.listLoading = false
         })
-      }
-      else {
+      } else {
         this.fetchData()
       }
     },
     handleCurrentChange(val) {
-      this.listLoading=true
-      this.currentPage=val
-      if(this.isMultiline){
-        this.infoInput.start=(val - 1)*this.limit
-        this.infoInput.limit=this.limit
-        const params=this.infoInput
-        searchComprehensiveInfoByMultipleConditions(params).then(res=>{
-          this.list=res.data.items
-          this.total=res.data.total
+      this.listLoading = true
+      this.currentPage = val
+      if (this.isMultiline) {
+        this.infoInput.start = (val - 1) * this.limit
+        this.infoInput.limit = this.limit
+        const params = this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res => {
+          this.list = res.data.items
+          this.total = res.data.total
           this.listLoading = false
         })
-      }else if(this.isGuaranteePeriodSearch){
-        const params ={
-          start:(val - 1) * this.limit,
-          limit:this.limit,
-          searchCondition:this.tempGuaranteePeriodSearchCondition,
+      } else if (this.isGuaranteePeriodSearch) {
+        const params = {
+          start: (val - 1) * this.limit,
+          limit: this.limit,
+          searchCondition: this.tempGuaranteePeriodSearchCondition
         }
-        guaranteePeriodSearchByTime(params).then(res=>{
-          this.list=res.data.items
-          this.total=res.data.total
-          this.listLoading=false
+        guaranteePeriodSearchByTime(params).then(res => {
+          this.list = res.data.items
+          this.total = res.data.total
+          this.listLoading = false
         })
-      }
-      else {
+      } else {
         const params = {
           dataName: this.initname,
           dataValue: this.inputValue,
-          status: "0",
+          status: '0',
           start: (val - 1) * this.limit,
           limit: this.limit
         }
@@ -968,80 +970,87 @@ export default {
         })
       }
     },
-    search(){
+    search() {
       this.dialogVisible = true
     },
     //保修期搜索
-    guaranteePeriodSearch(){
+    guaranteePeriodSearch() {
       this.isMultiline = false
-      console.log("查询的条件:",this.guaranteePeriodSearchCondition)
+      console.log('查询的条件:', this.guaranteePeriodSearchCondition)
       //一年后过保
-      if(this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod'){
+      if (this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
       }
       //半年后过保
-      else if(this.guaranteePeriodSearchCondition === 'sixMonthsOverGuaranteePeriod'){
+      else if (this.guaranteePeriodSearchCondition === 'sixMonthsOverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
       }
       //三个月后过保
-      else if(this.guaranteePeriodSearchCondition === 'threeMonthsOverGuaranteePeriod'){
+      else if (this.guaranteePeriodSearchCondition === 'threeMonthsOverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
       }
       //已过保
-      else if(this.guaranteePeriodSearchCondition === 'OverGuaranteePeriod'){
+      else if (this.guaranteePeriodSearchCondition === 'OverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
       }
     },
 
-   guaranteePeriodSearchHandel(){
+    guaranteePeriodSearchHandel() {
       this.currentPage = 1
       this.tempGuaranteePeriodSearchCondition = this.guaranteePeriodSearchCondition
-     // this.guaranteePeriodParams.start = this.start
-     // this.guaranteePeriodParams.limit = this.limit
-     const params ={
-       start:this.start,
-       limit:this.limit,
-       searchCondition:this.guaranteePeriodSearchCondition,
-     }
-     guaranteePeriodSearchByTime(params).then(res=>{
-       this.list=res.data.items
-       this.total=res.data.total
-       this.guaranteePeriodSearchCondition = ''
-       this.isGuaranteePeriodSearch = true
-       this.listLoading=false
-     })
-   },
+      // this.guaranteePeriodParams.start = this.start
+      // this.guaranteePeriodParams.limit = this.limit
+      const params = {
+        start: this.start,
+        limit: this.limit,
+        searchCondition: this.guaranteePeriodSearchCondition
+      }
+      guaranteePeriodSearchByTime(params).then(res => {
+        this.list = res.data.items
+        this.total = res.data.total
+        this.guaranteePeriodSearchCondition = ''
+        this.isGuaranteePeriodSearch = true
+        this.listLoading = false
+      })
+    },
     changeDiv(value) {
       this.ifUpdate = value
     },
     //分页连续展示   currentPage页码  limit每页数量
-    typeIndex(index){
-      return index+(this.currentPage-1)*this.limit + 1
+    typeIndex(index) {
+      return index + (this.currentPage - 1) * this.limit + 1
     },
-    getColorClass(value){
-       if (value === "OverGuaranteePeriod") {
-      { return "red" }}
+    getColorClass(value) {
+      if (value === 'OverGuaranteePeriod') {
+        {
+          return 'red'
+        }
+      }
     }
 
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
+
 .tile-content {
   padding: 9px;
   margin-bottom: 20px;
 }
+
 .shadows {
   box-shadow: 0 0 4px #0000004d !important;
 }
+
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
+
 .searchInput {
   height: 40px;
   line-height: 40px;
@@ -1062,15 +1071,19 @@ export default {
       margin-bottom: 0;
     } */
 }
+
 .el-col {
   border-radius: 4px;
 }
+
 .bg-purple-dark {
   background: #99a9bf;
 }
+
 .bg-purple {
   background: #d3dce6;
 }
+
 .bg-condition {
   line-height: 50px;
   text-align: center;
@@ -1078,41 +1091,49 @@ export default {
   margin: 0px !important;
   background: #d3dce6;
 }
+
 .bg-purple-light {
   background: #e5e9f2;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+
 .app-container {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
+
 .grid-content {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
+
 .font {
   font-size: 18px;
 }
+
 .el-cascader .el-input {
   width: 130px;
 }
+
 .el-pagination > * {
   font-size: 18px;
 }
+
 .block {
   text-align: center;
 }
 
 
-
 .red {
-  background-color: red ;
+  background-color: red;
   color: #FFFFFF;
 }
 

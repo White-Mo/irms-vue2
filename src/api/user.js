@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import axios from 'axios'
+import Ruoyi_request from '@/utils/Ruoyi_request'
 
 export function login(data) {
   return request({
@@ -22,7 +24,9 @@ export function logout() {
     method: 'post'
   })
 }
-
+/**
+获取验证码
+ */
 export function initVerifyCode(fosV) {
   return request({
     url: '/syslogin/initVerifyCode',
@@ -31,6 +35,14 @@ export function initVerifyCode(fosV) {
     params: { fosV }
   })
 }
+// export function initVerifyCode(fosV) {
+//   return Ruoyi_request({
+//     url: 'localhost:8086/syslogin/initVerifyCode',
+//     method: 'get',
+//     responseType: 'json',
+//     params: { fosV }
+//   })
+// }
 
 export function getMoveRoute() {
   return request({
