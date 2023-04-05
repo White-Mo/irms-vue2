@@ -56,7 +56,8 @@ export default {
     copySecretKey(val) {
       // 模拟 输入框
       var cInput = document.createElement("input");
-      cInput.value = val;
+      cInput.value = process.env.VUE_APP_BASE_API+"/api/"+val+"/equipments/status/0";
+      // cInput.value = val;
       document.body.appendChild(cInput);
       cInput.select(); // 选取文本框内容
       // 执行浏览器复制命令
