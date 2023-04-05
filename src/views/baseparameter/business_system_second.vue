@@ -209,7 +209,7 @@ export default {
         },
         {
           value: 'businessSystemFirstName',
-          label: '所属一级业务系统等级',
+          label: '所属一级业务系统',
         },
         {
           value: 'departmentName',

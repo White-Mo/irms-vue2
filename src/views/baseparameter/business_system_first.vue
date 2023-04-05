@@ -104,6 +104,16 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="block" style="height: 4vh;">
+          <el-pagination
+            :page-size="10"
+            :current-page="currentPage"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
         </div>
       <div v-if="ifShow === '1'">
         <add-first-level-business-system @changeDiv="changeDiv"></add-first-level-business-system>
@@ -117,8 +127,7 @@
 
 <script>
 import {
-  delBusinessSystem,
-  deleteFirstLevelBusinessSystem,
+  deleteFirstLevelBusinessSystem, getAllFirstLevelBusinessSystem,
   getFirstLevelBusinessSystemByPage, SearchBusinessSystemFirstLevel
 } from "@/api/baseparameter";
 import addFirstLevelBusinessSystem
@@ -138,10 +147,17 @@ export default {
       currentPage: 1,
       limit:10,
       row:{},
+      total: 0,
+      isSearch:false,
+      isEdit:false,
       header: [ //表头
         {
           value: 'businessSystemFirstName',
           label: '一级业务系统名称',
+        },
+        {
+          value: 'postName',
+          label: '单位名称',
         }
       ],
     }
@@ -149,20 +165,53 @@ export default {
   created() {
     this.showData() //渲染表格数据
   },
+  mounted() {
+
+  },
   methods:{
     showData(){
+      this.isSearch =  false
       this.listLoading = true
       const params = {
         start: this.currentPage-1,
         limit: this.limit,
-        status:"0"
       }
       //调用接口获取数据
       getFirstLevelBusinessSystemByPage(params).then(response=>{
         this.tableData = response.data.items
-        console.log(response)
+        this.listLoading = false
+      })
+      getAllFirstLevelBusinessSystem().then(res => {
+        this.total = res.data.total
+        console.log(res)
       })
       setTimeout(()=>{this.listLoading = false},1000)
+    },
+    handleSizeChange(val) {
+      //console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.showData()
+    },
+    handleCurrentChange(val) {
+      this.currentPage=val
+      const params = {
+        start: (val - 1)*this.limit,
+        limit: this.limit,
+        inputName :this.inputValue
+      }
+      if(this.isSearch===true){
+        SearchBusinessSystemFirstLevel(params).then(response=>{
+          console.log(response)
+          this.tableData = response.data.items
+          this.total = response.data.total
+        })
+      }else {
+        getFirstLevelBusinessSystemByPage(params).then((response) => {
+          this.tableData = response.data.items
+          this.listLoading = false
+        })
+      }
+
     },
     //弹出添加一级业务系统页面
     addFirstLevelBusinessSystem(){
@@ -195,26 +244,32 @@ export default {
     },
     //查询一级业务系统
     businessSystemFirstLevelSearch(){
+      this.isSearch = true
       const params = {
         start: this.currentPage-1,
         limit: this.limit,
         inputName :this.inputValue
       }
+      console.log(params)
       SearchBusinessSystemFirstLevel(params).then(response=>{
         this.tableData = response.data.items
+        this.total = response.data.total
       })
     },
     //修改一级业务系统
     handleEdit(index, row) {
       this.row = row
       this.ifShow = '2'
-      this.showData()
+      this.isEdit = true
+
+      // this.showData()
     },
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1
     },
     changeDiv(value) {
       this.ifShow = value
+      this.currentPage = 1
       this.showData()
     },
   }
@@ -244,5 +299,8 @@ export default {
   height: 54px;
   margin: 0px !important;
   background: #d3dce6;
+}
+.block{
+  text-align: center;
 }
 </style>

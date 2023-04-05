@@ -118,6 +118,15 @@ export function getAllFirstLevelBusinessSystem() {
   })
 }
 
+//通过单位获取一级业务系统
+export function getFirstLevelBusinessSystemByPostId(data) {
+  return request({
+    params: {postId: data},
+    url: '/home/baseparameter/getFirstLevelBusinessSystemByPostId',
+    method: 'get'
+  })
+}
+
 //改变机房状态wr
 export function changeStatus(eq) {
   var params = JSON.parse(JSON.stringify(eq))
@@ -181,7 +190,7 @@ export function checkBusinessSystemName(data) {
 //检查一级业务系统是否重复----------------------赵长开-------------------
 export function checkFirstLevelBusinessSystemName(data) {
   return request({
-    params: {businessSystemFirstName: data},
+    params: data,
     url: '/home/baseparameter/checkFirstLevelBusinessSystemName',
     method: 'post',
     responseType: 'json'

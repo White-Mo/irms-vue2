@@ -6,6 +6,17 @@
     <div class="edit-business-system">
       <el-row>
         <el-form ref="editInformation" :model="editInformation" label-width="140px" :inline="false" :rules="rules">
+          <el-form-item label="所属单位" prop="postName">
+            <el-col :span="10">
+              <el-select v-model="editInformation.postName">
+                <el-option
+                  v-for="item in postAll"
+                  :key="item.value"
+                  :value="item.postName"
+                />
+              </el-select>
+            </el-col>
+          </el-form-item>
           <el-form-item label="一级业务系统名称" prop="businessSystemFirstName">
             <el-col :span="10">
               <el-input v-model="editInformation.businessSystemFirstName" />
@@ -22,6 +33,7 @@
 
 <script>
 import {checkFirstLevelBusinessSystemName, updateFirstLevelBusinessSystem} from '@/api/baseparameter'
+import {getPost} from "@/api/select";
 export default {
   name:'update-first-level-business-system',
   props: ['row'],
@@ -40,9 +52,11 @@ export default {
       callback()
     };
     return{
+      postAll:'',
       editInformation:{
         businessSystemFirstName:this.row.businessSystemFirstName,
-        businessSystemFirstId:this.row.businessSystemFirstId
+        businessSystemFirstId:this.row.businessSystemFirstId,
+        postName:this.row.postName,
       },
       rules: {
         businessSystemFirstName:[
@@ -52,6 +66,16 @@ export default {
       }
 
     }
+  },
+  created() {
+    getPost().then(response => {
+      this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          this.editInformation.postName = element.postName
+        }
+      })
+    })
   },
   methods:{
     back() {
@@ -81,8 +105,8 @@ export default {
 
     // 验证添加的业务系统是否存在
     async getNameRules() {
-      const businessSystemFirstName = this.editInformation.businessSystemFirstName
-      await checkFirstLevelBusinessSystemName(businessSystemFirstName).then((res) => {
+      const params = this.editInformation
+      await checkFirstLevelBusinessSystemName(params).then((res) => {
         console.log(res)
         if (res.data.valid === true) {
           this.nameRules = true
@@ -91,6 +115,8 @@ export default {
         }
       })
     },
+
+
   }
 }
 </script>

@@ -6,6 +6,17 @@
     <div class="add-business-system">
       <el-row>
         <el-form ref="addInformation" :model="addInformation" label-width="140px" :inline="false" :rules="rules">
+          <el-form-item label="所属单位" prop="postName">
+            <el-col :span="10">
+              <el-select v-model="addInformation.postName">
+                <el-option
+                  v-for="item in postAll"
+                  :key="item.value"
+                  :value="item.postName"
+                />
+              </el-select>
+            </el-col>
+          </el-form-item>
           <el-form-item label="一级业务系统名称" prop="businessSystemFirstName">
             <el-col :span="10">
               <el-input v-model="addInformation.businessSystemFirstName" />
@@ -22,6 +33,7 @@
 
 <script>
 import {checkFirstLevelBusinessSystemName, createFirstLevelBusinessSystem} from '@/api/baseparameter'
+import {getPost} from "@/api/select";
 export default {
   name:'addFirstLevelBusinessSystem',
   data(){
@@ -40,9 +52,11 @@ export default {
     };
     return{
       roleId:this.$store.state.user.roleid,
+      roleName:this.$store.state.user.role_name,
+      postAll: [],
       addInformation:{
         businessSystemFirstName:'',
-        postId:this.roleId
+        postName:'',
       },
       rules: {
         businessSystemFirstName:[
@@ -50,12 +64,17 @@ export default {
           {validator: checkName, trigger: 'blur'}
         ]
       }
-
     }
   },
   created() {
-    console.log("单位：",this.roleId);
-
+    getPost().then(response => {
+      this.postAll = response.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          this.addInformation.postName = element.postName
+        }
+      })
+    })
   },
   methods:{
     back() {
@@ -87,8 +106,8 @@ export default {
 
     // 验证添加的业务系统是否存在
     async getNameRules() {
-      const businessSystemFirstName = this.addInformation.businessSystemFirstName
-      await checkFirstLevelBusinessSystemName(businessSystemFirstName).then((res) => {
+      const params = this.addInformation
+      await checkFirstLevelBusinessSystemName(params).then((res) => {
         console.log(res)
         if (res.data.valid === true) {
           this.nameRules = true
