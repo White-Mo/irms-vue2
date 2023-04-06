@@ -400,21 +400,27 @@ export default {
     },
     commit() {
       const equipments = []
-      console.log('&',this.form)
+      // console.log('&',this.form)
+      let formatOnlineTime=this.form.onlineTime.replace(/-/g, "");
+      let formatOfflineTime=this.form.offlineTime.replace(/-/g, "");
+
+
       const equip = { ...this.equipment }
-      //console.log(equip)
       const equipmentBaseInfo = equip.equipmentBaseInfo
       Object.keys(equipmentBaseInfo).forEach(key => {
         equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
       })
+      equip.equipmentBaseInfo.onlineTime=formatOnlineTime
+      equip.equipmentBaseInfo.offlineTime=formatOfflineTime
       equip.appAccessRights = equip.appAccessRights[0]
       equip.appNativeStore = equip.appNativeStore[0]
+      // console.log(equip)
       equipments.push(equip)
 
       addEquipment({ equipments: equipments }).then(res => {
         if(res.message === '填写错误'){
           this.$message({
-            message: '填写错误',
+            message: res.data,
             type: 'error'
           });
           this.showDialog=false

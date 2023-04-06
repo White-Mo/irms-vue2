@@ -51,7 +51,7 @@
         <el-col :span="2"><el-button type="primary" @click="next">下一步</el-button></el-col>
       </el-row>
     </div>
-    
+
 
 
     <div v-show="active==1">
@@ -127,13 +127,13 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2"><div class="label-style">序列号</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.serialNumber" size="medium" /></div></el-col> 
+                  <el-col :span="4"><div class="label-style"><el-input v-model="form.serialNumber" size="medium" /></div></el-col>
                   <el-col :span="2"><div class="label-style">保修期</div></el-col>
                   <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                   <el-col :span="2"><div class="label-style">上线时间</div></el-col>
                   <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                   <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyyMM-dd"></el-date-picker></div></el-col>
                 </el-row>
               </el-form>
               <el-row :gutter="20">
@@ -271,8 +271,13 @@ export default {
       this.active++
       const equipments = []
       if (this.active === 2) {
-        //console.log(this.form)
+        let formatOnlineTime=this.form.onlineTime.replace(/-/g, "");
+        let formatOfflineTime=this.form.offlineTime.replace(/-/g, "");
+
+
         const equip = { ...this.equipment }
+        equip.equipmentBaseInfo.onlineTime=formatOnlineTime
+        equip.equipmentBaseInfo.offlineTime=formatOfflineTime
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
