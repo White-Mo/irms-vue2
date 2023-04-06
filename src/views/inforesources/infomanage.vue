@@ -64,6 +64,7 @@
               v-model='inputValue'
               :fetch-suggestions='querySearch'
               placeholder='请输入内容'
+              :popper-append-to-body="false"
               @select='handleSelect'
             ></el-autocomplete>
           </el-col>
@@ -1035,8 +1036,9 @@ export default {
 
 <style lang='less' scoped>
 
-.el-select-dropdown .el-scrollbar {
-  position: relative;
+/deep/ .el-autocomplete-suggestion {
+  width: auto!important;
+  text-align:left!important;
 }
 
 .tile-content {
