@@ -101,7 +101,11 @@
             :lg='3'
             :xl='3'
           >
-            <el-select v-model='guaranteePeriodSearchCondition' placeholder='请选择查询条件' clearable>
+            <el-select
+                v-model='guaranteePeriodSearchCondition'
+                 placeholder='已过保'
+                 clearable
+                 :popper-append-to-body ="false">
               <el-option
                 v-for='(item, index) in guaranteePeriodSearchConditionData'
                 :key='index'
@@ -111,6 +115,16 @@
                 class='searchInput'
               ></el-option>
             </el-select>
+<!--            <el-select v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in cities"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+                <span style="float: left">{{ item.label }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+              </el-option>
+            </el-select>-->
           </el-col>
           <el-col
             :xs='8'
@@ -633,6 +647,10 @@ export default {
           label: '已过保'
         },
         {
+          value: 'currentMonthOverGuaranteePeriod',
+          label: '当前月过保'
+        },
+        {
           value: 'threeMonthsOverGuaranteePeriod',
           label: '三个月后过保'
         },
@@ -649,13 +667,10 @@ export default {
     }
   },
   created() {
-    //console.log(this.initname)
     this.fetchData()
-    // this.getInitValue(this.initdata)
   },
   mounted() {
     this.restaurants = this.loadAll()
-    // console.log(this.initval);
   },
   methods: {
     receiveAllSearchData(searchAllData, infoInput) {
@@ -741,17 +756,17 @@ export default {
       }
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
-      if (val.indexOf('type') == -1 && this.type == 1) {
+      if (val.indexOf('type') === -1 && this.type === 1) {
         // console.log("删除CPU类型");
         this.deleteSelect(this.typeID)
         this.type = 0
-      } else if (val.indexOf('edition') == -1 && this.edition == 1) {
+      } else if (val.indexOf('edition') === -1 && this.edition === 1) {
         // console.log("删除中间件版本");
         this.deleteSelect(this.editionID)
         this.edition = 0
       } else if (
-        val.indexOf('guaranteePeriod') == -1 &&
-        this.guaranteePeriod == 1
+        val.indexOf('guaranteePeriod') === -1 &&
+        this.guaranteePeriod === 1
       ) {
         // console.log("删除保修期");
         this.deleteSelect(this.guaranteePeriodID)
@@ -760,13 +775,13 @@ export default {
       // 特殊字段下拉框进行初始化
       var key = 0
       for (key = 0; key < val.length; key++) {
-        if (val[key] == 'type' && this.type == 0) {
+        if (val[key] === 'type' && this.type === 0) {
           this.getInitValue(this.typeID, 'type')
           this.type = 1
-        } else if (val[key] == 'edition' && this.edition == 0) {
+        } else if (val[key] === 'edition' && this.edition === 0) {
           this.getInitValue(this.editionID, 'edition')
           this.edition = 1
-        } else if (val[key] == 'guaranteePeriod' && this.guaranteePeriod == 0) {
+        } else if (val[key] === 'guaranteePeriod' && this.guaranteePeriod === 0) {
           this.getInitValue(this.guaranteePeriodID, 'guarantee_period')
           this.guaranteePeriod = 1
         }
@@ -790,9 +805,9 @@ export default {
       let num = 0
       let flag = 0
       for (let index = 0; index < dfata.length; index++) {
-        if (dfata[index].label == deleteName) {
+        if (dfata[index].label === deleteName) {
           num++
-          if (num == 1) {
+          if (num === 1) {
             flag = index
           }
         }
@@ -983,6 +998,10 @@ export default {
       if (this.guaranteePeriodSearchCondition === 'oneYearOverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
       }
+      //当前月过保
+      else if (this.guaranteePeriodSearchCondition === 'currentMonthOverGuaranteePeriod') {
+        this.guaranteePeriodSearchHandel()
+      }
       //半年后过保
       else if (this.guaranteePeriodSearchCondition === 'sixMonthsOverGuaranteePeriod') {
         this.guaranteePeriodSearchHandel()
@@ -992,7 +1011,8 @@ export default {
         this.guaranteePeriodSearchHandel()
       }
       //已过保
-      else if (this.guaranteePeriodSearchCondition === 'OverGuaranteePeriod') {
+      else if (this.guaranteePeriodSearchCondition === 'OverGuaranteePeriod' || this.guaranteePeriodSearchCondition === '') {
+        this.guaranteePeriodSearchCondition = 'OverGuaranteePeriod'
         this.guaranteePeriodSearchHandel()
       }
     },
@@ -1000,8 +1020,6 @@ export default {
     guaranteePeriodSearchHandel() {
       this.currentPage = 1
       this.tempGuaranteePeriodSearchCondition = this.guaranteePeriodSearchCondition
-      // this.guaranteePeriodParams.start = this.start
-      // this.guaranteePeriodParams.limit = this.limit
       const params = {
         start: this.start,
         limit: this.limit,
@@ -1061,6 +1079,35 @@ export default {
   color: #0b0c10;
   background-color: #deecff;
 }
+
+
+
+
+.el-select-dropdown__item {
+  height: 40px;
+  line-height: 40px;
+  margin: 8px;
+
+}
+/deep/.el-select-dropdown__list {
+  margin: 5px 15px 20px 30px;
+  height: auto;
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: stretch;
+  max-height: 100vh;
+}
+el-label{
+  display: inline-block;
+  line-height: 40px;
+  width: 150px;
+  text-align: right;
+}
+
 
 // .searchSelect {
 //   height: 40px;
