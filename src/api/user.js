@@ -1,6 +1,4 @@
 import request from '@/utils/request'
-import axios from 'axios'
-import Ruoyi_request from '@/utils/Ruoyi_request'
 
 export function login(data) {
   return request({
