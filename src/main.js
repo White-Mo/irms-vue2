@@ -34,12 +34,12 @@ document.body.style.zoom = 100 / Number(m);
 
 
 
-import BaiduMap from 'vue-baidu-map'
+/*import BaiduMap from 'vue-baidu-map'
 Vue.prototype.$echarts = echarts
 Vue.use(BaiduMap, {
-  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key *!/
   ak: 'ZlgTYsyV08aajZSuH7uEAFbvsWgLKfA4'
-})
+})*/
 
 /**
  * If you don't want to use mock-server
