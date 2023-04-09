@@ -1,5 +1,5 @@
 {
-  "name": "vue-admin-template",
+  "name": "echarts-geojson",
   "version": "4.4.0",
   "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
   "author": "Pan <panfree23@gmail.com>",
@@ -21,6 +21,7 @@
     "axios": "0.18.1",
     "core-js": "3.6.5",
     "echarts": "^5.4.0",
+    "echarts-gl": "^2.0.9",
     "element-resize-detector": "^1.2.4",
     "element-ui": "^2.15.10",
     "exceljs": "^4.3.0",
@@ -59,6 +60,7 @@
     "eslint-plugin-vue": "6.2.2",
     "html-webpack-plugin": "3.2.0",
     "mockjs": "1.0.1-beta3",
+    "parcel-bundler": "^1.12.5",
     "runjs": "4.3.2",
     "sass": "1.26.8",
     "sass-loader": "8.0.2",
@@ -78,5 +80,6 @@
     "node": ">=8.9",
     "npm": ">= 3.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "main": "index.js"
 }

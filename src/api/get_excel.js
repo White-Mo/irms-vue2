@@ -29,46 +29,52 @@ export async function getExcelDemo1(data){
 	let header = []
 	let items = []
     let c_to_e_obj = {
-        "hostName": "主机名",
-        "departmentCode": "部门代码",
-        "machineRoomName": "机房名称",
-        "appAdminPhone": "应用管理员电话",
-        "insertDate": '在线时间',
-        "equipmentId": "设备ID",
-        "lastmodifyDate": '上次修改日期',
-        "shelfOff": "是否可下架",
-        "brandModelName": "型号",
-        "businessSystemName": "所属系统",
-        "equipmentAdminId": "设备管理员ID",
-        "tureOrVirtual": "实体机/虚拟机",
-        "insertUserId": "安装用户标识",
-        "postName": "单位名称",
-        "migratable": "是否可迁移",
-        "onlineTime": '上线时间',
-        "equipmentName": "设备名称",
-        "offlineTime": '下线时间',
-        "dataSources": "数据来源",
-        "departmentName": "部门名称",
-        "lastmodifyUserId": "上一次修改用户ID",
-        "brandName": "品牌",
-        "cabinetName": "机柜名称",
+        "basicInfoId": "编号-总编号",
+	      "IPAddress":"ip地址",
+        "MACAddress":"MAC",
+        "equipmentName":"设备名称",
+        "postName": "单位",
+        "departmentName": "部门",
+        "appAdminId": "应用管理员",
         "equipmentTypeName": "设备类型",
-        "serialNumber": "序列号",
-        "mainOrBackup": "主机/备机",
-        "appAdminName": "应用管理员",
-        "basicInfoId": "编号",
-        "equipmentAdminPhone": "设备管理员电话",
-        "cabinetUStart": "机柜起点",
-        "equipmentAdminName": "设备管理员",
-        "equipmentTypeId": "设备类型ID",
-        "brandModelId": "品牌型号ID",
-        "businessOrExperimental": "业务机/实验机",
-        "appAdminId": "应用管理员ID",
-        "cabinetUEnd": "机柜终点",
-        "guaranteePeriod": "质保期",
-        "postCode": "单位代码",
+        "brandName": "品牌",
+        "brandModelName": "型号",
+        "serialNumber": '序列号',
+        "businessOrExperimental": "业务机/测试机",
+        "machineRoomName": "安装位置",
+        "cabinetName": "机柜号",
+        "cabinetUStart": "机柜开始U位",
+        "cabinetUEnd": "机柜结束U位",
+        "accessLocation": '接入位置',
+        "singleAndDoublePowerSupply": "单双电源",
+        // "hostName": "对应等保系统名称（父名称）",
+        // "departmentCode": "对应等保系统名称（子名称）",
+        // "machineRoomName": "等保系统级别（三级/二级/一级）",
+        "agreedToTemporaryShutdown": "是否同意临时关停（是/否）",
+        "installSafetyMonitoringSoftware": '是否安装安全监测软件',
+        "deployStrongPassword": "是否部署强口令",
+        // "lastmodifyDate": '部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）',
+        "offlineTime": "维保结束日期",
+        "onlineTime": "设备上线安装日期",
         "remarks": "备注",
-        "status": "标志位"
+        // "equipmentAdminId": "CPU型号",
+        // "tureOrVirtual": "内存容量（GB）",
+        // "insertUserId": "操作系统品牌规格",
+        // "hostName": "操作系统建设时间",
+        // "departmentCode": "数据库品牌规格",
+        // "machineRoomName": "建设时间",
+        // "insertDate": '中间件品牌规格',
+        // "equipmentId": "中间件建设时间",
+        "cloudServiceUnit": '云服务单位',
+        "leased_computing_resources": "租用计算资源情况（CPU核数）（个）",
+        "leasedComputingResources": "租用存储资源情况（TB）",
+        "leasedNetworkBandwidth": "租用网络带宽（兆）",
+        "termOfLease": "租用期限（年）",
+        "domainName": "域名",
+        "domainNameRegistrationService": "域名注册服务商",
+        "ns": "NS记录",
+        "cname": "CNAME记录（别名）",
+        "useCDN": "是否使用CDN",
     }
 	Object.keys(c_to_e_obj).map(key => {
 		header.push(c_to_e_obj[key])
@@ -89,7 +95,25 @@ export async function getExcelDemo1(data){
     }
     // data = items
     // 表头
-    const header_row = sheet.getRow(1);
+    const title_row=sheet.getRow(1);
+    title_row.values=["资产信息统计综合表"]
+  //   objectSpanMethod ({ row, column, rowIndex, columnIndex })
+  // {
+  //     if (rowIndex === 0) {
+  //       if ( columnIndex% 2 === 0) {
+  //         return {
+  //           rowspan: 1,
+  //           colspan: 5
+  //         }
+  //       } else {
+  //         return {
+  //           rowspan: 0,
+  //           colspan: 0
+  //         }
+  //       }
+  //     }
+  //   }
+    const header_row = sheet.getRow(2);
     header_row.values = header
     header_row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
         // //console.log('Cell ' + colNumber + ' = ' + cell.value);
@@ -106,7 +130,7 @@ export async function getExcelDemo1(data){
     header_row.commit();
     // 表格内容
     for(let i = 0;i<items.length;i++){
-        let row = sheet.getRow(i + 2);
+        let row = sheet.getRow(i + 3);
         row.values = items[i]
         row.numFmt = '0'
         row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
