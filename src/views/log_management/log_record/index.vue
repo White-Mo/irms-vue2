@@ -13,12 +13,16 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-row :gutter="10" >
-            <el-calendar v-model="date" type="date" @input="handleDateChange" style="background-color: rgba(34,116,236,0.22); border-radius: 8px; ">
+            <el-calendar v-model="date"
+                         ref="calendar"
+                         type="date"
+                         @input="handleDateChange"
+                         style="background-color: rgba(34,116,236,0.22); border-radius: 8px; ">
             </el-calendar>
 <!--            <div style="height: 32vh; background-color: #041165; border-radius: 8px;"></div>-->
           </el-row>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="5" >
           <el-table
             height="76.5vh"
             :row-style="{height:'6.26vh'}"
@@ -91,6 +95,9 @@ export default {
       handlersData:[],
       listLoading: false,
       timeParams:'',
+      dateArr:[],
+      year:'',
+      month:'',
       handlers:[
         {
           value:'user',
@@ -114,6 +121,7 @@ export default {
     }
   },
   created() {
+    // console.log("当前年月："+new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() )
     getLogDataUser().then(response => {
       this.handlersData = response.data.items
     })
@@ -121,6 +129,21 @@ export default {
       this.tableData = response.data.items
     })
   },
+  mounted() {
+    this.$nextTick(() => {
+      let tempDate = moment(new(Date)).format('YYYY-MM-DD')
+      this.year = tempDate.slice(0,4)
+      this.month = tempDate.slice(6,7)-1 // 注意：moment.js中的月份从0开始计数，所以4月的索引为3
+      const daysInMonth = moment(`${this.year}-${this.month+1}`, 'YYYY-MM').daysInMonth()
+      for (let i = 1; i <= daysInMonth; i++) {
+        const date = moment(`${this.year}-${this.month + 1}-${i}`, 'YYYY-MM-DD')
+        console.log(date.format('YYYY-MM-DD'))
+        this.dateArr.push(date.format('YYYY-MM-DD'))
+      }
+      console.log(this.dateArr)
+    })
+  },
+
   methods: {
      handleDateChange(date) {
       this.timeParams = moment(date).format('YYYY-MM-DD')
@@ -180,7 +203,6 @@ body,html{
 .is-selected {
   color: #1989FA;
 }
-
 </style>
 
 <style>
@@ -191,7 +213,22 @@ body,html{
   height: 85px;
   line-height: 85px;
   text-align: center;
+  position: relative;
+  /*background-color: orangered;*/
+
 }
+
+/*.el-calendar-table .el-calendar-day span{*/
+/*  background-color: rgb(242, 246, 250);*/
+/*  position: absolute;*/
+/*  width: 50px;*/
+/*  height: 50px;*/
+/*  line-height: 50px;*/
+/*  right: 14px;*/
+/*  top: 20px;*/
+/*  text-align: center;*/
+/*  border-radius: 50%;*/
+/*}*/
 </style>
 
 

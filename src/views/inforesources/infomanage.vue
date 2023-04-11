@@ -1075,14 +1075,14 @@ export default {
 
 .el-select-dropdown__item {
   height: 40px;
+  width: 200px;
   line-height: 40px;
-  margin: 8px;
 
 }
 /deep/.el-select-dropdown__list {
-  margin: 5px 15px 20px 30px;
+  margin: 5px -10px 20px -10px;
   height: auto;
-  width: 180px;
+  width: 150px;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
