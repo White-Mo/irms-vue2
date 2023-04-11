@@ -115,16 +115,6 @@
                 class='searchInput'
               ></el-option>
             </el-select>
-<!--            <el-select v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in cities"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-                <span style="float: left">{{ item.label }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-              </el-option>
-            </el-select>-->
           </el-col>
           <el-col
             :xs='8'
@@ -1085,14 +1075,14 @@ export default {
 
 .el-select-dropdown__item {
   height: 40px;
+  width: 200px;
   line-height: 40px;
-  margin: 8px;
 
 }
 /deep/.el-select-dropdown__list {
-  margin: 5px 15px 20px 30px;
+  margin: 5px -10px 20px -10px;
   height: auto;
-  width: 180px;
+  width: 150px;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
