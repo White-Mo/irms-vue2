@@ -41,3 +41,11 @@ export function getLogData() {
     method: 'get',
   })
 }
+//获取每天操作日志的次数
+export function getLogDateAndCount() {
+  return request({
+    params: '',
+    url: '/home/log_management/getLogDateAndCount',
+    method: 'get',
+  })
+}

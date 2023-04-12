@@ -14,10 +14,18 @@
         <el-col :span="8">
           <el-row :gutter="10" >
             <el-calendar v-model="date"
-                         ref="calendar"
-                         type="date"
                          @input="handleDateChange"
                          style="background-color: rgba(34,116,236,0.22); border-radius: 8px; ">
+              <template slot="dateCell" slot-scope="{ data }">
+                <div :class="data.isSelected ? 'is-selected' : ''">
+                  {{ data.day.split("-").slice(2).join("-") }}
+                <div
+                  v-for="(item ,index) in scheduleData"
+                  :key>
+                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData" ></div>
+                </div>
+                </div>
+              </template>
             </el-calendar>
 <!--            <div style="height: 32vh; background-color: #041165; border-radius: 8px;"></div>-->
           </el-row>
@@ -83,7 +91,7 @@ import {
   getLogData,
   getLogDataUser,
   getLogDataByTime,
-  getLogDataByUser
+  getLogDataByUser, getLogDateAndCount
 } from '@/api/log_management'
 import moment from 'moment'
 export default {
@@ -118,6 +126,7 @@ export default {
           label: '具体时间'
         },
       ],
+      scheduleData:{},
     }
   },
   created() {
@@ -142,6 +151,14 @@ export default {
       }
       console.log(this.dateArr)
     })
+    getLogDateAndCount().then(response =>{
+      console.log("---------*******-------")
+      console.log("123",response.data.items[0][0])
+      this.scheduleData = response.data.items
+      console.log(this.scheduleData)
+
+    })
+
   },
 
   methods: {
@@ -203,6 +220,8 @@ body,html{
 .is-selected {
   color: #1989FA;
 }
+
+
 </style>
 
 <style>
@@ -214,21 +233,18 @@ body,html{
   line-height: 85px;
   text-align: center;
   position: relative;
-  /*background-color: orangered;*/
 
 }
 
-/*.el-calendar-table .el-calendar-day span{*/
-/*  background-color: rgb(242, 246, 250);*/
-/*  position: absolute;*/
-/*  width: 50px;*/
-/*  height: 50px;*/
-/*  line-height: 50px;*/
-/*  right: 14px;*/
-/*  top: 20px;*/
-/*  text-align: center;*/
-/*  border-radius: 50%;*/
-/*}*/
+.haveData{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  left: 10px;
+  bottom: 17px;
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.44);
+}
 </style>
 
 
