@@ -184,45 +184,34 @@ export default {
       radio: -1,
       basic_info_id: '',
       dataname: [
-        {
-          value: 'basicInfoId',
-          label: '设备编号'
-        },
-        {
-          value: 'postName',
-          label: '所属单位'
-        },
-        {
-          value: 'departmentName',
-          label: '所属部门'
-        },
-        {
-          value: 'equipmentName',
-          label: '设备名'
-        },
-        {
-          value: 'brandName',
-          label: '设备品牌'
-        },
-        {
-          value: 'equipmentTypeName',
-          label: '设备类型'
-        },
-        {
-          value: 'businessSystemName',
-          label: '业务系统'
-        },
-        {
-          value: 'machineRoomName',
-          label: '安装位置'
-        },
-        {
-          value: 'cabinetName',
-          label: '机柜编号'
-        },
+        {value:"basicInfoId",label:" 编号-总编号"},
+        {value:"ipAddress",label:" ip地址"},
+        {value:"macAddress",label:" MAC"},
+        {value:"equipmentName",label:" 设备名称"},
+        {value:"postName",label:" 单位"},
+        {value:"departmentName",label:" 部门"},
+        {value:"appAdminName",label:" 应用管理员"},
+        {value:"equipmentTypeName",label:" 设备类型"},
+        {value:"brandName",label:" 品牌"},
+        {value:"brandModelName",label:" 型号"},
+        {value:"serialNumber",label:" 序列号"},
+        {value:"businessOrExperimental",label:" 业务机/测试机"},
+        {value:"machineRoomName",label:" 安装位置"},
+        {value:"cabinetName",label:" 机柜号"},
+        {value:"cabinetUStart",label:" 机柜开始U位"},
+        {value:"cabinetUEnd",label:" 机柜结束U位"},
+        {value:"accessLocation",label:" 接入位置"},
+        {value:"singleAndDoublePowerSupply",label:" 单双电源"},
+        {value:"businessSystemFirstName",label:" 对应等保系统名称（父名称）"},
+        {value:"businessSystem",label:" 对应等保系统名称（子名称）"},
+        {value:"businessSystemLevel",label:" 等保系统级别（三级/二级/一级）"},
+        {value:"agreedToTemporaryShutdown",label:" 是否同意临时关停（是/否）"},
+        {value:"installSafetyMonitoringSoftware",label:" 是否安装安全监测软件"},
+        {value:"deployStrongPassword",label:" 是否部署强口令"},
+        {value:"deploymentEnvironment",label:" 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）"},
         {
           value: 'onlineTime',
-          label: '上线时间',
+          label: '设备上线安装日期',
           formatter:function (row) {
             var time=row.onlineTime
             if(!time){
@@ -246,7 +235,7 @@ export default {
         },
         {
           value: 'offlineTime',
-          label: '下线时间',
+          label: '维保结束日期',
           formatter:function (row) {
             var time=row.offlineTime
             if(!time){
@@ -268,38 +257,26 @@ export default {
             return year+"-"+month+"-"+day;
           }
         },
-        {
-          value: 'hostName',
-          label: '主机名'
-        },
-        {
-          value: 'equipmentAdminName',
-          label: '设备管理员'
-        },
-        {
-          value: 'equipmentAdminPhone',
-          label: '设备管理员电话'
-        },
-        {
-          value: 'appAdminName',
-          label: '应用管理员'
-        },
-        {
-          value: 'appAdminPhone',
-          label: '应用管理员电话'
-        },
-        {
-          value: 'brandModelName',
-          label: '型号'
-        },
-        {
-          value: 'serialNumber',
-          label: '序列号'
-        },
-        {
-          value: 'guaranteePeriod',
-          label: '保修期'
-        }
+        {value:"remarks",label:" 备注"},
+        {value:"type",label:" CPU型号"},
+        {value:"configMemoryCorenessOrCapacity",label:" 内存容量（GB）"},
+        {value:"softwareOperatingSystemEdition",label:" 操作系统品牌规格"},
+        {value:"softwareOperatingSystemBuildDate",label:" 操作系统建设时间"},
+        {value:"softwareDatabaseEdition",label:" 数据库品牌规格"},
+        {value:"softwareDatabaseBuildDate",label:" 数据库建设时间"},
+        {value:"edition",label:" 中间件品牌规格"},
+        {value:"softwareMiddlewareBuildDate",label:" 中间件建设时间"},
+        {value:"cloudServiceUnit",label:" 云服务单位"},
+        {value:"leased_computing_resources",label:" 租用计算资源情况（CPU核数）（个）"},
+        {value:"leasedComputingResources",label:" 租用存储资源情况（TB）"},
+        {value:"leasedNetworkBandwidth",label:" 租用网络带宽（兆）"},
+        {value:"termOfLease",label:" 租用期限（年）"},
+        {value:"domainName",label:" 域名"},
+        {value:"domainNameRegistrationService",label:" 域名注册服务商"},
+        {value:"ns",label:" NS记录"},
+        {value:"cname",label:" CNAME记录（别名）"},
+        {value:"useCDN",label:" 是否使用CDN"},
+
       ],
       uploadData: {
         //懒加载节点信息

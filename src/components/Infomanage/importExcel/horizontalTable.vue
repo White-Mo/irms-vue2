@@ -88,7 +88,7 @@ export default {
   name: 'horizontalTable',
   data() {
     return {
-      value: '资产统计综合表',
+      value: '信息资产统计综合表',
       fileList: [],
       checkList: [],
       tableData: [],

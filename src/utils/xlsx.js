@@ -36,14 +36,14 @@ export function importfile(obj, head) {
       var filetype = Object.keys(outdata[0])[0]
       // 获取 Excel 表头 判断 是否为同一文件类型
       if (head === filetype) {
-        if(head === "资产统计综合表"){
+        if(head === "信息资产统计综合表"){
           // const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:"无数据"})
           resolve(outdata)
         }else {
           resolve(outdata)
         }
       } else {
-        reject('请选择正确的文件类型！')
+        console.log('请选择正确的文件类型！')
         console.log('应导入', head)
         console.log('当前导入', filetype)//excel第一个单元格
       }
@@ -770,6 +770,7 @@ function getRowBaseinfo(outdata) {
     ns:'',//NS记录
     cname:'',//CNAME记录（别名）
     useCDN:'',//是否使用CDN
+    deploymentEnvironment:''//部署环境
   }
 
   equipmentBaseInfo.hostName = ' '
@@ -777,6 +778,7 @@ function getRowBaseinfo(outdata) {
   equipmentBaseInfo.dataSources = 'EXCEL批量导入'
 
   //新增字段
+  equipmentBaseInfo.deploymentEnvironment = Object.values(outdata[0])[24]
   equipmentBaseInfo.accessLocation = Object.values(outdata[0])[16]
   equipmentBaseInfo.singleAndDoublePowerSupply = Object.values(outdata[0])[17]
   equipmentBaseInfo.agreedToTemporaryShutdown = Object.values(outdata[0])[21]
@@ -946,10 +948,10 @@ function getRowConfig(outdata) {
   configCPU.corenessOrCapacity = '' // 数量指标
   configCPU.quantity = '' // 实配数量
   configs.push(configCPU)
-  configMemory.projectName = '内存'//项目(内存)
+  configMemory.projectName = '内存（GB）'//项目(内存)
   configMemory.type = ''
   configMemory.frequency = '' //性能指标
-  configMemory.corenessOrCapacity = Object.values(outdata[index])[29] + '(GB)' //数量指标
+  configMemory.corenessOrCapacity = Object.values(outdata[index])[29] //数量指标
   configMemory.quantity = ''
   configs.push(configMemory)
   var softwareOperatingSystem = {
@@ -957,41 +959,41 @@ function getRowConfig(outdata) {
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
-    buildTime: '' //建设时间
+    buildDate: '' //建设时间
   }
   var softwareDatabase = {
     type: '', // 类型
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
-    buildTime: '' //建设时间
+    buildDate: '' //建设时间
   }
   var softwareMiddleware = {
     type: '', // 类型
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
-    buildTime: '' //建设时间
+    buildDate: '' //建设时间
   }
   softwareOperatingSystem.project = '操作系统'
   softwareOperatingSystem.projectName = Object.values(outdata[index])[30]
   softwareOperatingSystem.edition = ''
   softwareOperatingSystem.type = ''
-  softwareOperatingSystem.buildTime = Object.values(outdata[index])[31]
+  softwareOperatingSystem.buildDate = Object.values(outdata[index])[31]
   softwares.push(softwareOperatingSystem)
 
   softwareDatabase.project = '数据库'
   softwareDatabase.projectName = Object.values(outdata[index])[32]
   softwareDatabase.edition = ''
   softwareDatabase.type = ''
-  softwareDatabase.buildTime = Object.values(outdata[index])[33]
+  softwareDatabase.buildDate = Object.values(outdata[index])[33]
   softwares.push(softwareDatabase)
 
   softwareMiddleware.project = '中间件'
   softwareMiddleware.projectName = Object.values(outdata[index])[34]
   softwareMiddleware.edition = Object.values(outdata[index])[34]
   softwareMiddleware.type =""
-  softwareMiddleware.buildTime = Object.values(outdata[index])[35]
+  softwareMiddleware.buildDate = Object.values(outdata[index])[35]
   softwares.push(softwareMiddleware)
   return {
     softwares,
