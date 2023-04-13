@@ -14,7 +14,7 @@ export function getList(obj) {
 //IP 地址数据获取
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
-  var params = JSON.parse(JSON.stringify(obj))
+  let params = JSON.parse(JSON.stringify(obj))
   // console.log(typeof (params))
   return request({
     params,
