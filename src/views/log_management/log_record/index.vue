@@ -15,7 +15,7 @@
           <el-row :gutter="10" >
             <el-calendar v-model="date"
                          @input="handleDateChange"
-                         style="background-color: rgba(34,116,236,0.22); border-radius: 8px; ">
+                         style="background-color: rgba(34,116,236,0.22);  ">
               <template slot="dateCell" slot-scope="{ data }">
                 <div :class="data.isSelected ? 'is-selected' : ''">
                   {{ data.day.split("-").slice(2).join("-") }}
@@ -27,7 +27,8 @@
                 </div>
               </template>
             </el-calendar>
-<!--            <div style="height: 32vh; background-color: #041165; border-radius: 8px;"></div>-->
+<!--            <div id="myChart"  style="height: 32vh; background-color: rgba(34,81,236,0.22); ">
+            </div>-->
           </el-row>
         </el-col>
         <el-col :span="5" >
@@ -100,16 +101,16 @@ export default {
     return {
       date: null,
       tableData: [],
-      handlersData:[],
+      handlersData: [],
       listLoading: false,
-      timeParams:'',
-      dateArr:[],
-      year:'',
-      month:'',
-      handlers:[
+      timeParams: '',
+      dateArr: [],
+      year: '',
+      month: '',
+      handlers: [
         {
-          value:'user',
-          label:'用户'
+          value: 'user',
+          label: '用户'
         }
       ],
       basicValue: [
@@ -126,20 +127,20 @@ export default {
           label: '具体时间'
         },
       ],
-      scheduleData:{},
+      scheduleData: {},
     }
   },
   created() {
-    // console.log("当前年月："+new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() )
     getLogDataUser().then(response => {
       this.handlersData = response.data.items
     })
-    getLogData().then(response =>{
+    getLogData().then(response => {
       this.tableData = response.data.items
     })
   },
   mounted() {
-    this.$nextTick(() => {
+/*    this.frequencyChart()*/
+    /*    this.$nextTick(() => {
       let tempDate = moment(new(Date)).format('YYYY-MM-DD')
       this.year = tempDate.slice(0,4)
       this.month = tempDate.slice(6,7)-1 // 注意：moment.js中的月份从0开始计数，所以4月的索引为3
@@ -150,10 +151,8 @@ export default {
         this.dateArr.push(date.format('YYYY-MM-DD'))
       }
       console.log(this.dateArr)
-    })
-    getLogDateAndCount().then(response =>{
-      console.log("---------*******-------")
-      console.log("123",response.data.items[0][0])
+    })*/
+    getLogDateAndCount().then(response => {
       this.scheduleData = response.data.items
       console.log(this.scheduleData)
 
@@ -162,24 +161,50 @@ export default {
   },
 
   methods: {
-     handleDateChange(date) {
+    handleDateChange(date) {
       this.timeParams = moment(date).format('YYYY-MM-DD')
       const timeParams = this.timeParams
       getLogDataUserByTime(timeParams).then(response => {
         console.log(response)
         this.handlersData = response.data.items
       })
-       getLogDataByTime(timeParams).then(response =>{
+      getLogDataByTime(timeParams).then(response => {
         this.tableData = response.data.items
       })
     },
     searchLogByUser(row) {
       const userName = row.user
-      getLogDataByUser(userName).then(response =>{
+      getLogDataByUser(userName).then(response => {
         this.tableData = response.data.items
       })
-     }
-  },
+    },
+/*    frequencyChart() {
+      const myChart = this.$echarts.init(document.getElementById('myChart'));//获取容器元素
+      const option = {
+        title: {
+          text: '一周操作频率',
+          left: 'center',
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260],
+            type: 'line'
+          }
+        ]
+      };//设置初始化配置项
+      myChart.setOption(option);//设置option
+    },*/
+  }
 }
 </script>
 
@@ -229,19 +254,18 @@ body,html{
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 4px;
-  height: 85px;
-  line-height: 85px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   position: relative;
-
 }
 
 .haveData{
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  left: 10px;
-  bottom: 17px;
+  width: 100%;
+  height: 100%;
+  /*border-radius: 50%;*/
+  /*left: 24px;*/
+  /*bottom: 4px;*/
   position: absolute;
   background-color: rgba(255, 0, 0, 0.44);
 }
