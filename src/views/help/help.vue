@@ -9,17 +9,17 @@
             <div class="grid-content bg-purple-dark">帮助信息</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10" class="bg-condition">
+        <el-row class="bg-condition">
           <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
            <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="DownHelpDocument()">点击下载用户手册</el-button>
           </el-col>
           <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="checkSecretKey()">{{ ShowHidden ? '隐藏密钥' : '显示密钥' }}</el-button>
+            <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="checkSecretKey()">{{ ShowHidden ? '隐藏密钥' :'显示密钥' }}</el-button>
           </el-col>
-          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-            <el-input v-if="ShowHidden" size="medium" v-model="this.SecretKey" placeholder="密钥"/>
+          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+            <el-input size="medium" v-model="this.showSecretKey" placeholder="密钥"/>
           </el-col>
-          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
             <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="copySecretKey(SecretKey)">复制密钥</el-button>
           </el-col>
         </el-row>
@@ -42,6 +42,7 @@ export default {
     return {
       ShowHidden: false,
       SecretKey: '',
+      showSecretKey:''
     }
   },
   created() {
@@ -59,6 +60,11 @@ export default {
     },
     checkSecretKey(){
       this.ShowHidden=!this.ShowHidden
+      if (this.ShowHidden == true){
+        this.showSecretKey = this.SecretKey
+      } else {
+        this.showSecretKey = ''
+      }
     },
     copySecretKey(val) {
       // 模拟 输入框
