@@ -22,7 +22,8 @@
                 <div
                   v-for="(item ,index) in scheduleData"
                   :key>
-                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData" ></div>
+                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData" >
+                  </div>
                 </div>
                 </div>
               </template>
@@ -275,7 +276,7 @@ body,html{
 
 </style>
 
-<style>
+<style >
 .el-calendar-table .el-calendar-day {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -284,6 +285,7 @@ body,html{
   line-height: 42px;
   text-align: center;
   position: relative;
+
 }
 
 .haveData{
