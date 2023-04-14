@@ -26,10 +26,10 @@ export function getLogDataByTime(timeParams) {
   })
 }
 // 通过用户获取日志数据
-export function getLogDataByUser(userName) {
+export function getLogDataByDateAndUser(data) {
   return request({
-    params: {userName:userName},
-    url: '/home/log_management/getLogDataByUser',
+    params: data,
+    url: '/home/log_management/getLogDataByDateAndUser',
     method: 'get',
   })
 }
@@ -46,6 +46,14 @@ export function getLogDateAndCount() {
   return request({
     params: '',
     url: '/home/log_management/getLogDateAndCount',
+    method: 'get',
+  })
+}
+//获取当天日志数据
+export function getCurrentDayLogData(currentDate) {
+  return request({
+    params: {currentDate: currentDate},
+    url: '/home/log_management/getCurrentDayLogData',
     method: 'get',
   })
 }

@@ -10,7 +10,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="20" >
         <el-col :span="8">
           <el-row :gutter="10" >
             <el-calendar v-model="date"
@@ -27,13 +27,13 @@
                 </div>
               </template>
             </el-calendar>
-<!--            <div id="myChart"  style="height: 32vh; background-color: rgba(34,81,236,0.22); ">
-            </div>-->
+            <div id="myChart"  style="height: 32vh; background-color: rgba(34,81,236,0.22); ">
+            </div>
           </el-row>
         </el-col>
-        <el-col :span="5" >
+        <el-col :span="4" >
           <el-table
-            height="76.5vh"
+            height="77vh"
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px'}"
             v-loading="listLoading"
@@ -43,7 +43,7 @@
             border
             highlight-current-row
             stripe
-            @row-click="searchLogByUser"
+            @row-click="searchLogByDateAndUser"
           >
             <el-table-column
               v-for="(item,index) in handlers"
@@ -56,9 +56,10 @@
             </el-table-column>
           </el-table>
         </el-col>
+      <el-col span="1" style="width: 0.1vh; height: 77vh; background-color: rgba(170,238,238,0.6)"></el-col>
         <el-col :span="11">
           <el-table
-            height="76.5vh"
+            height="77vh"
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px'}"
             v-loading="listLoading"
@@ -90,9 +91,8 @@
 import {
   getLogDataUserByTime,
   getLogData,
-  getLogDataUser,
   getLogDataByTime,
-  getLogDataByUser, getLogDateAndCount
+  getLogDataByDateAndUser, getLogDateAndCount, getCurrentDayLogData
 } from '@/api/log_management'
 import moment from 'moment'
 export default {
@@ -128,82 +128,108 @@ export default {
         },
       ],
       scheduleData: {},
+      counts: [],
     }
   },
   created() {
-    getLogDataUser().then(response => {
-      this.handlersData = response.data.items
-    })
+  },
+  mounted() {
+    //默认显示当天操作用户
+    this.getCurrentDayDate()
+    //获取从当天开始按日期降序的数据
     getLogData().then(response => {
       this.tableData = response.data.items
     })
-  },
-  mounted() {
-/*    this.frequencyChart()*/
-    /*    this.$nextTick(() => {
-      let tempDate = moment(new(Date)).format('YYYY-MM-DD')
-      this.year = tempDate.slice(0,4)
-      this.month = tempDate.slice(6,7)-1 // 注意：moment.js中的月份从0开始计数，所以4月的索引为3
-      const daysInMonth = moment(`${this.year}-${this.month+1}`, 'YYYY-MM').daysInMonth()
-      for (let i = 1; i <= daysInMonth; i++) {
-        const date = moment(`${this.year}-${this.month + 1}-${i}`, 'YYYY-MM-DD')
-        console.log(date.format('YYYY-MM-DD'))
-        this.dateArr.push(date.format('YYYY-MM-DD'))
-      }
-      console.log(this.dateArr)
-    })*/
+    //操作频率统计
+    this.frequencyChart()
+    //获取有用户操作的日期和该日期操作的次数
     getLogDateAndCount().then(response => {
       this.scheduleData = response.data.items
-      console.log(this.scheduleData)
-
+      this.counts = response.data.items
+      console.log("用户操作的日期和该日期操作的次数",this.scheduleData)
     })
 
   },
 
   methods: {
+    getCurrentDayDate() {
+      const currentDate = moment(new Date()).format('YYYY-MM-DD')
+      console.log(currentDate)
+      getCurrentDayLogData(currentDate).then(response => {
+        console.log(response.data)
+        this.handlersData = response.data.items
+      })
+    },
     handleDateChange(date) {
       this.timeParams = moment(date).format('YYYY-MM-DD')
       const timeParams = this.timeParams
       getLogDataUserByTime(timeParams).then(response => {
-        console.log(response)
+        // console.log(response)
         this.handlersData = response.data.items
       })
       getLogDataByTime(timeParams).then(response => {
         this.tableData = response.data.items
       })
     },
-    searchLogByUser(row) {
-      const userName = row.user
-      getLogDataByUser(userName).then(response => {
+    searchLogByDateAndUser(row) {
+      const params = {
+        userName:row.user,
+        time:moment(row.time).format('YYYY-MM-DD')
+      }
+      getLogDataByDateAndUser(params).then(response => {
         this.tableData = response.data.items
       })
     },
-/*    frequencyChart() {
+    frequencyChart() {
       const myChart = this.$echarts.init(document.getElementById('myChart'));//获取容器元素
-      const option = {
-        title: {
-          text: '一周操作频率',
-          left: 'center',
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: 'line'
-          }
-        ]
-      };//设置初始化配置项
-      myChart.setOption(option);//设置option
-    },*/
+      getLogDateAndCount().then(response => {
+        this.counts = response.data.items;
+        const xAxisData = []; // 处理横坐标日期
+        const seriesData = []; // 处理纵坐标操作次数
+        const today = moment(); // 获取当前日期
+        for (let i = 6; i >= 0; i--) {
+          const date = today.clone().subtract(i, 'days'); // 获取最近7天的日期
+          xAxisData.push(date.format('MM-DD')); // 格式化日期
+          const item = this.counts.find(item => moment(item[0]).isSame(date, 'day')); // 查找该日期对应的次数
+          seriesData.push(item ? item[1] : 0); // 如果有次数，则添加次数，否则添加0
+        }
+
+        const option = {
+
+          title: {
+            text: '一周操作频率',
+            left: 'center',
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            type: 'category',
+            data: xAxisData,
+            name: '日期',
+            nameTextStyle: {
+              color: '#333',
+              fontSize: 16,
+            }
+          },
+          yAxis: {
+            type: 'value',
+            name: '操作频数',
+            nameTextStyle: {
+              color: '#333',
+              fontSize: 16,
+            }
+          },
+          series: [
+            {
+              data: seriesData,
+              type: 'bar'
+            }
+          ]
+        };//设置初始化配置项
+        myChart.setOption(option);//设置option
+      })
+    },
   }
 }
 </script>
@@ -254,20 +280,18 @@ body,html{
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 4px;
-  height: 40px;
-  line-height: 40px;
+  height: 42px;
+  line-height: 42px;
   text-align: center;
   position: relative;
 }
 
 .haveData{
-  width: 100%;
-  height: 100%;
-  /*border-radius: 50%;*/
-  /*left: 24px;*/
-  /*bottom: 4px;*/
+  width: 95%;
+  height: 95%;
   position: absolute;
-  background-color: rgba(255, 0, 0, 0.44);
+  top: 1%;
+  background-color: rgba(0, 255, 255, 0.44);
 }
 </style>
 
