@@ -832,7 +832,7 @@ export default {
         color: ['#87cefa', '#ff7f50', '#32cd32', '#da70d6', '#f1adbe', '#defa2d', '#fd0329', '#6c7ffd'],
         tooltip: {
           trigger: 'item',
-          formatter: '{b}<br/>{c}台 ({d}%)'
+          formatter: '{b}<br/>{c}个({d}%)'
         },
         // calculable : false,
         series: [
