@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 // 获取日志数据操作者
-export function getLogDataUser(data) {
+export function getLogDataUser() {
   return request({
     url: '/home/log_management/getLogDataUser',
     method: 'get',
-    params: data
+    params: ''
   })
 }
 // 通过时间获取日志数据的用户
@@ -26,10 +26,10 @@ export function getLogDataByTime(timeParams) {
   })
 }
 // 通过用户获取日志数据
-export function getLogDataByUser(userName) {
+export function getLogDataByDateAndUser(data) {
   return request({
-    params: {userName:userName},
-    url: '/home/log_management/getLogDataByUser',
+    params: data,
+    url: '/home/log_management/getLogDataByDateAndUser',
     method: 'get',
   })
 }
@@ -46,6 +46,24 @@ export function getLogDateAndCount() {
   return request({
     params: '',
     url: '/home/log_management/getLogDateAndCount',
+    method: 'get',
+  })
+}
+//获取当天日志数据
+export function getCurrentDayLogData(currentDate) {
+  return request({
+    params: {currentDate: currentDate},
+    url: '/home/log_management/getCurrentDayLogData',
+    method: 'get',
+  })
+}
+
+//通过用户获取该用户每天操作的次数
+
+export function getLogDateAndCountByUser(user) {
+  return request({
+    params: {user: user},
+    url: '/home/log_management/getLogDateAndCountByUser',
     method: 'get',
   })
 }
