@@ -977,14 +977,14 @@ function getRowConfig(outdata) {
   }
   softwareOperatingSystem.project = '操作系统'
   softwareOperatingSystem.projectName = Object.values(outdata[index])[30]
-  softwareOperatingSystem.edition = ''
+  softwareOperatingSystem.edition = Object.values(outdata[index])[30]
   softwareOperatingSystem.type = ''
   softwareOperatingSystem.buildDate = Object.values(outdata[index])[31]
   softwares.push(softwareOperatingSystem)
 
   softwareDatabase.project = '数据库'
   softwareDatabase.projectName = Object.values(outdata[index])[32]
-  softwareDatabase.edition = ''
+  softwareDatabase.edition = Object.values(outdata[index])[32]
   softwareDatabase.type = ''
   softwareDatabase.buildDate = Object.values(outdata[index])[33]
   softwares.push(softwareDatabase)
