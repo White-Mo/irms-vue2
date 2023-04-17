@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class='grid-content bg-purple'>
-      <i class='el-icon-s-order' /><span>日志管理</span>
+    <div class="grid-content bg-purple">
+      <i class="el-icon-s-order" /><span>日志管理</span>
     </div>
-    <div class='app-container' style='height: 100%'>
-      <el-row :gutter='20'>
+    <div class="app-container" style="height: 100%">
+      <el-row :gutter="20">
         <el-col>
-          <div class='grid-content bg-purple-dark'>日志记录
+          <div class="grid-content bg-purple-dark">日志记录
           </div>
         </el-col>
       </el-row>
@@ -37,22 +37,22 @@
             height="77vh"
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px'}"
-            v-loading='listLoading'
-            :disable='true'
-            :data='handlersData'
-            element-loading-text='Loading'
+            v-loading="listLoading"
+            :disable="true"
+            :data="handlersData"
+            element-loading-text="Loading"
             border
             highlight-current-row
             stripe
             @row-click="searchLogByDateAndUser"
           >
             <el-table-column
-              v-for='(item,index) in handlers'
-              :key='index'
-              :label='item.label'
-              :prop='item.value'
-              :formatter='item.formatter'
-              align='center'
+              v-for="(item,index) in handlers"
+              :key="index"
+              :label="item.label"
+              :prop="item.value"
+              :formatter="item.formatter"
+              align="center"
             >
             </el-table-column>
           </el-table>
@@ -63,22 +63,22 @@
             height="77vh"
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px'}"
-            v-loading='listLoading'
-            :disable='true'
-            :data='tableData'
-            element-loading-text='Loading'
+            v-loading="listLoading"
+            :disable="true"
+            :data="tableData"
+            element-loading-text="Loading"
             border
             highlight-current-row
             stripe
           >
-            <el-table-column align='center' type='index' />
+            <el-table-column align="center" type="index"/>
             <el-table-column
-              v-for='(item,index) in basicValue'
-              :key='index'
-              :label='item.label'
-              :prop='item.value'
-              :formatter='item.formatter'
-              align='center'
+              v-for="(item,index) in basicValue"
+              :key="index"
+              :label="item.label"
+              :prop="item.value"
+              :formatter="item.formatter"
+              align="center"
             >
             </el-table-column>
           </el-table>
@@ -96,7 +96,6 @@ import {
   getLogDataByDateAndUser, getLogDateAndCount, getCurrentDayLogData
 } from '@/api/log_management'
 import moment from 'moment'
-
 export default {
   name: 'logRecord',
   data() {
@@ -127,7 +126,7 @@ export default {
         {
           value: 'time',
           label: '具体时间'
-        }
+        },
       ],
       scheduleData: {},
       counts: [],
@@ -236,47 +235,40 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
-
 .bg-purple {
   background: #d3dce6;
 }
-
 .bg-purple-dark {
   background: #99a9bf;
 }
-
 .bg-condition {
   line-height: 50px;
   height: 54px;
   margin: 0px !important;
   background: #d3dce6;
 }
-
-.el-timeline {
+.el-timeline{
   height: 100%;
   margin-top: 15px;
 
 }
-
-.el-row {
+.el-row{
   min-height: 100%;
 }
 
-body, html {
-  height: 100%;
+body,html{
+  height:100%;
 }
-
-.box {
+.box{
   width: 100%;
 }
-
 .is-selected {
   color: #1989FA;
 }
