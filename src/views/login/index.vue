@@ -1,69 +1,72 @@
 <template>
-  <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+  <div class='login-container'>
+    <el-form ref='loginForm' :model='loginForm' :rules='loginRules' class='login-form' auto-complete='on'
+             label-position='left'>
 
-      <div class="title-container">
-        <h3 class="title">中国地震台网中心信息资源管理系统</h3>
+      <div class='title-container'>
+        <h3 class='title'>中国地震台网中心信息资源管理系统</h3>
       </div>
       <el-row>
-        <el-form-item prop="username">
-          <span class="svg-container">
-            <svg-icon icon-class="user" />
+        <el-form-item prop='username'>
+          <span class='svg-container'>
+            <svg-icon icon-class='user' />
           </span>
           <el-input
-            ref="username"
-            v-model="loginForm.username"
-            placeholder="请输入用户名"
-            name="username"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
+            ref='username'
+            v-model='loginForm.username'
+            placeholder='请输入用户名'
+            name='username'
+            type='text'
+            tabindex='1'
+            auto-complete='on'
           />
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
+        <el-form-item prop='password'>
+          <span class='svg-container'>
+            <svg-icon icon-class='password' />
           </span>
           <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="请输入密码"
-            name="password"
-            tabindex="2"
-            auto-complete="on"
-            @keyup.enter.native="handleLogin"
+            :key='passwordType'
+            ref='password'
+            v-model='loginForm.password'
+            :type='passwordType'
+            placeholder='请输入密码'
+            name='password'
+            tabindex='2'
+            auto-complete='on'
+            @keyup.enter.native='handleLogin'
           />
-          <span class="show-pwd" @click="showPwd">
+          <span class='show-pwd' @click='showPwd'>
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-form-item>
       </el-row>
       <el-row>
-        <el-col :span="17">
-          <el-form-item prop="code">
+        <el-col :span='17'>
+          <el-form-item prop='code'>
             <el-input
-              id="loginVerifyCode"
-              v-model="loginForm.reCode"
-              type="text"
-              placeholder="请输入验证码"
-              @keyup.enter.native="handleLogin"
+              id='loginVerifyCode'
+              v-model='loginForm.reCode'
+              type='text'
+              placeholder='请输入验证码'
+              @keyup.enter.native='handleLogin'
             />
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span='7'>
           <el-image
-            :src="base64"
-            :lazy="true"
-            @click.native.prevent="updateVerifyCode"
+            :src='base64'
+            :lazy='true'
+            @click.native.prevent='updateVerifyCode'
           />
         </el-col>
       </el-row>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading='loading' type='primary' style='width:100%;margin-bottom:30px;'
+                 @click.native.prevent='handleLogin'>登录
+      </el-button>
 
       <!--      <div class="tips">-->
       <!--        <span style="margin-right:20px;">username: admin</span>-->
@@ -77,6 +80,7 @@
 <script>
 import { validPassword, validUsername } from '@/utils/validate'
 import { initVerifyCode } from '@/api/user'
+
 export default {
 
   name: 'Login',
@@ -121,15 +125,8 @@ export default {
     }
   },
   created() {
-    this.vTime = Math.random()
-    const vTime = this.vTime
-    // window.addEventListener('storage', this.afterQRScan)
-    this.getCode(vTime).then((base64) => {
-      this.base64 = base64
-      //console.log(this.base64)
-    }, (err) => {
-      //console.log('fail' + err)
-    })
+    window.updateVerifyCode = this.updateVerifyCode
+    this.updateVerifyCode()
   },
   methods: {
     showPwd() {
@@ -172,28 +169,23 @@ export default {
         })
       })
     },
-
     updateVerifyCode() {
       this.vTime = Math.random()
       const vTime = this.vTime
       this.getCode(vTime).then((base64) => {
         this.base64 = base64
-        //console.log(this.base64)
-      }, (err) => {
-        //console.log('fail' + err)
       })
     }
-
   }
 }
 </script>
 
-<style lang="scss">
+<style lang='scss'>
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -235,10 +227,10 @@ $cursor: #fff;
 }
 </style>
 
-<style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+<style lang='scss' scoped>
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
@@ -296,8 +288,14 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
-  .verify{
-    width: 40%;height: 48px;background: #ecf5fa; margin-right:10px; float: left; padding-left: 20px;
+
+  .verify {
+    width: 40%;
+    height: 48px;
+    background: #ecf5fa;
+    margin-right: 10px;
+    float: left;
+    padding-left: 20px;
   }
 }
 </style>

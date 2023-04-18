@@ -54,7 +54,7 @@ service.interceptors.response.use(
           showCancelButton: 0,
           type: 'warning'
         }).then(() => {
-          location.reload()
+          updateVerifyCode()
         }).catch()
       } else if (res.code === 50008 || res.code === 50012 || res.code === 50014) { // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
         // to re-login

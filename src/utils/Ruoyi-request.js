@@ -44,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (typeof (res) === 'number') return res // 为了调取以前的接口
+    if (typeof (res) === 'number') return res // 为了调取以前只返回纯数字，不携带code的部分接口,多数为统计数量count
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       if (res.code === 20001 || res.code === 20002) {
@@ -54,7 +54,7 @@ service.interceptors.response.use(
           showCancelButton: 0,
           type: 'warning'
         }).then(() => {
-          location.reload()
+          // location.reload()
         }).catch()
       } else if (res.code === 50008 || res.code === 50012 || res.code === 50014) { // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
         // to re-login

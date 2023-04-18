@@ -1150,7 +1150,8 @@ export default {
       myChart.setOption({
         geo: [{
           map: 'myMap',
-          roam:true
+          roam:true,
+          zoom: 1.2,
         }],
       })
       // this.drawLine();

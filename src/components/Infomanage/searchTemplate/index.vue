@@ -585,16 +585,16 @@ export default{
   margin: 10px;
 }
 /deep/.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px;
-  height: auto;
-  width: 950px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: stretch;
-  max-height: 100vh;
+  margin: 5px 20px 20px 5px!important;
+  height: auto!important;
+  width: 950px!important;
+  display: flex!important;
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important;
+  align-content: flex-start!important;
+  align-items: stretch!important;
+  max-height: 100vh!important;
 }
 el-label{
   display: inline-block;
