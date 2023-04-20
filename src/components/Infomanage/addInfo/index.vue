@@ -133,7 +133,7 @@
                   <el-col :span="2"><div class="label-style">上线时间</div></el-col>
                   <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                   <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyyMM-dd"></el-date-picker></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                 </el-row>
               </el-form>
               <el-row :gutter="20">
@@ -192,6 +192,8 @@ export default {
   data() {
     return {
       roleid: user.state.roleid,
+      role_department_name: user.state.role_department_name,
+      roles: user.state.roles,
       department: {},
       equipmentType: {},
       equipment: {
@@ -251,7 +253,13 @@ export default {
       })
       getDepartment(this.roleid).then(response => {
         this.departmentAll = response.data.items
-        this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+        console.log(this.departmentAll)
+        console.log(this.roles[0])
+        if (this.roles[0] == "部门管理员"){
+          this.equipment.equipmentBaseInfo.departmentName = this.role_department_name
+          this.departmentAll[0].departmentName = this.role_department_name
+          this.departmentAll.splice(1,11)
+        }
       })
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
@@ -281,7 +289,7 @@ export default {
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
-        //console.log(equipments)
+        console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           this.$alert(res.message, '提示', {
@@ -291,10 +299,10 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          //console.log(res)
+          console.log(res)
         }).catch(err => {
           this.active = 0
-          //console.log(err)
+          console.log(err)
         })
       }
     },
