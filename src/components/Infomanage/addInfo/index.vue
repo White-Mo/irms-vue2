@@ -192,6 +192,8 @@ export default {
   data() {
     return {
       roleid: user.state.roleid,
+      role: user.state.roles[0],
+      role_department_name: user.state.role_department_name,
       department: {},
       equipmentType: {},
       equipment: {
@@ -250,8 +252,14 @@ export default {
         })
       })
       getDepartment(this.roleid).then(response => {
-        this.departmentAll = response.data.items
-        this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+        if(this.role==='部门管理员'){
+          this.departmentAll = response.data.items.filter(element => element.departmentName === this.role_department_name)
+          this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+        }
+        else {
+          this.departmentAll = response.data.items
+          this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+        }
       })
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
