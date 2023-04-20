@@ -133,7 +133,7 @@
                   <el-col :span="2"><div class="label-style">上线时间</div></el-col>
                   <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                   <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyyMM-dd"></el-date-picker></div></el-col>
+                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
                 </el-row>
               </el-form>
               <el-row :gutter="20">

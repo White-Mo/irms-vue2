@@ -289,7 +289,7 @@ export default {
       cabinetColumn: [
         {
           value: 'cabinetName',
-          label: '机房名称'
+          label: '机柜名称'
         }
       ],
       value: '',

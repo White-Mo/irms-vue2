@@ -11,7 +11,23 @@
           </el-col>
         </el-row>
         <el-row style="width: 100%;height: 78vh;">
-          <el-col :span="8" style="height: 78vh;" >
+          <el-col :span="10" style="height: 78vh;" class="my-calendar" >
+            <el-calendar v-model="date"
+                         style="background-color: rgba(34,152,236,0.3); height: 78vh; ">
+<!--              <template slot="dateCell" slot-scope="{ data }">
+                <p :class="data.isSelected ? 'is-selected' : '' ">
+                  {{ data.day.split("-").slice(2).join("-") }}
+                </p>
+                <div  v-for="(item ,index) in dateAndCount"
+                      :key>
+                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData">
+                    <span >操作了{{item[1]}}次</span>
+                  </div>
+                </div>
+              </template>-->
+            </el-calendar>
+          </el-col>
+          <el-col :span="14" style="height: 78vh;" >
             <el-table
               height="78vh"
               :row-style="{height:'6.26vh'}"
@@ -42,22 +58,6 @@
               </el-table-column>
             </el-table>
           </el-col>
-          <el-col :span="16" style="height: 78vh;" class="my-calendar" >
-            <el-calendar v-model="date"
-                         style="background-color: rgba(34,152,236,0.3); height: 78vh; ">
-              <template slot="dateCell" slot-scope="{ data }">
-                <p :class="data.isSelected ? 'is-selected' : '' ">
-                  {{ data.day.split("-").slice(2).join("-") }}
-                </p>
-                <div  v-for="(item ,index) in dateAndCount"
-                      :key>
-                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData">
-                    <span >操作了{{item[1]}}次</span>
-                  </div>
-                </div>
-              </template>
-            </el-calendar>
-          </el-col>
         </el-row>
       </div>
     </div>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {getLogDataUser, getLogDateAndCountByUser} from "@/api/log_management";
+import {getLogDataUser, getLogDateAndCountByUser, getLogUserAndCounts} from "@/api/log_management";
 
 export default {
   name: "userLog",
@@ -86,21 +86,24 @@ export default {
     }
   },
   mounted() {
+    getLogUserAndCounts().then(res=>{
+      console.log(res)
+    })
     getLogDataUser().then(res => {
       this.handlersData = res.data.items;
       this.firstUser = res.data.items[0].user;
     })
-    getLogDateAndCountByUser(this.firstUser).then(res => {
+/*    getLogDateAndCountByUser(this.firstUser).then(res => {
       console.log("************",res)
      this.dateAndCount = res.data.items;
-    })
+    })*/
   },
   methods: {
-    searchLogByUser(row){
+/*    searchLogByUser(row){
       getLogDateAndCountByUser(row.user).then(res => {
         this.dateAndCount = res.data.items;
       })
-    }
+    }*/
   }
 }
 </script>

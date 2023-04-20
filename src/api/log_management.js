@@ -67,3 +67,12 @@ export function getLogDateAndCountByUser(user) {
     method: 'get',
   })
 }
+
+//统计用户和用户操作的次数
+export function getLogUserAndCounts() {
+  return request({
+    params: '',
+    url: '/home/log_management/getLogUserAndCounts',
+    method: 'get',
+  })
+}
