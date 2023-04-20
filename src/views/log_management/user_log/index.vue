@@ -77,7 +77,7 @@ export default {
       handlersData: [],
       handlers: [
         {
-          value: 'user',
+          value: 'realname',
           label: '用户'
         }
       ],
@@ -86,9 +86,9 @@ export default {
     }
   },
   mounted() {
-    getLogUserAndCounts().then(res=>{
+/*    getLogUserAndCounts().then(res=>{
       console.log(res)
-    })
+    })*/
     getLogDataUser().then(res => {
       this.handlersData = res.data.items;
       this.firstUser = res.data.items[0].user;
