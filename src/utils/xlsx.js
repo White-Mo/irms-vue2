@@ -813,7 +813,7 @@ function getRowBaseinfo(outdata) {
   const {
     status: postName,
     readStatus: readStatus3
-  } = underfindTransRow(Object.values(outdata[0])[4], '主机名', readStatus2) // 主机名
+  } = underfindTransRow(Object.values(outdata[0])[4], '单位', readStatus2) // 单位
   equipmentBaseInfo.postName = postName
 
   const {

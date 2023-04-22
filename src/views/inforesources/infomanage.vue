@@ -158,6 +158,7 @@
           :header-cell-style="{borderColor:'#C0C0C0'}"
           highlight-current-row
           stripe
+          @sort-change="sortChange"
           @cell-dblclick='tbCellDoubleClick'
         >
           <el-table-column
@@ -176,6 +177,7 @@
             :width='item.width'
             align='center'
             show-overflow-tooltip
+            sortable="custom"
           >
 
           </el-table-column>
@@ -812,6 +814,9 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       })
+    },
+    sortChange(column){
+      console.log(column)
     },
     //单条件搜索
     searchOne() {

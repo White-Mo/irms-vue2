@@ -1151,7 +1151,8 @@ export default {
         geo: [{
           map: 'myMap',
           roam:true,
-          zoom: 1.2,
+          zoom: 1.5,
+          center:[107.17822541210936,34.534217994282535],
         }],
       })
       // this.drawLine();
