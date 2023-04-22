@@ -87,7 +87,6 @@
             @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
-
           >
             <el-table-column label="" width="40" type="selection" />
             <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
@@ -160,6 +159,8 @@ export default {
 
   data() {
     return {
+      prop:'basicInfoId',
+      order:'ASC',
       listLoading:false,
       dialogVisible: false,
       // 总数据
@@ -353,7 +354,9 @@ export default {
           dataValue: this.inputValue,
           start: this.tableData.length ? this.tableData.length : 0,
           limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-          status: '0'
+          status: '0',
+          prop:'basicInfoId',
+          order:'ASC',
         }
         if(this.tableData.length < this.totalCount){
 
@@ -411,7 +414,9 @@ export default {
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: '0'
+        status: '0',
+        prop:'basicInfoId',
+        order:'ASC',
       }
       const numparams = {
         dataName: this.initname,
@@ -456,7 +461,9 @@ export default {
         dataValue: this.inputValue,
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
-        status: '0'
+        status: '0',
+        prop:'basicInfoId',
+        order:'ASC',
       }
       this.totalCount=0;
       getList(params).then((response) => {
@@ -547,7 +554,9 @@ export default {
           dataValue: this.inputValue,
           start: 0,
           limit: item_count,
-          status: '0'
+          status: '0',
+          prop:'basicInfoId',
+          order:'ASC',
         }
         getList(params).then((response) => {
           getExcelDemo1(response.data.items)
@@ -607,7 +616,9 @@ export default {
               dataValue: this.inputValue,
               start: 0,
               limit: item_count,
-              status: '0'
+              status: '0',
+              prop:'basicInfoId',
+              order:'ASC',
             }
             item = (await getList(params)).data.items
           }
