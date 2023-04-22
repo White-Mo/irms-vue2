@@ -486,6 +486,7 @@ export default {
       this.update_data.Status = row.status==="激活" ? '0':'1'
       // this.update_data.Status = row.status==="激活" ? '0':'1'
       this.update_data.row = row
+      console.log(this.update_data)
       //console.log(row)
       //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
       // this.departmentAll = (await getDepartment(row.roleid)).data.items
@@ -503,10 +504,10 @@ export default {
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
       // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
+        console.log(res)
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
-        _this.departmentAll = res.data.items
       })
     },
     closeDialog(){
@@ -524,7 +525,7 @@ export default {
         use_post:this.update_data.department == "" ? this.update_data.row.roleDepartmentId : this.update_data.department, // 单位的id
         // roleDepartmentId:"", // 部门的id
         // roles:"", // 权限的汉字名称
-        groupid:this.update_data.Roles == "" ? this.update_data.row.groupid : this.update_data.Roles, // 权限对应的id
+        groupid:this.update_data.Roles == "" ? this.update_data.row.groupid : this.update_data.row.groupid, // 权限对应的id
         telephone:"", // 电话 暂时为空
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
