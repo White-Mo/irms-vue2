@@ -153,7 +153,7 @@
           <template slot='label'>
             {{ item.key }}
           </template>
-          <el-tag :type=" item.values === 'update' ? 'success' : 'primary'">
+          <el-tag :type="item.values === 'update' ? 'success' : 'primary'">
             {{ item.values === 'update' ? '更新' : item.values }}
           </el-tag>
 
@@ -229,7 +229,7 @@ import index from 'async'
 // import { addEquipment, getbasic } from '@/api/table'
 
 export default {
-  name: 'Dashboard',
+  name: 'Datamanage',
   computed: {
     index() {
       return index
@@ -370,7 +370,8 @@ export default {
           const outdata = await importfile(this.checkList[index].value, this.value)
           //console.log("@",this.checkList[index].value.name)
           const postName = this.$store.state.user.post_name
-          const { equipment, readStatus } = getEquipment(outdata, postName)
+          const userInfo = this.$store.state.user
+          const { equipment, readStatus } = getEquipment(outdata, postName ,userInfo)
           //console.log(equipment)
           //console.log(readStatus)
           // debugger
@@ -599,37 +600,12 @@ export default {
       if (this.repalyInfo[index] === undefined) {
         this.$message({
           type: 'error',
-          message: '暂无反馈信息'
+          message: '服务器错误，暂无反馈信息'
         })
-      } else {
+      } else{
         this.repalyData = analysisReply(this.repalyInfo[index])
-        console.log(this.repalyData)
         this.backinfoDialog = true
       }
-      //
-      // const equipments = []
-      // console.log('&',this.form)
-      // const equip = { ...this.equipment }
-      // console.log(equip)
-      // const equipmentBaseInfo = equip.equipmentBaseInfo
-      // Object.keys(equipmentBaseInfo).forEach(key => {
-      //   equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
-      // })
-      // equip.appAccessRights = equip.appAccessRights[0]
-      // equip.appNativeStore = equip.appNativeStore[0]
-      // equipments.push(equip)
-      //
-      // addEquipment({ equipments: equipments }).then(res => {
-      //   //获得数据
-      //   //console.log('#',res)
-      //   console.log('@@',res)
-      //   const result = analysisReply(res.data)
-      //   console.log('#',result)
-      //   this.replayData = result
-      //   this.showDialog=true
-      // }).catch(err => {
-      //   console.log(err)
-      // })
     },
     // 删除
     handleDelete(index) {

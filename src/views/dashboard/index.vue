@@ -1151,7 +1151,7 @@ export default {
         geo: [{
           map: 'myMap',
           roam:true,
-          zoom: 1.5,
+          zoom: 1.6,
           center:[107.17822541210936,34.534217994282535],
         }],
       })
