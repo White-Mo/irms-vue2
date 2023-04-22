@@ -81,8 +81,8 @@
 
 <script>
 
-import { getEquipment, getRowEquipment, importfile } from '@/utils/xlsx'
-import { addEquipment, AddExcel } from '@/api/table'
+import { getRowEquipment, importfile } from '@/utils/xlsx'
+import { AddExcel } from '@/api/table'
 
 export default {
   name: 'horizontalTable',

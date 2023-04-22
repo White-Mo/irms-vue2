@@ -57,10 +57,10 @@ export function importfile(obj, head) {
  * @param postName
  * @returns {{readStatus: number, equipment: {}}}
  */
-export function getEquipment(outdata, postName) {
+export function getEquipment(outdata, postName ,userInfo) {
   const equipment = {}
   let excelIndex = 11
-  const { equipmentBaseInfo, readStatus: readStatus } = getBaseinfo(outdata, postName)
+  const { equipmentBaseInfo, readStatus: readStatus } = getBaseinfo(outdata, postName ,userInfo)
   equipment.equipmentBaseInfo = equipmentBaseInfo
 
   const { softwares, configs, excelIndex: configIndex } = getConfig(outdata, excelIndex)
@@ -96,7 +96,7 @@ export function getEquipment(outdata, postName) {
 }
 
 // 基本信息
-function getBaseinfo(outdata, postName) {
+function getBaseinfo(outdata, postName ,userInfo) {
   const equipmentBaseInfo = {
     equipmentId: '', //  设备id
     equipmentTypeName: '', // 设备类型
@@ -130,6 +130,9 @@ function getBaseinfo(outdata, postName) {
     onlineTime: '', // 上线时间
     offlineTime: '' // 下线时间
   }
+
+  equipmentBaseInfo.insertUserId=userInfo.userid
+
   equipmentBaseInfo.postName = postName
   const {
     status: equipmentName,
@@ -471,10 +474,6 @@ function appSoftwareFir(outdata, excelIndex) {
     }
     if (Object.values(outdata[index])[0] === '本  机  存  储') {
       index = index + 2
-      // console.log(index)
-      // console.log(outdata[index])
-      // console.log(outdata.length)
-      // debugger
       if (outdata[index] !== undefined) {
         for (; index < outdata.length; index++) {
           if (outdata[index] !== undefined) {
@@ -492,12 +491,6 @@ function appSoftwareFir(outdata, excelIndex) {
     }
     index += 1
   }
-  // console.log(appSoftwares,
-  //   appSystemUsers,
-  //   appBusinesses,
-  //   appStores,
-  //   appNativeStore,
-  //   softwareFirIndex)
   return {
     appSoftwares,
     appSystemUsers,
@@ -612,10 +605,16 @@ function underfindTransRow(status, part, readStatus) {
 
 
 export function analysisReply(data) {
-  //console.log(data)
   //这个数组的元素是对象
   let analysisData = []
   let result_data = []
+  if(data.status !=200){
+    let item={};
+    item.key="错误信息"
+    item.values=JSON.stringify(data)
+    result_data.push(item)
+    return result_data
+  }
   //每张小表是一个对象
   analysisData.push(getReplayData(data.AddAppAccessRights))
   analysisData.push(getReplayData(data.AddAppBusiness))

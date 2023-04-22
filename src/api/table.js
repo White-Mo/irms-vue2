@@ -2,6 +2,12 @@ import request from '@/utils/request'
 // 综合数据管理展示与查询--lry
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
+  if(obj.prop==null){
+    obj.prop='basicInfoId'
+  }
+  if(obj.order==null){
+    obj.order='ASC'
+  }
   var params = JSON.parse(JSON.stringify(obj))
   // console.log(typeof (params))
   return request({
