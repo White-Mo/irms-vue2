@@ -102,10 +102,10 @@
             :xl='3'
           >
             <el-select
-                v-model='guaranteePeriodSearchCondition'
-                 placeholder='已过保'
-                 clearable
-                 :popper-append-to-body ="false">
+              v-model='guaranteePeriodSearchCondition'
+              placeholder='已过保'
+              clearable
+              :popper-append-to-body ="false">
               <el-option
                 v-for='(item, index) in guaranteePeriodSearchConditionData'
                 :key='index'
@@ -146,71 +146,65 @@
             </el-button>
           </el-col>
         </el-row>
-        <el-table
-          v-loading='listLoading'
-          :diisable='true'
-          :data='list'
-          element-loading-text='Loading'
-          height='72vh'
-          border
-          :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
-          :header-cell-style="{borderColor:'#C0C0C0'}"
-          highlight-current-row
-          stripe
-          @sort-change="sortChange"
-          @cell-dblclick='tbCellDoubleClick'
-        >
-          <el-table-column
-            type='index'
-            align='center'
-            :index='typeIndex'
-            show-overflow-tooltip
-          >
-          </el-table-column>
-          <el-table-column
-            v-for='(item,index) in dataname'
-            :key='index'
-            :label='item.label'
-            :prop='item.value'
-            :formatter='item.formatter'
-            :width='item.width'
-            align='center'
-            show-overflow-tooltip
-            sortable="custom"
-          >
 
-          </el-table-column>
-          <el-table-column
-            align='center'
-            fixed='right'
-            label='操作'
-            width='250px'
+        <div class="draggable" style="padding: 20px">
+          <el-table
+            v-loading='listLoading'
+            :diisable='true'
+            :data='list'
+            element-loading-text='Loading'
+            height='72vh'
+            border
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+            :header-cell-style="{borderColor:'#C0C0C0'}"
+            highlight-current-row
+            stripe
+            @sort-change="sortChange"
+            @cell-dblclick='tbCellDoubleClick'
           >
-            <template slot-scope='scope'>
-              <el-button
-                type='success' plain
-                size='mini'
-                @click='handleDetail(scope.$index, scope.row)'
-              >详情
-              </el-button>
-              <el-button
-                type='primary' plain
-                size='mini'
-                @click='handleEdit(scope.$index, scope.row)'
-              >编辑
-              </el-button>
+            <el-table-column
+              v-for="(item,index) in oldList"
+              :key="`col_${index}`"
+              :prop="newList[index].value"
+              :label="item.label"
+              align="center"
+              :width='item.width'
+              show-overflow-tooltip
+              sortable="custom"
+            >
+            </el-table-column>
+            <el-table-column
+              align='center'
+              fixed='right'
+              label='操作'
+              width='250px'
+            >
+              <template slot-scope='scope'>
+                <el-button
+                  type='success' plain
+                  size='mini'
+                  @click='handleDetail(scope.$index, scope.row)'
+                >详情
+                </el-button>
+                <el-button
+                  type='primary' plain
+                  size='mini'
+                  @click='handleEdit(scope.$index, scope.row)'
+                >编辑
+                </el-button>
 
-              <el-button
-                size='mini'
-                type='danger'
-                text
-                @click=handleDelete(scope.row)
-              >删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+                <el-button
+                  size='mini'
+                  type='danger'
+                  text
+                  @click=handleDelete(scope.row)
+                >删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <el-dialog
           title='多条件搜索'
           :visible.sync='dialogVisible'
@@ -245,6 +239,7 @@
 </template>
 
 <script>
+import Sortable from 'sortablejs';
 import {
   getList,
   getdataCount,
@@ -312,8 +307,15 @@ export default {
       singalInfo: {},
       initval: [],
       tempAllData: null,
+      oldList: [],
+      newList: [],
+      counter :1,
       dataname: [
-
+        {
+          value: 'sequenceNumber',
+          label: '序号',
+          width: '80px'
+        },
         {
           value: 'basicInfoId',
           label: '设备编号',
@@ -665,8 +667,25 @@ export default {
   },
   mounted() {
     this.restaurants = this.loadAll()
+    this.oldList = JSON.parse(JSON.stringify(this.dataname))
+    this.newList = JSON.parse(JSON.stringify(this.dataname))
+    this.columnDrop()
   },
   methods: {
+    // 列拖拽
+    columnDrop() {
+      const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr');
+      this.sortable = Sortable.create(wrapperTr, {
+        animation: 180,
+        delay: 0,
+        onEnd: evt => {
+          const oldItem = this.newList[evt.oldIndex];
+          this.newList.splice(evt.oldIndex, 1);
+          this.newList.splice(evt.newIndex, 0, oldItem);
+        }
+      });
+    },
+
     receiveAllSearchData(searchAllData, infoInput) {
       this.isMultiline = true
       this.start = 0
@@ -880,6 +899,11 @@ export default {
         // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
+          let counter = 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter; // 添加一个序号属性，值为计数器变量
+            counter++; // 计数器自增
+          });
           this.total = response.data.total
           //console.log(this.list)
           this.listLoading = false
@@ -987,10 +1011,14 @@ export default {
           limit: this.limit,
           prop: this.prop,
           order: this.order
-
         }
         getList(params).then((response) => {
           this.list = response.data.items
+          let counter = 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter; // 添加一个序号属性，值为计数器变量
+            counter++; // 计数器自增
+          });
           this.total = response.data.total
           this.listLoading = false
         })
@@ -1198,4 +1226,3 @@ el-label{
 
 
 </style>
-
