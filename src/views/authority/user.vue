@@ -516,6 +516,7 @@ export default {
       this.departmentAll = []
     },
     async updateUserPlus(){
+      this.disabled=true
       let params = {
         id:this.update_data.row.id, // 被修改的账户的id
         // insertuserid:this.userid,   // 修改者的id
