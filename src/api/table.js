@@ -8,8 +8,13 @@ export function getList(obj) {
   if(obj.order==null){
     obj.order='ASC'
   }
-  var params = JSON.parse(JSON.stringify(obj))
-  // console.log(typeof (params))
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = ["guaranteePeriod","type","edition", "basicInfoId", "postName",
+    "departmentName", "ipAddress", "macAddress", "equipmentName", "brandName", "equipmentTypeName", "machineRoomName"
+   , "cabinetName", "onlineTime" , "offlineTime", "hostName", "equipmentAdminName", "equipmentAdminPhone", "appAdminName", "appAdminPhone"
+   , "brandModelName", "serialNumber"]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
     params,
     url: '/home/inforesources/getCompreDataAll',
