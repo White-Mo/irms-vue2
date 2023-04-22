@@ -200,8 +200,8 @@
           </div>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="userDialogDisplay = false">返回</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
+              <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
+              <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
             </span>
         </el-dialog>
         <div class="tabListPage" style="text-align: center">
@@ -237,6 +237,7 @@ export default {
   },
   data() {
     return {
+      disabled:false,
       user_input:{
         username:"",
         username_id:"",
@@ -471,6 +472,7 @@ export default {
     },
 
     async updateUser(row){
+      this.disabled=false
       console.log(row)
       let temp = row.role.split("/")
       this.userDialogDisplay = true
