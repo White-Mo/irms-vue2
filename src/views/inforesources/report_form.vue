@@ -87,6 +87,7 @@
             @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
+            @sort-change="sortChange"
           >
             <el-table-column label="" width="40" type="selection" />
             <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
@@ -101,6 +102,7 @@
               style="width: 100%"
               show-overflow-tooltip
               :width="flexColumnWidth(item.value, item.label)"
+              sortable="custom"
             />
           </el-table>
           <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
@@ -159,8 +161,8 @@ export default {
 
   data() {
     return {
-      prop:'basicInfoId',
-      order:'ASC',
+      prop:'',
+      order:'',
       listLoading:false,
       dialogVisible: false,
       // 总数据
@@ -355,8 +357,8 @@ export default {
           start: this.tableData.length ? this.tableData.length : 0,
           limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
           status: '0',
-          prop:'basicInfoId',
-          order:'ASC',
+          prop:this.prop,
+          order:this.order,
         }
         if(this.tableData.length < this.totalCount){
 
@@ -382,6 +384,18 @@ export default {
     }
   },
   methods: {
+    sortChange(column){
+      console.log(column)
+      this.prop=column.prop
+      if (column.order==null){
+        this.order= 'ASC'
+      } else {
+        this.order=column.order
+      }
+      this.listLoading=true
+      this.tableData.length=null
+      this.get_data()
+    },
     receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.dialogVisible = false;
       this.isMultiline=true;
@@ -415,8 +429,8 @@ export default {
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
         status: '0',
-        prop:'basicInfoId',
-        order:'ASC',
+        prop:this.prop,
+        order:this.order,
       }
       const numparams = {
         dataName: this.initname,
@@ -462,8 +476,8 @@ export default {
         start: this.tableData.length ? this.tableData.length : 0,
         limit: 15,
         status: '0',
-        prop:'basicInfoId',
-        order:'ASC',
+        prop:this.prop,
+        order:this.order,
       }
       this.totalCount=0;
       getList(params).then((response) => {
@@ -555,8 +569,8 @@ export default {
           start: 0,
           limit: item_count,
           status: '0',
-          prop:'basicInfoId',
-          order:'ASC',
+          prop:this.prop,
+          order:this.order,
         }
         getList(params).then((response) => {
           getExcelDemo1(response.data.items)
@@ -617,8 +631,8 @@ export default {
               start: 0,
               limit: item_count,
               status: '0',
-              prop:'basicInfoId',
-              order:'ASC',
+              prop:this.prop,
+              order:this.order,
             }
             item = (await getList(params)).data.items
           }
