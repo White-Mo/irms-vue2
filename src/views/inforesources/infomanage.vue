@@ -277,6 +277,8 @@ export default {
   },
   data() {
     return {
+      prop:'basicInfoId',
+      order:'ASC',
       currentPage: 1,
       guaranteePeriodID: '保修期:',
       editionID: '中间件版本:',
@@ -818,7 +820,13 @@ export default {
     },
     sortChange(column){
       console.log(column)
-
+      this.prop=column.prop
+      if (column.order==null){
+        this.order= 'ASC'
+      } else {
+        this.order=column.order
+      }
+      this.fetchData()
     },
     //单条件搜索
     searchOne() {
@@ -847,7 +855,9 @@ export default {
         dataValue: this.inputValue,
         status: '0',
         start: (this.currentPage-1)*this.limit,
-        limit: this.limit
+        limit: this.limit,
+        prop: this.prop,
+        order: this.order
       }
       // console.log('11',this.initname)
       var flog = false
@@ -974,7 +984,10 @@ export default {
           dataValue: this.inputValue,
           status: '0',
           start: (val - 1) * this.limit,
-          limit: this.limit
+          limit: this.limit,
+          prop: this.prop,
+          order: this.order
+
         }
         getList(params).then((response) => {
           this.list = response.data.items
