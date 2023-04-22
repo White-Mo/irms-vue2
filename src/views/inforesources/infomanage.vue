@@ -297,7 +297,7 @@ export default {
       limit: 10,
       keyname: [],
       DataName: 'all',
-      initname: ['123'],
+      initname: [],
       department: '',
       inputValue: '',
       inputValue2: '',
@@ -309,7 +309,6 @@ export default {
       initval: [],
       tempAllData: null,
       dataname: [
-
         {
           value: 'basicInfoId',
           label: '设备编号',
@@ -840,10 +839,11 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: '0',
-        start: this.start,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit
       }
       // console.log('11',this.initname)
+      console.log("*************",params)
       var flog = false
       for (let i = 0; i <= this.initname.length; i++) {
         if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
