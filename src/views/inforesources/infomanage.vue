@@ -311,6 +311,7 @@ export default {
       initval: [],
       tempAllData: null,
       dataname: [
+
         {
           value: 'basicInfoId',
           label: '设备编号',
@@ -817,6 +818,7 @@ export default {
     },
     sortChange(column){
       console.log(column)
+
     },
     //单条件搜索
     searchOne() {
@@ -848,7 +850,6 @@ export default {
         limit: this.limit
       }
       // console.log('11',this.initname)
-      console.log("*************",params)
       var flog = false
       for (let i = 0; i <= this.initname.length; i++) {
         if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
