@@ -137,8 +137,8 @@
                 </el-row>
               </el-form>
               <el-row :gutter="20">
-                <el-col :span="12"><othertable :form="equipment.config" :lable="configLable">配置信息</othertable></el-col>
-                <el-col :span="12"><othertable :form="equipment.software" :lable="softwareLable">通用软件信息</othertable></el-col>
+                <el-col :span="12"><othertable :form="equipment.config" :lable="configLable" :ch=2>配置信息</othertable></el-col>
+                <el-col :span="12"><othertable :form="equipment.software" :lable="softwareLable" :ch=3>通用软件信息</othertable></el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="12"><othertable :form="equipment.network" :lable="networkLable">网络信息</othertable></el-col>
