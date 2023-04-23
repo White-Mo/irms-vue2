@@ -149,6 +149,7 @@
 
         <div class='draggable' style='padding: 20px' v-if='showTable'>
           <el-table
+            ref='table'
             v-loading='listLoading'
             :diisable='true'
             :data='list'
@@ -175,7 +176,7 @@
               v-for='(item,index) in newList'
               v-if='index>0'
               :key='`col_${index}`'
-              :prop='newList[index].value'
+              :prop='item.value'
               :label='item.label'
               :formatter='item.formatter'
               align='center'
@@ -284,12 +285,17 @@ export default {
       console.log('列改变')
       await this.refreshTable()
       this.$nextTick(() => {
+        // 获取el-table的横向滚动条位置
+        const elTable = this.$refs.table.$el;
+        const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
+        bodyWrapper.scrollLeft=this.scrollLeft;
         this.columnDrop()
       })
     },
   },
   data() {
     return {
+      scrollLeft:0,
       newTable: false,
       showTable: true,
       prop: 'basicInfoId',
@@ -426,7 +432,8 @@ export default {
         { value: 'domainNameRegistrationService', label: ' 域名注册服务商' },
         { value: 'ns', label: ' NS记录' },
         { value: 'cname', label: ' CNAME记录（别名）' },
-        { value: 'useCDN', label: ' 是否使用CDN' }
+        { value: 'useCDN', label: ' 是否使用CDN' },
+        { value: 'networkArea', label: '网络区域' },
       ],
 
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
@@ -592,6 +599,9 @@ export default {
     this.oldList = JSON.parse(JSON.stringify(this.dataname))
     // 初始化新列顺序
     this.newList = JSON.parse(JSON.stringify(this.dataname))
+
+    this.newList[26].formatter=this.dataname[26].formatter
+    this.newList[27].formatter=this.dataname[27].formatter
   },
   mounted() {
     this.restaurants = this.loadAll()
@@ -602,9 +612,26 @@ export default {
     columnDrop() {
       // 创建列拖拽实例
       const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr')
+      const elTable = this.$refs.table.$el;
+      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
+      let position=0
+
       Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
+        onStart:env=>{
+          position=env.oldIndex;
+        },
+        onMove: evt => {
+          const deltaX = evt.willInsertAfter;
+          console.log(deltaX)
+
+          if(deltaX===true ){
+            bodyWrapper.scrollLeft=bodyWrapper.scrollLeft+(evt.draggedRect.left)
+          } else {
+            bodyWrapper.scrollLeft=bodyWrapper.scrollLeft-(evt.draggedRect.left);
+          }
+        },
         onEnd: evt => {
           // 更新新列顺序以反映新的列顺序
           if (this.newTable === false) {
@@ -779,6 +806,7 @@ export default {
     },
     headWidthChange(newWidth, oldWidth, column, event) {
       console.log(newWidth, oldWidth, column, event)
+      this.$refs.table.doLayout()
     },
     sortChange(column) {
       console.log(column)
@@ -1077,7 +1105,14 @@ export default {
       return width
     },
     refreshTable() {
+      // 获取el-table的横向滚动条位置
+      const elTable = this.$refs.table.$el;
+      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
+      this.scrollLeft = bodyWrapper.scrollLeft;
+      console.log(this.scrollLeft);
+
       this.showTable = false
+
       this.$nextTick(() => {
         this.showTable = true
       })
