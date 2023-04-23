@@ -112,3 +112,11 @@ export function getPostDepartmentAll(params) {
     responseType: 'json'
   })
 }
+export function checkAccountName(data) {
+  return request({
+    params: data,
+    url: '/home/authority/checkAccountName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
