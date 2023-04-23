@@ -608,7 +608,7 @@ export function analysisReply(data) {
   //这个数组的元素是对象
   let analysisData = []
   let result_data = []
-  if(data.status !=200){
+  if(data.status !=null){
     let item={};
     item.key="错误信息"
     item.values=JSON.stringify(data)
@@ -769,10 +769,12 @@ function getRowBaseinfo(outdata) {
     ns:'',//NS记录
     cname:'',//CNAME记录（别名）
     useCDN:'',//是否使用CDN
-    deploymentEnvironment:''//部署环境
+    deploymentEnvironment:'',//部署环境
+    networkArea:'' //网络区域
   }
 
-  equipmentBaseInfo.hostName = ' '
+  equipmentBaseInfo.networkArea = Object.values(outdata[0])[46]
+  equipmentBaseInfo.hostName = Object.values(outdata[0])[47]
   equipmentBaseInfo.remarks = Object.values(outdata[0])[27]
   equipmentBaseInfo.dataSources = 'EXCEL批量导入'
 
@@ -823,15 +825,18 @@ function getRowBaseinfo(outdata) {
 
   // debugger;
   const Serial = Object.values(outdata[0])[0].split('-')
-  if (Serial.length != 4) {
+  if (Serial.length != 4&&Serial.length != 3) {
     Message({
       type: 'error',
       message: '编号格式错误'
     })
-  } else {
+  } else if(Serial.length === 4){
     equipmentBaseInfo.basicInfoId = Object.values(outdata[0])[0] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
     equipmentBaseInfo.tureOrVirtual = (Serial[2] === 'S' || Serial[2] === 's') ? 0 : 1//实体机为0，虚拟机为1
+  }else {
+    equipmentBaseInfo.basicInfoId = Object.values(outdata[0])[0] // 编号
+    equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
   }
   const {
     status: equipmentAdminName,
@@ -1100,15 +1105,13 @@ function getRowAppSoftwareFir(outdata) {
     SAN_NAS: '',
     capacity: '' // 已用信息
   }
-  var appStoredata = Object.values(outdata[index])
   // console.log(appStoredata)
   appStoreConfig.volume = ""
   appStoreConfig.SAN_NAS = ""
   appStoreConfig.capacity = ""
   appStores.push(appStoreConfig)
 
-  // var NativeStoredata = Object.values(outdata[index])
-  // appNativeStore.totalCapacity = NativeStoredata[0]
+  appNativeStore.totalCapacity =Object.values(outdata[0])[46]
   // appNativeStore.usedSpace = NativeStoredata[1]
   // appNativeStore.unusedSpace = NativeStoredata[4]
   // appNativeStore.annualGrowthSpace = NativeStoredata[5]

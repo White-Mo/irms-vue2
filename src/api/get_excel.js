@@ -90,7 +90,7 @@ export async function getExcelDemo1(data) {
     'offlineTime': '维保结束日期',
     'onlineTime': '设备上线安装日期',
     'remarks': '备注',
-    "type": "CPU型号",
+    "type": "CPU型号规格",
     "configMemoryCorenessOrCapacity": "内存容量（GB）",
     "softwareOperatingSystemEdition": "操作系统品牌规格",
     "softwareOperatingSystemBuildDate": "操作系统建设时间",

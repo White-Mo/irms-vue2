@@ -8,8 +8,57 @@ export function getList(obj) {
   if(obj.order==null){
     obj.order='ASC'
   }
-  var params = JSON.parse(JSON.stringify(obj))
-  // console.log(typeof (params))
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'basicInfoId',
+      'ipAddress',
+      'macAddress',
+      'equipmentName',
+      'postName',
+      'departmentName',
+      'appAdminName',
+      'equipmentTypeName',
+      'brandName',
+      'brandModelName',
+      'serialNumber',
+      'businessOrExperimental',
+      'machineRoomName',
+      'cabinetName',
+      'cabinetUStart',
+      'cabinetUEnd',
+      'accessLocation',
+      'singleAndDoublePowerSupply',
+      'businessSystemFirstName',
+      'businessSystem',
+      'businessSystemLevel',
+      'agreedToTemporaryShutdown',
+      'installSafetyMonitoringSoftware',
+      'deployStrongPassword',
+      'deploymentEnvironment',
+      'offlineTime',
+      'onlineTime',
+      'remarks',
+      'type',
+      'configMemoryCorenessOrCapacity',
+      'softwareOperatingSystemEdition',
+      'softwareOperatingSystemBuildDate',
+      'softwareDatabaseEdition',
+      'softwareDatabaseBuildDate',
+      'edition',
+      'softwareMiddlewareBuildDate',
+      'cloudServiceUnit',
+      'leasedComputingResources',
+      'leasedStorageResources',
+      'leasedNetworkBandwidth',
+      'termOfLease',
+      'domainName',
+      'domainNameRegistrationService',
+      'ns',
+      'cname',
+      'useCDN',
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
     params,
     url: '/home/inforesources/getCompreDataAll',
