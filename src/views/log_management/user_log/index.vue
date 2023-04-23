@@ -13,18 +13,8 @@
         <el-row style="width: 100%;height: 78vh;">
           <el-col :span="10" style="height: 78vh;" class="my-calendar" >
             <el-calendar v-model="date"
+                         @input='handleDateChange'
                          style="background-color: rgba(34,152,236,0.3); height: 78vh; ">
-<!--              <template slot="dateCell" slot-scope="{ data }">
-                <p :class="data.isSelected ? 'is-selected' : '' ">
-                  {{ data.day.split("-").slice(2).join("-") }}
-                </p>
-                <div  v-for="(item ,index) in dateAndCount"
-                      :key>
-                  <div v-if="item[0].indexOf(data.day) != -1" class="haveData">
-                    <span >操作了{{item[1]}}次</span>
-                  </div>
-                </div>
-              </template>-->
             </el-calendar>
           </el-col>
           <el-col :span="14" style="height: 78vh;" >
@@ -39,7 +29,6 @@
               border
               highlight-current-row
               stripe
-              @row-click="searchLogByUser"
             >
               <el-table-column
                 type='index'
@@ -66,7 +55,8 @@
 </template>
 
 <script>
-import {getLogDataUser, getLogDateAndCountByUser, getLogUserAndCounts} from "@/api/log_management";
+import {getLogDataUser, getOperationCount, getUserAndCountByCurrentDay} from "@/api/log_management";
+import moment from "moment/moment";
 
 export default {
   name: "userLog",
@@ -77,38 +67,108 @@ export default {
       handlersData: [],
       handlers: [
         {
-          value: 'realname',
+          value: 'realName',
           label: '用户'
+        } ,
+        {
+          value: 'count',
+          label: '操作次数'
         }
       ],
-      firstUser:',',
-      dateAndCount: [],
+      operationUserAndCount: [],
+      operationCount:[],
+      operationUser: [],
+      selectedDate:'',
+      returnResult1:[],
+      returnResult2:[],
     }
   },
+  created() {
+    this.getUserAndCount()
+  },
   mounted() {
-/*    getLogUserAndCounts().then(res=>{
-      console.log(res)
-    })*/
-    getLogDataUser().then(res => {
-      this.handlersData = res.data.items;
-      this.firstUser = res.data.items[0].user;
-    })
-/*    getLogDateAndCountByUser(this.firstUser).then(res => {
-      console.log("************",res)
-     this.dateAndCount = res.data.items;
-    })*/
+
   },
   methods: {
-/*    searchLogByUser(row){
-      getLogDateAndCountByUser(row.user).then(res => {
-        this.dateAndCount = res.data.items;
-      })
-    }*/
+    async handleDateChange(date){
+      this.listLoading = true;
+      this.operationCount=[];
+      this.operationUser=[];
+      this.returnResult1=[],
+      this.returnResult2=[];
+      this.operationUserAndCount=[];
+      this.selectedDate = moment(date).format('YYYY-MM-DD')
+      this.returnResult1 = await getUserAndCountByCurrentDay(this.selectedDate)
+      console.log(this.returnResult1)
+      if(this.returnResult1.data !== "没有数据！" ){
+        this.operationCount = this.returnResult1.data.items;  //获取有操作的用户及其操作次数
+
+        this.returnResult2 = await getLogDataUser();
+        this.operationUser = this.returnResult2.data.items;  //获取所有用户
+
+        const realNameCount = {};
+        for (let i = 0; i < this.operationCount.length; i++) {
+          let realName = this.operationCount[i][0];  //获取操作用户的名称
+          let count = this.operationCount[i][1];  //获取操作次数
+          realNameCount[realName] = count;
+        }
+
+        const realNames = [];
+        for (let i = 0; i < this.operationUser.length; i++) {
+          const realName = this.operationUser[i].realname; //获取操作用户的名称
+          if (realNames.indexOf(realName) === -1) { //realNames.indexOf(realName) === -1 的含义是：如果数组 realNames 中不存在当前操作用户的名称 realName，则返回 true，否则返回 false。
+            realNames.push(realName);  //把所有用户的名称添加到数组 realNames
+          }
+        }
+
+        for (let i = 0; i < realNames.length; i++) {
+          const realName = realNames[i]; //因此获取用户
+          const count = realNameCount[realName] || 0;   //第i个用户的获取操作次数
+          this.operationUserAndCount.push({ realName, count }); //把获取到的用户名称和获取到的操作次数加到数组 operationUserAndCount 中
+        }
+        this.handlersData = this.operationUserAndCount  //把数组 operationUserAndCount赋值给表单数据绑定字段
+        this.listLoading = false;
+      }else {
+        alert("此日期没有数据！")
+        this.listLoading = false;
+        this.handlersData = [];
+      }
+    },
+
+    async getUserAndCount() {
+      this.listLoading = true;
+      this.returnResult1 = await getOperationCount();
+      this.operationCount = this.returnResult1.data.items;  //获取有操作的用户及其操作次数
+
+      this.returnResult2 = await getLogDataUser();
+      this.operationUser = this.returnResult2.data.items;  //获取所有用户
+
+      const realNameCount = {};
+      for (let i = 0; i < this.operationCount.length; i++) {
+        let realName = this.operationCount[i][0];  //获取操作用户的名称
+        let count = this.operationCount[i][1];  //获取操作次数
+        realNameCount[realName] = count;
+      }
+
+      const realNames = [];
+      for (let i = 0; i < this.operationUser.length; i++) {
+        const realName = this.operationUser[i].realname; //获取操作用户的名称
+        if (realNames.indexOf(realName) === -1) { //realNames.indexOf(realName) === -1 的含义是：如果数组 realNames 中不存在当前操作用户的名称 realName，则返回 true，否则返回 false。
+          realNames.push(realName);  //把所有用户的名称添加到数组 realNames
+        }
+      }
+
+      for (let i = 0; i < realNames.length; i++) {
+        const realName = realNames[i]; //因此获取用户
+        const count = realNameCount[realName] || 0;   //第i个用户的获取操作次数
+        this.operationUserAndCount.push({ realName, count }); //把获取到的用户名称和获取到的操作次数加到数组 operationUserAndCount 中
+      }
+      this.handlersData = this.operationUserAndCount  //把数组 operationUserAndCount赋值给表单数据绑定字段
+      this.listLoading = false;
+    }
   }
 }
 </script>
-
-
 
 <style lang="less" scoped>
 .bg-purple-dark {
