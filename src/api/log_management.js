@@ -58,21 +58,21 @@ export function getCurrentDayLogData(currentDate) {
   })
 }
 
-//通过用户获取该用户每天操作的次数
 
-export function getLogDateAndCountByUser(user) {
+//获取日志操作用户和次数
+export function getOperationCount() {
   return request({
-    params: {user: user},
-    url: '/home/log_management/getLogDateAndCountByUser',
+    params: '',
+    url: '/home/log_management/getOperationCount',
     method: 'get',
   })
 }
 
-//统计用户和用户操作的次数
-export function getLogUserAndCounts() {
+//获取当天操作用户和次数
+export function getUserAndCountByCurrentDay(currentDate) {
   return request({
-    params: '',
-    url: '/home/log_management/getLogUserAndCounts',
+    params: {currentDate: currentDate},
+    url: '/home/log_management/getUserAndCountByCurrentDay',
     method: 'get',
   })
 }
