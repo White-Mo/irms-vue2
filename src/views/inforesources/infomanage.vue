@@ -307,9 +307,11 @@ export default {
       singalInfo: {},
       initval: [],
       tempAllData: null,
+      // 用于保存旧的表格列顺序
       oldList: [],
+      // 用于保存新的表格列顺序
       newList: [],
-      counter :1,
+      // 定义表格列配置
       dataname: [
         {
           value: 'sequenceNumber',
@@ -667,18 +669,22 @@ export default {
   },
   mounted() {
     this.restaurants = this.loadAll()
+    // 初始化旧列顺序
     this.oldList = JSON.parse(JSON.stringify(this.dataname))
+    // 初始化新列顺序
     this.newList = JSON.parse(JSON.stringify(this.dataname))
     this.columnDrop()
   },
   methods: {
     // 列拖拽
     columnDrop() {
+      // 创建列拖拽实例
       const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr');
       this.sortable = Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
         onEnd: evt => {
+          // 更新新列顺序以反映新的列顺序
           const oldItem = this.newList[evt.oldIndex];
           this.newList.splice(evt.oldIndex, 1);
           this.newList.splice(evt.newIndex, 0, oldItem);
@@ -899,13 +905,15 @@ export default {
         // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
+          console.log("+++++++++",this.list)
+          //由于用组件列自动序号会导致拖动是数据错乱，故自定义一个序号属性
           let counter = 1
           this.list.forEach(item => {
             item.sequenceNumber = counter; // 添加一个序号属性，值为计数器变量
             counter++; // 计数器自增
           });
+          console.log("---------------",this.list)
           this.total = response.data.total
-          //console.log(this.list)
           this.listLoading = false
         })
       }

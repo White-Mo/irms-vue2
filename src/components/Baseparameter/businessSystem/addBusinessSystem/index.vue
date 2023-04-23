@@ -50,7 +50,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('addInformation')">添加业务系统</el-button>
+            <el-button type="primary" @click="onSubmit('addInformation')">添加二级业务系统</el-button>
           </el-form-item>
         </el-form>
       </el-row>
