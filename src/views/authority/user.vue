@@ -247,9 +247,12 @@ export default {
   },
   data() {
     return {
+      //提交按钮禁用
       disabled:false,
-      action:'',
+      //登陆账号重复判断
       accountId:'',
+      action:'',
+
       user_input:{
         username:"",
         username_id:"",
@@ -341,6 +344,7 @@ export default {
     this.changeGroupID()
   },*/
   methods: {
+    //登陆账号检查是否重复
     checkAccount(){
       if (this.action!='add'){
         this.action='update'
@@ -362,6 +366,7 @@ export default {
           this.disabled = false;
         }
       })
+      //防止直接点击修改按钮而导致判断失效
       if (this.disabled=true){
         return false
       } else {
@@ -489,6 +494,7 @@ export default {
         });
       })
     },
+    //删除用户弹窗
     deleteUser(row){
         this.$alert(`是否永久删除用户：\"${row.realname}\"信息`, '提示', {
           confirmButtonText: '确定',
@@ -511,8 +517,8 @@ export default {
     },
 
     async updateUser(row){
-      this.accountId=row.id
-      this.disabled=false
+      this.accountId=row.id   //获取用户ID
+      this.disabled=false      //点击修改按钮，提交按钮不禁用
       let temp = row.role.split("/")
       this.userDialogDisplay = true
       this.updateOrAdd = true
@@ -527,7 +533,6 @@ export default {
       this.update_data.Status = row.status==="激活" ? '0':'1'
       // this.update_data.Status = row.status==="激活" ? '0':'1'
       this.update_data.row = row
-      console.log(this.update_data)
       //console.log(row)
       //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
       // this.departmentAll = (await getDepartment(row.roleid)).data.items
@@ -555,7 +560,7 @@ export default {
       this.departmentAll = []
     },
     async updateUserPlus(){
-      this.disabled = true;
+      this.disabled = true;  //防止更新按钮重复点击
       if(this.checkAccount()===false){
       let params = {
         id:this.update_data.row.id, // 被修改的账户的id
@@ -593,7 +598,7 @@ export default {
       }
     },
     add_user(){
-      this.action='add'
+      this.action='add' //判断是修改还是添加用户 add添加 update修改
 
       this.userDialogDisplay = true
       this.updateOrAdd = false

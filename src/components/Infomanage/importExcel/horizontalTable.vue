@@ -22,7 +22,7 @@
               :file-list='fileList'
               :auto-upload='false'
             >
-              <el-button slot='trigger' size='large' type='primary' icon='el-icon-printer'>导入综合表文件</el-button>
+              <el-button slot='trigger' size='large' type='primary' icon='el-icon-printer'>导入文件</el-button>
               <el-button style='margin-left:10px' size='large' type='primary' @click='downloadFile()'
                          icon='el-icon-download'>下载模板
               </el-button>
