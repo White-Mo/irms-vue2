@@ -1,17 +1,5 @@
 import request from '@/utils/request'
 // 综合数据管理展示与查询--lry
-export function getList(obj) {
-  // 将有数组和字符串的对象转为符合JSON格式的对象
-  var params = JSON.parse(JSON.stringify(obj))
-  // //console.log(params)
-  // //console.log(typeof (params))
-  return request({
-    params,
-    url: '/home/inforesources/getCompreDataAll',
-    method: 'get',
-    responseType: 'json'
-  })
-}
 //IP 地址数据获取
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象

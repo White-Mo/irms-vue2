@@ -4,7 +4,8 @@
  * @Date: 2022-10-20 00:38:12
  * @LastEditTime: 2022-11-04 17:55:33
  */
-import {getList, getdataCount, getNetWorkList} from '@/api/IP_address'
+import {getdataCount, getNetWorkList} from '@/api/IP_address'
+import { getList } from '@/api/table'
 export const hunhe1 = {
   methods: {
     fetchData() {

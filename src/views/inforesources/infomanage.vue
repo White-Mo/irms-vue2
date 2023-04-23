@@ -165,7 +165,15 @@
             @header-dragend='headWidthChange'
           >
             <el-table-column
+              align='center'
+              fixed='left'
+              label='序号'
+              :prop='newList[0].value'
+              width='80px'
+            ></el-table-column>
+            <el-table-column
               v-for='(item,index) in newList'
+              v-if='index>0'
               :key='`col_${index}`'
               :prop='newList[index].value'
               :label='item.label'
@@ -244,7 +252,6 @@
 import Sortable from 'sortablejs'
 import {
   getList,
-  getdataCount,
   delEquipment,
   InitValue,
   searchComprehensiveInfoByMultipleConditions,
@@ -279,7 +286,7 @@ export default {
       this.$nextTick(() => {
         this.columnDrop()
       })
-    }
+    },
   },
   data() {
     return {
@@ -327,7 +334,7 @@ export default {
       // 定义表格列配置
       counter: 1,
       dataname: [
-        { value: 'sequenceNumber', label: '序号', width: '80px' },
+        { value: 'sequenceNumber', label: '序号' },
         { value: 'basicInfoId', label: ' 编号-总编号' },
         { value: 'ipAddress', label: ' ip地址' },
         { value: 'macAddress', label: ' MAC' },
@@ -581,13 +588,13 @@ export default {
   },
   created() {
     this.fetchData()
-  },
-  mounted() {
-    this.restaurants = this.loadAll()
     // 初始化旧列顺序
     this.oldList = JSON.parse(JSON.stringify(this.dataname))
     // 初始化新列顺序
     this.newList = JSON.parse(JSON.stringify(this.dataname))
+  },
+  mounted() {
+    this.restaurants = this.loadAll()
     this.columnDrop()
   },
   methods: {
@@ -620,8 +627,14 @@ export default {
       this.currentPage = 1
       this.infoInput = infoInput
       this.list = searchAllData.items
+      let counter = infoInput.start + 1
+      this.list.forEach(item => {
+        item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+        counter++ // 计数器自增
+      })
       this.total = searchAllData.total
       this.dialogVisible = false
+
     },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
@@ -653,48 +666,48 @@ export default {
     // change的处理事件
     handleSelectChange(val) {
       //ip地址、mac地址单独选择事件-选择ip或mac一者，其他所有禁选；选择其他任何，ip和mac二者都禁选
-      if (val.indexOf('ipAddress') !== -1) {
-        this.ipAddress = 1
-        for (const a in this.dataname_option) {
-          if (this.dataname_option[a].value !== 'ipAddress')
-            this.dataname_option[a].isDisabled = true
-        }
-      } else if (val.indexOf('macAddress') !== -1) {
-        this.macAddress = 1
-        for (const b in this.dataname_option) {
-          if (this.dataname_option[b].value !== 'macAddress')
-            this.dataname_option[b].isDisabled = true
-        }
-      } else {
-        if (val.length !== 0) {
-          this.remains = 1
-          this.dataname_option[6].isDisabled = true
-          this.dataname_option[7].isDisabled = true
-        }
-      }
+      // if (val.indexOf('ipAddress') !== -1) {
+      //   this.ipAddress = 1
+      //   for (const a in this.dataname_option) {
+      //     if (this.dataname_option[a].value !== 'ipAddress')
+      //       this.dataname_option[a].isDisabled = true
+      //   }
+      // } else if (val.indexOf('macAddress') !== -1) {
+      //   this.macAddress = 1
+      //   for (const b in this.dataname_option) {
+      //     if (this.dataname_option[b].value !== 'macAddress')
+      //       this.dataname_option[b].isDisabled = true
+      //   }
+      // } else {
+      //   if (val.length !== 0) {
+      //     this.remains = 1
+      //     this.dataname_option[6].isDisabled = true
+      //     this.dataname_option[7].isDisabled = true
+      //   }
+      // }
       //当ip地址、mac地址取消勾选，恢复正常
-      if (val.indexOf('ipAddress') === -1 && this.ipAddress === 1) {
-        for (const c in this.dataname_option) {
-          if (this.dataname_option[c].value !== 'ipAddress') {
-            this.dataname_option[c].isDisabled = false
-            this.ipAddress = 0
-          }
-        }
-      } else if (val.indexOf('macAddress') === -1 && this.macAddress === 1) {
-        for (const d in this.dataname_option) {
-          if (this.dataname_option[d].value !== 'macAddress') {
-            this.dataname_option[d].isDisabled = false
-            this.macAddress = 0
-          }
-        }
-      } else {
-        if (val.length === 0) {
-          for (const e in this.dataname_option) {
-            this.dataname_option[e].isDisabled = false
-            this.remains = 0
-          }
-        }
-      }
+      // if (val.indexOf('ipAddress') === -1 && this.ipAddress === 1) {
+      //   for (const c in this.dataname_option) {
+      //     if (this.dataname_option[c].value !== 'ipAddress') {
+      //       this.dataname_option[c].isDisabled = false
+      //       this.ipAddress = 0
+      //     }
+      //   }
+      // } else if (val.indexOf('macAddress') === -1 && this.macAddress === 1) {
+      //   for (const d in this.dataname_option) {
+      //     if (this.dataname_option[d].value !== 'macAddress') {
+      //       this.dataname_option[d].isDisabled = false
+      //       this.macAddress = 0
+      //     }
+      //   }
+      // } else {
+      //   if (val.length === 0) {
+      //     for (const e in this.dataname_option) {
+      //       this.dataname_option[e].isDisabled = false
+      //       this.remains = 0
+      //     }
+      //   }
+      // }
 
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') === -1 && this.type === 1) {
@@ -810,28 +823,28 @@ export default {
       }
       // console.log('11',this.initname)
       var flog = false
-      for (let i = 0; i <= this.initname.length; i++) {
-        if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
-          // console.log("参数1",params)
-          solelySearchIdAndMacAddress(params).then((response) => {
-            let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
-            console.log(IpOrMacSearchAllData)
-            this.list = IpOrMacSearchAllData
-            this.total = IpOrMacSearchAllData.length
-            // this.$emit('changList2', IpOrMacSearchAllData); //$emit()--将子组件的数据传递给父组件
-            this.listLoading = false
-          })
-          flog = true
-          break
-        }
-      }
+      // for (let i = 0; i <= this.initname.length; i++) {
+      //   if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
+      //     // console.log("参数1",params)
+      //     solelySearchIdAndMacAddress(params).then((response) => {
+      //       let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
+      //       console.log(IpOrMacSearchAllData)
+      //       this.list = IpOrMacSearchAllData
+      //       this.total = IpOrMacSearchAllData.length
+      //       // this.$emit('changList2', IpOrMacSearchAllData); //$emit()--将子组件的数据传递给父组件
+      //       this.listLoading = false
+      //     })
+      //     flog = true
+      //     break
+      //   }
+      // }单独搜索ip和mac
       if (flog === false) {
         // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
           console.log('+++++++++', this.list)
           //由于用组件列自动序号会导致拖动是数据错乱，故自定义一个序号属性
-          let counter = 1
+          let counter = params.start+1
           this.list.forEach(item => {
             item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
             counter++ // 计数器自增
@@ -893,6 +906,11 @@ export default {
         const params = this.infoInput
         searchComprehensiveInfoByMultipleConditions(params).then(res => {
           this.list = res.data.items
+          let counter = params.start+1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
           this.total = res.data.total
           this.listLoading = false
         })
@@ -904,6 +922,11 @@ export default {
         }
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
+          let counter =this.start * this.limit
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
           this.total = res.data.total
           this.listLoading = false
         })
@@ -920,6 +943,11 @@ export default {
         const params = this.infoInput
         searchComprehensiveInfoByMultipleConditions(params).then(res => {
           this.list = res.data.items
+          let counter = params.start+1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
           this.total = res.data.total
           this.listLoading = false
         })
@@ -931,6 +959,11 @@ export default {
         }
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
+          let counter = params.start+1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
           this.total = res.data.total
           this.listLoading = false
         })
@@ -946,7 +979,7 @@ export default {
         }
         getList(params).then((response) => {
           this.list = response.data.items
-          let counter = 1
+          let counter = params.start+1
           this.list.forEach(item => {
             item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
             counter++ // 计数器自增
@@ -990,12 +1023,17 @@ export default {
       this.currentPage = 1
       this.tempGuaranteePeriodSearchCondition = this.guaranteePeriodSearchCondition
       const params = {
-        start: this.start,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit,
         searchCondition: this.guaranteePeriodSearchCondition
       }
       guaranteePeriodSearchByTime(params).then(res => {
         this.list = res.data.items
+        let counter = params.start+1
+        this.list.forEach(item => {
+          item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+          counter++ // 计数器自增
+        })
         this.total = res.data.total
         this.guaranteePeriodSearchCondition = ''
         this.isGuaranteePeriodSearch = true
