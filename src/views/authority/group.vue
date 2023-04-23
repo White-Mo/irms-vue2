@@ -232,6 +232,10 @@ export default {
           })
         }
       })
+      this.addForm={
+        name: '',
+        status:''
+      }
     },
     // 编辑角色
     handleEdit(index, row) {
@@ -263,17 +267,7 @@ export default {
     },
     // 删除角色 确认弹窗
     handleDelete(index, row) {
-      this.delform = row
-      const data = {id:this.delform.id}
-      delAuthor(data).then((res) => {
-/*        if(res.code === 20000) {
-          this.$message({
-            type:'success',
-            message:'删除成功'
-          })
-          this.datainit()
-        }*/
-
+        const data = {id:row.id}
         this.$alert(`是否永久删除角色：\"${row.name}\"`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -292,7 +286,6 @@ export default {
             }
           }
         })
-      })
     },
     // 删除角色 提交
     // handdelAuthor(){
