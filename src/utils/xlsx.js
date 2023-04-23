@@ -608,7 +608,7 @@ export function analysisReply(data) {
   //这个数组的元素是对象
   let analysisData = []
   let result_data = []
-  if(data.status !=200){
+  if(data.status !=null){
     let item={};
     item.key="错误信息"
     item.values=JSON.stringify(data)

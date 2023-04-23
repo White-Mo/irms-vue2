@@ -168,6 +168,7 @@
               :key="`col_${index}`"
               :prop="newList[index].value"
               :label="item.label"
+              :formatter="item.formatter"
               align="center"
               :width='item.width'
               show-overflow-tooltip
@@ -368,7 +369,7 @@ export default {
           formatter: function(row) {
             var time = row.onlineTime
             if (time == null) {
-              return '无'
+              return null
             } else {
               //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
               var date = new Date(time)
@@ -406,7 +407,7 @@ export default {
           formatter: function(row) {
             var time = row.offlineTime
             if (time == null) {
-              return '无'
+              return null
             } else {
               //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
               var date = new Date(time)
@@ -501,8 +502,8 @@ export default {
         { value: 'domainNameRegistrationService', label: '域名注册服务商', width: '200px' },
         { value: 'ns', label: 'NS记录', width: '200px' },
         { value: 'cname', label: 'CNAME记录（别名）', width: '200px' },
-        { value: 'useCDN', label: '是否使用CDN', width: '200px' }
-
+        { value: 'useCDN', label: '是否使用CDN', width: '200px' },
+        { value: 'remarks', label: '备注', width: '200px' }
       ],
 
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
@@ -807,7 +808,6 @@ export default {
         for (let i = 0; i < this.initval.length; i++) {
           this.foad.push({ label: name, value: name + this.initval[i] })
         }
-
         this.listLoading = false
       })
     },

@@ -9,10 +9,54 @@ export function getList(obj) {
     obj.order='ASC'
   }
   if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
-    obj.dataName = ["guaranteePeriod","type","edition", "basicInfoId", "postName",
-    "departmentName", "ipAddress", "macAddress", "equipmentName", "brandName", "equipmentTypeName", "machineRoomName"
-   , "cabinetName", "onlineTime" , "offlineTime", "hostName", "equipmentAdminName", "equipmentAdminPhone", "appAdminName", "appAdminPhone"
-   , "brandModelName", "serialNumber"]
+    obj.dataName = [
+      'basicInfoId',
+      'ipAddress',
+      'macAddress',
+      'equipmentName',
+      'postName',
+      'departmentName',
+      'appAdminName',
+      'equipmentTypeName',
+      'brandName',
+      'brandModelName',
+      'serialNumber',
+      'businessOrExperimental',
+      'machineRoomName',
+      'cabinetName',
+      'cabinetUStart',
+      'cabinetUEnd',
+      'accessLocation',
+      'singleAndDoublePowerSupply',
+      'businessSystemFirstName',
+      'businessSystem',
+      'businessSystemLevel',
+      'agreedToTemporaryShutdown',
+      'installSafetyMonitoringSoftware',
+      'deployStrongPassword',
+      'deploymentEnvironment',
+      'offlineTime',
+      'onlineTime',
+      'remarks',
+      'type',
+      'configMemoryCorenessOrCapacity',
+      'softwareOperatingSystemEdition',
+      'softwareOperatingSystemBuildDate',
+      'softwareDatabaseEdition',
+      'softwareDatabaseBuildDate',
+      'edition',
+      'softwareMiddlewareBuildDate',
+      'cloudServiceUnit',
+      'leasedComputingResources',
+      'leasedStorageResources',
+      'leasedNetworkBandwidth',
+      'termOfLease',
+      'domainName',
+      'domainNameRegistrationService',
+      'ns',
+      'cname',
+      'useCDN',
+    ]
   }
   const params = JSON.parse(JSON.stringify(obj));
   return request({
