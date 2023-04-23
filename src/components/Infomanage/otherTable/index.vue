@@ -2,7 +2,7 @@
   <div class="shadows">
     <div class="shadows paddingLeft"><slot /></div>
     <div class="content">
-      <div v-if="hh !== '2' && hh !== '3'">
+      <div v-if="hh !== '2'">
         <el-button @click="addLine">新增行</el-button>
         <el-button v-show="form.length !== 1" @click="delLine">删除行</el-button>
       </div>
