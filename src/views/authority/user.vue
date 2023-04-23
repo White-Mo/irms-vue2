@@ -200,8 +200,8 @@
           </div>
             <span slot="footer" class="dialog-footer">
               <el-button style="height: 2.8rem;" @click="userDialogDisplay = false">返回</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
+              <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
+              <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
             </span>
         </el-dialog>
         <div class="tabListPage" style="text-align: center">
@@ -237,6 +237,7 @@ export default {
   },
   data() {
     return {
+      disabled:false,
       user_input:{
         username:"",
         username_id:"",
@@ -471,6 +472,7 @@ export default {
     },
 
     async updateUser(row){
+      this.disabled=false
       console.log(row)
       let temp = row.role.split("/")
       this.userDialogDisplay = true
@@ -486,6 +488,7 @@ export default {
       this.update_data.Status = row.status==="激活" ? '0':'1'
       // this.update_data.Status = row.status==="激活" ? '0':'1'
       this.update_data.row = row
+      console.log(this.update_data)
       //console.log(row)
       //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
       // this.departmentAll = (await getDepartment(row.roleid)).data.items
@@ -503,16 +506,17 @@ export default {
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
       // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
+        console.log(res)
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
-        _this.departmentAll = res.data.items
       })
     },
     closeDialog(){
       this.departmentAll = []
     },
     async updateUserPlus(){
+      this.disabled=true
       let params = {
         id:this.update_data.row.id, // 被修改的账户的id
         // insertuserid:this.userid,   // 修改者的id
