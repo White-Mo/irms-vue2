@@ -144,7 +144,7 @@
             </div>
             <div>
                 登录帐号
-              <el-input v-model="update_data.account " placeholder="请输入帐号" style="width: 20rem;left:2rem;"></el-input>
+              <el-input v-model="update_data.account " placeholder="请输入帐号" style="width: 20rem;left:2rem;" @blur='checkAccount'></el-input>
             </div>
             <div>
               密码
@@ -223,7 +223,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQComSelect, getFosUserByPage, getPostDepartmentAll, createFosUser,getFosUserCount, deleteFosUser,isdeleteFosUser,updateFosUserAction } from '@/api/user'
+import {
+  getQComSelect,
+  getFosUserByPage,
+  getPostDepartmentAll,
+  createFosUser,
+  getFosUserCount,
+  deleteFosUser,
+  isdeleteFosUser,
+  updateFosUserAction,
+  checkAccountName
+} from '@/api/user'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
 import {delMachineRoom} from "@/api/baseparameter";
 export default {
@@ -238,6 +248,8 @@ export default {
   data() {
     return {
       disabled:false,
+      action:'',
+      accountId:'',
       user_input:{
         username:"",
         username_id:"",
@@ -329,6 +341,33 @@ export default {
     this.changeGroupID()
   },*/
   methods: {
+    checkAccount(){
+      if (this.action!='add'){
+        this.action='update'
+      }
+      const params={
+        account:this.update_data.account,
+        action:this.action,
+        accountId:this.accountId,
+      }
+      console.log(params)
+      checkAccountName(params).then((res)=>{
+        if (res.data.valid!=true) {
+          this.disabled = true;
+          this.$message({
+            message: '登陆账号重复，请更改',
+            type: 'error'
+          })
+        }else{
+          this.disabled = false;
+        }
+      })
+      if (this.disabled=true){
+        return false
+      } else {
+        return true
+      }
+    },
     search(){
       this.currentPage = 0
       this.get_user()
@@ -472,8 +511,8 @@ export default {
     },
 
     async updateUser(row){
+      this.accountId=row.id
       this.disabled=false
-      console.log(row)
       let temp = row.role.split("/")
       this.userDialogDisplay = true
       this.updateOrAdd = true
@@ -482,7 +521,7 @@ export default {
       this.update_data.account = row.username
       this.update_data.password = row.password
       this.update_data.Unit = temp[0]
-      this.update_data.department =""
+      this.update_data.department =''
 
       this.update_data.Roles = row.roles
       this.update_data.Status = row.status==="激活" ? '0':'1'
@@ -506,17 +545,18 @@ export default {
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
       // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
-        console.log(res)
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
+        _this.departmentAll = res.data.items
       })
     },
     closeDialog(){
       this.departmentAll = []
     },
     async updateUserPlus(){
-      this.disabled=true
+      this.disabled = true;
+      if(this.checkAccount()===false){
       let params = {
         id:this.update_data.row.id, // 被修改的账户的id
         // insertuserid:this.userid,   // 修改者的id
@@ -550,8 +590,11 @@ export default {
         //console.log(err)
         _this.$message.error('更改失败');
       })
+      }
     },
     add_user(){
+      this.action='add'
+
       this.userDialogDisplay = true
       this.updateOrAdd = false
       this.headInfo = "添加新用户"

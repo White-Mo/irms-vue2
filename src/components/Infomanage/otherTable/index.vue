@@ -4,7 +4,7 @@
     <div class="content">
       <div v-if="hh !== '2'">
         <el-button @click="addLine">新增行</el-button>
-        <el-button v-show="form.length !== 1" @click="delLine">删除行</el-button>
+        <el-button v-show="form.length !== 1 && form.length !== ch" @click="delLine">删除行</el-button>
       </div>
       <div class="table">
         <el-table
@@ -36,6 +36,13 @@ export default {
       },
       required: false
     },
+    ch: {
+      type: Number,
+      default() {
+        return 0
+      },
+      required: false
+    },
     form: {
       type: Array,
       required: true
@@ -43,7 +50,7 @@ export default {
     lable: {
       type: Object,
       required: true
-    }
+    },
   },
   data() {
     return {  }
@@ -58,6 +65,7 @@ export default {
       else{}
     },
     addLine() {
+      console.log(this.ch)
       const obj = this.form[0]
       const newObj = {}
       for (const key in obj) {
