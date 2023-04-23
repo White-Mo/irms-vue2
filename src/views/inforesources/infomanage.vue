@@ -64,7 +64,7 @@
               v-model='inputValue'
               :fetch-suggestions='querySearch'
               placeholder='请输入内容'
-              :popper-append-to-body="false"
+              :popper-append-to-body='false'
               @select='handleSelect'
             ></el-autocomplete>
           </el-col>
@@ -105,7 +105,7 @@
               v-model='guaranteePeriodSearchCondition'
               placeholder='已过保'
               clearable
-              :popper-append-to-body ="false">
+              :popper-append-to-body='false'>
               <el-option
                 v-for='(item, index) in guaranteePeriodSearchConditionData'
                 :key='index'
@@ -147,7 +147,7 @@
           </el-col>
         </el-row>
 
-        <div class="draggable" style="padding: 20px">
+        <div class='draggable' style='padding: 20px' v-if='showTable'>
           <el-table
             v-loading='listLoading'
             :diisable='true'
@@ -160,19 +160,20 @@
             :header-cell-style="{borderColor:'#C0C0C0'}"
             highlight-current-row
             stripe
-            @sort-change="sortChange"
+            @sort-change='sortChange'
             @cell-dblclick='tbCellDoubleClick'
+            @header-dragend='headWidthChange'
           >
             <el-table-column
-              v-for="(item,index) in oldList"
-              :key="`col_${index}`"
-              :prop="newList[index].value"
-              :label="item.label"
-              :formatter="item.formatter"
-              align="center"
-              :width='item.width'
+              v-for='(item,index) in newList'
+              :key='`col_${index}`'
+              :prop='newList[index].value'
+              :label='item.label'
+              :formatter='item.formatter'
+              align='center'
+              :width=flexColumnWidth(item.label,item.value)
               show-overflow-tooltip
-              sortable="custom"
+              sortable='custom'
             >
             </el-table-column>
             <el-table-column
@@ -240,7 +241,7 @@
 </template>
 
 <script>
-import Sortable from 'sortablejs';
+import Sortable from 'sortablejs'
 import {
   getList,
   getdataCount,
@@ -271,10 +272,21 @@ export default {
       return statusMap[status]
     }
   },
+  watch: {
+    async newTable() {
+      console.log('列改变')
+      await this.refreshTable()
+      this.$nextTick(() => {
+        this.columnDrop()
+      })
+    }
+  },
   data() {
     return {
-      prop:'basicInfoId',
-      order:'ASC',
+      newTable: false,
+      showTable: true,
+      prop: 'basicInfoId',
+      order: 'ASC',
       currentPage: 1,
       guaranteePeriodID: '保修期:',
       editionID: '中间件版本:',
@@ -313,200 +325,101 @@ export default {
       // 用于保存新的表格列顺序
       newList: [],
       // 定义表格列配置
-      counter :1,
+      counter: 1,
       dataname: [
-        {
-          value: 'sequenceNumber',
-          label: '序号',
-          width: '80px'
-        },
-        {
-          value: 'basicInfoId',
-          label: '设备编号',
-          width: '200px'
-        },
-        {
-          value: 'postName',
-          label: '所属单位',
-          width: '200px'
-        },
-        {
-          value: 'departmentName',
-          label: '所属部门',
-          width: '200px'
-        },
-
-        {
-          value: 'equipmentName',
-          label: '设备名',
-          width: '200px'
-        },
-        {
-          value: 'brandName',
-          label: '设备品牌',
-          width: '200px'
-        },
-        {
-          value: 'equipmentTypeName',
-          label: '设备类型',
-          width: '200px'
-        },
-        // {
-        //   value: 'businessSystemName',
-        //   label: '业务系统',
-        //   width: '200px'
-        // },
-        {
-          value: 'machineRoomName',
-          label: '安装位置',
-          width: '200px'
-        },
-        {
-          value: 'cabinetName',
-          label: '机柜编号',
-          width: '200px'
-        },
+        { value: 'sequenceNumber', label: '序号', width: '80px' },
+        { value: 'basicInfoId', label: ' 编号-总编号' },
+        { value: 'ipAddress', label: ' ip地址' },
+        { value: 'macAddress', label: ' MAC' },
+        { value: 'equipmentName', label: ' 设备名称' },
+        { value: 'postName', label: ' 单位' },
+        { value: 'departmentName', label: ' 部门' },
+        { value: 'appAdminName', label: ' 应用管理员' },
+        { value: 'equipmentTypeName', label: ' 设备类型' },
+        { value: 'brandName', label: ' 品牌' },
+        { value: 'brandModelName', label: ' 型号' },
+        { value: 'serialNumber', label: ' 序列号' },
+        { value: 'businessOrExperimental', label: ' 业务机/测试机' },
+        { value: 'machineRoomName', label: ' 安装位置' },
+        { value: 'cabinetName', label: ' 机柜号' },
+        { value: 'cabinetUStart', label: ' 机柜开始U位' },
+        { value: 'cabinetUEnd', label: ' 机柜结束U位' },
+        { value: 'accessLocation', label: ' 接入位置' },
+        { value: 'singleAndDoublePowerSupply', label: ' 单双电源' },
+        { value: 'businessSystemFirstName', label: ' 对应等保系统名称（父名称）' },
+        { value: 'businessSystem', label: ' 对应等保系统名称（子名称）' },
+        { value: 'businessSystemLevel', label: ' 等保系统级别（三级/二级/一级）' },
+        { value: 'agreedToTemporaryShutdown', label: ' 是否同意临时关停（是/否）' },
+        { value: 'installSafetyMonitoringSoftware', label: ' 是否安装安全监测软件' },
+        { value: 'deployStrongPassword', label: ' 是否部署强口令' },
+        { value: 'deploymentEnvironment', label: ' 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）' },
         {
           value: 'onlineTime',
-          label: '上线时间',
+          label: '设备上线安装日期',
           formatter: function(row) {
             var time = row.onlineTime
-            if (time == null) {
-              return null
-            } else {
-              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-              var date = new Date(time)
-              var year = date.getFullYear()
-              /* 在日期格式中，月份是从0开始的，因此要加0
-               * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-               * */
-              var month =
-                date.getMonth() + 1 < 10
-                  ? '0' + (date.getMonth() + 1)
-                  : date.getMonth() + 1
-              var day =
-                date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-              var hours =
-                date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-              var minutes =
-                date.getMinutes() < 10
-                  ? '0' + date.getMinutes()
-                  : date.getMinutes()
-              var seconds =
-                date.getSeconds() < 10
-                  ? '0' + date.getSeconds()
-                  : date.getSeconds()
-              // 拼接
-              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-              row.onlineTime = year + '-' + month + '-' + day
-              return year + '-' + month + '-' + day
+            if (!time) {
+              return time
             }
-          },
-          width: '200px'
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date = new Date(time)
+            var year = date.getFullYear()
+            /* 在日期格式中，月份是从0开始的，因此要加0
+             * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+             * */
+            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            return year + '-' + month + '-' + day
+          }
         },
         {
           value: 'offlineTime',
-          label: '下线时间',
+          label: '维保结束日期',
           formatter: function(row) {
             var time = row.offlineTime
-            if (time == null) {
-              return null
-            } else {
-              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-              var date = new Date(time)
-              var year = date.getFullYear()
-              /* 在日期格式中，月份是从0开始的，因此要加0
+            if (!time) {
+              return time
+            }
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            var date = new Date(time)
+            var year = date.getFullYear()
+            /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-              var month =
-                date.getMonth() + 1 < 10
-                  ? '0' + (date.getMonth() + 1)
-                  : date.getMonth() + 1
-              var day =
-                date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-              var hours =
-                date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-              var minutes =
-                date.getMinutes() < 10
-                  ? '0' + date.getMinutes()
-                  : date.getMinutes()
-              var seconds =
-                date.getSeconds() < 10
-                  ? '0' + date.getSeconds()
-                  : date.getSeconds()
-              // 拼接
-              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-              row.offlineTime = year + '-' + month + '-' + day
-              return year + '-' + month + '-' + day
-            }
-          },
-          width: '200px'
+            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+            // 拼接
+            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            return year + '-' + month + '-' + day
+          }
         },
-        {
-          value: 'hostName',
-          label: '主机名',
-          width: '200px'
-        },
-        {
-          value: 'equipmentAdminName',
-          label: '设备管理员',
-          width: '200px'
-        },
-        {
-          value: 'equipmentAdminPhone',
-          label: '设备管理员电话',
-          width: '200px'
-        },
-        {
-          value: 'appAdminName',
-          label: '应用管理员',
-          width: '200px'
-        },
-        {
-          value: 'appAdminPhone',
-          label: '应用管理员电话',
-          width: '200px'
-        },
-        {
-          value: 'brandModelName',
-          label: '型号',
-          width: '200px'
-        },
-        {
-          value: 'serialNumber',
-          label: '序列号',
-          width: '200px'
-        }, {
-          value: 'guaranteePeriod',
-          label: '保修期',
-          width: '200px'
-        },
-        {
-          value: 'type',
-          label: 'CPU类型',
-          width: '200px'
-        },
-        {
-          value: 'edition',
-          label: '中间件版本',
-          width: '200px'
-        },
-        { value: 'accessLocation', label: '接入位置', width: '200px' },
-        { value: 'singleAndDoublePowerSupply', label: '单双电源', width: '200px' },
-        { value: 'agreedToATemporaryShutdown', label: '是否同意临时关停（是/否）', width: '200px' },
-        { value: 'installSafetyMonitoringSoftware', label: '是否安装安全监测软件', width: '200px' },
-        { value: 'deployStrongPassword', label: '是否部署强口令', width: '200px' },
-        { value: 'cloudServiceUnit', label: '云服务单位', width: '200px' },
-        { value: 'leasedComputingResources', label: '租用计算资源情况（CPU核数）（个）', width: '200px' },
-        { value: 'leasedStorageResources', label: '租用存储资源情况（TB）', width: '200px' },
-        { value: 'leasedNetworkBandwidth', label: '租用网络带宽（兆）', width: '200px' },
-        { value: 'termOfLease', label: '租用期限（年）', width: '200px' },
-        { value: 'domainName', label: '域名', width: '200px' },
-        { value: 'domainNameRegistrationService', label: '域名注册服务商', width: '200px' },
-        { value: 'ns', label: 'NS记录', width: '200px' },
-        { value: 'cname', label: 'CNAME记录（别名）', width: '200px' },
-        { value: 'useCDN', label: '是否使用CDN', width: '200px' },
-        { value: 'remarks', label: '备注', width: '200px' }
+        { value: 'remarks', label: ' 备注' },
+        { value: 'type', label: ' CPU型号' },
+        { value: 'configMemoryCorenessOrCapacity', label: ' 内存容量（GB）' },
+        { value: 'softwareOperatingSystemEdition', label: ' 操作系统品牌规格' },
+        { value: 'softwareOperatingSystemBuildDate', label: ' 操作系统建设时间' },
+        { value: 'softwareDatabaseEdition', label: ' 数据库品牌规格' },
+        { value: 'softwareDatabaseBuildDate', label: ' 数据库建设时间' },
+        { value: 'edition', label: ' 中间件品牌规格' },
+        { value: 'softwareMiddlewareBuildDate', label: ' 中间件建设时间' },
+        { value: 'cloudServiceUnit', label: ' 云服务单位' },
+        { value: 'leased_computing_resources', label: ' 租用计算资源情况（CPU核数）（个）' },
+        { value: 'leasedComputingResources', label: ' 租用存储资源情况（TB）' },
+        { value: 'leasedNetworkBandwidth', label: ' 租用网络带宽（兆）' },
+        { value: 'termOfLease', label: ' 租用期限（年）' },
+        { value: 'domainName', label: ' 域名' },
+        { value: 'domainNameRegistrationService', label: ' 域名注册服务商' },
+        { value: 'ns', label: ' NS记录' },
+        { value: 'cname', label: ' CNAME记录（别名）' },
+        { value: 'useCDN', label: ' 是否使用CDN' }
       ],
 
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
@@ -681,17 +594,24 @@ export default {
     // 列拖拽
     columnDrop() {
       // 创建列拖拽实例
-      const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr');
-      this.sortable = Sortable.create(wrapperTr, {
+      const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr')
+      Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
         onEnd: evt => {
           // 更新新列顺序以反映新的列顺序
-          const oldItem = this.newList[evt.oldIndex];
-          this.newList.splice(evt.oldIndex, 1);
-          this.newList.splice(evt.newIndex, 0, oldItem);
+          if (this.newTable === false) {
+            this.newTable = true
+          } else {
+            this.newTable = false
+          }
+          const oldItem = this.newList[evt.oldIndex]
+          this.newList.splice(evt.oldIndex, 1)
+          this.newList.splice(evt.newIndex, 0, oldItem)
+          console.log(this.newTable)
         }
-      });
+      })
+
     },
 
     receiveAllSearchData(searchAllData, infoInput) {
@@ -844,13 +764,16 @@ export default {
         cancelButtonText: '取消'
       })
     },
-    sortChange(column){
+    headWidthChange(newWidth, oldWidth, column, event) {
+      console.log(newWidth, oldWidth, column, event)
+    },
+    sortChange(column) {
       console.log(column)
-      this.prop=column.prop
-      if (column.order==null){
-        this.order= 'ASC'
+      this.prop = column.prop
+      if (column.order == null) {
+        this.order = 'ASC'
       } else {
-        this.order=column.order
+        this.order = column.order
       }
       this.fetchData()
     },
@@ -880,7 +803,7 @@ export default {
         dataName: this.initname,
         dataValue: this.inputValue,
         status: '0',
-        start: (this.currentPage-1)*this.limit,
+        start: (this.currentPage - 1) * this.limit,
         limit: this.limit,
         prop: this.prop,
         order: this.order
@@ -906,14 +829,14 @@ export default {
         // console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
-          console.log("+++++++++",this.list)
+          console.log('+++++++++', this.list)
           //由于用组件列自动序号会导致拖动是数据错乱，故自定义一个序号属性
           let counter = 1
           this.list.forEach(item => {
-            item.sequenceNumber = counter; // 添加一个序号属性，值为计数器变量
-            counter++; // 计数器自增
-          });
-          console.log("---------------",this.list)
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          console.log('---------------', this.list)
           this.total = response.data.total
           this.listLoading = false
         })
@@ -924,7 +847,7 @@ export default {
       this.ifUpdate = '1'
     },
     handleDetail(index, row) {
-      console.log("------------------------------")
+      console.log('------------------------------')
       console.log(index, row)
       this.row = row
       this.ifUpdate = '2'
@@ -1025,9 +948,9 @@ export default {
           this.list = response.data.items
           let counter = 1
           this.list.forEach(item => {
-            item.sequenceNumber = counter; // 添加一个序号属性，值为计数器变量
-            counter++; // 计数器自增
-          });
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
           this.total = response.data.total
           this.listLoading = false
         })
@@ -1092,6 +1015,34 @@ export default {
           return 'red'
         }
       }
+    },
+    /**
+     * el-table-column 自适应列宽
+     * @param prop_label: 表名
+     * @param table_data: 表格数据
+     */
+    flexColumnWidth(label, prop) {
+      return this.getTextWidth(label) * 1.7 + 40 + 'px'
+    },
+    /**
+     * 使用span标签包裹内容，然后计算span的宽度 width： px
+     * @param valArr
+     */
+    getTextWidth(str) {
+      let width = 0
+      const html = document.createElement('span')
+      html.innerText = str
+      html.className = 'getTextWidth'
+      document.querySelector('body').appendChild(html)
+      width = document.querySelector('.getTextWidth').offsetWidth
+      document.querySelector('.getTextWidth').remove()
+      return width
+    },
+    refreshTable() {
+      this.showTable = false
+      this.$nextTick(() => {
+        this.showTable = true
+      })
     }
 
   }
@@ -1101,8 +1052,8 @@ export default {
 <style lang='less' scoped>
 
 /deep/ .el-autocomplete-suggestion {
-  width: auto!important;
-  text-align:left!important;
+  width: auto !important;
+  text-align: left !important;
 }
 
 .tile-content {
@@ -1127,15 +1078,14 @@ export default {
 }
 
 
-
-
 .el-select-dropdown__item {
   height: 40px;
   width: 200px;
   line-height: 40px;
 
 }
-/deep/.el-select-dropdown__list {
+
+/deep/ .el-select-dropdown__list {
   margin: 5px -10px 20px -10px;
   height: auto;
   width: 150px;
@@ -1147,7 +1097,8 @@ export default {
   align-items: stretch;
   max-height: 100vh;
 }
-el-label{
+
+el-label {
   display: inline-block;
   line-height: 40px;
   width: 150px;
