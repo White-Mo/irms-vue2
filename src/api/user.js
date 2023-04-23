@@ -112,6 +112,7 @@ export function getPostDepartmentAll(params) {
     responseType: 'json'
   })
 }
+//登陆账号重复判断
 export function checkAccountName(data) {
   return request({
     params: data,
