@@ -1,21 +1,21 @@
 <template>
-<div>
-  <div class="grid-content bg-purple">
-    <i class="el-icon-s-order" /><span>密钥管理</span>
-  </div>
-  <div class="app-container">
-    <el-row>
-      <el-col :span="24">
-        <div class="grid-content bg-purple-dark">
-          <span style="color: #ffffff">密钥管理</span>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row
-      :gutter="10"
-      class="bg-condition"
-    >
-      <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+  <div>
+    <div class="grid-content bg-purple">
+      <i class="el-icon-s-order" /><span>密钥管理</span>
+    </div>
+    <div class="app-container">
+      <el-row>
+        <el-col :span="24">
+          <div class="grid-content bg-purple-dark">
+            <span style="color: #ffffff">密钥管理</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row
+        :gutter="10"
+        class="bg-condition"
+      >
+        <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
           <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="checkSecretKey()">{{ ShowHidden ? '隐藏密钥' :'显示密钥' }}</el-button>
         </el-col>
         <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
@@ -24,19 +24,17 @@
         <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
           <el-button type="primary" style="margin-left: 15px; line-height:10px" @click="copySecretKey(SecretKey)">复制密钥</el-button>
         </el-col>
-    </el-row>
+      </el-row>
     </div>
 
 
-</div>
+  </div>
 </template>
 
 <script>
 import { getSecret } from '@/api/select'
-
-
 export default {
-  name: 'helps',
+  name: 'data_api',
   data() {
     return {
       ShowHidden: false,
