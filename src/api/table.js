@@ -79,6 +79,56 @@ export function getNetWorkList(obj) {
   })
 }
 export function getdataCount(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'basicInfoId',
+      'ipAddress',
+      'macAddress',
+      'equipmentName',
+      'postName',
+      'departmentName',
+      'appAdminName',
+      'equipmentTypeName',
+      'brandName',
+      'brandModelName',
+      'serialNumber',
+      'businessOrExperimental',
+      'machineRoomName',
+      'cabinetName',
+      'cabinetUStart',
+      'cabinetUEnd',
+      'accessLocation',
+      'singleAndDoublePowerSupply',
+      'businessSystemFirstName',
+      'businessSystem',
+      'businessSystemLevel',
+      'agreedToTemporaryShutdown',
+      'installSafetyMonitoringSoftware',
+      'deployStrongPassword',
+      'deploymentEnvironment',
+      'offlineTime',
+      'onlineTime',
+      'remarks',
+      'type',
+      'configMemoryCorenessOrCapacity',
+      'softwareOperatingSystemEdition',
+      'softwareOperatingSystemBuildDate',
+      'softwareDatabaseEdition',
+      'softwareDatabaseBuildDate',
+      'edition',
+      'softwareMiddlewareBuildDate',
+      'cloudServiceUnit',
+      'leasedComputingResources',
+      'leasedStorageResources',
+      'leasedNetworkBandwidth',
+      'termOfLease',
+      'domainName',
+      'domainNameRegistrationService',
+      'ns',
+      'cname',
+      'useCDN',
+    ]
+  }
   // 将有数组和字符串的对象转为符合JSON格式的对象
   var params = JSON.parse(JSON.stringify(obj))
   // console.log(params)
