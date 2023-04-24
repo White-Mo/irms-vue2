@@ -249,8 +249,14 @@ export default {
   methods: {
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
-      console.log("****************1",this.dataName[0])
-      console.log("***",this.basicValue[0].value)
+
+      if(this.dataName.length === 0){
+        console.log("this.dataName",this.dataName.length)
+      }
+
+
+
+
       this.listLoading = true;
      this.tableData =  this.tempTableData ;
       setTimeout(() => {

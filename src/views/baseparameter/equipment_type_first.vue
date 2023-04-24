@@ -212,7 +212,6 @@ export default {
         //console.log(this.dataName)
         this.initName = ['111']
       } else {
-        console.log("********************************")
         console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }

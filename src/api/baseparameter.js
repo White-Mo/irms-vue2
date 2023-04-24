@@ -16,11 +16,18 @@ export function getPostDepartmentByPage(data) {
   })
 }
 //通过页码获取一级设备类型
-export function getEquipmentFirstTypeByPage(data) {
+export function getEquipmentFirstTypeByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'equipmentFirstTypeName',
+      'equipmentFirstTypeCode'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getEquipmentFirstTypeByPage',
     method: 'get',
-    params: data
   })
 }
 
@@ -47,11 +54,19 @@ export function updateEquipmentSecondType(data) {
 
 
 //通过页码获取二级设备类型
-export function getEquipmentTypeByPage(data) {
+export function getEquipmentTypeByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'equipmentTypeName',
+      'equipmentTypeCode',
+      'equipmentFirstTypeName'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getEquipmentTypeByPage',
     method: 'get',
-    params: data
   })
 }
 
@@ -74,11 +89,21 @@ export function getMachineRoomByPage(data) {
 }
 
 //通过页码获取业务系统
-export function getBusinessSystemByPage(data) {
+export function getBusinessSystemByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'businessSystemName',
+      'businessSystemLevel',
+      'businessSystemFirstName',
+      'departmentName',
+      'postName'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getBusinessSystemByPage',
     method: 'get',
-    params: data
   })
 }
 
