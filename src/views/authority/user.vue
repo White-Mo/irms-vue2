@@ -517,6 +517,7 @@ export default {
     },
 
     async updateUser(row){
+      this.action="update",   //更新状态  “update”
       this.accountId=row.id   //获取用户ID
       this.disabled=false      //点击修改按钮，提交按钮不禁用
       let temp = row.role.split("/")
@@ -545,7 +546,7 @@ export default {
       })
     },
     changeGroupID(groupid){
-      //console.log(groupid)
+      this.update_data.row.groupid = groupid
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
@@ -573,7 +574,7 @@ export default {
         use_post:this.update_data.department == "" ? this.update_data.row.roleDepartmentId : this.update_data.department, // 单位的id
         // roleDepartmentId:"", // 部门的id
         // roles:"", // 权限的汉字名称
-        groupid:this.update_data.Roles == "" ? this.update_data.row.groupid : this.update_data.row.groupid, // 权限对应的id
+        groupid:this.update_data.row.groupid, // 权限对应的id
         telephone:"", // 电话 暂时为空
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
