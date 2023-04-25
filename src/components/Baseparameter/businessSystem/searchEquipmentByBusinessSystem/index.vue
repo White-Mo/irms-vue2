@@ -38,7 +38,7 @@
         stripe
       >
         <el-table-column align="center" type="index" />
-        <el-table-column  prop="BasicInfoId" label="设备编号" ></el-table-column>
+        <el-table-column  prop="basicInfoId" label="设备编号" ></el-table-column>
         <el-table-column  prop="equipmentName" label="设备名称" ></el-table-column>
         <el-table-column  prop="postName" label="设备所属单位" ></el-table-column>
         <el-table-column  prop="departmentName" label="设备所属部门" ></el-table-column>
