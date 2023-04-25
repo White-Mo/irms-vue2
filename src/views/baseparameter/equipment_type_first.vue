@@ -225,7 +225,7 @@ export default {
       getEquipmentFirstTypeByPage(params).then((response) => {
         console.log(response)
         this.list = response.data.items
-        this.total = response.data.total
+        this.total = response.data.items.length
         this.listLoading = false
       })
     },
