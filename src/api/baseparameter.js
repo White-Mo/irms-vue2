@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 //通过页码获取单位
 export function getPostByPage(data) {
+  if(data.dataName[0] === '111' && data.dataValue !== " "){
+    data.dataName = [
+      'postName',
+      'postCode'
+    ]
+  }
   return request({
     url: '/home/baseparameter/getPostByPage',
     method: 'get',
@@ -17,6 +23,12 @@ export function getPostDepartmentByPage(data) {
 }
 //通过页码获取一级设备类型
 export function getEquipmentFirstTypeByPage(data) {
+  if(data.dataName[0] === '111' && data.dataValue !== ' '){
+    data.dataName = [
+      'equipmentFirstTypeName',
+      'equipmentFirstTypeCode'
+    ]
+  }
   return request({
     url: '/home/baseparameter/getEquipmentFirstTypeByPage',
     method: 'get',
@@ -48,6 +60,13 @@ export function updateEquipmentSecondType(data) {
 
 //通过页码获取二级设备类型
 export function getEquipmentTypeByPage(data) {
+  // if(data.dataName[0] === '111' && data.dataValue !== " "){
+  //   data.dataName = [
+  //     'equipmentTypeName',
+  //     'equipmentTypeCode',
+  //     'equipmentFirstTypeName'
+  //   ]
+  // }
   return request({
     url: '/home/baseparameter/getEquipmentTypeByPage',
     method: 'get',
@@ -57,6 +76,12 @@ export function getEquipmentTypeByPage(data) {
 
 //获取机房数量wr
 export function getMachineRoomTotal(data) {
+  if(data.dataName[0] === '111' && data.dataValue !== " "){
+    data.dataName = [
+      'machineRoomName',
+      'postName'
+    ]
+  }
   return request({
     url: '/home/baseparameter/getMachineRoomTotal',
     method: 'get',
@@ -66,6 +91,12 @@ export function getMachineRoomTotal(data) {
 
 //通过页码获取机房
 export function getMachineRoomByPage(data) {
+  if(data.dataName[0] === '111' && data.dataValue !== " "){
+    data.dataName = [
+      'machineRoomName',
+      'postName'
+    ]
+  }
   return request({
     url: '/home/baseparameter/getMachineRoomByPage',
     method: 'get',
@@ -75,6 +106,15 @@ export function getMachineRoomByPage(data) {
 
 //通过页码获取业务系统
 export function getBusinessSystemByPage(data) {
+  if(data.dataName[0] === '111' && data.dataValue !== " "){
+    data.dataName = [
+      'businessSystemName',
+      'businessSystemLevel',
+      'businessSystemFirstName',
+      'departmentName',
+      'postName'
+    ]
+  }
   return request({
     url: '/home/baseparameter/getBusinessSystemByPage',
     method: 'get',

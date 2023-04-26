@@ -222,9 +222,9 @@ export default {
         start: this.currentPage,
         limit: this.limit
       }
-      // //console.log(this.initName)
+      //console.log(111222,this.dataName)
       getEquipmentFirstTypeByPage(params).then((response) => {
-        console.log(response)
+        console.log(111222,params.dataName)
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

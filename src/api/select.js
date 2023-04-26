@@ -26,6 +26,13 @@ export function getSecret(data) { // 接受 data
 
 //获取拥有嵌套关系的单位和部门（部门所属于单位)
 export function getPostAllWithDepartment(data) {
+  // if(data.dataName[0] == null  && data.inputName !== ' '){
+  //   data.dataName = [
+  //     'departmentName',
+  //     'departmentCode',
+  //     'postName'
+  //   ]
+  // }
   return request({
     url: '/home/inforesources/getPostAllWithDepartment',
     method: 'post',
