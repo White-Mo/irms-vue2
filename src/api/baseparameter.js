@@ -1,12 +1,6 @@
 import request from '@/utils/request'
 //通过页码获取单位
 export function getPostByPage(data) {
-  if(data.dataName[0] === '111' && data.dataValue !== " "){
-    data.dataName = [
-      'postName',
-      'postCode'
-    ]
-  }
   return request({
     url: '/home/baseparameter/getPostByPage',
     method: 'get',
@@ -22,17 +16,18 @@ export function getPostDepartmentByPage(data) {
   })
 }
 //通过页码获取一级设备类型
-export function getEquipmentFirstTypeByPage(data) {
-  if(data.dataName[0] === '111' && data.dataValue !== ' '){
-    data.dataName = [
+export function getEquipmentFirstTypeByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
       'equipmentFirstTypeName',
       'equipmentFirstTypeCode'
     ]
   }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getEquipmentFirstTypeByPage',
     method: 'get',
-    params: data
   })
 }
 
@@ -59,29 +54,24 @@ export function updateEquipmentSecondType(data) {
 
 
 //通过页码获取二级设备类型
-export function getEquipmentTypeByPage(data) {
-  // if(data.dataName[0] === '111' && data.dataValue !== " "){
-  //   data.dataName = [
-  //     'equipmentTypeName',
-  //     'equipmentTypeCode',
-  //     'equipmentFirstTypeName'
-  //   ]
-  // }
+export function getEquipmentTypeByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'equipmentTypeName',
+      'equipmentTypeCode',
+      'equipmentFirstTypeName'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getEquipmentTypeByPage',
     method: 'get',
-    params: data
   })
 }
 
 //获取机房数量wr
 export function getMachineRoomTotal(data) {
-  if(data.dataName[0] === '111' && data.dataValue !== " "){
-    data.dataName = [
-      'machineRoomName',
-      'postName'
-    ]
-  }
   return request({
     url: '/home/baseparameter/getMachineRoomTotal',
     method: 'get',
@@ -91,12 +81,6 @@ export function getMachineRoomTotal(data) {
 
 //通过页码获取机房
 export function getMachineRoomByPage(data) {
-  if(data.dataName[0] === '111' && data.dataValue !== " "){
-    data.dataName = [
-      'machineRoomName',
-      'postName'
-    ]
-  }
   return request({
     url: '/home/baseparameter/getMachineRoomByPage',
     method: 'get',
@@ -105,9 +89,9 @@ export function getMachineRoomByPage(data) {
 }
 
 //通过页码获取业务系统
-export function getBusinessSystemByPage(data) {
-  if(data.dataName[0] === '111' && data.dataValue !== " "){
-    data.dataName = [
+export function getBusinessSystemByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
       'businessSystemName',
       'businessSystemLevel',
       'businessSystemFirstName',
@@ -115,10 +99,11 @@ export function getBusinessSystemByPage(data) {
       'postName'
     ]
   }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getBusinessSystemByPage',
     method: 'get',
-    params: data
   })
 }
 

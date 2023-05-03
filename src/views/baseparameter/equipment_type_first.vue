@@ -212,7 +212,6 @@ export default {
         //console.log(this.dataName)
         this.initName = ['111']
       } else {
-        console.log("********************************")
         console.log(JSON.parse(JSON.stringify(this.dataName)))
         this.initName = JSON.parse(JSON.stringify(this.dataName))
       }
@@ -226,7 +225,7 @@ export default {
       getEquipmentFirstTypeByPage(params).then((response) => {
         console.log(111222,params.dataName)
         this.list = response.data.items
-        this.total = response.data.total
+        this.total = response.data.items.length
         this.listLoading = false
       })
     },

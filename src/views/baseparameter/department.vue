@@ -249,45 +249,38 @@ export default {
   methods: {
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
-      console.log("****************1",this.dataName[0])
-      console.log("***",this.tempTableData )
+
+      if(this.dataName.length === 0){
+        console.log("this.dataName",this.dataName.length)
+      }
+
+
+
+
       this.listLoading = true;
-      this.tableData =  this.tempTableData ;
+     this.tableData =  this.tempTableData ;
       setTimeout(() => {
         let searchResults = [];
         if (this.inputValue !== '') {
-          if(this.dataName[0] !== this.basicValue[0].value
-            && this.dataName[0] !== this.basicValue[1].value
-              && this.dataName[0] !== this.basicValue[2].value){
-            //条件选择为空
-            console.log(123)
-            searchResults = this.tableData.filter(data => {
-              return (
-                data.children.some(child => child.departmentName.includes(this.inputValue))+
-                data.children.some(child => child.departmentCode.includes(this.inputValue))+
-                data.postName.includes(this.inputValue)
-              )
-            })
-          }else{
-            searchResults = this.tableData.filter(data => {
-              if (this.dataName[0] === this.basicValue[0].value) {
-                return (data.children.some(child => child.departmentName.includes(this.inputValue)))
-              }
-              if (this.dataName[0] === this.basicValue[1].value) {
-                return (data.children.some(child => child.departmentCode.includes(this.inputValue)))
-              }
-              if (this.dataName[0] === this.basicValue[2].value) {
-                return (data.postName.includes(this.inputValue))
-              }
-            })
-          }
-
+          searchResults = this.tableData.filter(data => {
+            if(this.dataName[0]===this.basicValue[0].value){
+              return(data.children.some(child => child.departmentName.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[1].value){
+              return (data.children.some(child => child.departmentCode.includes(this.inputValue)))
+            }
+            if(this.dataName[0]===this.basicValue[2].value){
+              return (data.postName.includes(this.inputValue))
+            }else {
+              return null;
+            }
+          });
           this.isExpand=true;
         } else {
           searchResults = this.tableData;
           this.isExpand=false;
         }
-        console.log("searchResults",searchResults)
+        //console.log(searchResults)
         this.refreshTable = false;
         this.tableData = searchResults;
         this.$nextTick(() => {
@@ -305,7 +298,7 @@ export default {
         this.tableData = res.data.items
         this.tempTableData = this.tableData
         this.listLoading = false
-        console.log("++111+",this.tableData)
+        console.log("+++",this.tableData)
       })
     },
     addDepartment() {
