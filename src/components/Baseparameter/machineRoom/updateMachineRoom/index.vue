@@ -23,6 +23,21 @@
               </el-select>
             </el-col>
           </el-form-item>
+          <el-form-item label='机房占地面积' prop='machineArea'>
+            <el-col>
+              <el-input v-model='machineRoomFrom.machineArea'/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label='机房地址' prop='machineLocation'>
+            <el-col>
+              <el-input v-model='machineRoomFrom.machineLocation'/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label='机房管理员' prop='machineAdministrator'>
+            <el-col>
+              <el-input v-model='machineRoomFrom.machineAdministrator'/>
+            </el-col>
+          </el-form-item>
           <el-form-item v-show="currentShow === '3'">
             <el-button type='primary' @click="onSubmit('machineRoomFrom')">提交修改</el-button>
           </el-form-item>
@@ -39,6 +54,9 @@ import { updataMachineRoomAction } from "@/api/baseparameter"
 
 export default {
   name: "updateMachineRoom",
+  components:{
+
+  },
   props: {
     row: {
       type: Object,
@@ -75,16 +93,19 @@ export default {
       nameRules: false,
       postAll: [],
       machineRoom: {
-        machineRoomName: '',
-        machineRoomId: '',
-        postName: '',
-        postId:'',
+        MachineRoomName:"",
+        machineRoomId:"",
+        postId: "",
+        status: "",
+        machineArea:'',
+        machineLocation:'',
+        machineAdministrator:'',
       },
       rules: {
         machineRoomName: [
           {required: true, message: '请输入机房名称', trigger: 'blur'},
           {
-            validator : checkName, trigger: 'blur'
+            // validator : checkName, trigger: 'blur'
           }
         ],
         postName: [
@@ -98,6 +119,7 @@ export default {
       this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
+      console.log(formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const machineRoom = {...this.machineRoom }

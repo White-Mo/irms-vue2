@@ -148,10 +148,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -239,9 +239,11 @@ import {
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
 import {mapGetters} from "vuex";
+import UpdateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom/index.vue'
 
 export default {
   components: {
+    UpdateMachineRoom,
     InfoTemplate
   },
   filters: {
@@ -259,8 +261,12 @@ export default {
       postAll:[],
       form: {
         MachineRoomName:"",
+        machineRoomId:"",
         postId: "",
-        status: ""
+        status: "",
+        machineArea:'',
+        machineLocation:'',
+        machineAdministrator:'',
       },
       formLabelWidth: '120px',
       dialogFormVisible:false,
@@ -404,8 +410,9 @@ export default {
       this.fetchCabinet(row)
     },
     handleEdit(index, row) {
-      // this.ifUpdate ='3'
+      console.log(row)
       this.row = row
+      this.ifUpdate ='3'
     },
     handleDelete(index, row) {
       this.$alert(`是否永久删除机房：\"${row.machineRoomName}\"`, '提示', {
