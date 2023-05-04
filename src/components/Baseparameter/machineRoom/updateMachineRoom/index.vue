@@ -49,8 +49,7 @@
 
 <script>
 import { getPost } from "@/api/select";
-import { checkMachineRoomName } from "@/api/baseparameter"
-import { updataMachineRoomAction } from "@/api/baseparameter"
+import { checkMachineRoomName, updateMachineRoomAction } from '@/api/baseparameter'
 
 export default {
   name: "updateMachineRoom",
@@ -123,7 +122,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const machineRoom = {...this.machineRoom }
-          updataMachineRoomAction(machineRoom).then(res => {
+          updateMachineRoomAction(machineRoom).then(res => {
             this.$alert("更新成功",'提示', {
               confirmButtonText: '确定',
               type: 'info',

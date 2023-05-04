@@ -1,4 +1,7 @@
 import request from '@/utils/request'
+
+
+
 //通过页码获取单位
 export function getPostByPage(data) {
   return request({
@@ -418,14 +421,15 @@ export function addMachineRoom(data) {
   })
 }
 //修改机房
-export function updataMachineRoomAction(data) {
+export function updateMachineRoomAction(data) {
   return request({
     params: data,
-    url: '/home/baseparameter/updataMachineRoomAction',
+    url: '/home/baseparameter/updateMachineRoomAction',
     method: 'post',
     responseType: 'json'
   })
 }
+
 //检查机房名称是否重复
 export function checkMachineRoomName(data) {
   return request({
@@ -451,6 +455,17 @@ export function delCabinet(data) {
     url: '/home/baseparameter/delCabinet',
     method: 'delete',
     params: {cabinetId : data}
+  })
+}
+
+
+//修改机房
+export function updateCabinetAction(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateCabinetAction',
+    method: 'post',
+    responseType: 'json'
   })
 }
 

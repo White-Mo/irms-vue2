@@ -206,10 +206,10 @@
                   size="mini"
                   @click="cabinetDetail(scope.$index, scope.row)"
                 >详情</el-button>
-<!--                <el-button-->
-<!--                  size="mini"-->
-<!--                  @click="cabinetEdit(scope.$index, scope.row)"-->
-<!--                >编辑</el-button>-->
+                <el-button
+                  size="mini"
+                  @click="cabinetEdit(scope.$index, scope.row)"
+                >编辑</el-button>
                 <el-button
                   size="mini"
                   type="danger"
@@ -222,6 +222,9 @@
       </el-drawer>
       <div v-if="ifUpdate === '3'">
         <updateMachineRoom :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '4'">
+        <UpdateCabinet :row='row' :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -240,9 +243,11 @@ import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
 import {mapGetters} from "vuex";
 import UpdateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom/index.vue'
+import UpdateCabinet from '@/components/Baseparameter/machineRoom/updateCabinet/index.vue'
 
 export default {
   components: {
+    UpdateCabinet,
     UpdateMachineRoom,
     InfoTemplate
   },
@@ -478,6 +483,9 @@ export default {
       this.ifUpdate ='1'
     },
     cabinetEdit(index, row) {
+      this.row = row
+      this.drawer =false
+      this.ifUpdate ='4'
     },
     cabinetDelete(val){
       delCabinet(val).then((response) => {

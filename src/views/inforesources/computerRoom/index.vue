@@ -136,6 +136,9 @@ export default {
         manager_name: '',
         equipment_ip: '',
         UnitDepartment: '',
+        machineAdministrator:'',
+        machineLocation:'',
+        machineArea:'',
       } ,
       equipmentBaseInfo:{
         total:0,
