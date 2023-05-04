@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style='height:30px'>
+    <div class="source">
       <el-page-header content='修改机房' @back='back'/>
     </div>
     <div>
@@ -101,17 +101,17 @@ export default {
         machineLocation:'',
         machineAdministrator:'',
       },
-      rules: {
-        machineRoomName: [
-          {required: true, message: '请输入机房名称', trigger: 'blur'},
-          {
-            // validator : checkName, trigger: 'blur'
-          }
-        ],
-        postName: [
-          {required: true, message: '请选择单位名称', trigger: 'blur'}
-        ],
-      }
+      // rules: {
+      //   machineRoomName: [
+      //     {required: true, message: '请输入机房名称', trigger: 'blur'},
+      //     {
+      //       validator : checkName, trigger: 'blur'
+      //     }
+      //   ],
+      //   postName: [
+      //     {required: true, message: '请选择单位名称', trigger: 'blur'}
+      //   ],
+      // }
     }
   },
   methods: {
@@ -167,5 +167,7 @@ export default {
 </script>
 
 <style scoped>
-
+.source {
+  padding: 24px;
+}
 </style>
