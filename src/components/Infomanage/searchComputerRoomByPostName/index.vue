@@ -226,6 +226,10 @@ export default {
       var installation_position = this.ComputerRoomCard[index].machineRoomName
       var unitid = this.ComputerRoomCard[index].postId
       var machineRoomId = this.ComputerRoomCard[index].machineRoomId
+      var machineArea = this.ComputerRoomCard[index].machineArea
+      var machineAdministrator = this.ComputerRoomCard[index].machineAdministrator
+      var machineLocation = this.ComputerRoomCard[index].machineLocation
+
       // //console.log(unit,department)
       // //console.log(this.ComputerRoomCard[index])
       this.$store.commit('machineRoom/SET_UnitId',unitid)
@@ -233,6 +237,11 @@ export default {
       this.$store.commit('machineRoom/SET_Unit',unit)
       this.$store.commit('machineRoom/SET_DEPARTMENT',department)
       this.$store.commit('machineRoom/SET_InstallPosition',installation_position)
+
+      this.$store.commit('machineRoom/SET_MachineArea',machineArea)
+      this.$store.commit('machineRoom/SET_MachineLocation',machineLocation)
+      this.$store.commit('machineRoom/SET_MachineAdministrator',machineAdministrator)
+
       this.$router.push({ name:'computerRoom'})
     },
 

@@ -23,6 +23,11 @@
               </el-select>
             </el-col>
           </el-form-item>
+          <el-form-item label='机房管理员' prop='machineAdministrator'>
+            <el-col>
+              <el-input v-model='machineRoomFrom.machineAdministrator'/>
+            </el-col>
+          </el-form-item>
           <el-form-item label='机房面积' prop='machineArea'>
             <el-col>
               <el-input v-model='machineRoomFrom.machineArea'/>
@@ -31,11 +36,6 @@
           <el-form-item label='机房位置' prop='machineLocation'>
             <el-col>
               <el-input v-model='machineRoomFrom.machineLocation'/>
-            </el-col>
-          </el-form-item>
-          <el-form-item label='机房管理员' prop='machineAdministrator'>
-            <el-col>
-              <el-input v-model='machineRoomFrom.machineAdministrator'/>
             </el-col>
           </el-form-item>
           <el-form-item v-show="currentShow === '3'">

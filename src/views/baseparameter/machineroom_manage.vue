@@ -114,6 +114,15 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="机房管理员" :label-width="formLabelWidth">
+              <el-input v-model="form.machineAdministrator" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机房面积" :label-width="formLabelWidth">
+              <el-input v-model="form.machineArea" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机房位置" :label-width="formLabelWidth">
+              <el-input v-model="form.machineLocation" autocomplete="off"></el-input>
+            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -298,16 +307,16 @@ export default {
           label: '所属单位'
         },
         {
+          value: 'machineAdministrator',
+          label: '机房管理员'
+        },
+        {
           value: 'machineArea',
           label: '机房面积'
         },
         {
           value: 'machineLocation',
           label: '机房位置'
-        },
-        {
-          value: 'machineAdministrator',
-          label: '机房管理员'
         }],
       cabinetColumn: [
         {
@@ -376,6 +385,13 @@ export default {
     },
 
     addMachine() {
+      //清除Form表单上一次输入的值
+      this.form.machineArea=""
+      this.form.machineAdministrator=""
+      this.form.machineLocation=""
+      this.form.MachineRoomName=""
+      this.form.postId=""
+
       // this.ifUpdate ='1'
       this.dialogFormVisible = true
       // 取值有问题
@@ -419,7 +435,6 @@ export default {
         })
       })
     },
-
     handleDetail(index, row) {
       // this.ifUpdate ='2'
       // this.row = row
@@ -487,16 +502,25 @@ export default {
       this.drawer =false
       this.ifUpdate ='4'
     },
-    cabinetDelete(val){
-      delCabinet(val).then((response) => {
-        this.$alert(response.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.dataName="all"
-          this.drawer = false
-        })
+    cabinetDelete(index, row){
+      this.$alert(`是否永久删除机柜：\"${row.cabinetName}\"`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delCabinet(row.cabinetId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.dataName="all"
+                this.drawer = false
+              })
+            })
+          }
+        }
       })
     },
     confirm(){
