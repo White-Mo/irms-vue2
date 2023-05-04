@@ -87,7 +87,6 @@ export function getMachineRoomByPage(data) {
     params: data
   })
 }
-
 //通过页码获取业务系统
 export function getBusinessSystemByPage(obj) {
   if(obj.dataName[0]=== "111" && obj.dataValue !== " "){

@@ -291,6 +291,18 @@ export default {
         {
           value: 'postName',
           label: '所属单位'
+        },
+        {
+          value: 'machineArea',
+          label: '机房面积'
+        },
+        {
+          value: 'machineLocation',
+          label: '机房位置'
+        },
+        {
+          value: 'machineAdministrator',
+          label: '机房管理员'
         }],
       cabinetColumn: [
         {

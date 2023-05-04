@@ -23,12 +23,12 @@
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label='机房占地面积' prop='machineArea'>
+          <el-form-item label='机房面积' prop='machineArea'>
             <el-col>
               <el-input v-model='machineRoomFrom.machineArea'/>
             </el-col>
           </el-form-item>
-          <el-form-item label='机房地址' prop='machineLocation'>
+          <el-form-item label='机房位置' prop='machineLocation'>
             <el-col>
               <el-input v-model='machineRoomFrom.machineLocation'/>
             </el-col>
