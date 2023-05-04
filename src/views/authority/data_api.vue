@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="grid-content bg-purple">
-      <i class="el-icon-s-order" /><span>密钥管理</span>
+      <i class="el-icon-s-order" /><span>数据接口管理</span>
     </div>
     <div class="app-container">
       <el-row>
         <el-col :span="24">
           <div class="grid-content bg-purple-dark">
-            <span style="color: #ffffff">密钥管理</span>
+            <span style="color: #ffffff">数据接口管理</span>
           </div>
         </el-col>
       </el-row>

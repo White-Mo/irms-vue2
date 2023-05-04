@@ -517,7 +517,6 @@ export default {
     },
 
     async updateUser(row){
-      this.action="update",   //更新状态  “update”
       this.accountId=row.id   //获取用户ID
       this.disabled=false      //点击修改按钮，提交按钮不禁用
       let temp = row.role.split("/")
@@ -546,7 +545,7 @@ export default {
       })
     },
     changeGroupID(groupid){
-      this.update_data.row.groupid = groupid
+      this.update_data.row.groupid=groupid
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
