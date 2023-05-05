@@ -391,42 +391,42 @@ export default {
 
     addMachine() {
       //添加机房组件
-      // this.ifUpdate = '2'
+      this.ifUpdate = '2'
 
-      //添加机房弹窗
-      //清除Form表单上一次输入的值
-      this.form.machineArea=""
-      this.form.machineAdministrator=""
-      this.form.machineLocation=""
-      this.form.MachineRoomName=""
-      this.form.postId=""
-
-      // this.ifUpdate ='1'
-      this.dialogFormVisible = true
-      // 取值有问题
-      const data ={
-        role:this.roles[0], //这个地方是realRole 写成了roles
-        postid:this.realRoleid
-      }
-      console.log(data)
-      getPost(data).then(response => {
-        this.postAll = response.data.items
-      })
-      // if(this.realChact !=="超级管理员"){
-      //   this.postAll = []
-      //   var obj = {
-      //    postId: this.realRoleid,
-      //    postName: this.realRole
-      //   }
-      //   this.postAll.push(obj)
-      // }else{
-      //   getPost().then(response => {
-      //     // console.log(response.data.items)
-      //     this.postAll = response.data.items
-      //     // console.log(this.postAll);
-      //     // console.log(this.options);
-      //   })
+      // //添加机房弹窗
+      // //清除Form表单上一次输入的值
+      // this.form.machineArea=""
+      // this.form.machineAdministrator=""
+      // this.form.machineLocation=""
+      // this.form.MachineRoomName=""
+      // this.form.postId=""
+      //
+      // // this.ifUpdate ='1'
+      // this.dialogFormVisible = true
+      // // 取值有问题
+      // const data ={
+      //   role:this.roles[0], //这个地方是realRole 写成了roles
+      //   postid:this.realRoleid
       // }
+      // console.log(data)
+      // getPost(data).then(response => {
+      //   this.postAll = response.data.items
+      // })
+      // // if(this.realChact !=="超级管理员"){
+      // //   this.postAll = []
+      // //   var obj = {
+      // //    postId: this.realRoleid,
+      // //    postName: this.realRole
+      // //   }
+      // //   this.postAll.push(obj)
+      // // }else{
+      // //   getPost().then(response => {
+      // //     // console.log(response.data.items)
+      // //     this.postAll = response.data.items
+      // //     // console.log(this.postAll);
+      // //     // console.log(this.options);
+      // //   })
+      // // }
 
     },
 
