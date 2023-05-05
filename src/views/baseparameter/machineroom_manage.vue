@@ -229,6 +229,9 @@
           </el-table>
         </div>
       </el-drawer>
+      <div v-if="ifUpdate === '2'">
+        <addMachineRoom @changeDiv="changeDiv" />
+      </div>
       <div v-if="ifUpdate === '3'">
         <updateMachineRoom :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
@@ -253,9 +256,11 @@ import { getCabinet,getPost } from '@/api/select'
 import {mapGetters} from "vuex";
 import UpdateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom/index.vue'
 import UpdateCabinet from '@/components/Baseparameter/machineRoom/updateCabinet/index.vue'
+import AddMachineRoom from '@/components/Baseparameter/machineRoom/addMachineRoom/index.vue'
 
 export default {
   components: {
+    AddMachineRoom,
     UpdateCabinet,
     UpdateMachineRoom,
     InfoTemplate
@@ -385,40 +390,7 @@ export default {
     },
 
     addMachine() {
-      //清除Form表单上一次输入的值
-      this.form.machineArea=""
-      this.form.machineAdministrator=""
-      this.form.machineLocation=""
-      this.form.MachineRoomName=""
-      this.form.postId=""
-
-      // this.ifUpdate ='1'
-      this.dialogFormVisible = true
-      // 取值有问题
-      const data ={
-        role:this.roles[0], //这个地方是realRole 写成了roles
-        postid:this.realRoleid
-      }
-      console.log(data)
-      getPost(data).then(response => {
-        this.postAll = response.data.items
-      })
-      // if(this.realChact !=="超级管理员"){
-      //   this.postAll = []
-      //   var obj = {
-      //    postId: this.realRoleid,
-      //    postName: this.realRole
-      //   }
-      //   this.postAll.push(obj)
-      // }else{
-      //   getPost().then(response => {
-      //     // console.log(response.data.items)
-      //     this.postAll = response.data.items
-      //     // console.log(this.postAll);
-      //     // console.log(this.options);
-      //   })
-      // }
-
+      this.ifUpdate = '2'
     },
 
     ceateMachineRoom(){

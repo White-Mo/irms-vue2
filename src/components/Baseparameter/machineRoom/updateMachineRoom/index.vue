@@ -100,17 +100,26 @@ export default {
         machineLocation:'',
         machineAdministrator:'',
       },
-      // rules: {
-      //   machineRoomName: [
-      //     {required: true, message: '请输入机房名称', trigger: 'blur'},
-      //     {
-      //       validator : checkName, trigger: 'blur'
-      //     }
-      //   ],
-      //   postName: [
-      //     {required: true, message: '请选择单位名称', trigger: 'blur'}
-      //   ],
-      // }
+      rules: {
+        machineRoomName: [
+          {required: true, message: '请输入机房名称', trigger: 'blur'},
+          {
+            validator : checkName, trigger: 'blur'
+          }
+        ],
+        postName: [
+          {required:true,message: '请选择单位',trigger:'blur'},
+        ],
+        machineAdministrator: [
+          {required: true, message: '请输入机房管理员', trigger: 'blur'}
+        ],
+        machineArea: [
+          {required: true, message: '请输入机房面积', trigger: 'blur'}
+        ],
+        machineLocation: [
+          {required: true, message: '请选择机房位置', trigger: 'blur'}
+        ],
+      }
     }
   },
   methods: {
@@ -153,7 +162,6 @@ export default {
     async getNameRules() {
       const machineRoom = {...this.machineRoom}
       await checkMachineRoomName(machineRoom).then((res) => {
-        console.log(res)
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
