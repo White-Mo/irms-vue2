@@ -114,6 +114,15 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="机房管理员" :label-width="formLabelWidth">
+              <el-input v-model="form.machineAdministrator" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机房面积" :label-width="formLabelWidth">
+              <el-input v-model="form.machineArea" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机房位置" :label-width="formLabelWidth">
+              <el-input v-model="form.machineLocation" autocomplete="off"></el-input>
+            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -148,10 +157,10 @@
                 size="mini"
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -206,10 +215,10 @@
                   size="mini"
                   @click="cabinetDetail(scope.$index, scope.row)"
                 >详情</el-button>
-<!--                <el-button-->
-<!--                  size="mini"-->
-<!--                  @click="cabinetEdit(scope.$index, scope.row)"-->
-<!--                >编辑</el-button>-->
+                <el-button
+                  size="mini"
+                  @click="cabinetEdit(scope.$index, scope.row)"
+                >编辑</el-button>
                 <el-button
                   size="mini"
                   type="danger"
@@ -220,8 +229,14 @@
           </el-table>
         </div>
       </el-drawer>
+      <div v-if="ifUpdate === '2'">
+        <addMachineRoom @changeDiv="changeDiv" />
+      </div>
       <div v-if="ifUpdate === '3'">
         <updateMachineRoom :row="row" :current-show="ifUpdate" @changeDiv="changeDiv" />
+      </div>
+      <div v-if="ifUpdate === '4'">
+        <UpdateCabinet :row='row' :current-show="ifUpdate" @changeDiv="changeDiv" />
       </div>
     </div>
   </div>
@@ -239,9 +254,15 @@ import {
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet,getPost } from '@/api/select'
 import {mapGetters} from "vuex";
+import UpdateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom/index.vue'
+import UpdateCabinet from '@/components/Baseparameter/machineRoom/updateCabinet/index.vue'
+import AddMachineRoom from '@/components/Baseparameter/machineRoom/addMachineRoom/index.vue'
 
 export default {
   components: {
+    AddMachineRoom,
+    UpdateCabinet,
+    UpdateMachineRoom,
     InfoTemplate
   },
   filters: {
@@ -259,8 +280,12 @@ export default {
       postAll:[],
       form: {
         MachineRoomName:"",
+        machineRoomId:"",
         postId: "",
-        status: ""
+        status: "",
+        machineArea:'',
+        machineLocation:'',
+        machineAdministrator:'',
       },
       formLabelWidth: '120px',
       dialogFormVisible:false,
@@ -285,6 +310,18 @@ export default {
         {
           value: 'postName',
           label: '所属单位'
+        },
+        {
+          value: 'machineAdministrator',
+          label: '机房管理员'
+        },
+        {
+          value: 'machineArea',
+          label: '机房面积'
+        },
+        {
+          value: 'machineLocation',
+          label: '机房位置'
         }],
       cabinetColumn: [
         {
@@ -353,32 +390,43 @@ export default {
     },
 
     addMachine() {
-      // this.ifUpdate ='1'
-      this.dialogFormVisible = true
-      // 取值有问题
-      const data ={
-        role:this.roles[0], //这个地方是realRole 写成了roles
-        postid:this.realRoleid
-      }
-      console.log(data)
-      getPost(data).then(response => {
-        this.postAll = response.data.items
-      })
-      // if(this.realChact !=="超级管理员"){
-      //   this.postAll = []
-      //   var obj = {
-      //    postId: this.realRoleid,
-      //    postName: this.realRole
-      //   }
-      //   this.postAll.push(obj)
-      // }else{
-      //   getPost().then(response => {
-      //     // console.log(response.data.items)
-      //     this.postAll = response.data.items
-      //     // console.log(this.postAll);
-      //     // console.log(this.options);
-      //   })
+      //添加机房组件
+      this.ifUpdate = '2'
+
+      // //添加机房弹窗
+      // //清除Form表单上一次输入的值
+      // this.form.machineArea=""
+      // this.form.machineAdministrator=""
+      // this.form.machineLocation=""
+      // this.form.MachineRoomName=""
+      // this.form.postId=""
+      //
+      // // this.ifUpdate ='1'
+      // this.dialogFormVisible = true
+      // // 取值有问题
+      // const data ={
+      //   role:this.roles[0], //这个地方是realRole 写成了roles
+      //   postid:this.realRoleid
       // }
+      // console.log(data)
+      // getPost(data).then(response => {
+      //   this.postAll = response.data.items
+      // })
+      // // if(this.realChact !=="超级管理员"){
+      // //   this.postAll = []
+      // //   var obj = {
+      // //    postId: this.realRoleid,
+      // //    postName: this.realRole
+      // //   }
+      // //   this.postAll.push(obj)
+      // // }else{
+      // //   getPost().then(response => {
+      // //     // console.log(response.data.items)
+      // //     this.postAll = response.data.items
+      // //     // console.log(this.postAll);
+      // //     // console.log(this.options);
+      // //   })
+      // // }
 
     },
 
@@ -396,7 +444,6 @@ export default {
         })
       })
     },
-
     handleDetail(index, row) {
       // this.ifUpdate ='2'
       // this.row = row
@@ -404,8 +451,9 @@ export default {
       this.fetchCabinet(row)
     },
     handleEdit(index, row) {
-      // this.ifUpdate ='3'
+      console.log(row)
       this.row = row
+      this.ifUpdate ='3'
     },
     handleDelete(index, row) {
       this.$alert(`是否永久删除机房：\"${row.machineRoomName}\"`, '提示', {
@@ -459,17 +507,29 @@ export default {
       this.ifUpdate ='1'
     },
     cabinetEdit(index, row) {
+      this.row = row
+      this.drawer =false
+      this.ifUpdate ='4'
     },
-    cabinetDelete(val){
-      delCabinet(val).then((response) => {
-        this.$alert(response.data, '提示', {
-          confirmButtonText: '确定',
-          type: 'info',
-          showClose: false
-        }).then(() => {
-          this.dataName="all"
-          this.drawer = false
-        })
+    cabinetDelete(index, row){
+      this.$alert(`是否永久删除机柜：\"${row.cabinetName}\"`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        callback: (action, instance) => {
+          if (action === 'confirm') {
+            delCabinet(row.cabinetId).then((response) => {
+              this.$alert(response.data, '提示', {
+                confirmButtonText: '确定',
+                type: 'info',
+                showClose: false
+              }).then(() => {
+                this.dataName="all"
+                this.drawer = false
+              })
+            })
+          }
+        }
       })
     },
     confirm(){

@@ -107,7 +107,6 @@ export default {
     }
 
     return {
-
       nameRules: false,
       codeRules: false,
       postRules:false,

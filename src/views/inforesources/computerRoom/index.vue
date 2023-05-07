@@ -23,15 +23,15 @@
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name === "" ? "暂无详细数据" : this.roomBasicInfo.manager_name}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "暂无数据" : this.roomBasicInfo.machineAdministrator}}</span></th>
           </tr>
           <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房IP：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.equipment_ip === "" ? "暂无详细数据" : this.roomBasicInfo.equipment_ip}}</span></th>
+            <th style="color: #0a72c7;width: 80px">机房面积：</th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "暂无数据" : this.roomBasicInfo.machineArea}}</span></th>
           </tr>
           <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房地址：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.UnitDepartment === "" ? "暂无详细数据" : this.roomBasicInfo.UnitDepartment}}</span></th>
+            <th style="color: #0a72c7;width: 80px">机房位置：</th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "暂无数据" : this.roomBasicInfo.machineLocation}}</span></th>
           </tr>
         </table>
       <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
@@ -133,9 +133,9 @@ export default {
       showEquipment:false,
       logosrc:'',
       roomBasicInfo:{ // 左上角机房信息概况
-        manager_name: '',
-        equipment_ip: '',
-        UnitDepartment: '',
+        machineAdministrator:'',
+        machineLocation:'',
+        machineArea:'',
       } ,
       equipmentBaseInfo:{
         total:0,
@@ -247,7 +247,10 @@ export default {
       //     switchCount:0
       // },
       // this.equipmentBaseInfo.
-
+      this.roomBasicInfo.machineArea = this.$store.state.machineRoom.machineArea
+      this.roomBasicInfo.machineAdministrator = this.$store.state.machineRoom.machineAdministrator
+      this.roomBasicInfo.machineLocation = this.$store.state.machineRoom.machineLocation
+      console.log(this.roomBasicInfo.machineArea)
       getEquipmentCount().then((response)=> {
         this.equipmentBaseInfo.total = response.data.total
       })
