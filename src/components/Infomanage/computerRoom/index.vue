@@ -20,25 +20,25 @@
 
     <div id="container"></div>
     <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background: #142437" v-show="datacard">
-        <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name === "" ? "暂无详细数据" : this.roomBasicInfo.manager_name}}</span></th>
-          </tr>
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房IP：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.equipment_ip === "" ? "暂无详细数据" : this.roomBasicInfo.equipment_ip}}</span></th>
-          </tr>
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房地址：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.UnitDepartment === "" ? "暂无详细数据" : this.roomBasicInfo.UnitDepartment}}</span></th>
-          </tr>
-        </table>
+      <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
+        <tr style="height: 45px">
+          <th style="color: #0a72c7;width: 110px">管理员：</th>
+          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.manager_name === "" ? "暂无详细数据" : this.roomBasicInfo.manager_name}}</span></th>
+        </tr>
+        <tr style="height: 45px">
+          <th style="color: #0a72c7;width: 80px">机房IP：</th>
+          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.equipment_ip === "" ? "暂无详细数据" : this.roomBasicInfo.equipment_ip}}</span></th>
+        </tr>
+        <tr style="height: 45px">
+          <th style="color: #0a72c7;width: 80px">机房地址：</th>
+          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.UnitDepartment === "" ? "暂无详细数据" : this.roomBasicInfo.UnitDepartment}}</span></th>
+        </tr>
+      </table>
       <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
-      </dv-border-box-11>
+    </dv-border-box-11>
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background: #142437" v-show="datacard">
-        <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
-      </dv-border-box-12>
+      <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
+    </dv-border-box-12>
     <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 1vw;top: 10rem;background: #142437" v-show="datacard">
       <div style="height:35%;width:100%;position: absolute;left:10px;top: 35%;">
         <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px" border="1" cellspacing="0" cellpadding="0">
@@ -91,12 +91,12 @@
         </el-table-column>
         <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
       </el-table>
-<!--      <el-popover-->
-<!--        popper-class="popoverBackB"-->
-<!--        placement="top-start"-->
-<!--        >-->
-<!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
-<!--      </el-popover>-->
+      <!--      <el-popover-->
+      <!--        popper-class="popoverBackB"-->
+      <!--        placement="top-start"-->
+      <!--        >-->
+      <!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
+      <!--      </el-popover>-->
     </dv-border-box-12>
     <el-dialog
       :visible.sync="showEquipment"
@@ -294,7 +294,7 @@ export default {
       });
     },
     backPage(){
-      this.$router.push({ path:'/inforesources/digital_computer_room'})
+      this.$emit('changeDiv5', '0')
       this.full()
     },
     handchangedatacardstate(){
