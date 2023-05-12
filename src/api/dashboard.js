@@ -74,3 +74,13 @@ export function getCabinetAllCountData(obj) {
     responseType: 'json'
   })
 }
+
+
+//获取有数据的单位
+export function getUnitWithExistData(){
+  return request({
+    url: '/home/inforesources/getUnitWithExistData',
+    method: 'get',
+    responseType: 'json',
+  })
+}
