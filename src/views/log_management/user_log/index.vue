@@ -55,7 +55,11 @@
 </template>
 
 <script>
-import {getLogDataUser, getOperationCount, getUserAndCountByCurrentDay} from "@/api/log_management";
+import {
+  getLogDataUser,
+  getOperationCount,
+  getUserAndCountByCurrentDay
+} from "@/api/log_management";
 import moment from "moment/moment";
 
 export default {
@@ -165,7 +169,10 @@ export default {
       }
       this.handlersData = this.operationUserAndCount  //把数组 operationUserAndCount赋值给表单数据绑定字段
       this.listLoading = false;
-    }
+    },
+
+
+
   }
 }
 </script>
