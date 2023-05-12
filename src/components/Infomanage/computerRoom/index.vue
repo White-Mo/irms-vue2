@@ -297,7 +297,7 @@ export default {
       });
     },
     backPage(){
-      this.$router.push({ path:'/inforesources/digital_computer_room'})
+      this.$emit('changeDiv5', '0')
       this.full()
     },
     handchangedatacardstate(){

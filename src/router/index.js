@@ -139,13 +139,13 @@ export function filterAsyncRoutes(routes) {
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })
-  accessedRoutes.push(
+/*  accessedRoutes.push(
       {
         path: '/computerRoom',
         name: 'computerRoom',
         component: () => import('@/views/inforesources/computerRoom/index')
       }
-    )
+    )*/
   const firstRouteNode =
     {
       path: '/',
