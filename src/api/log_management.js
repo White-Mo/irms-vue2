@@ -78,4 +78,14 @@ export function getUserAndCountByCurrentDay(currentDate) {
 }
 
 
+//获取每个单位操作的次数
+export function getPostAndOperationCount() {
+  return request({
+    params: '',
+    url: '/home/log_management/getPostAndOperationCount',
+    method: 'get',
+  })
+}
+
+
 
