@@ -168,6 +168,15 @@ export function AddExcel(eq) {
   })
 }
 
+export function importMachineRoom(machineRoom) {
+  return request({
+    data: machineRoom,
+    url: '/home/inforesources/importMachineRoom',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 export function delEquipment(equipmentId) {
   console.log(typeof (equipmentId))
   return request({

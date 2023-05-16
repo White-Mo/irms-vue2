@@ -1,4 +1,4 @@
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import { status } from 'nprogress'
 import logdepthbuf_fragmentGlsl from 'three/src/renderers/shaders/ShaderChunk/logdepthbuf_fragment.glsl'
 import item from '@/layout/components/Sidebar/Item'
@@ -36,16 +36,14 @@ export function importfile(obj, head) {
       var filetype = Object.keys(outdata[0])[0]
       // 获取 Excel 表头 判断 是否为同一文件类型
       if (head === filetype) {
-        if(head === "信息资产统计综合表"){
-          // const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:"无数据"})
           resolve(outdata)
-        }else {
-          resolve(outdata)
-        }
       } else {
         console.log('请选择正确的文件类型！')
         console.log('应导入', head)
         console.log('当前导入', filetype)//excel第一个单元格
+        MessageBox.alert("<div>请选择正确的文件类型</div><div>应导入:" + head + "</div><div>当前导入：" + filetype+"</div>",
+          {dangerouslyUseHTMLString:true}
+      );
       }
     }
   })
