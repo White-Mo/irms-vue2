@@ -1781,12 +1781,18 @@ export async function getExcelDemo3(StatisticsData) {
   //设置工作簿属性↓
   workbook.creator = '中国地震台网中心信息资源管理系统'
   // workbook.lastModifiedBy = 'Her';
+
   workbook.created = new Date()
   workbook.modified = new Date()
   workbook.lastPrinted = new Date()
+  // 将工作簿日期设置为 1904 年日期系统
   workbook.properties.date1904 = true
+
+  // 设置计算属性
+  // 在加载时强制工作簿计算属性
   workbook.calcProperties.fullCalcOnLoad = true
-  //工作簿视图 ？？啥玩意
+
+  //工作簿视图控制在查看工作簿时 Excel 将打开多少个单独的窗口。
   workbook.views = [{
     x: 0,
     y: 0,
@@ -1804,8 +1810,11 @@ export async function getExcelDemo3(StatisticsData) {
   for (let i = 0; i < col_i.length; i++) {
     sheet.getColumn(col_i[i]).width = 13
   }
+
   //样式
+  //文字居中展示
   const content_row = { vertical: 'middle', horizontal: 'center' }
+  //设置表头文字样式
   const table_header2 = {
     name: 'Arial Black',
     color: { argb: '000' },
@@ -1813,6 +1822,8 @@ export async function getExcelDemo3(StatisticsData) {
     size: 14,
     bold: true
   }
+
+  //设置数据文字格式
   const table_header3 = {
     name: 'Black',
     color: { argb: '000' },
@@ -1820,9 +1831,11 @@ export async function getExcelDemo3(StatisticsData) {
     size: 14,
     bold: false
   }
+
+  //设置表格边框
   const black = { style: 'medium', color: { argb: '000' } }
 
-  // 第2到n行
+  // 第一列要展示的
   let name_list = [
     '名称',
     '总设备数量(台)',
@@ -1832,19 +1845,28 @@ export async function getExcelDemo3(StatisticsData) {
     '应用管理员数量(个)',
     '设备管理员数量(个)'
   ]
-  let B2 = []
+
+  // i 是name_list 下标
   for (let i in name_list) {
-    let item_list = []
+    // i 是字符串格式
     let num = 2 + parseInt(i)
+    //设置表格高度
     if (i == 0) {
       sheet.getRow(num).height = 30
     } else {
       sheet.getRow(num).height = 25.5
     }
+
+    //合并每行表格
     sheet.mergeCells('B' + num + ':C' + num)
     sheet.mergeCells('D' + num + ':E' + num)
+
+    //给item_list添加表格   每一行
+    let item_list = []
     item_list.push(sheet.getCell('B' + num))
     item_list.push(sheet.getCell('D' + num))
+
+    //cell == 0 时为第一列 cell == 1 时为第二列
     for (let cell in item_list) {
       if (cell == 0) {
         item_list[cell].value = name_list[i]
@@ -1852,14 +1874,20 @@ export async function getExcelDemo3(StatisticsData) {
       if (i == 0 && cell == 1) {
         item_list[cell].value = '数量'
       } else if (cell == 1) {
-        item_list[cell].value = StatisticsData[i - 1]
+        item_list[cell].value = StatisticsData[i-1]  //把前端的值传给后端
       }
-      if (i == 0) {
+
+      //给文字加粗
+      if (i == 0) {  //名称和数量--加粗
         item_list[cell].font = table_header2
-      } else {
+      } else {   //下面数据--加粗
         item_list[cell].font = table_header3
       }
+
+      //文字居中展示
       item_list[cell].alignment = content_row
+
+      //加上边框
       item_list[cell].border = {
         top: black,
         left: black,
@@ -1867,8 +1895,10 @@ export async function getExcelDemo3(StatisticsData) {
         right: black
       }
     }
-    B2.push(item_list)
 
+    //不明所以的代码
+    // let B2 = []
+    // B2.push(item_list)
   }
 
   //导出下载
@@ -1881,3 +1911,4 @@ export async function getExcelDemo3(StatisticsData) {
   link.click()
   document.body.removeChild(link)
 }
+
