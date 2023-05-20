@@ -88,8 +88,10 @@
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
             @sort-change="sortChange"
+            :row-key="rowKey"
           >
-            <el-table-column label="" width="40" type="selection" />
+            <el-table-column label="" width="40" type="selection"
+                             :reserve-selection="true" />
             <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
             <el-table-column
               v-for="(item, index) in dataname"
@@ -415,6 +417,10 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    // rxr
+    rowKey(row) {
+      return row.equipmentId
+    },
     get_data() {
       this.isMultiline=false
       if (this.DataName === 'all' || this.DataName.length === 0) {
@@ -538,8 +544,11 @@ export default {
         })
       }
     },
+    // rxr
     handleSelectionChange(val) {
+      //用selectedData接收所有勾选中的数据
       this.selectData = val
+      console.log(this.selectedData);
     },
     selectAllFun(val){
       if(val.length!=0){

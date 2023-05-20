@@ -101,6 +101,7 @@
 <!--        表格数据渲染 -->
         <div class="grid-content form_table_class" >
           <el-table
+            ref='table'
             :data="tableData"
             stripe
             height="70vh"
@@ -109,9 +110,18 @@
             border
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             v-loading="listLoading"
+            :row-key="rowKey"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column align="center" label="" width="40" type="selection" />
+<!--            rxr-->
+              <el-table-column
+                :reserve-selection="true"
+                align="center"
+                label=""
+                width="40"
+                type="selection"/>
+
+
             <el-table-column align="center" label="" width="50" type="index" />
             <el-table-column
               v-for="(value, key, index) in labels"
@@ -161,6 +171,7 @@
 </template>
 
 <script>
+
 //导入多条件搜索接口，用于下拉加载时更新多条件查询返回的数据
 import {searchComprehensiveInfoByMultipleConditions} from '@/api/table'
 //获取总数据，总数据条数
@@ -230,6 +241,7 @@ export default {
   created() {
     this.get_data()
   },
+  // rxr
   mounted() {
     document.getElementsByClassName('el-table__body-wrapper')[0].addEventListener('scroll',this.load)
   },
@@ -329,10 +341,16 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    // rxr
+    rowKey(row) {
+      // console.log(this.selectedData);
+      return row.equipmentId
+    },
     //记录勾选了哪些（条）数据
     handleSelectionChange(val) {
       //用selectedData接收所有勾选中的数据
       this.selectedData = val
+      console.log(this.selectedData);
     },
     //点击取消后，隐藏取消按钮
     handleDetail(index, row) {
@@ -453,8 +471,8 @@ export default {
       })
 
     },
-    //下拉加载新数据
     load (e) {
+      // rxr
 /*- load是一个方法，它有一个参数e，表示事件对象
 - 这个方法会在某个元素滚动时执行
 - 这个方法的作用是判断是否滚动到了元素内容的底部，并更新ClientHeight的值
@@ -466,12 +484,13 @@ export default {
   - 否则就把scrollHeight赋值给ClientHeight，以便下次比较*/
       if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
         if(this.ClientHeight == e.target.scrollHeight){
-          this.isflag = true
+          this.isflag = false
           setTimeout(()=>{
-            this.isflag = false
-          },1000)
+            this.isflag = true
+          },10)
         }
         this.ClientHeight = e.target.scrollHeight
+        // console.log(this.selectedData);
       }
     },
     //弹出批量调拨框，并进行批量调拨逻辑处理
@@ -533,6 +552,7 @@ export default {
 
 <style lang="less" scoped>
 .el-select-dropdown .el-scrollbar {
+  color: #c50d0d;
   position: relative;
 }
 .searchInput {
