@@ -248,6 +248,9 @@ export default {
       this.$store.commit('machineRoom/SET_Unit', unit)
       this.$store.commit('machineRoom/SET_DEPARTMENT', department)
       this.$store.commit('machineRoom/SET_InstallPosition', installation_position)
+      this.$store.commit('machineRoom/SET_MachineArea', machineArea)
+      this.$store.commit('machineRoom/SET_MachineAdministrator', machineAdministrator)
+      this.$store.commit('machineRoom/SET_MachineLocation', machineLocation)
       // this.$router.push({name: 'computerRoom'})
       this.isShow = '2'
     },

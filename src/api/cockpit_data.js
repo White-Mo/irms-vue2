@@ -34,3 +34,18 @@ export const getApplicationUserCount= () =>{
 export const getEquipmentUserCount= () =>{
   return request.get('/home/inforesources/getEquipmentUserCount?qequipment_user=all')
 }
+
+//虚拟机设备
+export const getTureOrVirtualCount= () =>{
+  return request.get('/home/inforesources/getTureOrVirtualCount')
+}
+
+//在用设备数量
+export const getStatusCount= () =>{
+  return request.get('/home/inforesources/getStatusCount')
+}
+
+//获取国产化设备数量
+export const getDomesticEquipmentCount= () =>{
+  return request.get('/home/inforesources/getDomesticEquipmentCount')
+}

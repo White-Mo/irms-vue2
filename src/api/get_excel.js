@@ -1775,7 +1775,7 @@ export async function getExcelDemo2(data_list, data_num = 1) {
   return
 }
 
-export async function getExcelDemo3(StatisticsData) {
+export async function getExcelDemo3(StatisticsData,state) {
   //创建工作簿↓
   const workbook = new ExcelJS.Workbook()
   //设置工作簿属性↓
@@ -1804,9 +1804,8 @@ export async function getExcelDemo3(StatisticsData) {
   }]
   //添加工作表
   const sheet = workbook.addWorksheet('1')
-  // 设置padding 列宽
-  sheet.getColumn('A').width = 1.88
-  let col_i = 'BCDE'
+  // 设置 padding 列宽
+  let col_i = 'ABCD'
   for (let i = 0; i < col_i.length; i++) {
     sheet.getColumn(col_i[i]).width = 13
   }
@@ -1841,7 +1840,24 @@ export async function getExcelDemo3(StatisticsData) {
     '总设备数量(台)',
     '总设备类型(种)',
     '保修期内设备数量(台)',
-    '总应用系统数量(台)',
+    '在用设备数量(台)',
+    '国产化设备数量(台)',
+    '总单位数量(个）',
+    '虚拟机设备数量(台)',
+    '总业务系统数量(个)',
+    '应用管理员数量(个)',
+    '设备管理员数量(个)'
+  ]
+  let name_list1 = [
+    '名称',
+    '设备数量(台)',
+    '设备类型(种)',
+    '保修期内设备数量(台)',
+    '在用设备数量(台)',
+    '国产化设备数量(台)',
+    '单位数量(个）',
+    '虚拟机设备数量(台)',
+    '业务系统数量(个)',
     '应用管理员数量(个)',
     '设备管理员数量(个)'
   ]
@@ -1849,7 +1865,7 @@ export async function getExcelDemo3(StatisticsData) {
   // i 是name_list 下标
   for (let i in name_list) {
     // i 是字符串格式
-    let num = 2 + parseInt(i)
+    let num = 1 + parseInt(i)
     //设置表格高度
     if (i == 0) {
       sheet.getRow(num).height = 30
@@ -1858,43 +1874,75 @@ export async function getExcelDemo3(StatisticsData) {
     }
 
     //合并每行表格
-    sheet.mergeCells('B' + num + ':C' + num)
-    sheet.mergeCells('D' + num + ':E' + num)
+    sheet.mergeCells('A' + num + ':B' + num)
+    sheet.mergeCells('C' + num + ':D' + num)
 
     //给item_list添加表格   每一行
     let item_list = []
-    item_list.push(sheet.getCell('B' + num))
-    item_list.push(sheet.getCell('D' + num))
+    item_list.push(sheet.getCell('A' + num))
+    item_list.push(sheet.getCell('C' + num))
 
     //cell == 0 时为第一列 cell == 1 时为第二列
-    for (let cell in item_list) {
-      if (cell == 0) {
-        item_list[cell].value = name_list[i]
-      }
-      if (i == 0 && cell == 1) {
-        item_list[cell].value = '数量'
-      } else if (cell == 1) {
-        item_list[cell].value = StatisticsData[i-1]  //把前端的值传给后端
-      }
+    if (state===1){
+      for (let cell in item_list) {
+        if (cell == 0) {
+          item_list[cell].value = name_list[i]
+        }
+        if (i == 0 && cell == 1) {
+          item_list[cell].value = '数量'
+        } else if (cell == 1) {
+          item_list[cell].value = StatisticsData[i-1]  //把前端的值传给后端
+        }
 
-      //给文字加粗
-      if (i == 0) {  //名称和数量--加粗
-        item_list[cell].font = table_header2
-      } else {   //下面数据--加粗
-        item_list[cell].font = table_header3
+        //给文字加粗
+        if (i == 0) {  //名称和数量--加粗
+          item_list[cell].font = table_header2
+        } else {   //下面数据--加粗
+          item_list[cell].font = table_header3
+        }
+
+        //文字居中展示
+        item_list[cell].alignment = content_row
+
+        //加上边框
+        item_list[cell].border = {
+          top: black,
+          left: black,
+          bottom: black,
+          right: black
+        }
       }
+    } else {
+      for (let cell in item_list) {
+        if (cell == 0) {
+          item_list[cell].value = name_list1[i]
+        }
+        if (i == 0 && cell == 1) {
+          item_list[cell].value = '数量'
+        } else if (cell == 1) {
+          item_list[cell].value = StatisticsData[i-1]  //把前端的值传给后端
+        }
 
-      //文字居中展示
-      item_list[cell].alignment = content_row
+        //给文字加粗
+        if (i == 0) {  //名称和数量--加粗
+          item_list[cell].font = table_header2
+        } else {   //下面数据--加粗
+          item_list[cell].font = table_header3
+        }
 
-      //加上边框
-      item_list[cell].border = {
-        top: black,
-        left: black,
-        bottom: black,
-        right: black
+        //文字居中展示
+        item_list[cell].alignment = content_row
+
+        //加上边框
+        item_list[cell].border = {
+          top: black,
+          left: black,
+          bottom: black,
+          right: black
+        }
       }
     }
+
 
     //不明所以的代码
     // let B2 = []

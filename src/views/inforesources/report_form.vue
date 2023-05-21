@@ -88,9 +88,9 @@
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
             @sort-change="sortChange"
+            :row-key="record=>record.basicInfoId"
           >
-            <el-table-column label="" width="40" type="selection" />
-            <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
+            <el-table-column width="40" type="selection" :reserve-selection="true"/>
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -157,6 +157,14 @@ import {getStatisticsData, searchComprehensiveInfoByMultipleConditions} from '@/
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
 import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
+import {
+  getApplicationUserCount,
+  getBusinessSystemCount,
+  getEquipmentCount,
+  getEquipmentTypeCount, getEquipmentUserCount, getGuaranteePeriodCount,
+  getOverGuaranteePeriodCount, getStatusCount, getTureOrVirtualCount
+} from '@/api/cockpit_data'
+import { getPost } from '@/api/select'
 export default {
 
   data() {
@@ -177,6 +185,7 @@ export default {
       PageSize: 12,
       // 上一次的筛选参数
       par_str: '',
+      // 多选的数据
       selectData: [],
       centerDialogVisible: false,
       select_teble_radio: -1,
@@ -293,6 +302,8 @@ export default {
       ClientHeight:0,
       // 统计数据
       StatisticsData: [],
+      // 多选是统计数据
+      StatisticsData1:[],
       // 全选事件
       is_select_all:false,
       isMultiline:false,//是否多条件筛选
@@ -507,39 +518,156 @@ export default {
         this.ClientHeight = e.target.scrollHeight
       }
     },
-    getStatisticsExcel() {
-      const item_list = [
-        'getEquipmentCount',
-        '../baseparameter/getEquipmentTypeCount',
-        'getGuaranteePeriodCount',
-        'getSystemWareCount',
-        'getApplicationUserCount?qapp_user=all',
-        'getEquipmentUserCount?qequipment_user=all'
-      ]
-      const trigger_fun = (data) => {
-        this.StatisticsData.push(data)
-        if (this.StatisticsData.length > 5) {
-          //console.log('ok')
-          getExcelDemo3(this.StatisticsData)
+    async getStatisticsExcel() {
+      if (this.selectData.length > 0) {
+        // 设备数量
+        this.StatisticsData1.push(this.selectData.length)
+        // 设备类型
+        let arr = []
+        for (const i in this.selectData) {
+          arr.push(this.selectData[i].equipmentTypeName)
         }
-      }
-      for (const i of item_list) {
-        getStatisticsData(i).then((res) => {
-          // //console.log(res,i)
-          // StatisticsData.push(res)
-          if (typeof res === 'object') {
-            trigger_fun(res.data)
-          } else {
-            trigger_fun(res)
+        this.StatisticsData1.push(Array.from(new Set(arr)).length)
+        // 保修期内设备数量(台)
+        var date = new Date()
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+        var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+        let NowTime = year + month + day
+        let arr2i = 0
+        for (const i in this.selectData) {
+          let a = this.selectData[i].guaranteePeriod.split("-")
+          console.log(a)
+          if (a[1] > NowTime) {
+            arr2i += 1
           }
-        }).catch(err=>{ // 如果接口失效则添加零
-          //console.log(err)
-          trigger_fun(0)
+        }
+        this.StatisticsData1.push(arr2i)
+        //在用设备数量(台)
+        let a1=0
+        for (const i in this.selectData) {
+          if ( this.selectData[i].status == 0){
+            a1 += 1
+          }
+        }
+        this.StatisticsData1.push(a1)
+        //国产化设备数量(台)
+        this.StatisticsData1.push(0)
+        //单位数量(个）
+        let arr5 = []
+        for (const i in this.selectData) {
+          arr5.push(this.selectData[i].departmentName)
+        }
+        this.StatisticsData1.push(Array.from(new Set(arr5)).length)
+        //虚拟机设备数量(台)
+        let a2=0
+        for (const i in this.selectData) {
+          if ( this.selectData[i].tureOrVirtual === 0){
+            a2 += 1
+          }
+        }
+        this.StatisticsData1.push(a2)
+        //业务系统数量(个)
+        let arr1 = []
+        for (const i in this.selectData) {
+          arr1.push(this.selectData[i].businessSystemFirstName)
+        }
+        this.StatisticsData1.push(Array.from(new Set(arr1)).length)
+        //应用管理员数量(个)
+        let arr3 = []
+        for (const i in this.selectData) {
+          arr3.push(this.selectData[i].appAdminId)
+        }
+        this.StatisticsData1.push(Array.from(new Set(arr3)).length)
+        console.log(arr3)
+        //设备管理员数量(个)
+        let arr4 = []
+        for (const i in this.selectData) {
+          arr4.push(this.selectData[i].equipmentAdminId)
+        }
+        this.StatisticsData1.push(Array.from(new Set(arr4)).length)
+        // 导入 excel
+        await getExcelDemo3(this.StatisticsData1)
+
+      } else {
+
+        // 设备数量
+        await getEquipmentCount().then(res => {
+          this.StatisticsData.push(res.data.total)
         })
+        //设备类型
+        await getEquipmentTypeCount().then(res => {
+          this.StatisticsData.push(res.data)
+        })
+        // 保修期内设备数量(台)
+        await getGuaranteePeriodCount().then(res => {
+          this.StatisticsData.push(res)
+        })
+        //在用设备数量(台)
+        await getStatusCount().then(res => {
+          this.StatisticsData.push(res)
+        })
+        //国产化设备数量(台)
+        this.StatisticsData.push(0)
+        //总单位数量(个）
+        await getPost().then(res => {
+          this.StatisticsData.push(res.data.total)
+        })
+        //虚拟机设备数量(台)
+        await getTureOrVirtualCount().then(res => {
+          this.StatisticsData.push(res)
+        })
+        //业务系统数量
+        await getBusinessSystemCount().then(res => {
+          this.StatisticsData.push(res.data)
+        })
+        //应用管理员数量(个)
+        await getApplicationUserCount().then(res => {
+          this.StatisticsData.push(res)
+        })
+        //设备管理员数量(个)
+        await getEquipmentUserCount().then(res => {
+          this.StatisticsData.push(res)
+        })
+        // 导入 excel
+        await getExcelDemo3(this.StatisticsData,1)
+
+        // const item_list = [
+        //   'getEquipmentCount',
+        //   '../baseparameter/getEquipmentTypeCount',
+        //   'getGuaranteePeriodCount',
+        //   'getSystemWareCount',
+        //   'getApplicationUserCount?qapp_user=all',
+        //   'getEquipmentUserCount?qequipment_user=all'
+        // ]
+        // for (const i of item_list) {
+        //   getStatisticsData(i).then((res) => {
+        //     // //console.log(res,i)
+        //     // StatisticsData.push(res)
+        //     if (typeof res === 'object') {
+        //       trigger_fun(res.data)
+        //     } else {
+        //       trigger_fun(res)
+        //     }
+        //   }).catch(err => { // 如果接口失效则添加零
+        //     //console.log(err)
+        //     trigger_fun(0)
+        //   })
+        // }
+        // const trigger_fun = (data) => {
+        //   this.StatisticsData.push(data)
+        //   if (this.StatisticsData.length > 5) {
+        //     //console.log('ok')
+        //     getExcelDemo3(this.StatisticsData)
+        //     this.StatisticsData = []
+        //   }
+        // }
+
       }
     },
     handleSelectionChange(val) {
       this.selectData = val
+      console.log(val)
     },
     selectAllFun(val){
       if(val.length!=0){
@@ -572,9 +700,14 @@ export default {
           prop:this.prop,
           order:this.order,
         }
-        getList(params).then((response) => {
-          getExcelDemo1(response.data.items)
-        })
+        if (this.selectData.length > 0){
+          await getExcelDemo1(this.selectData)
+        } else {
+          getList(params).then((response) => {
+            getExcelDemo1(response.data.items)
+          })
+        }
+
       } else if (model === 1) {
         // 选择怎么导出数据 1.单独导出每条数据 2.多条数据存放在一个文件中导出
         // 设置弹窗导出
@@ -639,16 +772,16 @@ export default {
           this.is_select_all = false
           const h = this.$createElement
           let notify = this.$notify({
-              title: '正在导出',
-              dangerouslyUseHTMLString: true,
-              message: h('Progress',{
+            title: '正在导出',
+            dangerouslyUseHTMLString: true,
+            message: h('Progress',{
               style:{
-                  width:"15rem"
+                width:"15rem"
               }
-              }),
-              type: 'success',
-              offset: 100,  // 向下偏移100
-              duration: 0  // 设置不会自动关闭
+            }),
+            type: 'success',
+            offset: 100,  // 向下偏移100
+            duration: 0  // 设置不会自动关闭
           })
           // //console.log("退出弹窗")
           this.centerDialogVisible = false
@@ -786,9 +919,9 @@ export default {
 //   // height: 50rem;
 // }
 .tabListPage h3 {
-    padding-top: 0.1rem;
-    padding-bottom: 0.5rem;
-    margin: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.5rem;
+  margin: 0.1rem;
 }
 .row-bg {
   padding: 10px 0;
@@ -871,56 +1004,3 @@ export default {
   width:100%;
 }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
