@@ -341,7 +341,6 @@ export default {
   // },
   created() {
     this.fetchData()
-    console.log(this.currentShow)
   },
   mounted() {
     const list = document.getElementsByClassName('update_detail')[0]
@@ -367,6 +366,8 @@ export default {
 
     fetchData() {
       this.listLoading = true
+      this.row.onlineTime=new Date(this.row.onlineTime)
+      this.row.offlineTime=new Date(this.row.offlineTime)
       getPost().then(response => {
         console.log(response)
         this.postAll = response.data.items

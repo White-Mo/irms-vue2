@@ -368,50 +368,52 @@ export default {
         {value: 'deploymentEnvironment', label: ' 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）'},
         {
           value: 'onlineTime',
-          label: '设备上线安装日期',
+          label: '上线时间',
           formatter: function (row) {
             var time = row.onlineTime
-            if (!time) {
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year + '-' + month + '-' + day
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
         {
           value: 'offlineTime',
-          label: '维保结束日期',
+          label: '下线时间',
           formatter: function (row) {
             var time = row.offlineTime
-            if (!time) {
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year + '-' + month + '-' + day
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
         {value: 'remarks', label: ' 备注'},
