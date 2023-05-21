@@ -23,15 +23,15 @@
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "暂无数据" : this.roomBasicInfo.machineAdministrator}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
           </tr>
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 80px">机房面积：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "暂无数据" : this.roomBasicInfo.machineArea}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
           </tr>
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 80px">机房位置：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "暂无数据" : this.roomBasicInfo.machineLocation}}</span></th>
+            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
           </tr>
         </table>
       <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
@@ -155,7 +155,7 @@ export default {
     };
   },
   created() {
-    this.full()
+    // this.full()
   },
   mounted() {
     if (this.$store.state.machineRoom.department === '') {
@@ -163,13 +163,13 @@ export default {
     } else {
       this.computerTitle = this.$store.state.machineRoom.department + this.$store.state.machineRoom.installation_position
       this.unitid = this.$store.state.machineRoom.unitid
-      var machineRoomId = this.$store.state.machineRoom.machineRoomId
+      let machineRoomId = this.$store.state.machineRoom.machineRoomId
       getCabinet(machineRoomId).then((res) =>{
         // //console.log(res)
         this.tableData = res.data.items
       })
     }
-    var that = this
+    let that = this
     setTimeout(function () {
       that.echartsDraw()
       that.initCount()
@@ -180,23 +180,24 @@ export default {
     }, 200);
   },
   methods: {
+    //为解决threejs射线不准问题，设置全屏
     full () {
-      // //console.log(this.$store.state.machineRoom.department)
+      //console.log(this.$store.state.machineRoom.department)
       screenfull.toggle()
     },
     //初始化
     init: function() {
       //  创建场景对象Scene
       this.scene = new THREE.Scene();
-      var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight.position.set(10, 10, 10);
       this.scene.add(directionalLight);
 // 平行光2
-      var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+      let directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight2.position.set(-400, -200, -300);
       this.scene.add(directionalLight2);
 //环境光
-      var ambient = new THREE.AmbientLight(0xffffff, 0.5);
+      let ambient = new THREE.AmbientLight(0xffffff, 0.5);
       this.scene.add(ambient);
       //网格模型添加到场景中
       // let geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
@@ -212,10 +213,10 @@ export default {
        * 相机设置
        */
 
-      var width = window.outerWidth; //窗口宽度
-      var height = window.outerHeight; //窗口高度
-      var k = width / height; //Three.js输出的Cnavas画布宽高比
-      var s = 200;//设置相机渲染范围大小
+      let width = window.outerWidth; //窗口宽度
+      let height = window.outerHeight; //窗口高度
+      let k = width / height; //Three.js输出的Cnavas画布宽高比
+      let s = 200;//设置相机渲染范围大小
       this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 3000);
       this.camera.position.set(-537, 76, -615); //设置相机位置
       this.camera.lookAt(0,0,0);
@@ -298,7 +299,7 @@ export default {
     },
     backPage(){
       this.$emit('changeDiv5', '0')
-      this.full()
+      // this.full()
     },
     handchangedatacardstate(){
       this.datacard = !this.datacard
@@ -309,7 +310,7 @@ export default {
       // this.dialog_description = val
     },
     echartsDraw() {
-      var myChart = this.$echarts.init(document.getElementById('myechart'));
+      let myChart = this.$echarts.init(document.getElementById('myechart'));
       const option = {
         title: {
           text: '设备故障年趋势（示例图）',

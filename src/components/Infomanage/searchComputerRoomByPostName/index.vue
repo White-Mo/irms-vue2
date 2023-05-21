@@ -125,8 +125,10 @@
                     disable-transitions>{{ item.status === "0" ? "正常" : "维修中" }}
                   </el-tag>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="7">
                   <el-button type="primary" size="mini" @click="CheckComputerRoom(index)">进入机房</el-button>
+                </el-col>
+                <el-col :span="1">
                 </el-col>
               </el-row>
             </div>
@@ -244,10 +246,13 @@ export default {
       // //console.log(unit,department)
       // //console.log(this.ComputerRoomCard[index])
       this.$store.commit('machineRoom/SET_UnitId', unitid)
-      this.$store.commit('machineRoom/SET_MashRoomId', machineRoomId)
+      this.$store.commit('machineRoom/SET_MachineRoomId', machineRoomId)
       this.$store.commit('machineRoom/SET_Unit', unit)
       this.$store.commit('machineRoom/SET_DEPARTMENT', department)
       this.$store.commit('machineRoom/SET_InstallPosition', installation_position)
+      this.$store.commit('machineRoom/SET_MachineAdministrator', machineAdministrator)
+      this.$store.commit('machineRoom/SET_MachineArea', machineArea)
+      this.$store.commit('machineRoom/SET_MachineLocation', machineLocation)
       // this.$router.push({name: 'computerRoom'})
       this.isShow = '2'
     },
