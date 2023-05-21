@@ -23,7 +23,7 @@
           >
             <span>查询条件：</span>
           </el-col>
-           <el-col
+          <el-col
             :xs="3"
             :sm="3"
             :md="3"
@@ -71,9 +71,8 @@
               type="primary"
               icon="el-icon-search"
               clearable="true"
-              @click="get_data2()"
+              @click="search()"
             >搜索</el-button>
-<!--              rxr-->
           </el-col>
           <el-col
             :xs="2"
@@ -104,23 +103,20 @@
             >批量恢复正常</el-button>
           </el-col>
         </el-row>
-        <el-tabs v-model="tab_name" type="border-card" >
-<!--          @tab-click="changeTab"-->
+        <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
           <el-tab-pane label="正常设备" name="0">
             <el-table
               v-loading="listLoading"
-              :data="tableData"
+              :data="list"
               element-loading-text="Loading"
               border
               highlight-current-row
               stripe
               :row-key="rowKey"
-              @selection-change="handleSelectionChange"
+              @selection-change="handleSelectionNormalChange"
             >
-<!--              shang xia rxr-->
-              <el-table-column align="center" type="selection" :reserve-selection="true" />
-              <el-table-column align="center" type="index"  show-overflow-tooltip/>
-<!--              :index="typeIndex"-->
+              <el-table-column align="center" type="selection" :reserve-selection="true"/>
+              <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column
                 v-for="(value,key,index) in labels"
                 :key="index"
@@ -147,16 +143,15 @@
           <el-tab-pane label="报废设备" name="2">
             <el-table
               v-loading="listLoading"
-              :data="tableData"
+              :data="list"
               element-loading-text="Loading"
               border
               highlight-current-row
               stripe
-              @selection-change="handleSelectionChange"
+              @selection-change="handleSelectionNormalChange"
             >
               <el-table-column align="center" type="selection" />
-<!--              :index="typeIndex"-->
-              <el-table-column align="center" type="index"  show-overflow-tooltip/>
+              <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
@@ -177,23 +172,14 @@
           </el-tab-pane>
         </el-tabs>
         <div class="block">
-<!--          rxr-->
-          <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
-          <el-alert v-if="isMore" title="没有更多数据" type="warning" center show-icon></el-alert>
+          <el-pagination
+            :page-size="limit"
+            :current-page="currentPage"
+            layout="total, prev, pager, next, jumper"
+            :total="total"
+            @current-change="handleCurrentChange"
+          />
         </div>
-        <!--        统计总数据条数-->
-        <div class="tabListPage" style="text-align: center">
-          <h3>
-            共{{totalCount}}条数据
-          </h3>
-        </div>
-<!--          <el-pagination-->
-<!--            :page-size="limit"-->
-<!--            :current-page="currentPage"-->
-<!--            layout="total, prev, pager, next, jumper"-->
-<!--            :total="total"-->
-<!--            @current-change="handleCurrentChange"-->
-<!--          />-->
       </div>
     </div>
   </div>
@@ -201,12 +187,7 @@
 
 <script>
 import { hunhe1 } from '@/layout/mixin/cycleMix'
-import {
-  batchChangeEquipmentStatus,
-  changeStatus, getdataCount,
-  getList,
-  searchComprehensiveInfoByMultipleConditions
-} from '@/api/table'
+import {batchChangeEquipmentStatus,changeStatus} from '@/api/table'
 
 export default {
   filters: {
@@ -225,25 +206,16 @@ export default {
       start:0,
       limit:10,
       tab_name: '0',
+      list: null,
       total: 0,
       currentPage: 1,
+      DataName: 'all',
+      initname: ['123'],
       department: '',
+      inputValue: '',
       postname: '',
       input3: '',
-      listLoading: false,
-      // rxr
-      selectedData: [],    //接收勾选中的数据
-      totalCount: 0,   // 总条数
-      tableData: [],         // 总数据
-      isflag: false,  //决定是否正加载数据
-      isMore: false,  //数据到底了
-      DataName: 'all',
-      ClientHeight:0,
-      isMultiline:false,//是否多条件筛选
-      inputValue: '',
-      initname: ['123'],
-      isEdit:false,   //按钮的显示
-
+      listLoading: true,
       singalInfo: {},
       dataname: [
         {
@@ -296,251 +268,28 @@ export default {
         onlineTime: '上线时间',
         guaranteePeriod: '保修期',
       },
+      selectedData:[],
       tempEquipmentId:[],
     }
   },
   created() {
     //console.log('=======')
-    // this.fetchData()
-    // rxr
-    this.get_data()
-
+    this.fetchData()
   },
-  // rxr
-  mounted() {
-    document.getElementsByClassName('el-table__body-wrapper')[0].addEventListener('scroll',this.load)
-  },
-  destroyed() {
-    document.removeEventListener('scroll',this.load)
-  },
-  watch:{
-    //   watch是一个对象，它有一个属性ClientHeight，它的值是一个函数.  这个函数会在ClientHeight这个数据变化时执行
-    //这个函数的作用是根据isMultiline的值，执行不同的逻辑
-    'ClientHeight':function(curVal,oldVal){
-      this.isflag = true
-      //如果isMultiline为true，则调用searchComprehensiveInfoByMultipleConditions方法，获取更多的表格数据，并更新tableData数组
-      if(this.isMultiline){
-        //把多条件查询组件中传过来的属性字段解析成JSON形式
-        const params=JSON.parse(JSON.stringify(this.infoInput));
-        params.start=this.tableData.length ? this.tableData.length : 0;
-        params.limit=this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15;
-        if(this.tableData.length < this.totalCount){
-          this.isMore=false
-          searchComprehensiveInfoByMultipleConditions(params).then(response=>{
-            response.data.items.forEach(element => {
-              element.isEdit = false;
-            });
-            this.isflag = false
-            if(this.tableData.length < this.totalCount){
-              let num = this.tableData.length + 1
-              for(let i of response.data.items){
-                i["num"] = num
-                num++
-              }
-              this.tableData = this.tableData.concat(response.data.items)
-              this.listLoading=false;
-            }
-          })
-        }else {
-          this.isflag=false
-          this.isMore=true
-        }
-
-      }
-      //如果isMultiline为false，则调用getList方法，根据DataName和inputValue获取更多的表格数据，并更新tableData数组
-      else {
-        if (this.DataName === 'all' || this.DataName.length === 0) {
-          this.initname = ['111']
-        } else {
-          this.initname = JSON.parse(JSON.stringify(this.DataName))
-        }
-        const params = {
-          dataName: this.initname,
-          dataValue: this.inputValue,
-          start: this.tableData.length ? this.tableData.length : 0,
-          limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-          status: ''
-        }
-        if(this.tableData.length < this.totalCount){
-          this.isMore=false
-          getList(params).then((response) => {
-            response.data.items.forEach(element => {
-              element.isEdit = false;
-            });
-            this.isflag = false
-            if(this.tableData.length < this.totalCount){
-              let num = this.tableData.length + 1
-              for(let i of response.data.items){
-                i["num"] = num
-                num++
-              }
-              this.tableData = this.tableData.concat(response.data.items)
-            }
-          })
-        }else {
-          this.isflag=false
-          this.isMore=true
-        }
-      }
-    }
-  },
-
   methods: {
-    // rxr
-    //接收多条件搜索的数据重新渲染
-    // receiveAllSearchData(searchAllData,infoInput,postNameReturn){
-    //   this.dialogVisible = false;
-    //   this.isMultiline=true;
-    //   this.infoInput=infoInput;
-    //   this.infoInput.postName=postNameReturn;
-    //   this.listLoading=true;
-    //   this.tableData=[];
-    //   let num = 1
-    //   for(let i of searchAllData.items){
-    //     i["num"] = num
-    //     num++
-    //   }
-    //   this.tableData = this.tableData.concat(searchAllData.items)
-    //   this.totalCount=searchAllData.total;
-    //   this.listLoading=false
-    // },
-    load (e) {
-      // rxr
-      /*- load是一个方法，它有一个参数e，表示事件对象
-      - 这个方法会在某个元素滚动时执行
-      - 这个方法的作用是判断是否滚动到了元素内容的底部，并更新ClientHeight的值
-        - scrollHeight表示元素内容的总高度，包括不可见部分
-        - scrollTop表示元素已经滚动过的距离，即不可见部分的高度
-        - clientHeight表示元素可见部分的高度，不包括边框、滚动条和外边距
-        - 如果scrollHeight减去scrollTop和clientHeight的差值小于等于40，说明已经接近或达到了底部
-        - 如果ClientHeight等于scrollHeight，说明没有新内容加载，就设置isflag为true，并在一秒后恢复为false
-        - 否则就把scrollHeight赋值给ClientHeight，以便下次比较*/
-      if(e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <= 40){
-        if(this.ClientHeight == e.target.scrollHeight){
-          this.isflag = false
-          setTimeout(()=>{
-            this.isflag = true
-          },10)
-        }
-        this.ClientHeight = e.target.scrollHeight
-        // console.log(this.selectedData);
-      }
-    },
-
-// rxr
-    // search(){
-    //   this.start = 0
-    //   // rxr
-    //   // this.currentPage=1
-    //   this.fetchData()
-    // },
-
-    // rxr
-    //获取总数据，渲染表格
-    get_data() {
-      this.listLoading = true
-      this.isMultiline=false
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        //console.log(this.DataName)
-        this.initname = ['111']
-      } else {
-        this.initname = JSON.parse(JSON.stringify(this.DataName))
-      }
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        start: this.tableData.length ? this.tableData.length : 0,
-        limit: 15,
-        status: '0'
-      }
-      const numparams = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: '0'
-      }
-      getdataCount(numparams).then((response) => {
-        this.totalCount = response.data.total
-      })
-      //console.log("提交请求",params)
-
-      getList(params).then((response) => {
-        response.data.items.forEach(element => {
-          element.isEdit = false;
-        });
-
-        //console.log(response)
-        let num = this.tableData.length + 1
-        for(let i of response.data.items){
-          i["num"] = num
-          num++
-        }
-        this.tableData = this.tableData.concat(response.data.items)
-        this.listLoading=false
-        this.isEdit = false
-      })
-
-    },
-    //单条件搜索
-    get_data2() {
-      this.isMultiline=false
-      this.tableData = []
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        //console.log(this.DataName)
-        this.initname = ['111']
-      } else {
-        this.initname = JSON.parse(JSON.stringify(this.DataName))
-      }
-
-      const numparams = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        status: '0'
-      }
-      const params = {
-        dataName: this.initname,
-        dataValue: this.inputValue,
-        start: this.tableData.length ? this.tableData.length : 0,
-        limit: 15,
-        status: '0'
-      }
-
-      this.totalCount=0;
-      getList(params).then((response) => {
-        response.data.items.forEach(element => {
-          element.isEdit = false;
-        });
-        //console.log(response)
-        let num = this.tableData.length + 1
-        for(let i of response.data.items){
-          i["num"] = num
-          num++
-        }
-        this.tableData = this.tableData.concat(response.data.items)
-        console.log("nml",this.tableData.length)
-        this.listLoading=false
-        getdataCount(numparams).then((response) => {
-          this.totalCount = response.data.total
-        })
-      })
-
-    },
     rowKey(row) {
       // console.log(this.selectedData);
       return row.equipmentId
     },
-    //记录勾选了哪些（条）数据
-    handleSelectionChange(val) {
-      //用selectedData接收所有勾选中的数据
-      this.selectedData = val
-      console.log(this.selectedData);
+    search(){
+      this.start = 0
+      this.currentPage=1
+      this.fetchData()
     },
-
-    //点击取消后，隐藏取消按钮
     handleDetail(index, row) {
       //console.log(index, row)
     },
     handleScrap(index, row) {
-      // console.log(row)
       changeStatus({ id: row.equipmentId, status: '2' }).then(res => {
         this.$message({
           message: '修改成功',
@@ -552,7 +301,6 @@ export default {
       })
     },
     handleRecover(index, row) {
-      console.log(row)
       //console.log(index, row)
       changeStatus({ id: row.equipmentId, status: '0' }).then(res => {
         // this.$router.go(0)
@@ -565,22 +313,24 @@ export default {
         //console.log(err)
       })
     },
-    // rxr
-    // handleCurrentChange(val) {
-    //   this.currentPage=val
-    //   this.start = (val - 1) * this.limit
-    //   this.fetchData()
-    // },
-    // changeTab(name) {
-    //   //console.log(this.tab_name)
-    //   this.start=0
-    //   this.currentPage=1
-    //   this.fetchData()
-    // },
+    handleCurrentChange(val) {
+      this.currentPage=val
+      this.start = (val - 1) * this.limit
+      this.fetchData()
+    },
+    changeTab(name) {
+      //console.log(this.tab_name)
+      this.start=0
+      this.currentPage=1
+      this.fetchData()
+    },
     //分页连续展示   currentPage页码  limit每页数量
-    // typeIndex(index){
-    //   return index+(this.currentPage-1)*this.limit+1
-    // },
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit+1
+    },
+    handleSelectionNormalChange(val){
+      this.selectedData = val
+    },
     //批量报废
     batchScrap(){
       if(this.selectedData.length>=1){
@@ -598,7 +348,6 @@ export default {
         //报废成功，等待2秒后重新刷新数据，重新渲染批量报废成功后的数据
         setTimeout(() => {
           location.reload();
-          this.listLoading = false
         }, 2000)
       }else {
         this.$message.error('请选择要报废的设备')
@@ -621,7 +370,6 @@ export default {
         //报废成功，等待2秒后重新刷新数据，重新渲染批量报废成功后的数据
         setTimeout(() => {
           location.reload();
-          this.listLoading = false
         }, 2000)
       }else {
         this.$message.error('请选择要恢复正常的设备')
@@ -644,18 +392,10 @@ export default {
   color: #0b0c10;
   background-color: #deecff;
 }
- .el-scrollbar {
-   overflow: hidden;
-   position: relative;
- }
- //rxr
-.el-scrollbar .el-scrollbar__wrap {
-  overflow: auto;
-  height: 100%;
-}
-.el-scrollbar__bar.is-vertical > div {
-  width: 0;
-}
+// .el-scrollbar {
+//   overflow: hidden;
+//   position: relative;
+// }
 
 .el-row {
   //margin-bottom: 20px;
@@ -685,11 +425,6 @@ export default {
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
-}
-.tabListPage h3 {
-  padding-top: 0.1rem;
-  padding-bottom: 0.5rem;
-  margin: 0.1rem;
 }
 .row-bg {
   padding: 10px 0;
@@ -738,9 +473,21 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+.el-scrollbar {
+  // height: 380px;
+  overflow: hidden;
+  position: relative;
+}
+.el-scrollbar .el-scrollbar__wrap {
+  overflow: auto;
+  height: 100%;
+}
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
   background-color: #d2d2d2;
+}
+.el-scrollbar__bar.is-vertical > div {
+  width: 0;
 }
 //.el-button--primary {
 //  height: 58px;
@@ -749,3 +496,4 @@ export default {
 //  border-color: #409eff;
 //}
 </style>
+
