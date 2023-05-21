@@ -13,7 +13,7 @@
           </el-form-item>
           <el-form-item label='所属单位' prop='postName'>
             <el-col>
-              <el-select v-model='machineRoomFrom.postName' @change='changePost'>
+              <el-select v-model='machineRoomFrom.postName' @change='changePost':popper-append-to-body ="false">
                 <el-option
                   v-for='item in postAll'
                   :key='item.value'
@@ -169,8 +169,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .source {
   padding: 24px;
+}
+/deep/.el-select-dropdown__list{
+  width: 750px;
+}
+/deep/.el-select-dropdown__item{
+  height: 25px;
 }
 </style>
