@@ -520,6 +520,7 @@ export default {
     },
     async getStatisticsExcel() {
       if (this.selectData.length > 0) {
+        this.StatisticsData1=[]
         // 设备数量
         this.StatisticsData1.push(this.selectData.length)
         // 设备类型
@@ -590,7 +591,7 @@ export default {
         await getExcelDemo3(this.StatisticsData1)
 
       } else {
-
+this.StatisticsData=[]
         // 设备数量
         await getEquipmentCount().then(res => {
           this.StatisticsData.push(res.data.total)
