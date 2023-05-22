@@ -519,6 +519,7 @@ export default {
       }
     },
     async getStatisticsExcel() {
+      this.StatisticsData1=[]
       if (this.selectData.length > 0) {
         // 设备数量
         this.StatisticsData1.push(this.selectData.length)
@@ -590,7 +591,7 @@ export default {
         await getExcelDemo3(this.StatisticsData1)
 
       } else {
-
+        this.StatisticsData=[]
         // 设备数量
         await getEquipmentCount().then(res => {
           this.StatisticsData.push(res.data.total)
@@ -631,6 +632,7 @@ export default {
         })
         // 导入 excel
         await getExcelDemo3(this.StatisticsData,1)
+
 
         // const item_list = [
         //   'getEquipmentCount',
