@@ -17,6 +17,9 @@ const MachineData = () => {
 const state = MachineData()
 
 const mutations = {
+  SET_MashRoomId:(state,machineRoomId) => {
+    state.machineRoomId = machineRoomId
+  },
   SET_MachineLocation:(state,machineLocation) => {
     state.machineLocation = machineLocation
   },
