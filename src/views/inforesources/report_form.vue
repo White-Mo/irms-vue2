@@ -714,7 +714,7 @@ export default {
         if (this.selectData.length > 1) {
           this.centerDialogVisible = true
         } else if (this.selectData.length === 1) {
-          getExcelDemo2(this.selectData)
+          await getExcelDemo2(this.selectData)
           // 取消表格选择
           this.$refs.multipleTable.clearSelection();
           // //console.log('this')
@@ -722,7 +722,7 @@ export default {
           this.$message.error('请选择需要导出的信息')
         }
       } else if (model === 2) {
-        this.getStatisticsExcel()
+        await this.getStatisticsExcel()
       }
     },
     async getExcel2() {
