@@ -13,11 +13,12 @@
         <el-row :gutter="30">
           <el-col :span="5" :offset="1">
             <div class="selectLabel">单位</div>
-            <el-select v-model="form.postName" placeholder="请选择" @change="changePost">
+            <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
               <el-option
                 v-for="item in postAll"
                 :key="item.value"
                 :value="item.postName"
+                class="searchInput"
               />
             </el-select>
           </el-col>
@@ -33,11 +34,12 @@
           </el-col>
           <el-col :span="5">
             <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
+            <el-select v-model="form.equipmentTypeName"  placeholder="请选择">
               <el-option
                 v-for="item in equipmentTypeAll"
                 :key="item.value"
                 :value="item.equipmentTypeName"
+                :title="item.equipmentTypeName"
               />
             </el-select>
           </el-col>
@@ -428,4 +430,16 @@ export default {
 .el-radio:nth-of-type(1){
     margin-right: 35px;
 }
+//覆盖全局样式代码
+/deep/.el-select-dropdown__list{
+  width: 750px !important;
+}
+/deep/.el-select-dropdown__item{
+  height: 26px !important;
+}
+.searchInput {
+  text-align: center;
+}
 </style>
+
+

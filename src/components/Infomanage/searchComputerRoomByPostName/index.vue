@@ -125,10 +125,8 @@
                     disable-transitions>{{ item.status === "0" ? "正常" : "维修中" }}
                   </el-tag>
                 </el-col>
-                <el-col :span="7">
+                <el-col :span="8">
                   <el-button type="primary" size="mini" @click="CheckComputerRoom(index)">进入机房</el-button>
-                </el-col>
-                <el-col :span="1">
                 </el-col>
               </el-row>
             </div>

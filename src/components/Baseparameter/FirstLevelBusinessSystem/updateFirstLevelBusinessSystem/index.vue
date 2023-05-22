@@ -8,7 +8,7 @@
         <el-form ref="editInformation" :model="editInformation" label-width="140px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="editInformation.postName">
+              <el-select v-model="editInformation.postName":popper-append-to-body ="false"><!--:popper-append-to-body ="false"使此元素可以跳出全局样式另外设置-->
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -124,5 +124,12 @@ export default {
 <style lang="less" scoped>
 .edit-business-system{
   padding: 24px;
+}
+//覆盖全局样式代码
+/deep/.el-select-dropdown__list{
+  width: 750px;
+}
+/deep/.el-select-dropdown__item{
+  height: 26px;
 }
 </style>
