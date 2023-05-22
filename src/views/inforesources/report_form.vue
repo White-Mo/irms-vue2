@@ -88,7 +88,7 @@
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
             @sort-change="sortChange"
-            :row-key="record=>record.basicInfoId"
+            :row-key="record=>record.equipmentId"
           >
             <el-table-column width="40" type="selection" :reserve-selection="true"/>
             <el-table-column
