@@ -110,8 +110,9 @@
             :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
+            :row-key="record=>record.basicInfoId"
           >
-            <el-table-column align="center" label="" width="40" type="selection" />
+            <el-table-column align="center" label="" width="40" type="selection" :reserve-selection="true"/>
             <el-table-column align="center" label="" width="50" type="index" />
             <el-table-column
               v-for="(value, key, index) in labels"
