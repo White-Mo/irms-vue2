@@ -426,8 +426,8 @@ export default {
         {value: 'edition', label: ' 中间件品牌规格'},
         {value: 'softwareMiddlewareBuildDate', label: ' 中间件建设时间'},
         {value: 'cloudServiceUnit', label: ' 云服务单位'},
-        {value: 'leased_computing_resources', label: ' 租用计算资源情况（CPU核数）（个）'},
-        {value: 'leasedComputingResources', label: ' 租用存储资源情况（TB）'},
+        {value: 'leasedComputingResources', label: ' 租用计算资源情况（CPU核数）（个）'},
+        {value: 'leasedStorageResources', label: ' 租用存储资源情况（TB）'},
         {value: 'leasedNetworkBandwidth', label: ' 租用网络带宽（兆）'},
         {value: 'termOfLease', label: ' 租用期限（年）'},
         {value: 'domainName', label: ' 域名'},
@@ -436,8 +436,17 @@ export default {
         {value: 'cname', label: ' CNAME记录（别名）'},
         {value: 'useCDN', label: ' 是否使用CDN'},
         {value: 'networkArea', label: '网络区域'},
+        {value: 'isChinaLocalization', label: '是否国产化'},
+        {value: 'isTestBusinessSystem', label: '正式业务/实验业务'},
+        {value: 'pool', label: '所属资源池'},
+        {value: 'isTransfer', label: '是否存在调拨'},
+        {value: 'transferRecord', label: '设备调拨记录'},
+        {value: 'transferRecordTime', label: '调拨记录时间'},
+        {value: 'isMoving', label: '是否存在移动'},
+        {value: 'movingRecord', label: '设备移动记录'},
+        {value: 'movingRecordTime', label: '设备移动时间'},
+        {value: 'businessApplicationName', label: '业务应用名称'},
       ],
-
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
         {

@@ -723,7 +723,20 @@ export function getRowEquipment(outdata, userInfo) {
 
   return { equipment, readStatus }
 }
-
+//拼接多个列信息
+function notNull(name,num,type,outdata){
+  let res=''
+  for(let i=1;i<num+1;i++){
+    if(outdata[0][name+num.toString()+type]!=''){
+      if(res!=''){
+        res=res+";"+outdata[0][name+num+type]
+      }else {
+        res=outdata[0][name+num+type]
+      }
+    }
+  }
+  return res
+}
 // 基本信息
 function getRowBaseinfo(outdata) {
   const equipmentBaseInfo = {
@@ -782,16 +795,20 @@ function getRowBaseinfo(outdata) {
     isUpdate: false,//是否覆盖更新
     isChinaLocalization: false,//是否国产化
     isTestBusinessSystem: false, //正式或者测试业务
-    pool:''//所属资源池
+    pool:'',//所属资源池
+    isTransfer:false,//是否存在调拨
+    transferRecord:'',//设备调拨记录
+    transferRecordTime:'',//设备调拨记录时间
+    isMoving:false,//是否存在移动
+    movingRecord:'',//设备移动记录
+    movingRecordTime:'',//设备移动记录时间
+    businessApplicationName:'',//业务应用名称、
   }
 
-  equipmentBaseInfo.networkArea = outdata[0]['网络区域']
+
+  equipmentBaseInfo.dataSources = 'EXCEL批量导入'
   equipmentBaseInfo.hostName = outdata[0]['主机名']
   equipmentBaseInfo.remarks = outdata[0]['备注']
-  equipmentBaseInfo.isUpdate = outdata[0]['是否覆盖更新'] === '否' ? false : true
-  equipmentBaseInfo.dataSources = 'EXCEL批量导入'
-  equipmentBaseInfo.pool=outdata[0]['所属资源池']
-
   //新增字段
   equipmentBaseInfo.deploymentEnvironment = outdata[0]['部署环境']
   equipmentBaseInfo.accessLocation = outdata[0]['接入位置']
@@ -809,13 +826,23 @@ function getRowBaseinfo(outdata) {
   equipmentBaseInfo.ns = outdata[0]['NS记录']
   equipmentBaseInfo.cname = outdata[0]['CNAME记录（别名）']
   equipmentBaseInfo.useCDN = outdata[0]['是否使用CDN']
+  equipmentBaseInfo.networkArea = outdata[0]['网络区域']
+
+  equipmentBaseInfo.isUpdate = outdata[0]['是否覆盖更新']
+
+  equipmentBaseInfo.pool=outdata[0]['所属资源池']
+  equipmentBaseInfo.isTransfer=outdata[0]['是否存在调拨']
+  equipmentBaseInfo.transferRecord=notNull('设备调拨记录',2,'',outdata)
+  equipmentBaseInfo.transferRecordTime=notNull('设备调拨记录',2,'时间',outdata)
+  equipmentBaseInfo.isMoving=outdata[0]['是否存在移动']
+  equipmentBaseInfo.movingRecord=outdata[0]['设备移动记录']
+  equipmentBaseInfo.movingRecordTime=outdata[0]['设备移动记录时间']
+  equipmentBaseInfo.businessApplicationName=outdata[0]['业务应用名称']
+  equipmentBaseInfo.isChinaLocalization=outdata[0]['是否国产化']
 
   let readStatus0 = []
   // const { status: equipmentName, readStatus: readStatus1 } = underfindTransRow(outdata[0][3], '设备名称', readStatus0)// 设备名称
   equipmentBaseInfo.equipmentName = outdata[0]['设备名称']
-  equipmentBaseInfo.isUpdate = outdata[0]['是否覆盖更新']
-  equipmentBaseInfo.isChinaLocalization=outdata[0]['是否国产化']
-
   if(outdata[0]['设备状态']==='在用'){
     equipmentBaseInfo.status=0
   }else if(outdata[0]['设备状态']==='停用'){
@@ -893,6 +920,7 @@ function getRowBaseinfo(outdata) {
   equipmentBaseInfo.businessOrExperimental = outdata[0]['业务机/实验机']// 业务机试验机
   equipmentBaseInfo.mainOrBackup = outdata[0]['主机/备机']// 主机 备机
   equipmentBaseInfo.migratable = outdata[0]['是否可迁移']// 是否迁移
+  equipmentBaseInfo.shelfOff=outdata[0]['是否可下架']
 
   const {
     status: brandName,
@@ -964,20 +992,7 @@ function getRowBaseinfo(outdata) {
 }
 
 // 配置信息  通用软件信息
-//拼接多个列信息
-function notNull(name,num,type,outdata){
-  let res=''
-  for(let i=1;i<num+1;i++){
-    if(outdata[0][name+num.toString()+type]!=''){
-      if(res!=''){
-        res=res+";"+outdata[0][name+num+type]
-      }else {
-        res=outdata[0][name+num+type]
-      }
-    }
-  }
-  return res
-}
+
 function getRowConfig(outdata) {
   const configs = []
   const softwares = []
@@ -1006,7 +1021,7 @@ function getRowConfig(outdata) {
   configMemory.projectName = '内存（GB）'//项目(内存)
   configMemory.type = ''
   configMemory.frequency = '' //性能指标
-  configMemory.corenessOrCapacity = outdata[index]['内存容量'] //数量指标
+  configMemory.corenessOrCapacity = outdata[index]['内存容量(GB)'] //数量指标
   configMemory.quantity = ''
   configs.push(configMemory)
   var softwareOperatingSystem = {
