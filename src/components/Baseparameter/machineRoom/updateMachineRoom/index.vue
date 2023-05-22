@@ -7,7 +7,7 @@
       <el-row>
         <el-form ref='machineRoomFrom' :model='machineRoomFrom = this.machineRoom' label-width='120px' :rules='rules' :inline='false'>
           <el-form-item label='机房名称' prop='machineRoomName'>
-            <el-col>
+            <el-col :span="10">
               <el-input v-model='machineRoomFrom.machineRoomName'/>
             </el-col>
           </el-form-item>
@@ -24,17 +24,17 @@
             </el-col>
           </el-form-item>
           <el-form-item label='机房管理员' prop='machineAdministrator'>
-            <el-col>
+            <el-col :span="10">
               <el-input v-model='machineRoomFrom.machineAdministrator'/>
             </el-col>
           </el-form-item>
           <el-form-item label='机房面积' prop='machineArea'>
-            <el-col>
+            <el-col :span="10">
               <el-input v-model='machineRoomFrom.machineArea'/>
             </el-col>
           </el-form-item>
           <el-form-item label='机房位置' prop='machineLocation'>
-            <el-col>
+            <el-col :span="10">
               <el-input v-model='machineRoomFrom.machineLocation'/>
             </el-col>
           </el-form-item>
