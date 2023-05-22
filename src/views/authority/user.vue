@@ -174,7 +174,7 @@
             </div>
             <div>
               部门
-              <el-select v-model="update_data.department" placeholder="请选择"  style="width: 20rem;left:2.8rem;">
+              <el-select v-model="update_data.department" placeholder="请选择":popper-append-to-body ="false" style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in departmentAll"
                   :key="item.departmentId"
@@ -642,7 +642,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+/deep/.el-select-dropdown__list{
+  width: 900px;
+}
+
 .dashboard {
   &-container {
     margin: 30px;

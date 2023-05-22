@@ -8,7 +8,7 @@
         <el-form ref="editInBusinessSystemFormation" :model="editInBusinessSystemFormation" label-width="150px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost">
+              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost":popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item label="所属一级业务系统" prop="businessSystemFirstName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" filterable placeholder="请选择">
+              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" filterable placeholder="请选择":popper-append-to-body ="false">
                 <el-option
                   v-for="item in businessSystemFirst"
                   :key="item.value"
@@ -196,4 +196,14 @@ export default {
 .edit-business-system{
   padding: 24px;
 }
+/deep/.el-select-dropdown__list{
+  width: 900px;
+}
+/deep/.el-select-dropdown__item{
+  height: 27px;
+}
+/deep/ .el-popper{
+  top: -120px !important;
+}
+
 </style>
