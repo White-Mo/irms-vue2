@@ -65,7 +65,7 @@
               size="medium"
               type="primary"
               @click="addFirstLevelBusinessSystem()"
-            >添加一级业务系统</el-button>
+            >添加业务系统</el-button>
           </el-col>
           </el-row>
         <el-table
@@ -153,7 +153,7 @@ export default {
       header: [ //表头
         {
           value: 'businessSystemFirstName',
-          label: '一级业务系统名称',
+          label: '业务系统名称',
         },
         {
           value: 'postName',
@@ -213,16 +213,16 @@ export default {
       }
 
     },
-    //弹出添加一级业务系统页面
+    //弹出添加业务系统页面
     addFirstLevelBusinessSystem(){
       this.ifShow = '1'
       this.showData()
     },
-    //删除一级业务系统
+    //删除业务系统
     handleDelete(index, row) {
       const businessSystemFirstId = row.businessSystemFirstId
 
-      this.$alert(`是否永久删除一级业务系统: \"${row.businessSystemFirstName}\"`, '提示', {
+      this.$alert(`是否永久删除业务系统: \"${row.businessSystemFirstName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -242,7 +242,7 @@ export default {
       })
 
     },
-    //查询一级业务系统
+    //查询业务系统
     businessSystemFirstLevelSearch(){
       this.isSearch = true
       const params = {
@@ -256,7 +256,7 @@ export default {
         this.total = response.data.total
       })
     },
-    //修改一级业务系统
+    //修改业务系统
     handleEdit(index, row) {
       this.row = row
       this.ifShow = '2'

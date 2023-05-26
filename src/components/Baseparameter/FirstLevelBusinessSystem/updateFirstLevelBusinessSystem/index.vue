@@ -1,7 +1,7 @@
 <template>
   <div class="addFirstLevelBusinessSystem-panel">
     <div class="edit-business-system">
-      <el-page-header content="修改一级业务系统" @back="back" />
+      <el-page-header content="修改业务系统" @back="back" />
     </div>
     <div class="edit-business-system">
       <el-row>
@@ -17,13 +17,13 @@
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="一级业务系统名称" prop="businessSystemFirstName">
+          <el-form-item label="业务系统名称" prop="businessSystemFirstName">
             <el-col :span="10">
               <el-input v-model="editInformation.businessSystemFirstName" />
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('editInformation')">修改一级业务系统</el-button>
+            <el-button type="primary" @click="onSubmit('editInformation')">修改业务系统</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -40,11 +40,11 @@ export default {
   data(){
     const checkName = async (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('一级业务系统不能为空'))
+        return callback(new Error('业务系统不能为空'))
       } else {
         await this.getNameRules()
         if (!this.nameRules) {
-          callback(new Error('该一级业务系统已存在，请重新输入'))
+          callback(new Error('该业务系统已存在，请重新输入'))
         } else {
           callback()
         }
@@ -60,7 +60,7 @@ export default {
       },
       rules: {
         businessSystemFirstName:[
-          { required: true, message: '请输入一级业务系统名称', trigger: 'blur' },
+          { required: true, message: '请输入业务系统名称', trigger: 'blur' },
           {validator: checkName, trigger: 'blur'}
         ]
       }

@@ -88,7 +88,7 @@
               size="medium"
               type="primary"
               @click="addBusinessSystem()"
-            >添加二级业务系统</el-button>
+            >添加业务子系统</el-button>
           </el-col>
         </el-row>
         <el-table
