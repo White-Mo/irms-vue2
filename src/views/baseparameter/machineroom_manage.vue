@@ -44,7 +44,7 @@
               size='medium'
             />
           </el-col>
-          <el-col :span='1'>
+          <el-col :span='2.5'>
             <el-button
               size='medium'
               type='primary'
@@ -54,7 +54,7 @@
             >搜索
             </el-button>
           </el-col>
-          <el-col :span='2'>
+          <el-col :span='2.5'>
             <el-button
               size='medium'
               type='primary'
