@@ -45,19 +45,13 @@ export default {
   name:'updateEquipmentSecondType',
   props: ['row'],
   data(){
-    var checkName = async (rule, value, callback) => {
+    const checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('设备类型名称不能为空'))
       } else {
-        await this.getNameRules()
-        if (!this.nameRules) {
-          callback(new Error('设备已存在，请重新输入'))
-        } else {
-          callback()
-        }
+        callback()
       }
-      callback()
-    }
+    };
     return{
       equipmentSecondType: {
         equipmentSecondTypeName: this.row.equipmentTypeName,
@@ -119,7 +113,7 @@ export default {
         }
       });
     },
-    async getNameRules() {
+    /*async getNameRules() {
       const equipmentSecondType = { ...this.equipmentSecondType }
       await checkEquipmentTypeSecondName(equipmentSecondType).then((res) => {
         if (res.data.valid === true) {
@@ -128,7 +122,7 @@ export default {
           this.nameRules = false
         }
       })
-    },
+    },*/
   }
 }
 </script>

@@ -237,25 +237,14 @@ export default {
     addPost() {
       this.ifUpdate ='1'
     },
-    // addPost() {
-    //   this.ifUpdate ='1'
-    // },
     handleDetail(index, row) {
       this.ifUpdate ='2'
       this.row = row
     },
-    // handleDetail(index, row) {
-    //   this.ifUpdate ='2'
-    //   this.row = row
-    // },
     handleEdit(index, row) {
       this.ifUpdate ='3'
       this.row = row
     },
-    // handleEdit(index, row) {
-    //   this.ifUpdate ='3'
-    //   this.row = row
-    // },
     handleDelete(index, row) {
       this.$alert(`是否永久删除单位:\"${row.postName}\"`, '提示', {
         confirmButtonText: '确定',
@@ -276,26 +265,6 @@ export default {
         }
       })
     },
-    // handleDelete(index, row) {
-    //   this.$alert("是否永久删除该单位", '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'info',
-    //     callback: (action, instance) => {
-    //       if (action === 'confirm') {
-    //         delPost(row.postId).then((response) => {
-    //           this.$alert(response.data, '提示', {
-    //             confirmButtonText: '确定',
-    //             type: 'info',
-    //             showClose: false
-    //           }).then(() => {
-    //             this.fetchData()
-    //           })
-    //         })
-    //       }
-    //     }
-    //   })
-    // },
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit=val
@@ -310,6 +279,7 @@ export default {
         limit: this.limit
       }
       getPostByPage(params).then((response) => {
+        console.log("response",response)
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

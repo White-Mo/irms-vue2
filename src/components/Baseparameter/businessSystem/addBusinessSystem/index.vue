@@ -41,7 +41,12 @@
           </el-form-item>
           <el-form-item label="业务子系统等级" prop="businessSystemLevel">
             <el-col :span="10">
-              <el-input v-model="addInformation.businessSystemLevel" />
+              <el-select v-model="addInformation.businessSystemLevel">
+                <el-option
+                  v-for="item in level"
+                  :value="item.sonSystemLevel"
+                />
+              </el-select>
             </el-col>
           </el-form-item>
           <el-form-item label="业务子系统名称" prop="businessSystemName">
@@ -89,6 +94,15 @@ export default {
       postAll: [],
       departmentAll: [],
       businessSystemFirst:[],
+      level:[{
+        sonSystemLevel: '一级'
+      },{
+        sonSystemLevel: '二级'
+      },{
+        sonSystemLevel: '三级'
+      },{
+        sonSystemLevel: '未定级'
+      },],
       addInformation:{
         postName:'',
         departmentName:'',

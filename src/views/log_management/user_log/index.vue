@@ -18,35 +18,6 @@
             </el-calendar>
           </el-col>
           <el-col :span="17" style="height: 78vh;">
-<!--            <el-table
-              height="78vh"
-              :row-style="{height:'5.20vh'}"
-              :cell-style="{padding:'0px'}"
-              v-loading="listLoading"
-              :disable="true"
-              :data="handlersData"
-              element-loading-text="Loading"
-              border
-              highlight-current-row
-              stripe
-            >
-              <el-table-column
-                type='index'
-                align='center'
-                show-overflow-tooltip
-              >
-              </el-table-column>
-              <el-table-column
-                v-for="(item,index) in handlers"
-                :key="index"
-                :label="item.label"
-                :prop="item.value"
-                :formatter="item.formatter"
-                align="center"
-              >
-              </el-table-column>
-            </el-table>-->
-
             <el-table border :data="tableList">
               <template v-if="operationUnitAndCount.length==0">
                 <el-table-column label="单位" align="center" prop="unitName"></el-table-column>
@@ -117,6 +88,7 @@ export default {
       this.operationUnit = [];
       this.returnResult1 = [];
       this.returnResult2 = [];
+      this.tableList = [];
       this.operationUnitAndCount = [];
       this.selectedDate = moment(date).format('YYYY-MM-DD')
       this.returnResult1 = await getUserAndCountByCurrentDay(this.selectedDate)

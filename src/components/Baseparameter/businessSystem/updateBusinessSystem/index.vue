@@ -41,7 +41,12 @@
           </el-form-item>
           <el-form-item label="业务子系统等级" prop="businessSystemLevel">
             <el-col :span="10">
-              <el-input v-model="editInBusinessSystemFormation.businessSystemLevel"  placeholder="请选择"/>
+              <el-select v-model="editInBusinessSystemFormation.businessSystemLevel">
+                <el-option
+                  v-for="item in level"
+                  :value="item.sonSystemLevel"
+                />
+              </el-select>
             </el-col>
           </el-form-item>
           <el-form-item label="业务子系统名称" prop="businessSystemName">
@@ -76,21 +81,24 @@ export default {
     const checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('业务系统不能为空'))
-      } else {
-        await this.getNameRules()
-        if (!this.nameRules) {
-          callback(new Error('该业务系统已存在，请重新输入'))
-        } else {
+      }  else {
           callback()
         }
-      }
-      callback()
     };
     return{
       roleid: user.state.roleid,
       postAll: [],
       departmentAll: [],
       businessSystemFirst:[],
+      level:[{
+        sonSystemLevel: '一级'
+      },{
+        sonSystemLevel: '二级'
+      },{
+        sonSystemLevel: '三级'
+      },{
+        sonSystemLevel: '未定级'
+      },],
       editInBusinessSystemFormation:{
         postName:this.row.postName,
         departmentName:this.row.departmentName,
@@ -159,18 +167,6 @@ export default {
           return false;
         }
       });
-    },
-
-    // 验证添加的业务系统是否存在
-    async getNameRules() {
-      const editInBusinessSystemFormation = { ...this.editInBusinessSystemFormation }
-      await checkBusinessSystemName(editInBusinessSystemFormation).then((res) => {
-        if (res.data.valid === true) {
-          this.nameRules = true
-        } else {
-          this.nameRules = false
-        }
-      })
     },
 
     changePost(val) {
