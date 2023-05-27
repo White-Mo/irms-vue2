@@ -201,7 +201,7 @@ export default {
 
         {
           value: 'businessSystemName',
-          label: '业务系统名称',
+          label: '业务子系统名称',
         },
         {
           value: 'businessSystemLevel',
@@ -209,7 +209,7 @@ export default {
         },
         {
           value: 'businessSystemFirstName',
-          label: '所属一级业务系统',
+          label: '所属业务系统',
         },
         {
           value: 'departmentName',
