@@ -13,11 +13,12 @@
         <el-row :gutter="30">
           <el-col :span="5" :offset="1">
             <div class="selectLabel">单位</div>
-            <el-select v-model="form.postName" placeholder="请选择" @change="changePost">
+            <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
               <el-option
                 v-for="item in postAll"
                 :key="item.value"
                 :value="item.postName"
+                class="searchInput"
               />
             </el-select>
           </el-col>
@@ -33,11 +34,12 @@
           </el-col>
           <el-col :span="5">
             <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
+            <el-select v-model="form.equipmentTypeName"  placeholder="请选择">
               <el-option
                 v-for="item in equipmentTypeAll"
                 :key="item.value"
                 :value="item.equipmentTypeName"
+                :title="item.equipmentTypeName"
               />
             </el-select>
           </el-col>
@@ -212,7 +214,7 @@ export default {
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
         appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
-        appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
+        appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
@@ -224,7 +226,7 @@ export default {
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
       appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
-      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
+      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
@@ -428,4 +430,16 @@ export default {
 .el-radio:nth-of-type(1){
     margin-right: 35px;
 }
+//覆盖全局样式代码
+/deep/.el-select-dropdown__list{
+  width: 750px !important;
+}
+/deep/.el-select-dropdown__item{
+  height: 26px !important;
+}
+.searchInput {
+  text-align: center;
+}
 </style>
+
+

@@ -8,7 +8,7 @@
         <el-form ref="editInBusinessSystemFormation" :model="editInBusinessSystemFormation" label-width="150px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost">
+              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost":popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -28,9 +28,9 @@
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="所属一级业务系统" prop="businessSystemFirstName">
+          <el-form-item label="所属业务系统" prop="businessSystemFirstName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" filterable placeholder="请选择">
+              <el-select v-model="editInBusinessSystemFormation.businessSystemFirstName" filterable placeholder="请选择":popper-append-to-body ="false">
                 <el-option
                   v-for="item in businessSystemFirst"
                   :key="item.value"
@@ -39,12 +39,12 @@
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="业务系统等级" prop="businessSystemLevel">
+          <el-form-item label="业务子系统等级" prop="businessSystemLevel">
             <el-col :span="10">
               <el-input v-model="editInBusinessSystemFormation.businessSystemLevel"  placeholder="请选择"/>
             </el-col>
           </el-form-item>
-          <el-form-item label="业务系统名称" prop="businessSystemName">
+          <el-form-item label="业务子系统名称" prop="businessSystemName">
             <el-col :span="10">
               <el-input v-model="editInBusinessSystemFormation.businessSystemName" />
             </el-col>
@@ -75,11 +75,11 @@ export default {
   data(){
     const checkName = async (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('一级业务系统不能为空'))
+        return callback(new Error('业务系统不能为空'))
       } else {
         await this.getNameRules()
         if (!this.nameRules) {
-          callback(new Error('该一级业务系统已存在，请重新输入'))
+          callback(new Error('该业务系统已存在，请重新输入'))
         } else {
           callback()
         }
@@ -196,4 +196,14 @@ export default {
 .edit-business-system{
   padding: 24px;
 }
+/deep/.el-select-dropdown__list{
+  width: 900px;
+}
+/deep/.el-select-dropdown__item{
+  height: 27px;
+}
+/deep/ .el-popper{
+  top: -120px !important;
+}
+
 </style>

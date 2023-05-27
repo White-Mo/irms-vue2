@@ -41,6 +41,9 @@ const mutations = {
   SET_InstallPosition: (state, installation_position) => {
     state.installation_position = installation_position
   },
+  SET_MachineRoomId:(state,machineRoomId) => {
+    state.machineRoomId = machineRoomId
+  }
 }
 
 

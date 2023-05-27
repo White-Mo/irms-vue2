@@ -800,8 +800,7 @@ export default {
 .roomCard{
   width: 18rem;
   height: 10rem;
-  margin-left: 2rem;
-  margin-top: 1rem;
+  margin: 1rem;
 }
 
 

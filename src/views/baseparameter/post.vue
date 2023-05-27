@@ -87,7 +87,7 @@
           >
             <el-button
               size="medium"
-              type="info"
+              type="primary"
               @click="addPost()"
             >添加单位</el-button>
           </el-col>

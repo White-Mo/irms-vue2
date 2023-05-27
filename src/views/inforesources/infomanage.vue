@@ -368,50 +368,52 @@ export default {
         {value: 'deploymentEnvironment', label: ' 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）'},
         {
           value: 'onlineTime',
-          label: '设备上线安装日期',
+          label: '上线时间',
           formatter: function (row) {
             var time = row.onlineTime
-            if (!time) {
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year + '-' + month + '-' + day
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
         {
           value: 'offlineTime',
-          label: '维保结束日期',
+          label: '下线时间',
           formatter: function (row) {
             var time = row.offlineTime
-            if (!time) {
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date = new Date(time)
-            var year = date.getFullYear()
-            /* 在日期格式中，月份是从0开始的，因此要加0
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-            var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-            var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-            var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year + '-' + month + '-' + day
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
         {value: 'remarks', label: ' 备注'},
@@ -424,8 +426,8 @@ export default {
         {value: 'edition', label: ' 中间件品牌规格'},
         {value: 'softwareMiddlewareBuildDate', label: ' 中间件建设时间'},
         {value: 'cloudServiceUnit', label: ' 云服务单位'},
-        {value: 'leased_computing_resources', label: ' 租用计算资源情况（CPU核数）（个）'},
-        {value: 'leasedComputingResources', label: ' 租用存储资源情况（TB）'},
+        {value: 'leasedComputingResources', label: ' 租用计算资源情况（CPU核数）（个）'},
+        {value: 'leasedStorageResources', label: ' 租用存储资源情况（TB）'},
         {value: 'leasedNetworkBandwidth', label: ' 租用网络带宽（兆）'},
         {value: 'termOfLease', label: ' 租用期限（年）'},
         {value: 'domainName', label: ' 域名'},
@@ -434,8 +436,17 @@ export default {
         {value: 'cname', label: ' CNAME记录（别名）'},
         {value: 'useCDN', label: ' 是否使用CDN'},
         {value: 'networkArea', label: '网络区域'},
+        {value: 'isChinaLocalization', label: '是否国产化'},
+        {value: 'isTestBusinessSystem', label: '正式业务/实验业务'},
+        {value: 'pool', label: '所属资源池'},
+        {value: 'isTransfer', label: '是否存在调拨'},
+        {value: 'transferRecord', label: '设备调拨记录'},
+        {value: 'transferRecordTime', label: '调拨记录时间'},
+        {value: 'isMoving', label: '是否存在移动'},
+        {value: 'movingRecord', label: '设备移动记录'},
+        {value: 'movingRecordTime', label: '设备移动时间'},
+        {value: 'businessApplicationName', label: '业务应用名称'},
       ],
-
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
         {

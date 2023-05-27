@@ -88,9 +88,10 @@
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
             @sort-change="sortChange"
-            :row-key="record=>record.basicInfoId"
+            :row-key="rowKey"
           >
-            <el-table-column width="40" type="selection" :reserve-selection="true"/>
+            <el-table-column label="" width="40" type="selection" :reserve-selection="true" />
+            <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -426,6 +427,10 @@ export default {
     search(){
       this.dialogVisible = true
     },
+    // rxr
+    rowKey(row) {
+      return row.equipmentId
+    },
     get_data() {
       this.isMultiline=false
       if (this.DataName === 'all' || this.DataName.length === 0) {
@@ -519,8 +524,8 @@ export default {
       }
     },
     async getStatisticsExcel() {
-      this.StatisticsData1=[]
       if (this.selectData.length > 0) {
+        this.StatisticsData1=[]
         // 设备数量
         this.StatisticsData1.push(this.selectData.length)
         // 设备类型
@@ -591,7 +596,7 @@ export default {
         await getExcelDemo3(this.StatisticsData1)
 
       } else {
-        this.StatisticsData=[]
+this.StatisticsData=[]
         // 设备数量
         await getEquipmentCount().then(res => {
           this.StatisticsData.push(res.data.total)
@@ -633,7 +638,6 @@ export default {
         // 导入 excel
         await getExcelDemo3(this.StatisticsData,1)
 
-
         // const item_list = [
         //   'getEquipmentCount',
         //   '../baseparameter/getEquipmentTypeCount',
@@ -667,9 +671,11 @@ export default {
 
       }
     },
+    // rxr
     handleSelectionChange(val) {
+      //用selectedData接收所有勾选中的数据
       this.selectData = val
-      console.log(val)
+      console.log(this.selectedData);
     },
     selectAllFun(val){
       if(val.length!=0){

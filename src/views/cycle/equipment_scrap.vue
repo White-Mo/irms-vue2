@@ -23,7 +23,7 @@
           >
             <span>查询条件：</span>
           </el-col>
-           <el-col
+          <el-col
             :xs="3"
             :sm="3"
             :md="3"
@@ -112,9 +112,10 @@
               border
               highlight-current-row
               stripe
+              :row-key="rowKey"
               @selection-change="handleSelectionNormalChange"
             >
-              <el-table-column align="center" type="selection" />
+              <el-table-column align="center" type="selection" :reserve-selection="true"/>
               <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column
                 v-for="(value,key,index) in labels"
@@ -276,6 +277,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    rowKey(row) {
+      // console.log(this.selectedData);
+      return row.equipmentId
+    },
     search(){
       this.start = 0
       this.currentPage=1
@@ -491,3 +496,4 @@ export default {
 //  border-color: #409eff;
 //}
 </style>
+

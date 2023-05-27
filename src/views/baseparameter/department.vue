@@ -123,7 +123,7 @@
               </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="postName" label="部门所属单位" ></el-table-column>
+          <el-table-column prop="postName" label="部门所属单位"></el-table-column>
           <el-table-column prop="postCode"  label="" ></el-table-column>
           <el-table-column prop="operation" label="" ></el-table-column>
       </el-table>
@@ -397,4 +397,6 @@ export default {
   border-bottom: 1px solid #EBEEF5;
   background-color: beige;
 }
+
+
 </style>
