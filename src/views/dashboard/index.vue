@@ -1863,14 +1863,13 @@ export default {
       return result
     },
     // 饼状图图例
-    /* getDepartmentEqLabData(chart1Count) {
+     getDepartmentEqLabData(chart1Count) {
        let lab = []
        for (let i = 0; i < chart1Count.length; i++) {
          lab.push(chart1Count[i].name)
        }
        return lab
      },
- */
     // 获取当前单位的所有部门的各自的所有种类设备统计
     async handleEquipmentAllCountData(postId) {
       let result = []

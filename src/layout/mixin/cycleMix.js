@@ -7,7 +7,6 @@
 import {getList, getdataCount} from '@/api/table'
 export const hunhe1 = {
   methods: {
-
     fetchData() {
       this.listLoading = true
       if (this.DataName === 'all' || this.DataName.length === 0) {

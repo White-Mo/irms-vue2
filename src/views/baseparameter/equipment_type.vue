@@ -103,7 +103,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" />
+          <el-table-column align="center" type="index" :index="typeIndex" />
           <el-table-column
             v-for="(item,index) in basicvalue"
             :key="index"
@@ -131,6 +131,7 @@
         <div class="block">
           <el-pagination
             :page-size="10"
+            :current-page="currentPage"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
@@ -172,7 +173,7 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage: 0,
+      currentPage: 1,
       limit:10,
       basicValue: '',
       initName:'',
@@ -215,7 +216,7 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage,
+        start: this.currentPage-1,
         limit: this.limit
       }
       // //console.log(this.initName)
@@ -265,11 +266,12 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: val-1,
-        limit: 10
+        start: this.currentPage-1,
+        limit: this.limit
       }
       getEquipmentTypeByPage(params).then((response) => {
         this.list = response.data.items
@@ -280,6 +282,10 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
       this.fetchData()
+    },
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
     }
   }
 }

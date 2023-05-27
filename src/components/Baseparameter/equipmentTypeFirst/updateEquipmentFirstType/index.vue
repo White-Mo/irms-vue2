@@ -38,15 +38,9 @@ export default {
     var checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('设备类型名称不能为空'))
-      } else {
-        await this.getNameRules()
-        if (!this.nameRules) {
-          callback(new Error('设备已存在，请重新输入'))
-        } else {
+      }  else {
           callback()
         }
-      }
-      callback()
     }
     return{
       equipmentFirstType: {
@@ -95,7 +89,7 @@ export default {
         }
       });
     },
-    async getNameRules() {
+    /*async getNameRules() {
       const equipmentFirstType = { ...this.equipmentFirstType }
       await checkEquipmentTypeFirstName(equipmentFirstType).then((res) => {
         if (res.data.valid === true) {
@@ -104,7 +98,7 @@ export default {
           this.nameRules = false
         }
       })
-    },
+    },*/
   }
 }
 </script>
