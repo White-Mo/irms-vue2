@@ -91,26 +91,26 @@
                 <el-row>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.businessOrExperimental">
-                      <el-radio label="1">业 务 机</el-radio>
-                      <el-radio label="0">实 验 机</el-radio>
+                      <el-radio label="0">业 务 机</el-radio>
+                      <el-radio label="1">实 验 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.mainOrBackup">
-                      <el-radio label="1">主 机</el-radio>
-                      <el-radio label="0">备 机</el-radio>
+                      <el-radio label="0">主 机</el-radio>
+                      <el-radio label="1">备 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.tureOrVirtual">
+                    <el-radio-group v-model="form.trueOrVirtual">
                       <el-radio label="1">实 体 机</el-radio>
                       <el-radio label="0">虚 拟 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.migratable">
-                      <el-radio label="1">可 迁 移</el-radio>
-                      <el-radio label="0">不可迁移</el-radio>
+                      <el-radio label="0">可 迁 移</el-radio>
+                      <el-radio label="1">不可迁移</el-radio>
                     </el-radio-group>
                   </div></el-col>
                 </el-row>
@@ -201,7 +201,7 @@ export default {
       equipment: {
         appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
-          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
+          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', trueOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },

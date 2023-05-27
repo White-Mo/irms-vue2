@@ -127,7 +127,7 @@ function getBaseinfo(outdata, postName, userInfo) {
     appAdminPhone: '',
     businessOrExperimental: '', // 业务机试验机
     mainOrBackup: '', // 主机 备机
-    tureOrVirtual: '', // 实体机虚拟机
+    trueOrVirtual: '', // 实体机虚拟机
     migratable: '', // 是否可迁移
     brandName: '', // 品牌
     brandModelName: '', // 型号
@@ -203,7 +203,7 @@ function getBaseinfo(outdata, postName, userInfo) {
 
   equipmentBaseInfo.businessOrExperimental = statusTrans(Object.values(outdata[3])[1])// 业务机试验机
   equipmentBaseInfo.mainOrBackup = statusTrans(Object.values(outdata[3])[4]) // 主机 备机
-  equipmentBaseInfo.tureOrVirtual = statusTrans(Object.values(outdata[3])[6]) // 实体机虚拟机
+  equipmentBaseInfo.trueOrVirtual = statusTrans(Object.values(outdata[3])[6]) // 实体机虚拟机
   equipmentBaseInfo.migratable = statusTrans(Object.values(outdata[3])[8]) // 是否迁移
 
   const {
@@ -763,7 +763,7 @@ function getRowBaseinfo(outdata) {
     appAdminPhone: '',
     businessOrExperimental: '', // 业务机试验机
     mainOrBackup: '', // 主机 备机
-    tureOrVirtual: '', // 实体机虚拟机
+    trueOrVirtual: '', // 实体机虚拟机
     migratable: '', // 是否可迁移
     brandName: '', // 品牌
     brandModelName: '', // 型号
@@ -887,11 +887,11 @@ function getRowBaseinfo(outdata) {
   } else if (Serial[2] === 'S' || Serial[2] === 's' || Serial[2] === 'X' || Serial[2] === 'x') {
     equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
-    equipmentBaseInfo.tureOrVirtual = (Serial[2] === 'S' || Serial[2] === 's') ? 0 : 1//实体机为0，虚拟机为1
+    equipmentBaseInfo.trueOrVirtual = (Serial[2] === 'S' || Serial[2] === 's') ? 1 : 0//实体机为1，虚拟机为0
   } else {
     equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[2] // 设备类型
-    equipmentBaseInfo.tureOrVirtual = outdata[0]['实体机/虚拟机'] === '实体机' ? 0 : 1
+    equipmentBaseInfo.trueOrVirtual = outdata[0]['实体机/虚拟机'] === '实体机' ? 1 : 0
   }
   const {
     status: equipmentAdminName,
@@ -1199,15 +1199,15 @@ function getRowAppSoftwareFir(outdata) {
     capacity: '' // 已用信息
   }
   // console.log(appStoredata)
-  appStoreConfig.volume = ''
-  appStoreConfig.SAN_NAS = ''
-  appStoreConfig.capacity = ''
+  appStoreConfig.volume =  outdata[0]['非本机存储卷信息']
+  appStoreConfig.SAN_NAS = outdata[0]['SAN/NAS/分布式存储']
+  appStoreConfig.capacity = outdata[0]['非本机存储已用/分配容量']
   appStores.push(appStoreConfig)
 
-  appNativeStore.totalCapacity = outdata[0]['存储总容量']
-  appNativeStore.usedSpace = outdata[0]['存储已用容量']
+  appNativeStore.totalCapacity = outdata[0]['本机存储总容量']
+  appNativeStore.usedSpace = outdata[0]['本机存储已用容量']
   appNativeStore.unusedSpace =''
-  appNativeStore.annualGrowthSpace = outdata[0]['存储年增长空间']
+  appNativeStore.annualGrowthSpace = outdata[0]['本机存储年增长空间']
 
   return {
     appSoftwares,

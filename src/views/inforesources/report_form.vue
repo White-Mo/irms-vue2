@@ -162,7 +162,7 @@ import {
   getBusinessSystemCount,
   getEquipmentCount,
   getEquipmentTypeCount, getEquipmentUserCount, getGuaranteePeriodCount,
-  getOverGuaranteePeriodCount, getStatusCount, getTureOrVirtualCount
+  getOverGuaranteePeriodCount, getStatusCount, getTrueOrVirtualCount
 } from '@/api/cockpit_data'
 import { getPost } from '@/api/select'
 export default {
@@ -563,7 +563,7 @@ export default {
         //虚拟机设备数量(台)
         let a2=0
         for (const i in this.selectData) {
-          if ( this.selectData[i].tureOrVirtual === 0){
+          if ( this.selectData[i].trueOrVirtual === 0){
             a2 += 1
           }
         }
@@ -615,7 +615,7 @@ this.StatisticsData=[]
           this.StatisticsData.push(res.data.total)
         })
         //虚拟机设备数量(台)
-        await getTureOrVirtualCount().then(res => {
+        await getTrueOrVirtualCount().then(res => {
           this.StatisticsData.push(res)
         })
         //业务系统数量
@@ -632,38 +632,6 @@ this.StatisticsData=[]
         })
         // 导入 excel
         await getExcelDemo3(this.StatisticsData,1)
-
-        // const item_list = [
-        //   'getEquipmentCount',
-        //   '../baseparameter/getEquipmentTypeCount',
-        //   'getGuaranteePeriodCount',
-        //   'getSystemWareCount',
-        //   'getApplicationUserCount?qapp_user=all',
-        //   'getEquipmentUserCount?qequipment_user=all'
-        // ]
-        // for (const i of item_list) {
-        //   getStatisticsData(i).then((res) => {
-        //     // //console.log(res,i)
-        //     // StatisticsData.push(res)
-        //     if (typeof res === 'object') {
-        //       trigger_fun(res.data)
-        //     } else {
-        //       trigger_fun(res)
-        //     }
-        //   }).catch(err => { // 如果接口失效则添加零
-        //     //console.log(err)
-        //     trigger_fun(0)
-        //   })
-        // }
-        // const trigger_fun = (data) => {
-        //   this.StatisticsData.push(data)
-        //   if (this.StatisticsData.length > 5) {
-        //     //console.log('ok')
-        //     getExcelDemo3(this.StatisticsData)
-        //     this.StatisticsData = []
-        //   }
-        // }
-
       }
     },
     handleSelectionChange(val) {
@@ -847,29 +815,6 @@ this.StatisticsData=[]
       document.querySelector('.getTextWidth').remove()
       return width
     },
-    handleSizeChange(val) {
-      // 改变每页显示的条数
-      this.PageSize = val
-      // 注意：在改变每页显示的条数时，要将页码显示到第一页
-      // this.currentPage = 1;
-      // this.getData_plus(0, this.currentPage * this.PageSize, this.par_str);
-      // //console.log(val);
-    }
-    // 显示第几页
-    // handleCurrentChange(val) {
-    //   // 改变默认的页数
-    //   this.currentPage = val
-    //   // 取消选中
-    //   this.basic_info_id = ''
-    //   this.radio = -1
-
-    //   this.getData_plus(
-    //     this.PageSize * (this.currentPage - 1),
-    //     this.PageSize * this.currentPage
-    //     // this.par_str
-    //   )
-    //   // //console.log(val);
-    // }
   }
 }
 </script>

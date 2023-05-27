@@ -341,36 +341,29 @@ export default {
       counter: 1,
       dataname: [
         {value: 'sequenceNumber', label: '序号'},
-        {value: 'basicInfoId', label: ' 编号-总编号'},
-        {value: 'ipAddress', label: ' ip地址'},
-        {value: 'macAddress', label: ' MAC'},
-        {value: 'equipmentName', label: ' 设备名称'},
-        {value: 'postName', label: ' 单位'},
-        {value: 'departmentName', label: ' 部门'},
-        {value: 'appAdminName', label: ' 应用管理员'},
-        {value: 'equipmentTypeName', label: ' 设备类型'},
-        {value: 'brandName', label: ' 品牌'},
-        {value: 'brandModelName', label: ' 型号'},
-        {value: 'serialNumber', label: ' 序列号'},
-        {value: 'businessOrExperimental', label: ' 业务机/测试机'},
-        {value: 'machineRoomName', label: ' 安装位置'},
-        {value: 'cabinetName', label: ' 机柜号'},
-        {value: 'cabinetUStart', label: ' 机柜开始U位'},
-        {value: 'cabinetUEnd', label: ' 机柜结束U位'},
-        {value: 'accessLocation', label: ' 接入位置'},
-        {value: 'singleAndDoublePowerSupply', label: ' 单双电源'},
-        {value: 'businessSystemFirstName', label: ' 对应等保系统名称（父名称）'},
-        {value: 'businessSystem', label: ' 对应等保系统名称（子名称）'},
-        {value: 'businessSystemLevel', label: ' 等保系统级别（三级/二级/一级）'},
-        {value: 'agreedToTemporaryShutdown', label: ' 是否同意临时关停（是/否）'},
-        {value: 'installSafetyMonitoringSoftware', label: ' 是否安装安全监测软件'},
-        {value: 'deployStrongPassword', label: ' 是否部署强口令'},
-        {value: 'deploymentEnvironment', label: ' 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）'},
+        {value: "basicInfoId", label:"设备编号"},
+        {value: "postName", label:"所属单位名称"},
+        {value: "departmentName", label:"所属部门名称"},
+        {value: "equipmentTypeName", label:"设备类型"},
         {
-          value: 'onlineTime',
+          value: "trueOrVirtual",
+          label:"实体机/虚拟机",
+          formatter:function(row){
+            let trueOrVirtual =row.trueOrVirtual === '1' ? "实体机" : "虚拟机"
+            return trueOrVirtual
+          }
+        },
+        {value: "isChinaLocalization", label:"是否国产化"},
+        {value: "equipmentName", label:"设备名称"},
+        {value: "equipmentAdminName", label:"设备管理员"},
+        {value: "equipmentAdminPhone", label:"设备管理员电话"},
+        {value: "appAdminName", label:"应用管理员"},
+        {value: "appAdminPhone", label:"应用管理员电话"},
+        {
+          value: "onlineTime",
           label: '上线时间',
           formatter: function (row) {
-            var time = row.onlineTime
+            let time = row.onlineTime
             if (time == null) {
               return null
             } else {
@@ -382,9 +375,6 @@ export default {
              * */
               var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
               var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
               // 拼接
               // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
               return year + '-' + month + '-' + day
@@ -392,10 +382,10 @@ export default {
           }
         },
         {
-          value: 'offlineTime',
+          value: "offlineTime",
           label: '下线时间',
           formatter: function (row) {
-            var time = row.offlineTime
+            let time = row.offlineTime
             if (time == null) {
               return null
             } else {
@@ -416,36 +406,59 @@ export default {
             }
           }
         },
-        {value: 'remarks', label: ' 备注'},
-        {value: 'type', label: ' CPU型号'},
-        {value: 'configMemoryCorenessOrCapacity', label: ' 内存容量（GB）'},
-        {value: 'softwareOperatingSystemEdition', label: ' 操作系统品牌规格'},
-        {value: 'softwareOperatingSystemBuildDate', label: ' 操作系统建设时间'},
-        {value: 'softwareDatabaseEdition', label: ' 数据库品牌规格'},
-        {value: 'softwareDatabaseBuildDate', label: ' 数据库建设时间'},
-        {value: 'edition', label: ' 中间件品牌规格'},
-        {value: 'softwareMiddlewareBuildDate', label: ' 中间件建设时间'},
-        {value: 'cloudServiceUnit', label: ' 云服务单位'},
-        {value: 'leasedComputingResources', label: ' 租用计算资源情况（CPU核数）（个）'},
-        {value: 'leasedStorageResources', label: ' 租用存储资源情况（TB）'},
-        {value: 'leasedNetworkBandwidth', label: ' 租用网络带宽（兆）'},
-        {value: 'termOfLease', label: ' 租用期限（年）'},
-        {value: 'domainName', label: ' 域名'},
-        {value: 'domainNameRegistrationService', label: ' 域名注册服务商'},
-        {value: 'ns', label: ' NS记录'},
-        {value: 'cname', label: ' CNAME记录（别名）'},
-        {value: 'useCDN', label: ' 是否使用CDN'},
-        {value: 'networkArea', label: '网络区域'},
-        {value: 'isChinaLocalization', label: '是否国产化'},
-        {value: 'isTestBusinessSystem', label: '正式业务/实验业务'},
-        {value: 'pool', label: '所属资源池'},
-        {value: 'isTransfer', label: '是否存在调拨'},
-        {value: 'transferRecord', label: '设备调拨记录'},
-        {value: 'transferRecordTime', label: '调拨记录时间'},
-        {value: 'isMoving', label: '是否存在移动'},
-        {value: 'movingRecord', label: '设备移动记录'},
-        {value: 'movingRecordTime', label: '设备移动时间'},
-        {value: 'businessApplicationName', label: '业务应用名称'},
+        {value: "status", label:"设备状态"},
+        {value: "isTransfer", label:"是否存在调拨"},
+        {value: "transferRecord", label:"设备调拨记录"},
+        {value: "transferRecordTime", label:"设备调拨时间"},
+        {value: "isMoving", label:"是否存在移动"},
+        {value: "movingRecord", label:"设备移动记录"},
+        {value: "movingRecordTime", label:"设备移动时间"},
+        {value: "machineRoomName", label:"安装位置"},
+        {value: "cabinetName", label:"机柜号"},
+        {value: "cabinetUStart", label:"机柜开始U位"},
+        {value: "cabinetUEnd", label:"机柜结束U位"},
+        {value: "guaranteePeriod", label:"保修期"},
+        {value: "pool", label:"所属资源池"},
+        {value: "hostName", label:"主机名"},
+        {value: "businessApplicationName", label:"业务应用名称"},
+        {value: "businessSystem", label:"所属业务子系统"},
+        {value: "businessSystemLevel", label:"所属业务子系统等保等级"},
+        {value: "businessSystemFirstName", label:"所属业务系统"},
+        {value: "isTestBusinessSystem", label:"正式业务/实验业务"},
+        {value: "ipAddress", label:"IP地址"},
+        {value: "macAddress", label:"MAC地址"},
+        {value: "type", label:"CPU型号"},
+        {value: "configMemoryCorenessOrCapacity", label:"内存容量（GB）"},
+        {value: "softwareOperatingSystemEdition", label:"操作系统版本"},
+        {value: "edition", label:"中间件品牌规格"},
+        {value: "softwareDatabaseEdition", label:"数据库版本"},
+        {value: "businessOrExperimental", label:"业务机/实验机"},
+        {value: "mainOrBackup", label:"主机/备机"},
+        {value: "migratable", label:"是否可迁移"},
+        {value: "shelfOff", label:"是否可下架"},
+        {value: "brandName", label:"品牌"},
+        {value: "brandModelName", label:"型号"},
+        {value: "serialNumber", label:"序列号"},
+        {value: "deploymentEnvironment", label:"部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）"},
+        {value: "remarks", label:"备注"},
+        {value: "singleAndDoublePowerSupply", label:"单双电源"},
+        {value: "agreedToTemporaryShutdown", label:"是否同意临时关停（是/否）"},
+        {value: "installSafetyMonitoringSoftware", label:"是否安装安全监测软件"},
+        {value: "deployStrongPassword", label:"是否部署强口令"},
+        {value: "cloudServiceUnit", label:"云服务单位"},
+        {value: "leasedComputingResources", label:"租用计算资源情况（CPU核数）（个）"},
+        {value: "leasedStorageResources", label:"租用存储资源情况（TB）"},
+        {value: "leasedNetworkBandwidth", label:"租用网络带宽（兆）"},
+        {value: "termOfLease", label:"租用期限（年）"},
+        {value: "domainName", label:"域名"},
+        {value: "domainNameRegistrationService", label:"域名注册服务商"},
+        {value: "ns", label:"NS记录"},
+        {value: "cname", label:"CNAME记录（别名）"},
+        {value: "useCDN", label:"是否使用CDN"},
+        {value: "networkArea", label:"网络区域"},
+        {value: "accessLocation", label:"接入位置"},
+
+
       ],
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
@@ -529,7 +542,6 @@ export default {
         {
           value: 'offlineTime',
           label: '下线时间',
-
           width: '200px'
         },
         {
@@ -611,8 +623,9 @@ export default {
     // 初始化新列顺序
     this.newList = JSON.parse(JSON.stringify(this.dataname))
 
-    this.newList[26].formatter = this.dataname[26].formatter
-    this.newList[27].formatter = this.dataname[27].formatter
+    this.newList[12].formatter = this.dataname[12].formatter
+    this.newList[13].formatter = this.dataname[13].formatter
+    this.newList[5].formatter = this.dataname[5].formatter
   },
   mounted() {
     this.restaurants = this.loadAll()
@@ -1081,6 +1094,7 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+      console.log(this.row)
     },
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index) {

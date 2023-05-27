@@ -36,8 +36,8 @@ export const getEquipmentUserCount= () =>{
 }
 
 //虚拟机设备
-export const getTureOrVirtualCount= () =>{
-  return request.get('/home/inforesources/getTureOrVirtualCount')
+export const getTrueOrVirtualCount= () =>{
+  return request.get('/home/inforesources/getTrueOrVirtualCount')
 }
 
 //在用设备数量

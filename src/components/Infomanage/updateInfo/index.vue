@@ -98,26 +98,26 @@
                   <el-row>
                     <el-col :span="6"><div class="label-style">
                       <el-radio-group v-model="form.businessOrExperimental">
-                        <el-radio label="1">业 务 机</el-radio>
-                        <el-radio label="0">实 验 机</el-radio>
+                        <el-radio label="0">业 务 机</el-radio>
+                        <el-radio label="1">实 验 机</el-radio>
                       </el-radio-group>
                     </div></el-col>
                     <el-col :span="6"><div class="label-style">
                       <el-radio-group v-model="form.mainOrBackup">
-                        <el-radio label="1">主 机</el-radio>
-                        <el-radio label="0">备 机</el-radio>
+                        <el-radio label="0">主 机</el-radio>
+                        <el-radio label="1">备 机</el-radio>
                       </el-radio-group>
                     </div></el-col>
                     <el-col :span="6"><div class="label-style">
-                      <el-radio-group v-model="form.tureOrVirtual">
+                      <el-radio-group v-model="form.trueOrVirtual">
                         <el-radio label="1">实 体 机</el-radio>
                         <el-radio label="0">虚 拟 机</el-radio>
                       </el-radio-group>
                     </div></el-col>
                     <el-col :span="6"><div class="label-style">
                       <el-radio-group v-model="form.migratable">
-                        <el-radio label="1">可 迁 移</el-radio>
-                        <el-radio label="0">不可迁移</el-radio>
+                        <el-radio label="0">可 迁 移</el-radio>
+                        <el-radio label="1">不可迁移</el-radio>
                       </el-radio-group>
                     </div></el-col>
                   </el-row>
@@ -140,7 +140,7 @@
                     <el-col :span="2"><div class="label-style">保修期</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
                     <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
+                    <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto" /></div></el-col>
                     <el-col :span="2"><div class="label-style">下线时间</div></el-col>
                     <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" :clearable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:auto"/></div></el-col>
                   </el-row>
@@ -206,7 +206,7 @@
             </el-tag>
           </el-descriptions-item>
         </el-descriptions>
-        <el-button @click="showDialog=false" type="primary" style="margin-top: 10px;position:fixed;right:200px">确定</el-button>
+        <el-button @click="showDialog=false" type="primary" style="margin-top: 10px;">确定</el-button>
       </div>
     </el-dialog>
 
@@ -247,7 +247,7 @@ export default {
       equipment: {
         appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '1223',
-          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
+          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', trueOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: '', equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
@@ -262,16 +262,6 @@ export default {
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
       },
-      // configLable: { project_name: '项目', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量' },
-      // softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      // networkLable: { network_card_name: '网卡', ip_address: 'IP地址', switch_info: '端口', network_card_port: '交换机', mAC_address: 'MAC地址' },
-      // protocolPortLable: { protocol_name: '协议', app_name: '应用名称', network_card_port: '端口' },
-      // appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
-      // appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
-      // appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
-      // appAccessRightsLable: { intranet: '内网', industry_network: '行内网', intranet: '互联网', other: '其他' },
-      // appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
-      // appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       // appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
       configLable: { projectName: '项目',type:'类型', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量', },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
@@ -284,19 +274,6 @@ export default {
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
-      // KeySet: {
-      //   config: ['project_name', 'frequency', 'corenessOrCapacity', 'quantity'],
-      //   software: ['project', 'projectame', 'edition', 'type'],
-      //   network: ['network_card_name', 'ip_address', 'switch_info', 'network_card_port', 'mAC_address'],
-      //   protocolPort: ['protocol_name', 'app_name', 'network_card_port' ],
-      //   appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
-      //   appSystemUser: ['userName', 'realName', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other' ],
-      //   appBusiness: ['businessName', 'domainName', 'userScope', 'ICPNum'],
-      //   appAccessRights: ['intranet', 'industry_network', 'intranet', 'other' ],
-      //   appLinksInfo: ['company', 'userName', 'IPAddress', 'other'],
-      //   appStore: ['volume', 'SAN_NAS', 'capacity'],
-      //   appNativeStore: ['total_capacity', 'used_space', 'unused_space', 'annual_growth_space' ]
-      // },
       KeySet: {
         config: ['projectName', 'type','frequency', 'corenessOrCapacity', 'quantity'],
         software: ['project', 'projectName', 'edition', 'type'],
@@ -315,30 +292,9 @@ export default {
       equipmentTypeAll: [],
       active: 0,
       labels:
-        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
-        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位' }
      {'basicInfoId': '设备编号' ,'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位'}
     }
   },
-  // watch: {
-  //   currentShow(val, oldVal) {
-  //     const inputDom = document.getElementsByTagName('input')
-  //     //console.log(val)
-  //     if (val === '2') {
-  //       inputDom.forEach(e => {
-  //         const parentNode = e.parentNode
-  //         e.disabled = true
-  //         parentNode.classList.add('is-disabled')
-  //       })
-  //     } else {
-  //       inputDom.forEach(e => {
-  //         const parentNode = e.parentNode
-  //         e.disabled = false
-  //         parentNode.classList.remove('is-disabled')
-  //       })
-  //     }
-  //   }
-  // },
   created() {
     this.fetchData()
   },
@@ -346,10 +302,17 @@ export default {
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
+
       inputDom.forEach(e => {
+        console.log(e.parentNode.classList)
         const parentNode = e.parentNode
         e.disabled = true
-        parentNode.classList.add('is-disabled')
+        if (parentNode.classList.contains("el-date-editor--date")){
+          e.readonly="readonly"
+        }else{
+          parentNode.classList.add('is-disabled')
+        }
+
       })
     } else {
       inputDom.forEach(e => {
@@ -359,7 +322,6 @@ export default {
     }
   },
   methods: {
-    //
     showResult(){
       this.showDialog=true
     },
@@ -401,11 +363,10 @@ export default {
     },
     commit() {
       const equipments = []
-      // console.log('&',this.form)
-      let formatOnlineTime=this.form.onlineTime.replace(/-/g, "");
-      let formatOfflineTime=this.form.offlineTime.replace(/-/g, "");
-
-
+      this.form.onlineTime=new Date(this.form.onlineTime)
+      this.form.offlineTime=new Date(this.form.offlineTime)
+      let formatOnlineTime=this.form.onlineTime.toLocaleDateString()
+      let formatOfflineTime=this.form.offlineTime.toLocaleDateString()
       const equip = { ...this.equipment }
       const equipmentBaseInfo = equip.equipmentBaseInfo
       Object.keys(equipmentBaseInfo).forEach(key => {
@@ -415,6 +376,7 @@ export default {
       equip.equipmentBaseInfo.offlineTime=formatOfflineTime
       equip.appAccessRights = equip.appAccessRights[0]
       equip.appNativeStore = equip.appNativeStore[0]
+      equip.equipmentBaseInfo.isUpdate="是"
       // console.log(equip)
       equipments.push(equip)
 
@@ -453,6 +415,8 @@ export default {
     changeTab(name) {
     },
     back() {
+      this.row.onlineTime=this.row.onlineTime.valueOf()
+      this.row.offlineTime=this.row.offlineTime.valueOf()
       this.$emit('changeDiv', '0')
     },
     checkKey(listname, value) {
