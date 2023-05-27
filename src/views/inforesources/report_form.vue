@@ -43,10 +43,10 @@
             >搜索</el-button>
           </el-col>
           <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">总表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(0)">综合表导出</el-button>
           </el-col>
           <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(1)">详情表导出</el-button>
           </el-col>
           <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
@@ -91,7 +91,7 @@
             :row-key="rowKey"
           >
             <el-table-column label="" width="40" type="selection" :reserve-selection="true" />
-            <el-table-column label="" width="50" type="index" show-overflow-tooltip/>
+            <el-table-column label="序号" width="50" type="index" show-overflow-tooltip/>
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -154,7 +154,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
-import {getStatisticsData, searchComprehensiveInfoByMultipleConditions} from '@/api/table'
+import { getbasic, getBasicInfoAll, getStatisticsData, searchComprehensiveInfoByMultipleConditions } from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
 import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
@@ -197,98 +197,123 @@ export default {
       radio: -1,
       basic_info_id: '',
       dataname: [
-        {value:"basicInfoId",label:" 编号-总编号"},
-        {value:"ipAddress",label:" ip地址"},
-        {value:"macAddress",label:" MAC"},
-        {value:"equipmentName",label:" 设备名称"},
-        {value:"postName",label:" 单位"},
-        {value:"departmentName",label:" 部门"},
-        {value:"appAdminName",label:" 应用管理员"},
-        {value:"equipmentTypeName",label:" 设备类型"},
-        {value:"brandName",label:" 品牌"},
-        {value:"brandModelName",label:" 型号"},
-        {value:"serialNumber",label:" 序列号"},
-        {value:"businessOrExperimental",label:" 业务机/测试机"},
-        {value:"machineRoomName",label:" 安装位置"},
-        {value:"cabinetName",label:" 机柜号"},
-        {value:"cabinetUStart",label:" 机柜开始U位"},
-        {value:"cabinetUEnd",label:" 机柜结束U位"},
-        {value:"accessLocation",label:" 接入位置"},
-        {value:"singleAndDoublePowerSupply",label:" 单双电源"},
-        {value:"businessSystemFirstName",label:" 对应等保系统名称（父名称）"},
-        {value:"businessSystem",label:" 对应等保系统名称（子名称）"},
-        {value:"businessSystemLevel",label:" 等保系统级别（三级/二级/一级）"},
-        {value:"agreedToTemporaryShutdown",label:" 是否同意临时关停（是/否）"},
-        {value:"installSafetyMonitoringSoftware",label:" 是否安装安全监测软件"},
-        {value:"deployStrongPassword",label:" 是否部署强口令"},
-        {value:"deploymentEnvironment",label:" 部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）"},
+        {value: "basicInfoId", label:"设备编号"},
+        {value: "postName", label:"所属单位名称"},
+        {value: "departmentName", label:"所属部门名称"},
+        {value: "equipmentTypeName", label:"设备类型"},
         {
-          value: 'onlineTime',
-          label: '设备上线安装日期',
-          formatter:function (row) {
-            var time=row.onlineTime
-            if(!time){
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date=new Date(time);
-            var year=date.getFullYear();
-            /* 在日期格式中，月份是从0开始的，因此要加0
+          value: "trueOrVirtual",
+          label:"实体机/虚拟机",
+          formatter:function(row){
+            let trueOrVirtual =row.trueOrVirtual === '1' ? "实体机" : "虚拟机"
+            return trueOrVirtual
+          }
+        },
+        {value: "isChinaLocalization", label:"是否国产化"},
+        {value: "equipmentName", label:"设备名称"},
+        {value: "equipmentAdminName", label:"设备管理员"},
+        {value: "equipmentAdminPhone", label:"设备管理员电话"},
+        {value: "appAdminName", label:"应用管理员"},
+        {value: "appAdminPhone", label:"应用管理员电话"},
+        {
+          value: "onlineTime",
+          label: '上线时间',
+          formatter: function (row) {
+            let time = row.onlineTime
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
-            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
-            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
-            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
-            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year+"-"+month+"-"+day;
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
         {
-          value: 'offlineTime',
-          label: '维保结束日期',
-          formatter:function (row) {
-            var time=row.offlineTime
-            if(!time){
-              return time
-            }
-            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
-            var date=new Date(time);
-            var year=date.getFullYear();
-            /* 在日期格式中，月份是从0开始的，因此要加0
+          value: "offlineTime",
+          label: '下线时间',
+          formatter: function (row) {
+            let time = row.offlineTime
+            if (time == null) {
+              return null
+            } else {
+              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+              var date = new Date(time)
+              var year = date.getFullYear()
+              /* 在日期格式中，月份是从0开始的，因此要加0
              * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
              * */
-            var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
-            var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
-            var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
-            var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
-            var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
-            // 拼接
-            // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-            return year+"-"+month+"-"+day;
+              var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+              var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+              var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+              var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+              var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+              // 拼接
+              // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+              return year + '-' + month + '-' + day
+            }
           }
         },
-        {value:"remarks",label:" 备注"},
-        {value:"type",label:" CPU型号"},
-        {value:"configMemoryCorenessOrCapacity",label:" 内存容量（GB）"},
-        {value:"softwareOperatingSystemEdition",label:" 操作系统品牌规格"},
-        {value:"softwareOperatingSystemBuildDate",label:" 操作系统建设时间"},
-        {value:"softwareDatabaseEdition",label:" 数据库品牌规格"},
-        {value:"softwareDatabaseBuildDate",label:" 数据库建设时间"},
-        {value:"edition",label:" 中间件品牌规格"},
-        {value:"softwareMiddlewareBuildDate",label:" 中间件建设时间"},
-        {value:"cloudServiceUnit",label:" 云服务单位"},
-        {value:"leased_computing_resources",label:" 租用计算资源情况（CPU核数）（个）"},
-        {value:"leasedComputingResources",label:" 租用存储资源情况（TB）"},
-        {value:"leasedNetworkBandwidth",label:" 租用网络带宽（兆）"},
-        {value:"termOfLease",label:" 租用期限（年）"},
-        {value:"domainName",label:" 域名"},
-        {value:"domainNameRegistrationService",label:" 域名注册服务商"},
-        {value:"ns",label:" NS记录"},
-        {value:"cname",label:" CNAME记录（别名）"},
-        {value:"useCDN",label:" 是否使用CDN"},
+        {value: "status", label:"设备状态"},
+        {value: "isTransfer", label:"是否存在调拨"},
+        {value: "transferRecord", label:"设备调拨记录"},
+        {value: "transferRecordTime", label:"设备调拨时间"},
+        {value: "isMoving", label:"是否存在移动"},
+        {value: "movingRecord", label:"设备移动记录"},
+        {value: "movingRecordTime", label:"设备移动时间"},
+        {value: "machineRoomName", label:"安装位置"},
+        {value: "cabinetName", label:"机柜号"},
+        {value: "cabinetUStart", label:"机柜开始U位"},
+        {value: "cabinetUEnd", label:"机柜结束U位"},
+        {value: "guaranteePeriod", label:"保修期"},
+        {value: "pool", label:"所属资源池"},
+        {value: "hostName", label:"主机名"},
+        {value: "businessApplicationName", label:"业务应用名称"},
+        {value: "businessSystem", label:"所属业务子系统"},
+        {value: "businessSystemLevel", label:"所属业务子系统等保等级"},
+        {value: "businessSystemFirstName", label:"所属业务系统"},
+        {value: "isTestBusinessSystem", label:"正式业务/实验业务"},
+        {value: "ipAddress", label:"IP地址"},
+        {value: "macAddress", label:"MAC地址"},
+        {value: "type", label:"CPU型号"},
+        {value: "configMemoryCorenessOrCapacity", label:"内存容量（GB）"},
+        {value: "softwareOperatingSystemEdition", label:"操作系统版本"},
+        {value: "edition", label:"中间件品牌规格"},
+        {value: "softwareDatabaseEdition", label:"数据库版本"},
+        {value: "businessOrExperimental", label:"业务机/实验机"},
+        {value: "mainOrBackup", label:"主机/备机"},
+        {value: "migratable", label:"是否可迁移"},
+        {value: "shelfOff", label:"是否可下架"},
+        {value: "brandName", label:"品牌"},
+        {value: "brandModelName", label:"型号"},
+        {value: "serialNumber", label:"序列号"},
+        {value: "deploymentEnvironment", label:"部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）"},
+        {value: "remarks", label:"备注"},
+        {value: "singleAndDoublePowerSupply", label:"单双电源"},
+        {value: "agreedToTemporaryShutdown", label:"是否同意临时关停（是/否）"},
+        {value: "installSafetyMonitoringSoftware", label:"是否安装安全监测软件"},
+        {value: "deployStrongPassword", label:"是否部署强口令"},
+        {value: "cloudServiceUnit", label:"云服务单位"},
+        {value: "leasedComputingResources", label:"租用计算资源情况（CPU核数）（个）"},
+        {value: "leasedStorageResources", label:"租用存储资源情况（TB）"},
+        {value: "leasedNetworkBandwidth", label:"租用网络带宽（兆）"},
+        {value: "termOfLease", label:"租用期限（年）"},
+        {value: "domainName", label:"域名"},
+        {value: "domainNameRegistrationService", label:"域名注册服务商"},
+        {value: "ns", label:"NS记录"},
+        {value: "cname", label:"CNAME记录（别名）"},
+        {value: "useCDN", label:"是否使用CDN"},
+        {value: "networkArea", label:"网络区域"},
+        {value: "accessLocation", label:"接入位置"},
+
 
       ],
       uploadData: {
@@ -425,6 +450,7 @@ export default {
       this.listLoading=false
     },
     search(){
+      this.$refs.multipleTable.clearSelection();
       this.dialogVisible = true
     },
     // rxr
@@ -472,6 +498,7 @@ export default {
 
     },
     get_data2() {
+      this.$refs.multipleTable.clearSelection();
       this.isMultiline=false
       this.tableData = []
       if (this.DataName === 'all' || this.DataName.length === 0) {
@@ -596,7 +623,7 @@ export default {
         await getExcelDemo3(this.StatisticsData1)
 
       } else {
-this.StatisticsData=[]
+        this.StatisticsData=[]
         // 设备数量
         await getEquipmentCount().then(res => {
           this.StatisticsData.push(res.data.total)
@@ -641,9 +668,9 @@ this.StatisticsData=[]
     },
     // rxr
     handleSelectionChange(val) {
-      //用selectedData接收所有勾选中的数据
+      //用selectData接收所有勾选中的数据
       this.selectData = val
-      console.log(this.selectedData);
+      console.log(this.selectData);
     },
     selectAllFun(val){
       if(val.length!=0){
@@ -677,9 +704,16 @@ this.StatisticsData=[]
           order:this.order,
         }
         if (this.selectData.length > 0){
-          await getExcelDemo1(this.selectData)
+          let data= []
+          for(let i=0;i<this.selectData.length;i++){
+            await getbasic(this.selectData[i]["equipmentId"]).then((response) => {
+              response.data.items.equipment_list=this.selectData[i]
+              data.push(response.data.items)
+            })
+          }
+          await getExcelDemo1(data)
         } else {
-          getList(params).then((response) => {
+          getBasicInfoAll(params).then((response) => {
             getExcelDemo1(response.data.items)
           })
         }

@@ -226,8 +226,8 @@ export default {
     downloadFile() {
       // templatefile.xlsx存储在public文件夹下
       let a = document.createElement('a')
-      a.href = './static/templatefile_row.xlsx'
-      a.download = '信息资产统计综合表(模板).xlsx'
+      a.href = './static/templatefile_row.zip'
+      a.download = '信息资产统计综合表(模板).zip'
       a.style.display = 'none'
       document.body.appendChild(a)
       a.click()

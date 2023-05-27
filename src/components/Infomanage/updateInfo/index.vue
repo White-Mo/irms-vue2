@@ -255,7 +255,7 @@ export default {
         software: [{ project: '', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
+        appSystemUser: [{ userName: '', realName: '', userLevel: '', localAccessMode: '', remoteAccessMode: '', createDate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
@@ -268,7 +268,7 @@ export default {
       networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', networkCardPort: '交换机',macAddress: 'MAC地址',switchInfo: '端口', },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
       appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
@@ -280,7 +280,7 @@ export default {
         network: ['networkCardName', 'ipAddress', 'switchInfo', 'networkCardPort', 'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
         appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
-        appSystemUser: ['userName', 'realName', 'userlevel', 'localAccessMode', 'remoteAccessMode', 'createdate', 'other'],
+        appSystemUser: ['userName', 'realName', 'userLevel', 'localAccessMode', 'remoteAccessMode', 'createDate', 'other'],
         appBusiness: ['businessName', 'domainName', 'userScope', 'ICPNum'],
         appAccessRights: ['intranet', 'industryNetwork', 'internet', 'other'],
         appLinksInfo: ['company', 'userName', 'IPAddress', 'other'],
@@ -349,7 +349,6 @@ export default {
         this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentTypeName
       })
       getbasic(this.row.equipmentId).then(response => {
-        console.log("hello",this.row)
         const item = response.data.items
         for (const key in item) {
           if (Object.hasOwnProperty.call(item, key)) {

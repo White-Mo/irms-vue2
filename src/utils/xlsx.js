@@ -424,7 +424,7 @@ function appSoftwareFir(outdata, excelIndex) {
           appSystemUserData.userLevel = Object.values(outdata[index])[3]
           appSystemUserData.remoteAccessMode = Object.values(outdata[index])[6]
           appSystemUserData.localAccessMode = Object.values(outdata[index])[5]
-          appSystemUserData.createData = Object.values(outdata[index])[7]
+          appSystemUserData.createDate = Object.values(outdata[index])[7]
           appSystemUserData.other = Object.values(outdata[index])[8]
           appSystemUsers.push(appSystemUserData)
         } else {
@@ -727,11 +727,11 @@ export function getRowEquipment(outdata, userInfo) {
 function notNull(name,num,type,outdata){
   let res=''
   for(let i=1;i<num+1;i++){
-    if(outdata[0][name+num.toString()+type]!=''){
+    if(outdata[0][name+i.toString()+type]!=''){
       if(res!=''){
-        res=res+";"+outdata[0][name+num+type]
+        res=res+";"+outdata[0][name+i+type]
       }else {
-        res=outdata[0][name+num+type]
+        res=outdata[0][name+i+type]
       }
     }
   }
@@ -1173,11 +1173,13 @@ function getRowAppSoftwareFir(outdata) {
   appSystemUserData.realName = outdata[0]['系统用户使用人']
   appSystemUserData.userLevel = outdata[0]['系统用户权限级别']
   if(outdata[0]['系统用户访问方式']==='本地'){
-    appSystemUserData.localAccessMode ='√'
+    appSystemUserData.localAccessMode ='本地'
+    appSystemUserData.remoteAccessMode ='本地'
   }else if (outdata[0]['系统用户访问方式']==='远程'){
-    appSystemUserData.remoteAccessMode ='√'
+    appSystemUserData.localAccessMode ='远程'
+    appSystemUserData.remoteAccessMode ='远程'
   }
-  appSystemUserData.createData = outdata[0]['系统用户创建时间']
+  appSystemUserData.createDate = outdata[0]['系统用户创建时间']
   appSystemUserData.other = ''
   appSystemUsers.push(appSystemUserData)
 
