@@ -298,6 +298,9 @@ export default {
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
+          if(res.message==="填写错误"){
+            res.message=res.data
+          }
           this.$alert(res.message, '提示', {
             confirmButtonText: '确定',
             type: 'info',
@@ -305,7 +308,6 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          //console.log(res)
         }).catch(err => {
           this.active = 0
           //console.log(err)
