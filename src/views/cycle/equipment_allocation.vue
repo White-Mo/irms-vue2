@@ -184,9 +184,6 @@ export default {
         if (this.tableData.length < this.totalCount) {
           this.isMore = false
           searchComprehensiveInfoByMultipleConditions(params).then(response => {
-            response.data.items.forEach(element => {
-              element.isEdit = false;
-            });
             this.isflag = false
             if (this.tableData.length < this.totalCount) {
               let num = this.tableData.length + 1
@@ -216,14 +213,13 @@ export default {
           dataValue: this.inputValue,
           start: this.tableData.length ? this.tableData.length : 0,
           limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
-          status: ''
+          status: '0',
+          prop:this.prop,
+          order:this.order,
         }
         if (this.tableData.length < this.totalCount) {
           this.isMore = false
           getList(params).then((response) => {
-            response.data.items.forEach(element => {
-              element.isEdit = false;
-            });
             this.isflag = false
             if (this.tableData.length < this.totalCount) {
               let num = this.tableData.length + 1
