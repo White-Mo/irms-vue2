@@ -864,6 +864,7 @@ export default {
         // }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
+      // console.log("initname",this.initname)
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
@@ -891,7 +892,7 @@ export default {
       //   }
       // }单独搜索ip和mac
       if (flog === false) {
-        // console.log("参数2",params)
+        console.log("参数2",params)
         getList(params).then((response) => {
           this.list = response.data.items
           console.log('+++++++++', this.list)
@@ -1009,6 +1010,7 @@ export default {
           limit: this.limit,
           searchCondition: this.tempGuaranteePeriodSearchCondition
         }
+        console.log(222,this.initname)
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
           let counter = params.start + 1

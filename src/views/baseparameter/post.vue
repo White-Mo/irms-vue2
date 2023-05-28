@@ -226,8 +226,8 @@ export default {
         start: this.currentPage-1,
         limit: this.limit
       }
-      // //console.log(this.initName)
       getPostByPage(params).then((response) => {
+        console.log("params",params)
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

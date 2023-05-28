@@ -371,6 +371,8 @@ export default {
         dataValue: this.inputValue,
         status: ''
       }
+      console.log(112233,params)
+      console.log(332211,numparams)
       getMachineRoomTotal(numparams).then((response) => {
         this.total = response.data
       })
