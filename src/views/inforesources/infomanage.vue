@@ -1096,7 +1096,7 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
-      console.log(this.row)
+      this.fetchData()
     },
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index) {

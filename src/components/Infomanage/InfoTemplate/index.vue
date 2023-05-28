@@ -367,6 +367,7 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+      this.fetchData()
     },
     /**
      * el-table-column 自适应列宽

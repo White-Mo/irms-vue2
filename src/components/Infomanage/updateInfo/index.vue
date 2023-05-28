@@ -208,7 +208,7 @@
             </el-tag>
           </el-descriptions-item>
         </el-descriptions>
-        <el-button @click="showDialog=false" type="primary" style="margin-top: 10px;">确定</el-button>
+        <el-button @click="back" type="primary" style="margin-top: 10px;">确定</el-button>
       </div>
     </el-dialog>
 
@@ -418,6 +418,7 @@ export default {
     changeTab(name) {
     },
     back() {
+      this.showDialog=false
       this.row.onlineTime=this.row.onlineTime.valueOf()
       this.row.offlineTime=this.row.offlineTime.valueOf()
       this.$emit('changeDiv', '0')
