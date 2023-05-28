@@ -139,7 +139,6 @@ export default {
       this.postAll.forEach(element => {
         if (element.postId === this.roleid) {
           this.addInformation.postName = element.postName
-
         }
       })
     })

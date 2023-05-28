@@ -193,6 +193,7 @@
       title="查看反馈信息">
       <div style="height:450px;text-align:center">
         <!--需要弹出的内容部分-->
+        插入成功
         <el-descriptions  :column="3"  border>
           <el-descriptions-item v-for="item in replayData" :key="index">
             <template slot="label">
@@ -380,10 +381,13 @@ export default {
       equipments.push(equip)
 
       addEquipment({ equipments: equipments }).then(res => {
-        if(res.message === '填写错误'){
-          this.$message({
-            message: res.data,
-            type: 'error'
+        if(res.message === "填写错误"){
+          this.$alert(res.data, '提示', {
+            confirmButtonText: '确定',
+            type: 'info',
+            showClose: false
+          }).then(() => {
+            this.$router.go(0)
           });
           this.showDialog=false
         }else {
@@ -391,7 +395,6 @@ export default {
           console.log('#',result)
           this.replayData = result
           this.showDialog=true
-
         }
       }).catch(err => {
         console.log(err)

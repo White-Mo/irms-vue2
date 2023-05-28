@@ -291,12 +291,16 @@ export default {
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime=formatOnlineTime
         equip.equipmentBaseInfo.offlineTime=formatOfflineTime
+        equip.equipmentBaseInfo.status="0"
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
+          if(res.message==="填写错误"){
+            res.message=res.data
+          }
           this.$alert(res.message, '提示', {
             confirmButtonText: '确定',
             type: 'info',
@@ -304,7 +308,6 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          //console.log(res)
         }).catch(err => {
           this.active = 0
           //console.log(err)
