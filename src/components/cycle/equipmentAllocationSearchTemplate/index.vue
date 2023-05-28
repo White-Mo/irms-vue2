@@ -13,10 +13,9 @@
           :popper-append-to-body ="false"
         >
           <el-option
-            v-for="(item,index) in dataname_option"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in postAll"
+            :key="item.value"
+            :value="item.postName"
             class="searchInput"
             :title="item.label"
           />
@@ -96,6 +95,7 @@
 
 <script>
 import {searchComprehensiveInfoByMultipleConditions} from "@/api/table";
+import { getPost } from '@/api/select'
 
 
 export default{
@@ -137,181 +137,20 @@ export default{
       backDataAll:[],
       timeout:null,
       // 筛选——多单位
-      dataname_option: [
-        {
-          value: '北京地震局',
-          label: '北京地震局',
-        },
-        {
-          value: '天津地震局',
-          label: '天津地震局',
-        },
-        {
-          value: '河北地震局',
-          label: '河北地震局',
-        },
-        {
-          value: '中国地震台网中心',
-          label: '中国地震台网中心',
-        },
-        {
-          value: '山西地震局',
-          label: '山西地震局',
-        },
-        {
-          value: '内蒙古地震局',
-          label: '内蒙古地震局',
-        },
-        {
-          value: '辽宁地震局',
-          label: '辽宁地震局',
-        },
-        {
-          value: '中国地震灾害防御中心',
-          label: '中国地震灾害防御中心',
-        },
-        {
-          value: '吉林地震局',
-          label: '吉林地震局',
-        },
-        {
-          value: '黑龙江地震局',
-          label: '黑龙江地震局',
-        },
-        {
-          value: '上海地震局',
-          label: '上海地震局',
-        },
-        {
-          value: '中国地震局发展研究中心',
-          label: '中国地震局发展研究中心',
-        },
-        {
-          value: '江苏地震局',
-          label: '江苏地震局',
-        },
-        {
-          value: '浙江地震局',
-          label: '浙江地震局',
-        },
-
-        {
-          value: '安徽地震局',
-          label: '安徽地震局',
-        },{
-          value: '中国地震局地球物理勘探中心',
-          label: '中国地震局地球物理勘探中心',
-        },
-        {
-          value: '福建地震局',
-          label: '福建地震局',
-        },
-        {
-          value: '江西地震局',
-          label: '江西地震局',
-        },
-        {
-          value: '山东地震局',
-          label: '山东地震局',
-        },
-        {
-          value: '中国地震局第一监测中心',
-          label: '中国地震局第一监测中心',
-        },
-        {
-          value: '河南地震局',
-          label: '河南地震局',
-        },
-        {
-          value: '湖北地震局',
-          label: '湖北地震局',
-        },
-        {
-          value: '湖南地震局',
-          label: '湖南地震局',
-        },
-        {
-          value: '中国地震局第二监测中心',
-          label: '中国地震局第二监测中心',
-        },
-        {
-          value: '广东地震局',
-          label: '广东地震局',
-        },
-        {
-          value: '广西地震局',
-          label: '广西地震局',
-        },
-        {
-          value: '海南地震局',
-          label: '海南地震局',
-        },
-        {
-          value: '中国地震局地球物理研究所',
-          label: '中国地震局地球物理研究所',
-        },
-        {
-          value: '重庆地震局',
-          label: '重庆地震局',
-        },
-        {
-          value: '四川地震局',
-          label: '四川地震局',
-        },
-        {
-          value: '贵州地震局',
-          label: '贵州地震局',
-        },
-        {
-          value: '中国地震局地质研究所',
-          label: '中国地震局地质研究所',
-        },
-        {
-          value: '云南地震局',
-          label: '云南地震局',
-        },
-        {
-          value: '西藏地震局',
-          label: '西藏地震局',
-        },
-        {
-          value: '陕西地震局',
-          label: '陕西地震局',
-        },
-        {
-          value: '中国地震局地震预测研究所',
-          label: '中国地震局地震预测研究所',
-        },
-        {
-          value: '甘肃地震局',
-          label: '甘肃地震局',
-        },
-        {
-          value: '青海地震局',
-          label: '青海地震局',
-        },
-        {
-          value: '宁夏地震局',
-          label: '宁夏地震局',
-        },
-        {
-          value: '中国地震局工程力学研究所',
-          label: '中国地震局工程力学研究所',
-        },
-        {
-          value: '新疆地震局',
-          label: '新疆地震局',
-        },
-        {
-          value: '防灾科技学院',
-          label: '防灾科技学院',
-        }
-      ]
+      postAll:[]
     }
   },
   created() {
     this.infoInput.start=this.start;
     this.infoInput.limit=this.limit;
+    getPost().then(res=>{
+      this.postAll = res.data.items
+      this.postAll.forEach(element => {
+        if (element.postId === this.roleid) {
+          this.postName = element.postName
+        }
+      })
+    })
   },
   methods: {
     async querySearch(queryString, cb , mark) {

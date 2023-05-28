@@ -291,6 +291,7 @@ export default {
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime=formatOnlineTime
         equip.equipmentBaseInfo.offlineTime=formatOfflineTime
+        equip.equipmentBaseInfo.status="0"
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
