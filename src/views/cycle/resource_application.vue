@@ -7,7 +7,7 @@
       <div class="show">
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark">IP 资源申请</div>
+            <div class="grid-content bg-purple-dark">资源申请</div>
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
@@ -159,7 +159,7 @@ export default {
           label: '所属部门'
         },
         {
-          value: 'equipmentId',
+          value: 'basicInfoId',
           label: '设备编号'
         },
         {
@@ -208,7 +208,7 @@ export default {
       labels: {
         postName: '所属单位',
         departmentName: '所属部门',
-        basic_info_id:'设备编号',
+        basicInfoId:'设备编号',
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
         ip_address: 'ip 地址',

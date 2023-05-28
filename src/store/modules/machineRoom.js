@@ -8,7 +8,10 @@ const MachineData = () => {
     department: '',
     installation_position: '',
     unitid:'',
-    machineRoomId:''
+    machineRoomId:'',
+    machineArea:'',
+    machineLocation:'',
+    machineAdministrator:''
   }
 }
 const state = MachineData()
@@ -16,6 +19,15 @@ const state = MachineData()
 const mutations = {
   SET_MashRoomId:(state,machineRoomId) => {
     state.machineRoomId = machineRoomId
+  },
+  SET_MachineLocation:(state,machineLocation) => {
+    state.machineLocation = machineLocation
+  },
+  SET_MachineAdministrator:(state,machineAdministrator) => {
+    state.machineAdministrator = machineAdministrator
+  },
+  SET_MachineArea:(state,machineArea) => {
+    state.machineArea = machineArea
   },
   SET_UnitId:(state,unitid) => {
     state.unitid = unitid
@@ -29,6 +41,9 @@ const mutations = {
   SET_InstallPosition: (state, installation_position) => {
     state.installation_position = installation_position
   },
+  SET_MachineRoomId:(state,machineRoomId) => {
+    state.machineRoomId = machineRoomId
+  }
 }
 
 

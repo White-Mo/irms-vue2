@@ -174,7 +174,7 @@
             </div>
             <div>
               部门
-              <el-select v-model="update_data.department" placeholder="请选择"  style="width: 20rem;left:2.8rem;">
+              <el-select v-model="update_data.department" placeholder="请选择":popper-append-to-body ="false" style="width: 20rem;left:2.8rem;">
                 <el-option
                   v-for="item in departmentAll"
                   :key="item.departmentId"
@@ -545,7 +545,7 @@ export default {
       })
     },
     changeGroupID(groupid){
-      //console.log(groupid)
+      this.update_data.row.groupid=groupid
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
@@ -573,7 +573,7 @@ export default {
         use_post:this.update_data.department == "" ? this.update_data.row.roleDepartmentId : this.update_data.department, // 单位的id
         // roleDepartmentId:"", // 部门的id
         // roles:"", // 权限的汉字名称
-        groupid:this.update_data.Roles == "" ? this.update_data.row.groupid : this.update_data.row.groupid, // 权限对应的id
+        groupid:this.update_data.row.groupid, // 权限对应的id
         telephone:"", // 电话 暂时为空
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
@@ -642,7 +642,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+/deep/.el-select-dropdown__list{
+  width: 900px;
+}
+
 .dashboard {
   &-container {
     margin: 30px;

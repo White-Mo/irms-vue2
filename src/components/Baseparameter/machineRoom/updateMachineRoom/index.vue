@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div style='height:30px'>
+    <div class="source">
       <el-page-header content='修改机房' @back='back'/>
     </div>
     <div>
       <el-row>
         <el-form ref='machineRoomFrom' :model='machineRoomFrom = this.machineRoom' label-width='120px' :rules='rules' :inline='false'>
           <el-form-item label='机房名称' prop='machineRoomName'>
-            <el-col>
+            <el-col :span="10">
               <el-input v-model='machineRoomFrom.machineRoomName'/>
             </el-col>
           </el-form-item>
           <el-form-item label='所属单位' prop='postName'>
             <el-col>
-              <el-select v-model='machineRoomFrom.postName' @change='changePost'>
+              <el-select v-model='machineRoomFrom.postName' @change='changePost':popper-append-to-body ="false">
                 <el-option
                   v-for='item in postAll'
                   :key='item.value'
@@ -21,6 +21,21 @@
                   >
                 </el-option>
               </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label='机房管理员' prop='machineAdministrator'>
+            <el-col :span="10">
+              <el-input v-model='machineRoomFrom.machineAdministrator'/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label='机房面积' prop='machineArea'>
+            <el-col :span="10">
+              <el-input v-model='machineRoomFrom.machineArea'/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label='机房位置' prop='machineLocation'>
+            <el-col :span="10">
+              <el-input v-model='machineRoomFrom.machineLocation'/>
             </el-col>
           </el-form-item>
           <el-form-item v-show="currentShow === '3'">
@@ -34,11 +49,13 @@
 
 <script>
 import { getPost } from "@/api/select";
-import { checkMachineRoomName } from "@/api/baseparameter"
-import { updataMachineRoomAction } from "@/api/baseparameter"
+import { checkMachineRoomName, updateMachineRoomAction } from '@/api/baseparameter'
 
 export default {
   name: "updateMachineRoom",
+  components:{
+
+  },
   props: {
     row: {
       type: Object,
@@ -75,10 +92,13 @@ export default {
       nameRules: false,
       postAll: [],
       machineRoom: {
-        machineRoomName: '',
-        machineRoomId: '',
-        postName: '',
-        postId:'',
+        MachineRoomName:"",
+        machineRoomId:"",
+        postId: "",
+        status: "",
+        machineArea:'',
+        machineLocation:'',
+        machineAdministrator:'',
       },
       rules: {
         machineRoomName: [
@@ -88,7 +108,16 @@ export default {
           }
         ],
         postName: [
-          {required: true, message: '请选择单位名称', trigger: 'blur'}
+          {required:true,message: '请选择单位',trigger:'blur'},
+        ],
+        machineAdministrator: [
+          {required: true, message: '请输入机房管理员', trigger: 'blur'}
+        ],
+        machineArea: [
+          {required: true, message: '请输入机房面积', trigger: 'blur'}
+        ],
+        machineLocation: [
+          {required: true, message: '请选择机房位置', trigger: 'blur'}
         ],
       }
     }
@@ -98,10 +127,11 @@ export default {
       this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
+      console.log(formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const machineRoom = {...this.machineRoom }
-          updataMachineRoomAction(machineRoom).then(res => {
+          updateMachineRoomAction(machineRoom).then(res => {
             this.$alert("更新成功",'提示', {
               confirmButtonText: '确定',
               type: 'info',
@@ -132,7 +162,6 @@ export default {
     async getNameRules() {
       const machineRoom = {...this.machineRoom}
       await checkMachineRoomName(machineRoom).then((res) => {
-        console.log(res)
         if (res.data.valid === true) {
           this.nameRules = true
         } else {
@@ -144,6 +173,14 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+.source {
+  padding: 24px;
+}
+/deep/.el-select-dropdown__list{
+  width: 750px;
+}
+/deep/.el-select-dropdown__item{
+  height: 25px;
+}
 </style>

@@ -1,37 +1,125 @@
+import { status } from 'nprogress'
+
 const ExcelJS = require('exceljs')
 import { getbasic } from '@/api/table'
 import Store from '@/store'
 
 function timeFormat(time) {
-      if (time==''||time==0||time==null){
-        return null
-      }
+  if (time == '' || time == 0 || time == null) {
+    return null
+  }
 
-      let date = new Date(time)
-      let year = date.getFullYear()
-      /* 在日期格式中，月份是从0开始的，因此要加0
-     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-     * */
-      let month =
-        date.getMonth() + 1 < 10
-          ? '0' + (date.getMonth() + 1)
-          : date.getMonth() + 1
-      let day =
-        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-      let hours =
-        date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-      let minutes =
-        date.getMinutes() < 10
-          ? '0' + date.getMinutes()
-          : date.getMinutes()
-      let seconds =
-        date.getSeconds() < 10
-          ? '0' + date.getSeconds()
-          : date.getSeconds()
-      // 拼接
-      // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-      console.log(year + month + day)
-      return year + month + day
+  let date = new Date(time)
+  let year = date.getFullYear()
+  /* 在日期格式中，月份是从0开始的，因此要加0
+ * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+ * */
+  let month =
+    date.getMonth() + 1 < 10
+      ? '0' + (date.getMonth() + 1)
+      : date.getMonth() + 1
+  let day =
+    date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+  let hours =
+    date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  let minutes =
+    date.getMinutes() < 10
+      ? '0' + date.getMinutes()
+      : date.getMinutes()
+  let seconds =
+    date.getSeconds() < 10
+      ? '0' + date.getSeconds()
+      : date.getSeconds()
+  // 拼接
+  // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+  console.log(year + month + day)
+  return year + month + day
+}
+
+function statusFormat(status) {
+  switch (status) {
+    case '0':
+      status = '在用'
+      break
+    case '1':
+      status = '停用'
+      break
+    case '2':
+      status = '报废'
+      break
+    default:
+      status = '状态异常'
+      break
+  }
+  return status
+}
+
+function getListInfo(key, listName, i, i_list) {
+  let keyArray = key.split('.')
+  if (keyArray[0] === listName && keyArray.length === 3) {
+    let newKey = keyArray[keyArray.length - 1]
+    switch (keyArray[1]) {
+      case 'cpu':
+        console.log(i[listName].length)
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['projectName'] === 'CPU') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+      case 'OperatingSystem':
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['project'] === '操作系统') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+      case 'Middle':
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['project'] === '中间件') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+      case 'Database':
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['project'] === '数据库') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+      case 'Http':
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['protocolName'] === 'HTTP应用') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+      case 'Ftp':
+        for (let index = 0; index < i[listName].length; index++) {
+          if (i[listName][index]['protocolName'] === 'FTP应用') {
+            console.log(key, listName, newKey, i[listName][index][newKey])
+            i_list.set(key, i[listName][index][newKey])
+          }
+        }
+        break
+
+    }
+
+  } else if (keyArray[0] === listName) {
+    let newKey = keyArray[keyArray.length - 1]
+    if (i[listName][0][newKey] != null) {
+      console.log(key, listName, newKey, i[listName][0][newKey])
+      i_list.set(key, i[listName][0][newKey])
+    }
+
+  }
+  return i_list
 }
 
 export async function getExcelDemo1(data) {
@@ -45,7 +133,7 @@ export async function getExcelDemo1(data) {
   workbook.lastPrinted = new Date()
   workbook.properties.date1904 = true
   workbook.calcProperties.fullCalcOnLoad = true
-  //工作簿视图 ？？啥玩意
+  //工作簿视图
   workbook.views = [{
     x: 0,
     y: 0,
@@ -61,63 +149,166 @@ export async function getExcelDemo1(data) {
 
   let header = []
   let items = []
+  console.log(data)
   let c_to_e_obj = {
-    'basicInfoId': '编号-总编号',
-    'ipAddress': 'ip地址',
-    'macAddress': 'MAC地址',
+    'basicInfoId': '设备编号',
+    'isUpdate': '是否覆盖更新',
+    'postCode': '所属单位代码',
+    'postName': '所属单位名称',
+    'departmentCode': '所属部门代码',
+    'departmentName': '所属部门名称',
+    'equipmentTypeCode': '二级设备类型代码',
+    'equipmentTypeName': '二级设备类型名称',
+    'trueOrVirtual': '实体机/虚拟机',
+    'isChinaLocalization': '是否国产化',
     'equipmentName': '设备名称',
-    'postName': '单位',
-    'departmentName': '部门',
+    'equipmentAdminName': '设备管理员',
+    'equipmentAdminPhone': '设备管理员电话',
     'appAdminName': '应用管理员',
-    'equipmentTypeName': '设备类型',
+    'appAdminPhone': '应用管理员电话',
+    'onlineTime': '上线时间',
+    'offlineTime': '下线时间',
+    'status': '设备状态',
+    'isTransfer': '是否存在调拨',
+    'transferRecord': '设备调拨记录1',
+    'transferRecordTime': '设备调拨记录1时间',
+    'transferRecord2': '设备调拨记录2',
+    'transferRecordTime2': '设备调拨记录2时间',
+    'isMoving': '是否存在移动',
+    'movingRecord': '设备移动记录',
+    'movingRecordTime': '设备移动记录时间',
+    'machineRoomName': '所属机房',
+    'cabinetName': '所属机柜',
+    'cabinetUEnd': '机柜U位起始位',
+    'cabinetUStart': '机柜U位结束位',
+    'guaranteePeriodStart': '保修期起始时间',
+    'guaranteePeriodEnd': '保修期结束时间',
+    'pool': '所属资源池',
+    'hostName': '主机名',
+    'businessSystemFirstName': '所属业务系统',
+    'businessSystem': '所属业务子系统',
+    'businessApplicationName': '业务应用名称',
+    'businessSystemLevel': '所属业务子系统等保等级',
+    'isTestBusinessSystem': '正式业务/测试业务',
+    'ipAddress': '网卡1IP地址',
+    'macAddress': '网卡1MAC地址',
+    '网卡2IP地址': '网卡2IP地址',
+    '网卡2MAC地址': '网卡2MAC地址',
+    'HBA卡IP地址': 'HBA卡IP地址',
+    'HBA卡MAC地址': 'HBA卡MAC地址',
+    'type': 'CPU类型',
+    'basicInfoConfig_list.cpu.frequency': 'CPU频率',
+    'basicInfoConfig_list.cpu.quantity': 'CPU核数',
+    'configMemoryCorenessOrCapacity': '内存容量(GB)',
+    'basicInfoSoftware_list.OperatingSystem.projectName': '操作系统1名称',
+    'softwareOperatingSystemEdition': '操作系统1版本',
+    'basicInfoSoftware_list.OperatingSystem.type': '操作系统1类型',
+    '操作系统2名称': '操作系统2名称',
+    '操作系统2版本': '操作系统2版本',
+    '操作系统2类型': '操作系统2类型',
+    'basicInfoSoftware_list.Middle.projectName': '中间件1名称',
+    'basicInfoSoftware_list.Middle.edition': '中间件1版本',
+    'basicInfoSoftware_list.Middle.type': '中间件1类型',
+    '中间件2名称': '中间件2名称',
+    '中间件2版本': '中间件2版本',
+    '中间件2类型': '中间件2类型',
+    '中间件3名称': '中间件3名称',
+    '中间件3版本': '中间件3版本',
+    '中间件3类型': '中间件3类型',
+    '中间件4名称': '中间件4名称',
+    '中间件4版本': '中间件4版本',
+    '中间件4类型': '中间件4类型',
+    '中间件5名称': '中间件5名称',
+    '中间件5版本': '中间件5版本',
+    '中间件5类型': '中间件5类型',
+    'basicInfoSoftware_list.Database.projectName': '数据库1名称',
+    'softwareDatabaseEdition': '数据库1版本',
+    'basicInfoSoftware_list.Database.type': '数据库1类型',
+    '数据库2名称': '数据库2名称',
+    '数据库2版本': '数据库2版本',
+    '数据库2类型': '数据库2类型',
+    '数据库3名称': '数据库3名称',
+    '数据库3版本': '数据库3版本',
+    '数据库3类型': '数据库3类型',
+    'basicInfoAppStore_list.volume': '非本机存储卷信息',
+    'basicInfoAppStore_list.SAN_NAS': 'SAN/NAS/分布式存储',
+    'basicInfoAppStore_list.capacity': '非本机存储已用/分配容量',
+    'basicInfoAppNativeStore_list.totalCapacity': '本机存储总容量',
+    'basicInfoAppNativeStore_list.usedSpace': '本机存储已用容量',
+    'basicInfoAppNativeStore_list.annualGrowthSpace': '本机存储年增长空间',
+    'mainOrBackup': '主机/备机',
+    'migratable': '是否可迁移',
+    'shelfOff': '是否可下架',
     'brandName': '品牌',
     'brandModelName': '型号',
     'serialNumber': '序列号',
-    'businessOrExperimental': '业务机/测试机',
-    'machineRoomName': '安装位置',
-    'cabinetName': '机柜号',
-    'cabinetUStart': '机柜开始U位',
-    'cabinetUEnd': '机柜结束U位',
-    'accessLocation': '接入位置',
+    'deploymentEnvironment': '部署环境',
+    'basicInfoAppSoftware_list.softwareName': '专用软件名称',
+    'basicInfoAppSoftware_list.softwareEdition': '专用软件版本',
+    'basicInfoAppSoftware_list.softwarePort': '专用软件端口',
+    'basicInfoAppSoftware_list.softwareOnlineTime': '专业软件上线时间',
+    'basicInfoAppSoftware_list.softwareDevelopCompany': '专用软件研发单位',
+    'basicInfoAppSoftware_list.softwareLiaison': '专用软件联系人',
+    'basicInfoProtocolPort_list.Http.appName': 'HTTP应用名称',
+    'basicInfoProtocolPort_list.Http.networkCardPort': 'HTTP协议端口',
+    'basicInfoProtocolPort_list.Ftp.appName': 'FTP应用名称',
+    'basicInfoProtocolPort_list.Ftp.networkCardPort': 'FTP协议端口',
+    'remarks': '备注',
+    'basicInfoAppSystemUser_list.userName': '系统用户名',
+    'basicInfoAppSystemUser_list.realName': '系统用户使用人',
+    'basicInfoAppSystemUser_list.userLevel': '系统用户权限级别',
+    'basicInfoAppSystemUser_list.remoteAccessMode': '系统用户访问方式',
+    'basicInfoAppSystemUser_list.createDate': '系统用户创建时间',
+    'basicInfoAppBusiness_list.businessName': '业务应用类型',
+    'basicInfoAppBusiness_list.domainName': '业务应用域名',
+    'domainNameRegistrationService': '域名注册服务商',
+    'basicInfoAppBusiness_list.ICPNum': '业务应用ICP号',
+    'basicInfoAppBusiness_list.userScope': '业务应用用户范围',
+    'basicInfoAppAccessRights_list.industryNetwork': '访问权限',
+    'basicInfoAppLinksInfo_list.company': '服务用户单位',
+    'basicInfoAppLinksInfo_list.userName': '服务用户名',
+    'basicInfoAppLinksInfo_list.ipAddress': '服务用户IP地址',
     'singleAndDoublePowerSupply': '单双电源',
-    "businessSystemFirstName": "对应等保系统名称（父名称）",
-    "businessSystem": "对应等保系统名称（子名称）",
-    "businessSystemLevel": "等保系统级别（三级/二级/一级）",
     'agreedToTemporaryShutdown': '是否同意临时关停（是/否）',
     'installSafetyMonitoringSoftware': '是否安装安全监测软件',
     'deployStrongPassword': '是否部署强口令',
-    "deploymentEnvironment": '部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）',
-    'offlineTime': '维保结束日期',
-    'onlineTime': '设备上线安装日期',
-    'remarks': '备注',
-    "type": "CPU型号规格",
-    "configMemoryCorenessOrCapacity": "内存容量（GB）",
-    "softwareOperatingSystemEdition": "操作系统品牌规格",
-    "softwareOperatingSystemBuildDate": "操作系统建设时间",
-    "softwareDatabaseEdition": "数据库品牌规格",
-    "softwareDatabaseBuildDate": "数据库建设时间",
-    "edition": '中间件品牌规格',
-    "softwareMiddlewareBuildDate": "中间件建设时间",
     'cloudServiceUnit': '云服务单位',
     'leasedComputingResources': '租用计算资源情况（CPU核数）（个）',
     'leasedStorageResources': '租用存储资源情况（TB）',
     'leasedNetworkBandwidth': '租用网络带宽（兆）',
     'termOfLease': '租用期限（年）',
-    'domainName': '域名',
-    'domainNameRegistrationService': '域名注册服务商',
     'ns': 'NS记录',
     'cname': 'CNAME记录（别名）',
-    'useCDN': '是否使用CDN'
+    'useCDN': '是否使用CDN',
+    'networkArea': '网络区域',
+    'accessLocation': '接入位置'
   }
   Object.keys(c_to_e_obj).map(key => {
     header.push(c_to_e_obj[key])
   })
   for (let i of data) {
-    let i_list = []
+    let i_list = new Map()
     Object.keys(c_to_e_obj).map(key => {
-      i_list.push(i[key])
+      i_list.set(key, i['equipment_list'][key])
     })
-    items.push(i_list)
+    Object.keys(c_to_e_obj).map(key => {
+      i_list = getListInfo(key, 'basicInfoAppAccessRights_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppBusiness_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppLinksInfo_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppNativeStore_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppSoftware_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppStore_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoAppSystemUser_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoConfig_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoNetwork_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoProtocolPort_list', i, i_list)
+      i_list = getListInfo(key, 'basicInfoSoftware_list', i, i_list)
+    })
+    i_list.set('guaranteePeriodStart',i['equipment_list']['guaranteePeriod'].split("-")[0])
+    i_list.set('guaranteePeriodEnd',i['equipment_list']['guaranteePeriod'].split("-")[1])
+    i_list.set('isUpdate',"否")
+    console.log(i_list.values())
+    items.push(Array.from(i_list.values()))
   }
   // for
   let num = 0
@@ -159,9 +350,10 @@ export async function getExcelDemo1(data) {
     let row = sheet.getRow(i + 3)
     row.values = items[i]
     row.numFmt = '0'
-    console.log(row.getCell(26).value)
-    row.getCell(26).value = timeFormat(row.getCell(26).value)
-    row.getCell(27).value = timeFormat(row.getCell(27).value)
+    // console.log(row.getCell(26).value)
+    row.getCell(16).value = timeFormat(row.getCell(16).value)
+    row.getCell(17).value = timeFormat(row.getCell(17).value)
+    row.getCell(18).value = statusFormat(row.getCell(18).value)
     row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
       // //console.log('Cell ' + colNumber + ' = ' + cell.value);
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
@@ -176,14 +368,14 @@ export async function getExcelDemo1(data) {
     row.commit()
   }
   //导出下载
-  const buffer = await workbook.xlsx.writeBuffer();
+  const buffer = await workbook.xlsx.writeBuffer()
   let blob = new Blob([buffer])
-  let link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  document.body.appendChild(link);
-  link.download = "总表.xlsx";
-  link.click();
-  document.body.removeChild(link);
+  let link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  document.body.appendChild(link)
+  link.download = '信息资产统计综合表.xlsx'
+  link.click()
+  document.body.removeChild(link)
 }
 
 export async function getExcelDemo2(data_list, data_num = 1) {
@@ -1554,7 +1746,7 @@ export async function getExcelDemo2(data_list, data_num = 1) {
       K5.value = item_data['appAdminPhone']
       D6.value = item_data['businessOrExperimental'] == '0' ? '■\n□' : '□\n■'
       G6.value = item_data['mainOrBackup'] == '0' ? '■\n□' : '□\n■'
-      I6.value = item_data['tureOrVirtual'] == '0' ? '■\n□' : '□\n■'
+      I6.value = item_data['trueOrVirtual'] == '0' ? '■\n□' : '□\n■'
       K6.value = item_data['migratable'] == '0' ? '是■\n否□' : '是□\n否■'
       C9.value = item_data['brandName']
       F9.value = item_data['brandModelName']
@@ -1775,18 +1967,24 @@ export async function getExcelDemo2(data_list, data_num = 1) {
   return
 }
 
-export async function getExcelDemo3(StatisticsData) {
+export async function getExcelDemo3(StatisticsData, state) {
   //创建工作簿↓
   const workbook = new ExcelJS.Workbook()
   //设置工作簿属性↓
   workbook.creator = '中国地震台网中心信息资源管理系统'
   // workbook.lastModifiedBy = 'Her';
+
   workbook.created = new Date()
   workbook.modified = new Date()
   workbook.lastPrinted = new Date()
+  // 将工作簿日期设置为 1904 年日期系统
   workbook.properties.date1904 = true
+
+  // 设置计算属性
+  // 在加载时强制工作簿计算属性
   workbook.calcProperties.fullCalcOnLoad = true
-  //工作簿视图 ？？啥玩意
+
+  //工作簿视图控制在查看工作簿时 Excel 将打开多少个单独的窗口。
   workbook.views = [{
     x: 0,
     y: 0,
@@ -1798,14 +1996,16 @@ export async function getExcelDemo3(StatisticsData) {
   }]
   //添加工作表
   const sheet = workbook.addWorksheet('1')
-  // 设置padding 列宽
-  sheet.getColumn('A').width = 1.88
-  let col_i = 'BCDE'
+  // 设置 padding 列宽
+  let col_i = 'ABCD'
   for (let i = 0; i < col_i.length; i++) {
     sheet.getColumn(col_i[i]).width = 13
   }
+
   //样式
+  //文字居中展示
   const content_row = { vertical: 'middle', horizontal: 'center' }
+  //设置表头文字样式
   const table_header2 = {
     name: 'Arial Black',
     color: { argb: '000' },
@@ -1813,6 +2013,8 @@ export async function getExcelDemo3(StatisticsData) {
     size: 14,
     bold: true
   }
+
+  //设置数据文字格式
   const table_header3 = {
     name: 'Black',
     color: { argb: '000' },
@@ -1820,55 +2022,123 @@ export async function getExcelDemo3(StatisticsData) {
     size: 14,
     bold: false
   }
+
+  //设置表格边框
   const black = { style: 'medium', color: { argb: '000' } }
 
-  // 第2到n行
+  // 第一列要展示的
   let name_list = [
     '名称',
     '总设备数量(台)',
     '总设备类型(种)',
     '保修期内设备数量(台)',
-    '总应用系统数量(台)',
+    '在用设备数量(台)',
+    '国产化设备数量(台)',
+    '总单位数量(个）',
+    '虚拟机设备数量(台)',
+    '总业务系统数量(个)',
     '应用管理员数量(个)',
     '设备管理员数量(个)'
   ]
-  let B2 = []
+  let name_list1 = [
+    '名称',
+    '设备数量(台)',
+    '设备类型(种)',
+    '保修期内设备数量(台)',
+    '在用设备数量(台)',
+    '国产化设备数量(台)',
+    '单位数量(个）',
+    '虚拟机设备数量(台)',
+    '业务系统数量(个)',
+    '应用管理员数量(个)',
+    '设备管理员数量(个)'
+  ]
+
+  // i 是name_list 下标
   for (let i in name_list) {
-    let item_list = []
-    let num = 2 + parseInt(i)
+    // i 是字符串格式
+    let num = 1 + parseInt(i)
+    //设置表格高度
     if (i == 0) {
       sheet.getRow(num).height = 30
     } else {
       sheet.getRow(num).height = 25.5
     }
-    sheet.mergeCells('B' + num + ':C' + num)
-    sheet.mergeCells('D' + num + ':E' + num)
-    item_list.push(sheet.getCell('B' + num))
-    item_list.push(sheet.getCell('D' + num))
-    for (let cell in item_list) {
-      if (cell == 0) {
-        item_list[cell].value = name_list[i]
+
+    //合并每行表格
+    sheet.mergeCells('A' + num + ':B' + num)
+    sheet.mergeCells('C' + num + ':D' + num)
+
+    //给item_list添加表格   每一行
+    let item_list = []
+    item_list.push(sheet.getCell('A' + num))
+    item_list.push(sheet.getCell('C' + num))
+
+    //cell == 0 时为第一列 cell == 1 时为第二列
+    if (state === 1) {
+      for (let cell in item_list) {
+        if (cell == 0) {
+          item_list[cell].value = name_list[i]
+        }
+        if (i == 0 && cell == 1) {
+          item_list[cell].value = '数量'
+        } else if (cell == 1) {
+          item_list[cell].value = StatisticsData[i - 1]  //把前端的值传给后端
+        }
+
+        //给文字加粗
+        if (i == 0) {  //名称和数量--加粗
+          item_list[cell].font = table_header2
+        } else {   //下面数据--加粗
+          item_list[cell].font = table_header3
+        }
+
+        //文字居中展示
+        item_list[cell].alignment = content_row
+
+        //加上边框
+        item_list[cell].border = {
+          top: black,
+          left: black,
+          bottom: black,
+          right: black
+        }
       }
-      if (i == 0 && cell == 1) {
-        item_list[cell].value = '数量'
-      } else if (cell == 1) {
-        item_list[cell].value = StatisticsData[i - 1]
-      }
-      if (i == 0) {
-        item_list[cell].font = table_header2
-      } else {
-        item_list[cell].font = table_header3
-      }
-      item_list[cell].alignment = content_row
-      item_list[cell].border = {
-        top: black,
-        left: black,
-        bottom: black,
-        right: black
+    } else {
+      for (let cell in item_list) {
+        if (cell == 0) {
+          item_list[cell].value = name_list1[i]
+        }
+        if (i == 0 && cell == 1) {
+          item_list[cell].value = '数量'
+        } else if (cell == 1) {
+          item_list[cell].value = StatisticsData[i - 1]  //把前端的值传给后端
+        }
+
+        //给文字加粗
+        if (i == 0) {  //名称和数量--加粗
+          item_list[cell].font = table_header2
+        } else {   //下面数据--加粗
+          item_list[cell].font = table_header3
+        }
+
+        //文字居中展示
+        item_list[cell].alignment = content_row
+
+        //加上边框
+        item_list[cell].border = {
+          top: black,
+          left: black,
+          bottom: black,
+          right: black
+        }
       }
     }
-    B2.push(item_list)
 
+
+    //不明所以的代码
+    // let B2 = []
+    // B2.push(item_list)
   }
 
   //导出下载
@@ -1881,3 +2151,4 @@ export async function getExcelDemo3(StatisticsData) {
   link.click()
   document.body.removeChild(link)
 }
+

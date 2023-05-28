@@ -103,7 +103,7 @@
           highlight-current-row
           stripe
         >
-          <el-table-column align="center" type="index" />
+          <el-table-column align="center" type="index" :index="typeIndex" />
           <el-table-column
             v-for="(item,index) in basicValue"
             :key="index"
@@ -131,6 +131,7 @@
         <div class="block">
           <el-pagination
             :page-size="10"
+            :current-page="currentPage"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
@@ -177,7 +178,7 @@ export default {
     return {
       list: null,
       total: 0,
-      currentPage: 0,
+      currentPage: 1,
       limit:10,
       initName:'',
       inputValue: '',
@@ -218,14 +219,14 @@ export default {
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: this.currentPage,
+        start: this.currentPage-1,
         limit: this.limit
       }
-      //console.log(111222,this.dataName)
+      // //console.log(this.initName)
       getEquipmentFirstTypeByPage(params).then((response) => {
-        console.log(111222,params.dataName)
+        console.log("----------***",response)
         this.list = response.data.items
-        this.total = response.data.items.length
+        this.total = response.data.total
         this.listLoading = false
       })
     },
@@ -267,13 +268,15 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      this.currentPage=val
       const params = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        start: val-1,
+        start: this.currentPage-1,
         limit: 10
       }
-      getEquipmentTypeByPage(params).then((response) => {
+      getEquipmentFirstTypeByPage(params).then((response) => {
+        console.log("--------***--***",response)
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -282,6 +285,10 @@ export default {
     changeDiv(value) {
       this.ifUpdate = value
       this.fetchData()
+    },
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
     }
   }
 }

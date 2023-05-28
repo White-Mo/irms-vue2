@@ -8,7 +8,7 @@
         <el-form ref="departmentForm" :model="departmentForm = this.department" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="departmentForm.postName" @change="changePost">
+              <el-select v-model="departmentForm.postName" @change="changePost":popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -107,7 +107,6 @@ export default {
     }
 
     return {
-
       nameRules: false,
       codeRules: false,
       postRules:false,
@@ -223,5 +222,11 @@ export default {
 <style lang="less" scoped>
 .source {
   padding: 24px;
+}
+/deep/.el-select-dropdown__list{
+  width: 750px;
+}
+/deep/.el-select-dropdown__item{
+  height: 25px;
 }
 </style>

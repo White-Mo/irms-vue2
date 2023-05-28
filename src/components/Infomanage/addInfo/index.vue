@@ -13,11 +13,12 @@
         <el-row :gutter="30">
           <el-col :span="5" :offset="1">
             <div class="selectLabel">单位</div>
-            <el-select v-model="form.postName" placeholder="请选择" @change="changePost">
+            <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
               <el-option
                 v-for="item in postAll"
                 :key="item.value"
                 :value="item.postName"
+                class="searchInput"
               />
             </el-select>
           </el-col>
@@ -33,11 +34,12 @@
           </el-col>
           <el-col :span="5">
             <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
+            <el-select v-model="form.equipmentTypeName"  placeholder="请选择">
               <el-option
                 v-for="item in equipmentTypeAll"
                 :key="item.value"
                 :value="item.equipmentTypeName"
+                :title="item.equipmentTypeName"
               />
             </el-select>
           </el-col>
@@ -89,26 +91,26 @@
                 <el-row>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.businessOrExperimental">
-                      <el-radio label="1">业 务 机</el-radio>
-                      <el-radio label="0">实 验 机</el-radio>
+                      <el-radio label="0">业 务 机</el-radio>
+                      <el-radio label="1">实 验 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.mainOrBackup">
-                      <el-radio label="1">主 机</el-radio>
-                      <el-radio label="0">备 机</el-radio>
+                      <el-radio label="0">主 机</el-radio>
+                      <el-radio label="1">备 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.tureOrVirtual">
+                    <el-radio-group v-model="form.trueOrVirtual">
                       <el-radio label="1">实 体 机</el-radio>
                       <el-radio label="0">虚 拟 机</el-radio>
                     </el-radio-group>
                   </div></el-col>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.migratable">
-                      <el-radio label="1">可 迁 移</el-radio>
-                      <el-radio label="0">不可迁移</el-radio>
+                      <el-radio label="0">可 迁 移</el-radio>
+                      <el-radio label="1">不可迁移</el-radio>
                     </el-radio-group>
                   </div></el-col>
                 </el-row>
@@ -199,7 +201,7 @@ export default {
       equipment: {
         appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
-          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', tureOrVirtual: '1', mainOrBackup: '1',
+          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', trueOrVirtual: '1', mainOrBackup: '1',
           serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
@@ -210,9 +212,9 @@ export default {
           { project: '中间件', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSystemUser: [{ userName: '', realName: '', userlevel: '', localAccessMode: '', remoteAccessMode: '', createdate: '', other: '' }],
+        appSystemUser: [{ userName: '', realName: '', userLevel: '', localAccessMode: '', remoteAccessMode: '', createDate: '', other: '' }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
-        appAccessRights: [{ lanIntranet: '', industryNetwork: '', intranet: '', other: '' }],
+        appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
@@ -222,9 +224,9 @@ export default {
       networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', networkCardPort: '交换机',macAddress: 'MAC地址',switchInfo: '端口', },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', realName: '使用人', userlevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createdate: '创建时间', other: '其他' },
+      appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
       appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
-      appAccessRightsLable: { lanIntranet: '内网', industryNetwork: '行内网', intranet: '互联网', other: '其他' },
+      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
       appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
@@ -289,12 +291,16 @@ export default {
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime=formatOnlineTime
         equip.equipmentBaseInfo.offlineTime=formatOfflineTime
+        equip.equipmentBaseInfo.status="0"
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
+          if(res.message==="填写错误"){
+            res.message=res.data
+          }
           this.$alert(res.message, '提示', {
             confirmButtonText: '确定',
             type: 'info',
@@ -302,7 +308,6 @@ export default {
           }).then(() => {
             this.$router.go(0)
           })
-          //console.log(res)
         }).catch(err => {
           this.active = 0
           //console.log(err)
@@ -428,4 +433,16 @@ export default {
 .el-radio:nth-of-type(1){
     margin-right: 35px;
 }
+//覆盖全局样式代码
+/deep/.el-select-dropdown__list{
+  width: 750px !important;
+}
+/deep/.el-select-dropdown__item{
+  height: 26px !important;
+}
+.searchInput {
+  text-align: center;
+}
 </style>
+
+

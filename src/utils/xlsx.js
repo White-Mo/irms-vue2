@@ -1,4 +1,4 @@
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import { status } from 'nprogress'
 import logdepthbuf_fragmentGlsl from 'three/src/renderers/shaders/ShaderChunk/logdepthbuf_fragment.glsl'
 import item from '@/layout/components/Sidebar/Item'
@@ -30,22 +30,30 @@ export function importfile(obj, head) {
       // console.log(wb)
       const sheet2JSONOpts = {
         /** Default value for null/undefined values */
-        defval: ''// 给defval赋值为空的字符串
+        defval: '',// 给defval赋值为空的字符串
+        range: 1
       }
-      const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], sheet2JSONOpts)
-      var filetype = Object.keys(outdata[0])[0]
+      let outdata
+      var filetype
+      if (head === '信息资产统计综合表') {
+        outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' })
+        filetype = Object.keys(outdata[0])[0]
+        outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], sheet2JSONOpts)
+      } else {
+        outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' })
+        filetype = Object.keys(outdata[0])[0]
+      }
+      console.log(outdata)
       // 获取 Excel 表头 判断 是否为同一文件类型
       if (head === filetype) {
-        if(head === "信息资产统计综合表"){
-          // const outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:"无数据"})
-          resolve(outdata)
-        }else {
-          resolve(outdata)
-        }
+        resolve(outdata)
       } else {
         console.log('请选择正确的文件类型！')
         console.log('应导入', head)
         console.log('当前导入', filetype)//excel第一个单元格
+        MessageBox.alert('<div>请选择正确的文件类型</div><div>应导入:' + head + '</div><div>当前导入：' + filetype + '</div>',
+          { dangerouslyUseHTMLString: true }
+        )
       }
     }
   })
@@ -57,10 +65,10 @@ export function importfile(obj, head) {
  * @param postName
  * @returns {{readStatus: number, equipment: {}}}
  */
-export function getEquipment(outdata, postName ,userInfo) {
+export function getEquipment(outdata, postName, userInfo) {
   const equipment = {}
   let excelIndex = 11
-  const { equipmentBaseInfo, readStatus: readStatus } = getBaseinfo(outdata, postName ,userInfo)
+  const { equipmentBaseInfo, readStatus: readStatus } = getBaseinfo(outdata, postName, userInfo)
   equipment.equipmentBaseInfo = equipmentBaseInfo
 
   const { softwares, configs, excelIndex: configIndex } = getConfig(outdata, excelIndex)
@@ -96,7 +104,7 @@ export function getEquipment(outdata, postName ,userInfo) {
 }
 
 // 基本信息
-function getBaseinfo(outdata, postName ,userInfo) {
+function getBaseinfo(outdata, postName, userInfo) {
   const equipmentBaseInfo = {
     equipmentId: '', //  设备id
     equipmentTypeName: '', // 设备类型
@@ -119,7 +127,7 @@ function getBaseinfo(outdata, postName ,userInfo) {
     appAdminPhone: '',
     businessOrExperimental: '', // 业务机试验机
     mainOrBackup: '', // 主机 备机
-    tureOrVirtual: '', // 实体机虚拟机
+    trueOrVirtual: '', // 实体机虚拟机
     migratable: '', // 是否可迁移
     brandName: '', // 品牌
     brandModelName: '', // 型号
@@ -131,7 +139,7 @@ function getBaseinfo(outdata, postName ,userInfo) {
     offlineTime: '' // 下线时间
   }
 
-  equipmentBaseInfo.insertUserId=userInfo.userid
+  equipmentBaseInfo.insertUserId = userInfo.userid
 
   equipmentBaseInfo.postName = postName
   const {
@@ -195,7 +203,7 @@ function getBaseinfo(outdata, postName ,userInfo) {
 
   equipmentBaseInfo.businessOrExperimental = statusTrans(Object.values(outdata[3])[1])// 业务机试验机
   equipmentBaseInfo.mainOrBackup = statusTrans(Object.values(outdata[3])[4]) // 主机 备机
-  equipmentBaseInfo.tureOrVirtual = statusTrans(Object.values(outdata[3])[6]) // 实体机虚拟机
+  equipmentBaseInfo.trueOrVirtual = statusTrans(Object.values(outdata[3])[6]) // 实体机虚拟机
   equipmentBaseInfo.migratable = statusTrans(Object.values(outdata[3])[8]) // 是否迁移
 
   const {
@@ -416,7 +424,7 @@ function appSoftwareFir(outdata, excelIndex) {
           appSystemUserData.userLevel = Object.values(outdata[index])[3]
           appSystemUserData.remoteAccessMode = Object.values(outdata[index])[6]
           appSystemUserData.localAccessMode = Object.values(outdata[index])[5]
-          appSystemUserData.createData = Object.values(outdata[index])[7]
+          appSystemUserData.createDate = Object.values(outdata[index])[7]
           appSystemUserData.other = Object.values(outdata[index])[8]
           appSystemUsers.push(appSystemUserData)
         } else {
@@ -594,7 +602,7 @@ function underfindTrans(status, part, readStatus) {
 function underfindTransRow(status, part, readStatus) {
   if (status === '') {
     const message = {}
-    message.erro=part + '不能为空'
+    message.erro = part + '不能为空'
     // readStatus.push(message)
     return { status, readStatus }
   } else {
@@ -608,10 +616,10 @@ export function analysisReply(data) {
   //这个数组的元素是对象
   let analysisData = []
   let result_data = []
-  if(data.status !=null){
-    let item={};
-    item.key="错误信息"
-    item.values=JSON.stringify(data)
+  if (data.status != null) {
+    let item = {}
+    item.key = '错误信息'
+    item.values = JSON.stringify(data)
     result_data.push(item)
     return result_data
   }
@@ -681,11 +689,11 @@ export function getUploadData(data, message) {
 /**
  * 横表解析
  */
-export function getRowEquipment(outdata,userInfo) {
+export function getRowEquipment(outdata, userInfo) {
   // console.log(outdata)
   const equipment = {}
   const { equipmentBaseInfo, readStatus: readStatus } = getRowBaseinfo(outdata)
-  equipmentBaseInfo.insertUserId=userInfo.userid
+  equipmentBaseInfo.insertUserId = userInfo.userid
   equipment.equipmentBaseInfo = equipmentBaseInfo
 
   const { softwares, configs } = getRowConfig(outdata)
@@ -701,7 +709,7 @@ export function getRowEquipment(outdata,userInfo) {
     appStores,
     appSystemUsers,
     appBusinesses,
-    appNativeStore,
+    appNativeStore
   } = getRowAppSoftwareFir(outdata)
   equipment.appNativeStore = appNativeStore
   equipment.appSystemUser = appSystemUsers
@@ -715,12 +723,24 @@ export function getRowEquipment(outdata,userInfo) {
 
   return { equipment, readStatus }
 }
-
+//拼接多个列信息
+function notNull(name,num,type,outdata){
+  let res=''
+  for(let i=1;i<num+1;i++){
+    if(outdata[0][name+i.toString()+type]!=''){
+      if(res!=''){
+        res=res+";"+outdata[0][name+i+type]
+      }else {
+        res=outdata[0][name+i+type]
+      }
+    }
+  }
+  return res
+}
 // 基本信息
 function getRowBaseinfo(outdata) {
-  console.log(outdata)
   const equipmentBaseInfo = {
-    equipmentId: '', //  设备id
+    equipmentId: '', //  设备id,后端生成
     equipmentTypeName: '', // 设备类型
     postName: '', // 单位名称
     cabinetUStart: '', // 机柜起点
@@ -732,8 +752,8 @@ function getRowBaseinfo(outdata) {
     status: '', // 标志位
     equipmentName: '', // 设备名称
     businessSystem: '', // 所属二级系统
-    businessSystemLevel:'',//所属二级系统等保等级
-    businessSystemFirstName:'',//所属一级业务系统
+    businessSystemLevel: '',//所属二级系统等保等级
+    businessSystemFirstName: '',//所属一级业务系统
     hostName: '', // 主机名
     departmentName: '', // 部门
     basicInfoId: '', // 编号
@@ -743,7 +763,7 @@ function getRowBaseinfo(outdata) {
     appAdminPhone: '',
     businessOrExperimental: '', // 业务机试验机
     mainOrBackup: '', // 主机 备机
-    tureOrVirtual: '', // 实体机虚拟机
+    trueOrVirtual: '', // 实体机虚拟机
     migratable: '', // 是否可迁移
     brandName: '', // 品牌
     brandModelName: '', // 型号
@@ -754,140 +774,179 @@ function getRowBaseinfo(outdata) {
     onlineTime: '', // 上线时间
     offlineTime: '', // 下线时间
     //新增字段
-    accessLocation:'',//接入位置
-    singleAndDoublePowerSupply:'',//单双电源
-    agreedToTemporaryShutdown:'',//是否同意临时关停（是/否）
-    installSafetyMonitoringSoftware:'',//是否安装安全监测软件
-    deployStrongPassword:'',//是否部署强口令
-    cloudServiceUnit:'',//云服务单位
-    leasedComputingResources:'',//租用计算资源情况（CPU核数）（个）
-    leasedStorageResources:'',//租用存储资源情况（TB）
-    leasedNetworkBandwidth:'',//租用网络带宽（兆）
-    termOfLease:'',//租用期限（年）
-    domainName:'',//域名
-    domainNameRegistrationService:'',//域名注册服务商
-    ns:'',//NS记录
-    cname:'',//CNAME记录（别名）
-    useCDN:'',//是否使用CDN
-    deploymentEnvironment:'',//部署环境
-    networkArea:'' //网络区域
+    accessLocation: '',//接入位置
+    singleAndDoublePowerSupply: '',//单双电源
+    agreedToTemporaryShutdown: '',//是否同意临时关停（是/否）
+    installSafetyMonitoringSoftware: '',//是否安装安全监测软件
+    deployStrongPassword: '',//是否部署强口令
+    cloudServiceUnit: '',//云服务单位
+    leasedComputingResources: '',//租用计算资源情况（CPU核数）（个）
+    leasedStorageResources: '',//租用存储资源情况（TB）
+    leasedNetworkBandwidth: '',//租用网络带宽（兆）
+    termOfLease: '',//租用期限（年）
+    domainName: '',//域名
+    domainNameRegistrationService: '',//域名注册服务商
+    ns: '',//NS记录
+    cname: '',//CNAME记录（别名）
+    useCDN: '',//是否使用CDN
+    deploymentEnvironment: '',//部署环境
+    networkArea: '', //网络区域
+
+    isUpdate: false,//是否覆盖更新
+    isChinaLocalization: false,//是否国产化
+    isTestBusinessSystem: false, //正式或者测试业务
+    pool:'',//所属资源池
+    isTransfer:false,//是否存在调拨
+    transferRecord:'',//设备调拨记录
+    transferRecordTime:'',//设备调拨记录时间
+    isMoving:false,//是否存在移动
+    movingRecord:'',//设备移动记录
+    movingRecordTime:'',//设备移动记录时间
+    businessApplicationName:'',//业务应用名称、
   }
 
-  equipmentBaseInfo.networkArea = Object.values(outdata[0])[46]
-  equipmentBaseInfo.hostName = Object.values(outdata[0])[47]
-  equipmentBaseInfo.remarks = Object.values(outdata[0])[27]
+
   equipmentBaseInfo.dataSources = 'EXCEL批量导入'
-
+  equipmentBaseInfo.hostName = outdata[0]['主机名']
+  equipmentBaseInfo.remarks = outdata[0]['备注']
   //新增字段
-  equipmentBaseInfo.deploymentEnvironment = Object.values(outdata[0])[24]
-  equipmentBaseInfo.accessLocation = Object.values(outdata[0])[16]
-  equipmentBaseInfo.singleAndDoublePowerSupply = Object.values(outdata[0])[17]
-  equipmentBaseInfo.agreedToTemporaryShutdown = Object.values(outdata[0])[21]
-  equipmentBaseInfo.installSafetyMonitoringSoftware = Object.values(outdata[0])[22]
-  equipmentBaseInfo.deployStrongPassword = Object.values(outdata[0])[23]
-  equipmentBaseInfo.cloudServiceUnit = Object.values(outdata[0])[36]
-  equipmentBaseInfo.leasedComputingResources = Object.values(outdata[0])[37]
-  equipmentBaseInfo.leasedStorageResources = Object.values(outdata[0])[38]
-  equipmentBaseInfo.leasedNetworkBandwidth = Object.values(outdata[0])[39]
-  equipmentBaseInfo.termOfLease = Object.values(outdata[0])[40]
-  equipmentBaseInfo.domainName = Object.values(outdata[0])[41]
-  equipmentBaseInfo.domainNameRegistrationService = Object.values(outdata[0])[42]
-  equipmentBaseInfo.ns = Object.values(outdata[0])[43]
-  equipmentBaseInfo.cname = Object.values(outdata[0])[44]
-  equipmentBaseInfo.useCDN = Object.values(outdata[0])[45]
+  equipmentBaseInfo.deploymentEnvironment = outdata[0]['部署环境']
+  equipmentBaseInfo.accessLocation = outdata[0]['接入位置']
+  equipmentBaseInfo.singleAndDoublePowerSupply = outdata[0]['单双电源']
+  equipmentBaseInfo.agreedToTemporaryShutdown = outdata[0]['是否同意临时关停（是/否）']
+  equipmentBaseInfo.installSafetyMonitoringSoftware = outdata[0]['是否安装安全监测软件']
+  equipmentBaseInfo.deployStrongPassword = outdata[0]['是否部署强口令']
+  equipmentBaseInfo.cloudServiceUnit = outdata[0]['云服务单位']
+  equipmentBaseInfo.leasedComputingResources = outdata[0]['租用计算资源情况（CPU核数）（个）']
+  equipmentBaseInfo.leasedStorageResources = outdata[0]['租用存储资源情况（TB）']
+  equipmentBaseInfo.leasedNetworkBandwidth = outdata[0]['租用网络带宽（兆）']
+  equipmentBaseInfo.termOfLease = outdata[0]['租用期限（年）']
+  equipmentBaseInfo.domainName = outdata[0]['域名']
+  equipmentBaseInfo.domainNameRegistrationService = outdata[0]['域名注册服务商']
+  equipmentBaseInfo.ns = outdata[0]['NS记录']
+  equipmentBaseInfo.cname = outdata[0]['CNAME记录（别名）']
+  equipmentBaseInfo.useCDN = outdata[0]['是否使用CDN']
+  equipmentBaseInfo.networkArea = outdata[0]['网络区域']
 
+  equipmentBaseInfo.isUpdate = outdata[0]['是否覆盖更新']
 
+  equipmentBaseInfo.pool=outdata[0]['所属资源池']
+  equipmentBaseInfo.isTransfer=outdata[0]['是否存在调拨']
+  equipmentBaseInfo.transferRecord=notNull('设备调拨记录',2,'',outdata)
+  equipmentBaseInfo.transferRecordTime=notNull('设备调拨记录',2,'时间',outdata)
+  equipmentBaseInfo.isMoving=outdata[0]['是否存在移动']
+  equipmentBaseInfo.movingRecord=outdata[0]['设备移动记录']
+  equipmentBaseInfo.movingRecordTime=outdata[0]['设备移动记录时间']
+  equipmentBaseInfo.businessApplicationName=outdata[0]['业务应用名称']
+  equipmentBaseInfo.isChinaLocalization=outdata[0]['是否国产化']
 
+  let readStatus0 = []
+  // const { status: equipmentName, readStatus: readStatus1 } = underfindTransRow(outdata[0][3], '设备名称', readStatus0)// 设备名称
+  equipmentBaseInfo.equipmentName = outdata[0]['设备名称']
+  if(outdata[0]['设备状态']==='在用'){
+    equipmentBaseInfo.status=0
+  }else if(outdata[0]['设备状态']==='停用'){
+    equipmentBaseInfo.status=1
+  }else if(outdata[0]['设备状态']==='报废'){
+    equipmentBaseInfo.status=2
+  }else {
+    const message = {}
+    message.erro ='设备状态错误'
+    readStatus0.push(message)
+  }
 
-  let readStatus0=[]
-  // const { status: equipmentName, readStatus: readStatus1 } = underfindTransRow(Object.values(outdata[0])[3], '设备名称', readStatus0)// 设备名称
-  equipmentBaseInfo.equipmentName = Object.values(outdata[0])[3]
 
   const {
     status: businessSystem,
     readStatus: readStatus2
-  } = underfindTransRow(Object.values(outdata[0])[19], '所属系统', readStatus0)// 所属系统
+  } = underfindTransRow(outdata[0]['所属业务子系统'], '所属业务系统', readStatus0)// 所属系统
   equipmentBaseInfo.businessSystem = businessSystem
-  equipmentBaseInfo.businessSystemLevel=Object.values(outdata[0])[20]
-  equipmentBaseInfo.businessSystemFirstName=Object.values(outdata[0])[18]
+  equipmentBaseInfo.businessSystemLevel = outdata[0]['所属业务子系统等保等级']
+  equipmentBaseInfo.businessSystemFirstName = outdata[0]['所属业务系统']
+  equipmentBaseInfo.isTestBusinessSystem = outdata[0]['正式业务/测试业务']
 
   const {
     status: postName,
     readStatus: readStatus3
-  } = underfindTransRow(Object.values(outdata[0])[4], '单位', readStatus2) // 单位
+  } = underfindTransRow(outdata[0]['所属单位名称'], '单位', readStatus2) // 单位
   equipmentBaseInfo.postName = postName
 
   const {
     status: departmentName,
     readStatus: readStatus4
-  } = underfindTransRow(Object.values(outdata[0])[5], '部门', readStatus3) // 部门
+  } = underfindTransRow(outdata[0]['所属部门名称'], '部门', readStatus3) // 部门
   equipmentBaseInfo.departmentName = departmentName
 
   // debugger;
-  const Serial = Object.values(outdata[0])[0].split('-')
-  if (Serial.length != 4&&Serial.length != 3) {
+  const Serial = outdata[0]['设备编号'].split('-')
+  if (Serial.length != 4) {
     Message({
       type: 'error',
       message: '编号格式错误'
     })
-  } else if(Serial.length === 4){
-    equipmentBaseInfo.basicInfoId = Object.values(outdata[0])[0] // 编号
+  } else if (Serial[2] === 'S' || Serial[2] === 's' || Serial[2] === 'X' || Serial[2] === 'x') {
+    equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
-    equipmentBaseInfo.tureOrVirtual = (Serial[2] === 'S' || Serial[2] === 's') ? 0 : 1//实体机为0，虚拟机为1
-  }else {
-    equipmentBaseInfo.basicInfoId = Object.values(outdata[0])[0] // 编号
-    equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
+    equipmentBaseInfo.trueOrVirtual = (Serial[2] === 'S' || Serial[2] === 's') ? 1 : 0//实体机为1，虚拟机为0
+  } else {
+    equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
+    equipmentBaseInfo.equipmentTypeName = Serial[2] // 设备类型
+    equipmentBaseInfo.trueOrVirtual = outdata[0]['实体机/虚拟机'] === '实体机' ? 1 : 0
   }
   const {
     status: equipmentAdminName,
     readStatus: readStatus5
-  } = underfindTransRow(Object.values(outdata[0])[6], '设备管理员', readStatus4) // 设备管理员
+  } = underfindTransRow(outdata[0]['设备管理员'], '设备管理员', readStatus4) // 设备管理员
   equipmentBaseInfo.equipmentAdminName = equipmentAdminName
 
   const {
     status: equipmentAdminPhone,
     readStatus: readStatus6
-  } = underfindTransRow('0', '设备管理员电话号码', readStatus5)
+  } = underfindTransRow(outdata[0]['设备管理员电话'], '设备管理员电话号码', readStatus5)
   equipmentBaseInfo.equipmentAdminPhone = equipmentAdminPhone
 
   const {
     status: appAdminName,
     readStatus: readStatus7
-  } = underfindTransRow(Object.values(outdata[0])[6], '应用管理员', readStatus6) // 应用管理员
+  } = underfindTransRow(outdata[0]['应用管理员'], '应用管理员', readStatus6) // 应用管理员
   equipmentBaseInfo.appAdminName = appAdminName
 
-  const { status: appAdminPhone, readStatus: readStatus8 } = underfindTransRow(' ', '应用管理员电话号码', readStatus7)
+  const {
+    status: appAdminPhone,
+    readStatus: readStatus8
+  } = underfindTransRow(outdata[0]['应用管理员电话'], '应用管理员电话号码', readStatus7)
   equipmentBaseInfo.appAdminPhone = appAdminPhone
 
-  equipmentBaseInfo.businessOrExperimental = Object.values(outdata[0])[11]// 业务机试验机
-  equipmentBaseInfo.mainOrBackup = ' ' // 主机 备机
-  equipmentBaseInfo.migratable = ' ' // 是否迁移
+  equipmentBaseInfo.businessOrExperimental = outdata[0]['业务机/实验机']// 业务机试验机
+  equipmentBaseInfo.mainOrBackup = outdata[0]['主机/备机']// 主机 备机
+  equipmentBaseInfo.migratable = outdata[0]['是否可迁移']// 是否迁移
+  equipmentBaseInfo.shelfOff=outdata[0]['是否可下架']
 
   const {
     status: brandName,
     readStatus: readStatus9
-  } = underfindTransRow(Object.values(outdata[0])[8], '品牌', readStatus8) // 品牌
+  } = underfindTransRow(outdata[0]['品牌'], '品牌', readStatus8) // 品牌
   equipmentBaseInfo.brandName = brandName
 
   const {
     status: brandModelName,
     readStatus: readStatus10
-  } = underfindTransRow(Object.values(outdata[0])[9], '型号', readStatus9) // 型号
+  } = underfindTransRow(outdata[0]['型号'], '型号', readStatus9) // 型号
   equipmentBaseInfo.brandModelName = brandModelName
 
   const {
     status: machineRoomName,
     readStatus: readStatus11
-  } = underfindTransRow(Object.values(outdata[0])[12], '安装位置', readStatus10) // 安装位置
+  } = underfindTransRow(outdata[0]['所属机房'], '安装位置', readStatus10) // 安装位置
   equipmentBaseInfo.machineRoomName = machineRoomName
-  equipmentBaseInfo.cabinetUStart = Object.values(outdata[0])[14]
-  equipmentBaseInfo.cabinetUEnd = Object.values(outdata[0])[15]
-  equipmentBaseInfo.cabinetName = Object.values(outdata[0])[13]
+  equipmentBaseInfo.cabinetUStart = outdata[0]['机柜U位起始位']
+  equipmentBaseInfo.cabinetUEnd = outdata[0]['机柜U位结束位']
+  equipmentBaseInfo.cabinetName = outdata[0]['所属机柜']
 
   const {
     status: serialNumber,
     readStatus: readStatus12
-  } = underfindTransRow(Object.values(outdata[0])[10], '序列号', readStatus11) // 序列号
+  } = underfindTransRow(outdata[0]['序列号'], '序列号', readStatus11) // 序列号
   equipmentBaseInfo.serialNumber = serialNumber
 
 
@@ -895,38 +954,45 @@ function getRowBaseinfo(outdata) {
   const {
     status: onlineTime,
     readStatus: readStatus13
-  } = underfindTransRow(Object.values(outdata[0])[26], '上线时间', readStatus12) // 上线时间
+  } = underfindTransRow(outdata[0]['上线时间'], '上线时间', readStatus12) // 上线时间
 
-  if (dateRegex.test(onlineTime)||onlineTime=='') {
+  if (dateRegex.test(onlineTime) || onlineTime == '') {
     equipmentBaseInfo.onlineTime = onlineTime
   } else {
     const onlineTimeRegex = {}
-    onlineTimeRegex.erro="设备上线安装时间格式错误"
+    onlineTimeRegex.erro = '上线时间格式错误'
     readStatus13.push(onlineTimeRegex)
   }
 
   const {
     status: offlineTime,
     readStatus: readStatus14
-  } = underfindTransRow(Object.values(outdata[0])[25], '下线时间', readStatus13) // 下线时间
+  } = underfindTransRow(outdata[0]['下线时间'], '下线时间', readStatus13) // 下线时间
 
-  if (dateRegex.test(offlineTime)||offlineTime=='') {
+  if (dateRegex.test(offlineTime) || offlineTime == '') {
     equipmentBaseInfo.offlineTime = offlineTime
   } else {
     const offlineTimeRegex = {}
-    offlineTimeRegex.erro="维保结束时间格式错误"
+    offlineTimeRegex.erro = '下线时间格式错误'
     readStatus14.push(offlineTimeRegex)
   }
-  const { status: guaranteePeriod, readStatus: readStatus15 } = underfindTransRow(equipmentBaseInfo.onlineTime+"-"+equipmentBaseInfo.offlineTime, '保修期', readStatus14) // 保修期
-  equipmentBaseInfo.guaranteePeriod = guaranteePeriod
-
-  // console.log(equipmentBaseInfo)
-  // debugger
+  const {
+    status: guaranteePeriod,
+    readStatus: readStatus15
+  } = underfindTransRow(outdata[0]['保修期起始时间'] + '-' + outdata[0]['保修期结束时间'], '保修期', readStatus14) // 保修期
+  if (dateRegex.test(outdata[0]['保修期结束时间']) || outdata[0]['保修期结束时间'] == '') {
+    equipmentBaseInfo.guaranteePeriod = guaranteePeriod
+  } else {
+    const guaranteePeriodRegex = {}
+    guaranteePeriodRegex.erro = '保修期结束时间格式错误'
+    readStatus15.push(guaranteePeriodRegex)
+  }
   return { equipmentBaseInfo, readStatus: readStatus15 }
 
 }
 
 // 配置信息  通用软件信息
+
 function getRowConfig(outdata) {
   const configs = []
   const softwares = []
@@ -939,7 +1005,7 @@ function getRowConfig(outdata) {
     quantity: '' // 数量
   }
 
-  var configMemory= {
+  var configMemory = {
     frequency: '', // 频率
     projectName: '', // 项目
     corenessOrCapacity: '', // 核数
@@ -947,15 +1013,15 @@ function getRowConfig(outdata) {
     quantity: '' // 数量
   }
   configCPU.projectName = 'CPU' // 项目(CPU)
-  configCPU.type = Object.values(outdata[index])[28] // 类型
-  configCPU.frequency = '' // 性能指标
-  configCPU.corenessOrCapacity = '' // 数量指标
+  configCPU.type = outdata[index]['CPU类型'] // 类型
+  configCPU.frequency = outdata[index]['CPU频率'] // 性能指标
+  configCPU.corenessOrCapacity = outdata[index]['CPU核数'] // 数量指标
   configCPU.quantity = '' // 实配数量
   configs.push(configCPU)
   configMemory.projectName = '内存（GB）'//项目(内存)
   configMemory.type = ''
   configMemory.frequency = '' //性能指标
-  configMemory.corenessOrCapacity = Object.values(outdata[index])[29] //数量指标
+  configMemory.corenessOrCapacity = outdata[index]['内存容量(GB)'] //数量指标
   configMemory.quantity = ''
   configs.push(configMemory)
   var softwareOperatingSystem = {
@@ -980,24 +1046,24 @@ function getRowConfig(outdata) {
     buildDate: '' //建设时间
   }
   softwareOperatingSystem.project = '操作系统'
-  softwareOperatingSystem.projectName = Object.values(outdata[index])[30]
-  softwareOperatingSystem.edition = Object.values(outdata[index])[30]
-  softwareOperatingSystem.type = ''
-  softwareOperatingSystem.buildDate = Object.values(outdata[index])[31]
+  softwareOperatingSystem.projectName = notNull('操作系统',2,'名称',outdata)
+  softwareOperatingSystem.edition = notNull('操作系统',2,'版本',outdata)
+  softwareOperatingSystem.type = notNull('操作系统',2,'类型',outdata)
+  softwareOperatingSystem.buildDate = ''
   softwares.push(softwareOperatingSystem)
 
   softwareDatabase.project = '数据库'
-  softwareDatabase.projectName = Object.values(outdata[index])[32]
-  softwareDatabase.edition = Object.values(outdata[index])[32]
-  softwareDatabase.type = ''
-  softwareDatabase.buildDate = Object.values(outdata[index])[33]
+  softwareDatabase.projectName = notNull('数据库',3,'名称',outdata)
+  softwareDatabase.edition = notNull('数据库',3,'版本',outdata)
+  softwareDatabase.type = notNull('数据库',3,'类型',outdata)
+  softwareDatabase.buildDate = ''
   softwares.push(softwareDatabase)
 
   softwareMiddleware.project = '中间件'
-  softwareMiddleware.projectName = Object.values(outdata[index])[34]
-  softwareMiddleware.edition = Object.values(outdata[index])[34]
-  softwareMiddleware.type =""
-  softwareMiddleware.buildDate = Object.values(outdata[index])[35]
+  softwareMiddleware.projectName = notNull('中间件',5,'名称',outdata)
+  softwareMiddleware.edition = notNull('中间件',5,'版本',outdata)
+  softwareMiddleware.type =notNull('中间件',5,'类型',outdata)
+  softwareMiddleware.buildDate = ''
   softwares.push(softwareMiddleware)
   return {
     softwares,
@@ -1018,23 +1084,47 @@ function getRowPortagreement(outdata) {
     ipAddress: '' // IP地址
   }
 
-  var protocolPortConfig = {
+  var networkCoinfigHBA = {
+    networkCardName: '', // HBA
+    networkCardPort: '', // 端口
+    macAddress: '', // MAC地址
+    switchInfo: '', // 交换机
+    ipAddress: '' // IP地址
+  }
+
+  var protocolPortConfigHTTP = {
+    networkCardPort: '', // 端口
+    appName: '', // 应用名称
+    protocolName: '' // 协议
+  }
+  var protocolPortConfigFTP = {
     networkCardPort: '', // 端口
     appName: '', // 应用名称
     protocolName: '' // 协议
   }
 
-  networkCoinfig.networkCardName = "默认网卡"
-  networkCoinfig.ipAddress = Object.values(outdata[indexs])[1]
-  networkCoinfig.switchInfo = ""
-  networkCoinfig.macAddress = Object.values(outdata[indexs])[2]
-  networkCoinfig.networkCardPort = ""
+  networkCoinfig.networkCardName = '网卡'
+  networkCoinfig.ipAddress = notNull('网卡',2,'IP地址',outdata)
+  networkCoinfig.switchInfo = ''
+  networkCoinfig.macAddress = notNull('网卡',2,'MAC地址',outdata)
+  networkCoinfig.networkCardPort = ''
   networks.push(networkCoinfig)
+  networkCoinfigHBA.networkCardName = 'HBA卡'
+  networkCoinfigHBA.ipAddress = outdata[0]['HBA卡IP地址']
+  networkCoinfigHBA.switchInfo = ''
+  networkCoinfigHBA.macAddress = outdata[0]['HBA卡MAC地址']
+  networkCoinfigHBA.networkCardPort = ''
+  networks.push(networkCoinfigHBA)
 
-  protocolPortConfig.protocolName = ""
-  protocolPortConfig.appName = ""
-  protocolPortConfig.networkCardPort = ""
-  protocolPorts.push(protocolPortConfig)
+  protocolPortConfigHTTP.protocolName ='HTTP应用'
+  protocolPortConfigHTTP.appName = outdata[0]['HTTP应用名称']
+  protocolPortConfigHTTP.networkCardPort = outdata[0]['HTTP协议端口']
+  protocolPorts.push(protocolPortConfigHTTP)
+
+  protocolPortConfigFTP.protocolName = 'FTP应用'
+  protocolPortConfigFTP.appName = outdata[0]['FTP应用名称']
+  protocolPortConfigFTP.networkCardPort = outdata[0]['FTP协议端口']
+  protocolPorts.push(protocolPortConfigFTP)
 
   // console.log(networks, protocolPorts)
   return {
@@ -1061,13 +1151,13 @@ function getRowAppSoftwareFir(outdata) {
     softwareLiaison: '', // 联系人
     softwareLiaisonPhone: '' // 联系人电话号码
   }
-  appSoftwareData.softwareName = ""
-  appSoftwareData.softwareEdition = ""
-  appSoftwareData.softwarePort = ""
-  appSoftwareData.softwareOnlineTime = ""
-  appSoftwareData.softwareDevelopCompany = ""
-  appSoftwareData.softwareLiaison = ""
-  appSoftwareData.softwareLiaisonPhone = ""
+  appSoftwareData.softwareName = outdata[0]['专用软件名称']
+  appSoftwareData.softwareEdition = outdata[0]['专用软件版本']
+  appSoftwareData.softwarePort = outdata[0]['专用软件端口']
+  appSoftwareData.softwareOnlineTime = outdata[0]['专业软件上线时间']
+  appSoftwareData.softwareDevelopCompany = outdata[0]['专用软件研发单位']
+  appSoftwareData.softwareLiaison = outdata[0]['专用软件联系人']
+  appSoftwareData.softwareLiaisonPhone = ''
   appSoftwares.push(appSoftwareData)
 
   var appSystemUserData = {
@@ -1079,13 +1169,18 @@ function getRowAppSoftwareFir(outdata) {
     createDate: '', // 创建时间
     other: '' // 其他
   }
-  appSystemUserData.userName = ""
-  appSystemUserData.realName = ""
-  appSystemUserData.userLevel = ""
-  appSystemUserData.remoteAccessMode = ""
-  appSystemUserData.localAccessMode = ""
-  appSystemUserData.createData = ""
-  appSystemUserData.other = ""
+  appSystemUserData.userName = outdata[0]['系统用户名']
+  appSystemUserData.realName = outdata[0]['系统用户使用人']
+  appSystemUserData.userLevel = outdata[0]['系统用户权限级别']
+  if(outdata[0]['系统用户访问方式']==='本地'){
+    appSystemUserData.localAccessMode ='本地'
+    appSystemUserData.remoteAccessMode ='本地'
+  }else if (outdata[0]['系统用户访问方式']==='远程'){
+    appSystemUserData.localAccessMode ='远程'
+    appSystemUserData.remoteAccessMode ='远程'
+  }
+  appSystemUserData.createDate = outdata[0]['系统用户创建时间']
+  appSystemUserData.other = ''
   appSystemUsers.push(appSystemUserData)
 
   var appBusinessData = {
@@ -1094,10 +1189,10 @@ function getRowAppSoftwareFir(outdata) {
     domainName: '', // HTTP/FTP
     businessName: '' // 域名地址
   }
-  appBusinessData.businessName = ""
-  appBusinessData.domainName = ""
-  appBusinessData.userScope = ""
-  appBusinessData.ICPNum = ""
+  appBusinessData.businessName = outdata[0]['业务应用类型']
+  appBusinessData.domainName = outdata[0]['业务应用域名']
+  appBusinessData.userScope = outdata[0]['业务应用用户范围']
+  appBusinessData.ICPNum = outdata[0]['业务应用ICP号']
   appBusinesses.push(appBusinessData)
 
   var appStoreConfig = {
@@ -1106,27 +1201,22 @@ function getRowAppSoftwareFir(outdata) {
     capacity: '' // 已用信息
   }
   // console.log(appStoredata)
-  appStoreConfig.volume = ""
-  appStoreConfig.SAN_NAS = ""
-  appStoreConfig.capacity = ""
+  appStoreConfig.volume =  outdata[0]['非本机存储卷信息']
+  appStoreConfig.SAN_NAS = outdata[0]['SAN/NAS/分布式存储']
+  appStoreConfig.capacity = outdata[0]['非本机存储已用/分配容量']
   appStores.push(appStoreConfig)
 
-  appNativeStore.totalCapacity =Object.values(outdata[0])[46]
-  // appNativeStore.usedSpace = NativeStoredata[1]
-  // appNativeStore.unusedSpace = NativeStoredata[4]
-  // appNativeStore.annualGrowthSpace = NativeStoredata[5]
-
-  appNativeStore.totalCapacity = " "
-  appNativeStore.usedSpace = " "
-  appNativeStore.unusedSpace = " "
-  appNativeStore.annualGrowthSpace = " "
+  appNativeStore.totalCapacity = outdata[0]['本机存储总容量']
+  appNativeStore.usedSpace = outdata[0]['本机存储已用容量']
+  appNativeStore.unusedSpace =''
+  appNativeStore.annualGrowthSpace = outdata[0]['本机存储年增长空间']
 
   return {
     appSoftwares,
     appSystemUsers,
     appBusinesses,
     appStores,
-    appNativeStore,
+    appNativeStore
   }
 }
 
@@ -1136,10 +1226,10 @@ function getRowAppSoftwareSeLi(outdata) {
   const appLinksInfo = []
   let index = 0
 
-  appAccessRights.intranet = Object.values(outdata[index])[24]
-  appAccessRights.industryNetwork = Object.values(outdata[index])[24] //行业网
-  appAccessRights.internet = Object.values(outdata[index])[24] //互联网
-  appAccessRights.other = Object.values(outdata[index])[24]
+  appAccessRights.intranet = outdata[0]['访问权限']
+  appAccessRights.industryNetwork = outdata[0]['访问权限']//行业网
+  appAccessRights.internet = outdata[0]['访问权限']//互联网
+  appAccessRights.other = outdata[0]['访问权限']
 
   var appLinksData = {
     company: '',
@@ -1147,15 +1237,13 @@ function getRowAppSoftwareSeLi(outdata) {
     ipAddress: '',
     other: ''
   }
-  appLinksData.company = ""
-  appLinksData.userName = ""
-  appLinksData.ipAddress = ""
-  appLinksData.other = ""
-  // console.log(appLinksData)
+  appLinksData.company = outdata[0]['服务用户单位']
+  appLinksData.userName = outdata[0]['服务用户名']
+  appLinksData.ipAddress = outdata[0]['服务用户IP地址']
+  appLinksData.other = ''
   appLinksInfo.push(appLinksData)
 
-  // console.log('访问权限', appAccessRights)
-  // console.log('服务用户信息', appLinksInfo)
+
   return {
     appAccessRights,
     appLinksInfo

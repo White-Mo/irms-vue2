@@ -66,6 +66,13 @@ export function getList(obj) {
     responseType: 'json'
   })
 }
+export function getBasicInfoAll() {
+  return request({
+    url: '/home/inforesources/getBasicInfoAll',
+    method: 'get',
+    responseType: 'json'
+  })
+}
 //IP 地址数据获取
 export function getNetWorkList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
@@ -163,6 +170,15 @@ export function AddExcel(eq) {
   return request({
     data: eq,
     url: '/home/inforesources/AddExcel',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function importMachineRoom(machineRoom) {
+  return request({
+    data: machineRoom,
+    url: '/home/inforesources/importMachineRoom',
     method: 'post',
     responseType: 'json'
   })

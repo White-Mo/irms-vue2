@@ -162,10 +162,10 @@ export default {
       } else {
         const outdata = await importfile(this.checkList[0].value, this.value)
         //console.log("@",this.checkList[index].value.name)
-        // console.log('文件内容', outdata)
+        console.log('文件内容', outdata)
 
 
-        for (let index = 1; index < outdata.length; index++) {
+        for (let index = 0; index < outdata.length; index++) {
           const replayInfoRow = {
             equipmentId: '',
             errorType: '',
@@ -173,7 +173,7 @@ export default {
           }
           const userInfo=this.$store.state.user
           const { equipment, readStatus } = getRowEquipment([outdata[index]],userInfo)
-          // console.log(equipment)
+          console.log(equipment)
           if (readStatus.length == 0) {
             const equipments = [equipment]
             await AddExcel({ equipments: equipments }).then((res) => {
@@ -185,20 +185,20 @@ export default {
                 replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
                 replayInfoRow.errorType = res.message
                 replayInfoRow.errorData = JSON.stringify(res.data)
-                this.repalyInfo[index - 1] = replayInfoRow
+                this.repalyInfo[index] = replayInfoRow
               }
             }).catch((error) => {
               this.uploadResult.noReturn = this.uploadResult.noReturn + 1
               replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
               replayInfoRow.errorType = '未知错误'
               replayInfoRow.errorData = '未知错误'
-              this.repalyInfo[index - 1] = replayInfoRow
+              this.repalyInfo[index] = replayInfoRow
             })
           } else {
             this.uploadResult.fail = this.uploadResult.fail + 1
             replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
             replayInfoRow.errorData = JSON.stringify(readStatus)
-            this.repalyInfo[index - 1] = replayInfoRow
+            this.repalyInfo[index] = replayInfoRow
           }
           this.uploadResult.total = this.uploadResult.total + 1
           this.percent = parseFloat((this.uploadResult.total * 100 / (outdata.length - 1)).toFixed(2))
@@ -226,8 +226,8 @@ export default {
     downloadFile() {
       // templatefile.xlsx存储在public文件夹下
       let a = document.createElement('a')
-      a.href = './static/templatefile_row.xlsx'
-      a.download = '信息资产统计综合表(模板).xlsx'
+      a.href = './static/templatefile_row.zip'
+      a.download = '信息资产统计综合表(模板).zip'
       a.style.display = 'none'
       document.body.appendChild(a)
       a.click()

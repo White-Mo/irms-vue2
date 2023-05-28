@@ -44,8 +44,10 @@ export default {
     DownHelpDocument() {
       // specification.docx文件存储在public文件夹下
       let a = document.createElement('a')
-      a.href = './static/specification.docx'  //下载链接
-      a.download = '中国地震台网中心信息资源管理系统v1.0用户手册.docx'  //下载后文件名
+      // a.href = './static/specification.docx'  //下载链接
+      // a.download = '中国地震台网中心信息资源管理系统v1.0用户手册.docx'  //下载后文件名
+      a.href = './static/specification.pdf'  //下载链接
+      a.download = '中国地震台网中心信息资源管理系统v1.0用户手册.pdf'  //下载后文件名
       // a.style.display = 'none'
       document.body.appendChild(a)
       a.click() //点击下载
@@ -78,6 +80,34 @@ export default {
   background: #d3dce6;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
