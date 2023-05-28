@@ -7,7 +7,7 @@
       <el-col :span="1"><el-button size="mini" @click="back">返回</el-button></el-col>
     </el-row>
     <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
-      <el-tab-pane label="综合表" name="0">
+      <el-tab-pane label="综合表" name="0" style="height: 75vh">
         <el-form ref="form" :model="form = row" label-width="120px" :inline="true" class="demo-form-inline">
           <el-row v-show="currentShow === '2'">
             <el-form-item label="单位">
@@ -23,7 +23,7 @@
           <el-row v-show="currentShow === '3'">
             <el-col :span="5" :offset="1">
               <div class="selectLabel">单位</div>
-              <el-select v-model="form.postName" placeholder="请选择" @change="changePost">
+              <el-select v-model="form.postName" placeholder="请选择" @change="changePost":popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
@@ -62,6 +62,7 @@
 <!--          <el-col :span="2"><el-button type="indo" @click="showResult">查看反馈信息</el-button></el-col>-->
 
         </el-row>
+        <hr>
       </el-tab-pane>
       <el-tab-pane label="详情表" name="1">
         <div class="detail-content">
@@ -556,5 +557,23 @@ export default {
 }
 /deep/.el-input.is-disabled .el-input__inner{
   color: #898585;
+}
+//覆盖全局样式代码
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 20%;
+  margin: 10px;
+}
+/deep/.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px!important;
+  height: auto!important;
+  width: 1200px!important;
+  display: flex!important;
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important;
+  align-content: flex-start!important;
+  align-items: stretch!important;
+  max-height: 100vh!important;
 }
 </style>
