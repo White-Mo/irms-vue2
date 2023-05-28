@@ -52,6 +52,7 @@
         <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
         <el-col :span="2"><el-button type="primary" @click="next">下一步</el-button></el-col>
       </el-row>
+      <hr>
     </div>
 
 
@@ -433,12 +434,24 @@ export default {
 .el-radio:nth-of-type(1){
     margin-right: 35px;
 }
+
 //覆盖全局样式代码
-/deep/.el-select-dropdown__list{
-  width: 750px !important;
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 20%;
+  margin: 10px;
 }
-/deep/.el-select-dropdown__item{
-  height: 26px !important;
+/deep/.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px!important;
+  height: auto!important;
+  width: 1200px!important;
+  display: flex!important;
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important;
+  align-content: flex-start!important;
+  align-items: stretch!important;
+  max-height: 100vh!important;
 }
 .searchInput {
   text-align: center;
