@@ -71,9 +71,13 @@ export function resetRouter() {
 export function getAsyncRoutes() {
   return new Promise((resolve, reject) => {
     getMoveRoute().then(response => {
-      const { data } = response
-      asyncRoutes = filterAsyncRoutes(data) // 全部的路由数据
-      //console.log('ASR:', asyncRoutes)
+      if (response.data.length == 0){
+        asyncRoutes = []
+      }else {
+        console.log(response.data)
+        const { data } = response
+        asyncRoutes = filterAsyncRoutes(data) // 全部的路由数据
+      }
       resolve()
     }).catch(error => {
       reject(error)
@@ -139,13 +143,6 @@ export function filterAsyncRoutes(routes) {
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })
-/*  accessedRoutes.push(
-      {
-        path: '/computerRoom',
-        name: 'computerRoom',
-        component: () => import('@/views/inforesources/computerRoom/index')
-      }
-    )*/
   const firstRouteNode =
     {
       path: '/',
