@@ -14,7 +14,7 @@
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">Please check that the URL you entered is correct, or click the button below to return to the homepage.</div>
-        <a href="" class="bullshit__return-home">Back to home</a>
+        <div class="bullshit__return-home" @click=backHome>Back to home</div>
       </div>
     </div>
   </div>
@@ -22,12 +22,20 @@
 
 <script>
 
+import store from '@/store'
+
 export default {
   name: 'Page404',
   computed: {
     message() {
-      return 'The webmaster said that you can not enter this page...'
+      return '未拥有页面权限，请联系管理员获取页面权限'
     }
+  },
+  methods:{
+     async backHome() {
+       await this.$store.dispatch('user/logout')
+       this.$router.push(`/login`)
+     }
   }
 }
 </script>

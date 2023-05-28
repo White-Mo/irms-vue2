@@ -53,14 +53,17 @@ const actions = {
       getAsyncRoutes().then(() => {
         if (roles.includes('超级管理员')) {
           accessedRoutes = asyncRoutes || []
-        } else {
+        } else if(asyncRoutes.length == 0){
+          accessedRoutes =asyncRoutes
+        }
+        else {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         }
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }
       ).catch(error => {
-        //console.log(error)
+        console.log(error)
       })
     })
   }
