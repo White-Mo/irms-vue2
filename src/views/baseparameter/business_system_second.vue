@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <span style="color: #ffffff">业务系统管理</span>
+              <span style="color: #ffffff">业务子系统管理</span>
             </div>
           </el-col>
         </el-row>
