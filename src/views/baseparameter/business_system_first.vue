@@ -173,7 +173,7 @@ export default {
       this.isSearch =  false
       this.listLoading = true
       const params = {
-        start: this.currentPage-1,
+        start: (this.currentPage-1)*this.limit,
         limit: this.limit,
       }
       //调用接口获取数据

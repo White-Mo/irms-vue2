@@ -24,6 +24,8 @@
           <el-table-column
             type="index"
             align="center"
+            label='序号'
+            width='60'
           />
           <el-table-column
             v-for="(item,index) in dataname"
@@ -135,7 +137,6 @@ export default {
       singalInfo: {},
       initval: [],
       dataname: [
-        {value: 'sequenceNumber', label: '序号'},
         {value: "basicInfoId", label:"设备编号"},
         {value: "postName", label:"所属单位名称"},
         {value: "departmentName", label:"所属部门名称"},
@@ -366,6 +367,7 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+      this.fetchData()
     },
     /**
      * el-table-column 自适应列宽
