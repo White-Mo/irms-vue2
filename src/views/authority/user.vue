@@ -119,17 +119,6 @@
             </el-table-column>
           </el-table>
         </div>
-<!--        <el-dialog
-            title="请确认要删除这条记录吗?"
-            :visible.sync="centerDialogVisible"
-            width="30%"
-            center
-          >
-            <span slot="footer" class="dialog-footer">
-              <el-button style="height: 2.8rem;" @click="centerDialogVisible = false">取 消</el-button>
-              <el-button type="primary" style="height: 2.8rem;" @click="deleteUserPlus">确 定</el-button>
-            </span>
-        </el-dialog>-->
         <el-dialog
             :title="headInfo"
             :visible.sync="userDialogDisplay"
@@ -150,17 +139,6 @@
               密码
               <el-input v-model="update_data.password " placeholder="请输入密码" style="width: 20rem;left:2.8rem;" show-password></el-input>
             </div>
-            <!-- <div>
-              单位
-              <el-select v-model="update_data.Unit" placeholder="请选择" style="width: 20rem;left:2.8rem;">
-                <el-option
-                  v-for="item in PostAll"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId">
-                </el-option>
-              </el-select>
-            </div> -->
             <div>
                 角色
               <el-select v-model="update_data.Roles" placeholder="请选择" @change="changeGroupID" style="width: 20rem;left:2.8rem;">
@@ -182,6 +160,10 @@
                   :value="item.departmentId">
                 </el-option>
               </el-select>
+            </div>
+            <div>
+              电话
+              <el-input v-model="update_data.telephone" placeholder="请输入电话" style="width: 20rem;left:2.8rem;"></el-input>
             </div>
             <div>
                 状态
@@ -299,9 +281,14 @@ export default {
           label: '角色'
         },
         {
+          value: 'telephone',
+          label: '电话'
+        },
+        {
           value: 'status',
           label: '状态'
         }
+
       ],
       // 显示弹窗
       centerDialogVisible: false,
@@ -315,11 +302,14 @@ export default {
         Unit:"",
         department:"",
         Roles:"",
+        telephone:"",
         Status:"",
         row:{},
       },
       departmentAll: [],
       updateOrAdd:false,
+      tempDepartmentId:'',
+      tempDepartmentPostOrName:''
     }
   },
   mounted() {
@@ -354,7 +344,6 @@ export default {
         action:this.action,
         accountId:this.accountId,
       }
-      console.log(params)
       checkAccountName(params).then((res)=>{
         if (res.data.valid!=true) {
           this.disabled = true;
@@ -517,31 +506,38 @@ export default {
     },
 
     async updateUser(row){
-      this.accountId=row.id   //获取用户ID
-      this.disabled=false      //点击修改按钮，提交按钮不禁用
-      let temp = row.role.split("/")
-      this.userDialogDisplay = true
-      this.updateOrAdd = true
-      this.headInfo = "更新用户信息"
-      this.update_data.username = row.realname
-      this.update_data.account = row.username
-      this.update_data.password = row.password
-      this.update_data.Unit = temp[0]
-      this.update_data.department =''
-
-      this.update_data.Roles = row.roles
-      this.update_data.Status = row.status==="激活" ? '0':'1'
-      // this.update_data.Status = row.status==="激活" ? '0':'1'
-      this.update_data.row = row
-      //console.log(row)
-      //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
-      // this.departmentAll = (await getDepartment(row.roleid)).data.items
       getPostDepartmentAll({groupid:row.groupid}).then(res=>{
-        //console.log(res)
         for(let i of res.data.items){
           i["postAnddepartment"] = i.postName + '/' + i.departmentName
         }
         this.departmentAll = res.data.items
+        for (let i = 0; i < this.departmentAll.length; i++) {
+          if(this.departmentAll[i].departmentId === row.roleDepartmentId){
+            this.tempDepartmentId = this.departmentAll[i].departmentId
+            this.tempDepartmentPostOrName = this.departmentAll[i].postAnddepartment
+            break
+          }
+        }
+
+        this.accountId=row.id   //获取用户ID
+        this.disabled=false      //点击修改按钮，提交按钮不禁用
+        let temp = row.role.split("/")
+        this.userDialogDisplay = true
+        this.updateOrAdd = true
+        this.headInfo = "更新用户信息"
+        this.update_data.username = row.realname
+        this.update_data.account = row.username
+        this.update_data.password = ''
+        this.update_data.Unit = temp[0]
+        this.update_data.department =this.tempDepartmentPostOrName
+        this.update_data.Roles = row.roles
+        this.update_data.telephone = row.telephone
+        this.update_data.Status = row.status==="激活" ? '0':'1'
+        // this.update_data.Status = row.status==="激活" ? '0':'1'
+        this.update_data.row = row
+        //console.log(row)
+        //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
+        // this.departmentAll = (await getDepartment(row.roleid)).data.items
       })
     },
     changeGroupID(groupid){
@@ -560,6 +556,11 @@ export default {
       this.departmentAll = []
     },
     async updateUserPlus(){
+      if(this.update_data.account===""||this.update_data.password===""||this.update_data.username===""|| this.update_data.telephone===""){
+        alert("请填写完整的信息")
+        return
+      }
+
       this.disabled = true;  //防止更新按钮重复点击
       if(this.checkAccount()===false){
       let params = {
@@ -570,11 +571,11 @@ export default {
         // roleid:"", // 单位的id
         // use_post:getDepartmentId(this.update_data.Unit), // 单位的id
         // use_post:this.update_data.row.roleid, // 单位的id
-        use_post:this.update_data.department == "" ? this.update_data.row.roleDepartmentId : this.update_data.department, // 单位的id
+        use_post:this.update_data.department === this.tempDepartmentPostOrName ? this.tempDepartmentId : this.update_data.department, // 单位的id
         // roleDepartmentId:"", // 部门的id
         // roles:"", // 权限的汉字名称
         groupid:this.update_data.row.groupid, // 权限对应的id
-        telephone:"", // 电话 暂时为空
+        telephone:this.update_data.telephone, // 电话 暂时为空
         isdel: this.update_data.Status == "" ? this.update_data.row.isdel : this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
@@ -599,7 +600,6 @@ export default {
     },
     add_user(){
       this.action='add' //判断是修改还是添加用户 add添加 update修改
-
       this.userDialogDisplay = true
       this.updateOrAdd = false
       this.headInfo = "添加新用户"
@@ -608,24 +608,30 @@ export default {
       this.update_data.password = ""
       this.update_data.department = ""
       this.update_data.Roles = ""
+      this.update_data.telephone = ""
       this.update_data.Status = ""
     },
     addUserPlus(){
+      if(this.update_data.account===""||this.update_data.password===""||this.update_data.username===""||
+        this.update_data.department===""||this.update_data.Roles===""||this.update_data.telephone===""||this.update_data.Status===""){
+        alert("请填写完整的信息")
+        return
+      }
       let params = {
         userid:this.userid,   // 修改者的id
         use_post:this.update_data.department, // 单位的id
         groupid:this.update_data.Roles, // 权限对应的id
-        telephone:"", // 电话 暂时为空
+        telephone:this.update_data.telephone, // 电话
         isdel: this.update_data.Status, // 帐号状态
         username:this.update_data.account, // 登录帐号
         realname:this.update_data.username, // 用户姓名
         password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
-      //console.log(params)
+      console.log("456",params)
       let _this = this
       createFosUser(params).then((res)=>{
-        //console.log(res)
+        console.log(res)
         _this.$message({
           message: '添加成功',
           type: 'success'
