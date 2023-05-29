@@ -336,7 +336,7 @@ export default {
   methods: {
     //登陆账号检查是否重复
     checkAccount(){
-      if (this.action!='add'){
+      if (this.action!=='add'){
         this.action='update'
       }
       const params={
@@ -348,7 +348,7 @@ export default {
         if (res.data.valid!=true) {
           this.disabled = true;
           this.$message({
-            message: '登陆账号重复，请更改',
+            message: '此账号已存在，请更改',
             type: 'error'
           })
         }else{
