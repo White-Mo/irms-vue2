@@ -682,6 +682,7 @@ export default {
     },
     async exportEscel(model) {
       if (model === 0) {
+        this.listLoading=true;
         if (this.DataName === 'all' || this.DataName.length === 0) {
           //console.log(this.DataName)
           this.initname = ['111']
@@ -711,10 +712,14 @@ export default {
               data.push(response.data.items)
             })
           }
-          await getExcelDemo1(data)
+          await getExcelDemo1(data).then(response=>{
+            this.listLoading=false
+          })
         } else {
           getBasicInfoAll(params).then((response) => {
-            getExcelDemo1(response.data.items)
+            getExcelDemo1(response.data.items).then(response=>{
+              this.listLoading=false
+            })
           })
         }
 
