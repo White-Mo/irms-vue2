@@ -53,6 +53,20 @@ function statusFormat(status) {
   }
   return status
 }
+function trueOrVirtualFormat(status) {
+  switch (status) {
+    case '0':
+      status = '虚拟机'
+      break
+    case '1':
+      status = '实体机'
+      break
+    default:
+      status = '数据错误'
+      break
+  }
+  return status
+}
 
 function getListInfo(key, listName, i, i_list) {
   let keyArray = key.split('.')
@@ -354,6 +368,7 @@ export async function getExcelDemo1(data) {
     row.getCell(16).value = timeFormat(row.getCell(16).value)
     row.getCell(17).value = timeFormat(row.getCell(17).value)
     row.getCell(18).value = statusFormat(row.getCell(18).value)
+    row.getCell(9).value = trueOrVirtualFormat(row.getCell(9).value)
     row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
       // //console.log('Cell ' + colNumber + ' = ' + cell.value);
       cell.alignment = { vertical: 'middle', horizontal: 'center' }

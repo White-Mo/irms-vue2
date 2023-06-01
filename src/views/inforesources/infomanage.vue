@@ -1,6 +1,6 @@
 <template>
   <div class='infobody'>
-    <div class='grid-content bg-purple'><i class='el-icon-s-order'/><span>信息资源管理</span></div>
+    <div class='grid-content bg-purple'><i class='el-icon-s-order' /><span>信息资源管理</span></div>
     <div class='app-container'>
       <div
         v-show="ifUpdate === '0'"
@@ -236,7 +236,7 @@
         </div>
       </div>
       <div v-if="ifUpdate === '1'">
-        <addInfo @changeDiv='changeDiv'/>
+        <addInfo @changeDiv='changeDiv' />
       </div>
       <div v-if="ifUpdate === '2' || ifUpdate === '3'">
         <updateInfo
@@ -286,12 +286,12 @@ export default {
       await this.refreshTable()
       this.$nextTick(() => {
         // 获取el-table的横向滚动条位置
-        const elTable = this.$refs.table.$el;
-        const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
-        bodyWrapper.scrollLeft = this.scrollLeft;
+        const elTable = this.$refs.table.$el
+        const bodyWrapper = elTable.querySelector('.el-table__body-wrapper')
+        bodyWrapper.scrollLeft = this.scrollLeft
         this.columnDrop()
       })
-    },
+    }
   },
   data() {
     return {
@@ -333,36 +333,33 @@ export default {
       singalInfo: {},
       initval: [],
       tempAllData: null,
-      // 用于保存旧的表格列顺序
-      oldList: [],
-      // 用于保存新的表格列顺序
       newList: [],
       // 定义表格列配置
       counter: 1,
       dataname: [
-        {value: 'sequenceNumber', label: '序号'},
-        {value: "basicInfoId", label:"设备编号"},
-        {value: "postName", label:"所属单位名称"},
-        {value: "departmentName", label:"所属部门名称"},
-        {value: "equipmentTypeName", label:"设备类型"},
+        { value: 'sequenceNumber', label: '序号' },
+        { value: 'basicInfoId', label: '设备编号' },
+        { value: 'postName', label: '所属单位名称' },
+        { value: 'departmentName', label: '所属部门名称' },
+        { value: 'equipmentTypeName', label: '设备类型' },
         {
-          value: "trueOrVirtual",
-          label:"实体机/虚拟机",
-          formatter:function(row){
-            let trueOrVirtual =row.trueOrVirtual === '1' ? "实体机" : "虚拟机"
+          value: 'trueOrVirtual',
+          label: '实体机/虚拟机',
+          formatter: function(row) {
+            let trueOrVirtual = row.trueOrVirtual === '1' ? '实体机' : '虚拟机'
             return trueOrVirtual
           }
         },
-        {value: "isChinaLocalization", label:"是否国产化"},
-        {value: "equipmentName", label:"设备名称"},
-        {value: "equipmentAdminName", label:"设备管理员"},
-        {value: "equipmentAdminPhone", label:"设备管理员电话"},
-        {value: "appAdminName", label:"应用管理员"},
-        {value: "appAdminPhone", label:"应用管理员电话"},
+        { value: 'isChinaLocalization', label: '是否国产化' },
+        { value: 'equipmentName', label: '设备名称' },
+        { value: 'equipmentAdminName', label: '设备管理员' },
+        { value: 'equipmentAdminPhone', label: '设备管理员电话' },
+        { value: 'appAdminName', label: '应用管理员' },
+        { value: 'appAdminPhone', label: '应用管理员电话' },
         {
-          value: "onlineTime",
+          value: 'onlineTime',
           label: '上线时间',
-          formatter: function (row) {
+          formatter: function(row) {
             let time = row.onlineTime
             if (time == null) {
               return null
@@ -382,9 +379,9 @@ export default {
           }
         },
         {
-          value: "offlineTime",
+          value: 'offlineTime',
           label: '下线时间',
-          formatter: function (row) {
+          formatter: function(row) {
             let time = row.offlineTime
             if (time == null) {
               return null
@@ -406,57 +403,80 @@ export default {
             }
           }
         },
-        {value: "status", label:"设备状态"},
-        {value: "isTransfer", label:"是否存在调拨"},
-        {value: "transferRecord", label:"设备调拨记录"},
-        {value: "transferRecordTime", label:"设备调拨时间"},
-        {value: "isMoving", label:"是否存在移动"},
-        {value: "movingRecord", label:"设备移动记录"},
-        {value: "movingRecordTime", label:"设备移动时间"},
-        {value: "machineRoomName", label:"安装位置"},
-        {value: "cabinetName", label:"机柜号"},
-        {value: "cabinetUStart", label:"机柜开始U位"},
-        {value: "cabinetUEnd", label:"机柜结束U位"},
-        {value: "guaranteePeriod", label:"保修期"},
-        {value: "pool", label:"所属资源池"},
-        {value: "hostName", label:"主机名"},
-        {value: "businessApplicationName", label:"业务应用名称"},
-        {value: "businessSystem", label:"所属业务子系统"},
-        {value: "businessSystemLevel", label:"所属业务子系统等保等级"},
-        {value: "businessSystemFirstName", label:"所属业务系统"},
-        {value: "isTestBusinessSystem", label:"正式业务/实验业务"},
-        {value: "ipAddress", label:"IP地址"},
-        {value: "macAddress", label:"MAC地址"},
-        {value: "type", label:"CPU型号"},
-        {value: "configMemoryCorenessOrCapacity", label:"内存容量（GB）"},
-        {value: "softwareOperatingSystemEdition", label:"操作系统版本"},
-        {value: "edition", label:"中间件品牌规格"},
-        {value: "softwareDatabaseEdition", label:"数据库版本"},
-        {value: "businessOrExperimental", label:"业务机/实验机"},
-        {value: "mainOrBackup", label:"主机/备机"},
-        {value: "migratable", label:"是否可迁移"},
-        {value: "shelfOff", label:"是否可下架"},
-        {value: "brandName", label:"品牌"},
-        {value: "brandModelName", label:"型号"},
-        {value: "serialNumber", label:"序列号"},
-        {value: "deploymentEnvironment", label:"部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）"},
-        {value: "remarks", label:"备注"},
-        {value: "singleAndDoublePowerSupply", label:"单双电源"},
-        {value: "agreedToTemporaryShutdown", label:"是否同意临时关停（是/否）"},
-        {value: "installSafetyMonitoringSoftware", label:"是否安装安全监测软件"},
-        {value: "deployStrongPassword", label:"是否部署强口令"},
-        {value: "cloudServiceUnit", label:"云服务单位"},
-        {value: "leasedComputingResources", label:"租用计算资源情况（CPU核数）（个）"},
-        {value: "leasedStorageResources", label:"租用存储资源情况（TB）"},
-        {value: "leasedNetworkBandwidth", label:"租用网络带宽（兆）"},
-        {value: "termOfLease", label:"租用期限（年）"},
-        {value: "domainName", label:"域名"},
-        {value: "domainNameRegistrationService", label:"域名注册服务商"},
-        {value: "ns", label:"NS记录"},
-        {value: "cname", label:"CNAME记录（别名）"},
-        {value: "useCDN", label:"是否使用CDN"},
-        {value: "networkArea", label:"网络区域"},
-        {value: "accessLocation", label:"接入位置"},
+        {
+          value: 'status',
+          label: '设备状态',
+          formatter: function (row) {//还需要修改上方newList
+            let status = row.status
+            console.log(status)
+            switch (status) {
+              case '0':
+                status = '在用'
+                break
+              case '1':
+                status = '停用'
+                break
+              case '2':
+                status = '报废'
+                break
+              default:
+                status = '状态异常'
+                break
+            }
+            return status
+          }
+
+        },
+        { value: 'isTransfer', label: '是否存在调拨' },
+        { value: 'transferRecord', label: '设备调拨记录' },
+        { value: 'transferRecordTime', label: '设备调拨时间' },
+        { value: 'isMoving', label: '是否存在移动' },
+        { value: 'movingRecord', label: '设备移动记录' },
+        { value: 'movingRecordTime', label: '设备移动时间' },
+        { value: 'machineRoomName', label: '安装位置' },
+        { value: 'cabinetName', label: '机柜号' },
+        { value: 'cabinetUStart', label: '机柜开始U位' },
+        { value: 'cabinetUEnd', label: '机柜结束U位' },
+        { value: 'guaranteePeriod', label: '保修期' },
+        { value: 'pool', label: '所属资源池' },
+        { value: 'hostName', label: '主机名' },
+        { value: 'businessApplicationName', label: '业务应用名称' },
+        { value: 'businessSystem', label: '所属业务子系统' },
+        { value: 'businessSystemLevel', label: '所属业务子系统等保等级' },
+        { value: 'businessSystemFirstName', label: '所属业务系统' },
+        { value: 'isTestBusinessSystem', label: '正式业务/实验业务' },
+        { value: 'ipAddress', label: 'IP地址' },
+        { value: 'macAddress', label: 'MAC地址' },
+        { value: 'type', label: 'CPU型号' },
+        { value: 'configMemoryCorenessOrCapacity', label: '内存容量（GB）' },
+        { value: 'softwareOperatingSystemEdition', label: '操作系统版本' },
+        { value: 'edition', label: '中间件品牌规格' },
+        { value: 'softwareDatabaseEdition', label: '数据库版本' },
+        { value: 'businessOrExperimental', label: '业务机/实验机' },
+        { value: 'mainOrBackup', label: '主机/备机' },
+        { value: 'migratable', label: '是否可迁移' },
+        { value: 'shelfOff', label: '是否可下架' },
+        { value: 'brandName', label: '品牌' },
+        { value: 'brandModelName', label: '型号' },
+        { value: 'serialNumber', label: '序列号' },
+        { value: 'deploymentEnvironment', label: '部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）' },
+        { value: 'remarks', label: '备注' },
+        { value: 'singleAndDoublePowerSupply', label: '单双电源' },
+        { value: 'agreedToTemporaryShutdown', label: '是否同意临时关停（是/否）' },
+        { value: 'installSafetyMonitoringSoftware', label: '是否安装安全监测软件' },
+        { value: 'deployStrongPassword', label: '是否部署强口令' },
+        { value: 'cloudServiceUnit', label: '云服务单位' },
+        { value: 'leasedComputingResources', label: '租用计算资源情况（CPU核数）（个）' },
+        { value: 'leasedStorageResources', label: '租用存储资源情况（TB）' },
+        { value: 'leasedNetworkBandwidth', label: '租用网络带宽（兆）' },
+        { value: 'termOfLease', label: '租用期限（年）' },
+        { value: 'domainName', label: '域名' },
+        { value: 'domainNameRegistrationService', label: '域名注册服务商' },
+        { value: 'ns', label: 'NS记录' },
+        { value: 'cname', label: 'CNAME记录（别名）' },
+        { value: 'useCDN', label: '是否使用CDN' },
+        { value: 'networkArea', label: '网络区域' },
+        { value: 'accessLocation', label: '接入位置' }
 
 
       ],
@@ -618,14 +638,13 @@ export default {
   },
   created() {
     this.fetchData()
-    // 初始化旧列顺序
-    this.oldList = JSON.parse(JSON.stringify(this.dataname))
     // 初始化新列顺序
-    this.newList = JSON.parse(JSON.stringify(this.dataname))
-
-    this.newList[12].formatter = this.dataname[12].formatter
-    this.newList[13].formatter = this.dataname[13].formatter
-    this.newList[5].formatter = this.dataname[5].formatter
+    this.newList=this.dataname
+    // this.newList = JSON.parse(JSON.stringify(this.dataname))
+    // this.newList[12].formatter = this.dataname[12].formatter
+    // this.newList[13].formatter = this.dataname[13].formatter
+    // this.newList[14].formatter = this.dataname[14].formatter
+    // this.newList[5].formatter = this.dataname[5].formatter
   },
   mounted() {
     this.restaurants = this.loadAll()
@@ -636,24 +655,24 @@ export default {
     columnDrop() {
       // 创建列拖拽实例
       const wrapperTr = document.querySelector('.draggable .el-table__header-wrapper tr')
-      const elTable = this.$refs.table.$el;
-      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
+      const elTable = this.$refs.table.$el
+      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper')
       let position = 0
 
       Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
         onStart: env => {
-          position = env.oldIndex;
+          position = env.oldIndex
         },
         onMove: evt => {
-          const deltaX = evt.willInsertAfter;
+          const deltaX = evt.willInsertAfter
           console.log(deltaX)
 
           if (deltaX === true) {
             bodyWrapper.scrollLeft = bodyWrapper.scrollLeft + (evt.draggedRect.left)
           } else {
-            bodyWrapper.scrollLeft = bodyWrapper.scrollLeft - (evt.draggedRect.left);
+            bodyWrapper.scrollLeft = bodyWrapper.scrollLeft - (evt.draggedRect.left)
           }
         },
         onEnd: evt => {
@@ -716,50 +735,6 @@ export default {
 
     // change的处理事件
     handleSelectChange(val) {
-      //ip地址、mac地址单独选择事件-选择ip或mac一者，其他所有禁选；选择其他任何，ip和mac二者都禁选
-      // if (val.indexOf('ipAddress') !== -1) {
-      //   this.ipAddress = 1
-      //   for (const a in this.dataname_option) {
-      //     if (this.dataname_option[a].value !== 'ipAddress')
-      //       this.dataname_option[a].isDisabled = true
-      //   }
-      // } else if (val.indexOf('macAddress') !== -1) {
-      //   this.macAddress = 1
-      //   for (const b in this.dataname_option) {
-      //     if (this.dataname_option[b].value !== 'macAddress')
-      //       this.dataname_option[b].isDisabled = true
-      //   }
-      // } else {
-      //   if (val.length !== 0) {
-      //     this.remains = 1
-      //     this.dataname_option[6].isDisabled = true
-      //     this.dataname_option[7].isDisabled = true
-      //   }
-      // }
-      //当ip地址、mac地址取消勾选，恢复正常
-      // if (val.indexOf('ipAddress') === -1 && this.ipAddress === 1) {
-      //   for (const c in this.dataname_option) {
-      //     if (this.dataname_option[c].value !== 'ipAddress') {
-      //       this.dataname_option[c].isDisabled = false
-      //       this.ipAddress = 0
-      //     }
-      //   }
-      // } else if (val.indexOf('macAddress') === -1 && this.macAddress === 1) {
-      //   for (const d in this.dataname_option) {
-      //     if (this.dataname_option[d].value !== 'macAddress') {
-      //       this.dataname_option[d].isDisabled = false
-      //       this.macAddress = 0
-      //     }
-      //   }
-      // } else {
-      //   if (val.length === 0) {
-      //     for (const e in this.dataname_option) {
-      //       this.dataname_option[e].isDisabled = false
-      //       this.remains = 0
-      //     }
-      //   }
-      // }
-
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') === -1 && this.type === 1) {
         // console.log("删除CPU类型");
@@ -797,7 +772,7 @@ export default {
       InitValue(initdatas).then((response) => {
         this.initval = response.data.items
         for (let i = 0; i < this.initval.length; i++) {
-          this.foad.push({label: name, value: name + this.initval[i]})
+          this.foad.push({ label: name, value: name + this.initval[i] })
         }
         this.listLoading = false
       })
@@ -892,7 +867,7 @@ export default {
       //   }
       // }单独搜索ip和mac
       if (flog === false) {
-        console.log("参数2",params)
+        console.log('参数2', params)
         getList(params).then((response) => {
           this.list = response.data.items
           console.log('+++++++++', this.list)
@@ -1010,7 +985,7 @@ export default {
           limit: this.limit,
           searchCondition: this.tempGuaranteePeriodSearchCondition
         }
-        console.log(222,this.initname)
+        console.log(222, this.initname)
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
           let counter = params.start + 1
@@ -1133,10 +1108,10 @@ export default {
     },
     refreshTable() {
       // 获取el-table的横向滚动条位置
-      const elTable = this.$refs.table.$el;
-      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper');
-      this.scrollLeft = bodyWrapper.scrollLeft;
-      console.log(this.scrollLeft);
+      const elTable = this.$refs.table.$el
+      const bodyWrapper = elTable.querySelector('.el-table__body-wrapper')
+      this.scrollLeft = bodyWrapper.scrollLeft
+      console.log(this.scrollLeft)
 
       this.showTable = false
 

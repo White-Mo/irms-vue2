@@ -184,14 +184,17 @@ export default {
                 this.uploadResult.fail = this.uploadResult.fail + 1
                 replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
                 replayInfoRow.errorType = res.message
-                replayInfoRow.errorData = JSON.stringify(res.data)
+                console.log(res.data)
+                console.log(res.data.equipmentBaseInfo)
+                replayInfoRow.errorData = res.data.equipmentBasicInfo.message
+
                 this.repalyInfo[index] = replayInfoRow
               }
             }).catch((error) => {
               this.uploadResult.noReturn = this.uploadResult.noReturn + 1
               replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
               replayInfoRow.errorType = '未知错误'
-              replayInfoRow.errorData = '未知错误'
+              replayInfoRow.errorData = error
               this.repalyInfo[index] = replayInfoRow
             })
           } else {
