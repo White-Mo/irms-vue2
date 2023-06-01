@@ -351,9 +351,10 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      console.log(this.preRow)
       const params = {
         dataName: this.initname,
-        dataValue: this.inputValue,
+        dataValue: this.preRow.cabinetId,
         status: "0",
         start: (val - 1) * this.limit,
         // start: val - 1,
