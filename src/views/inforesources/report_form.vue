@@ -333,6 +333,34 @@ export default {
       // 全选事件
       is_select_all:false,
       isMultiline:false,//是否多条件筛选
+      DataAll:[],
+      infoInput:{ //定义输入框里的字段
+        basicInfoId:'',
+        postName:'',
+        departmentName:'',
+        equipmentName:'',
+        brandName:'',
+        equipmentTypeName:'',
+        machineRoomName:'',
+        cabinetName:'',
+        onlineTime:'',
+        offlineTime:'',
+        hostName:'',
+        equipmentAdminName:'',
+        equipmentAdminPhone:'',
+        appAdminName:'',
+        appAdminPhone:'',
+        brandModelName:'',
+        serialNumber:'',
+        guaranteePeriod:'',
+        type:'',
+        edition:'',
+        mark:'',
+        start: 0,
+        limit: 10,
+        status: "0",
+      },
+
     }
   },
   components:{
@@ -361,6 +389,8 @@ export default {
         const params=JSON.parse(JSON.stringify(this.infoInput));
         params.start=this.tableData.length ? this.tableData.length : 0;
         params.limit=this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15;
+        params.prop="basicInfoId" ? "basicInfoId" : this.prop;
+        params.order= "descending" ? "descending" : this.order
         if(this.tableData.length < this.totalCount){
           this.isMore=false
           searchComprehensiveInfoByMultipleConditions(params).then(response=>{
@@ -380,7 +410,6 @@ export default {
           this.isflag=false
           this.isMore=true
         }
-
       }else {
         if (this.DataName === 'all' || this.DataName.length === 0) {
           //console.log(this.DataName)
@@ -421,17 +450,52 @@ export default {
     }
   },
   methods: {
-    sortChange(column){
-      console.log(column)
-      this.prop=column.prop
-      if (column.order==null){
-        this.order= 'ASC'
+    async sortChange(column) {
+
+      this.prop = column.prop
+      if (column.order == null) {
+        this.order = 'ASC'
       } else {
-        this.order=column.order
+        this.order = column.order
       }
-      this.listLoading=true
-      this.tableData.length=null
-      this.get_data()
+
+      if (this.isMultiline) {
+        this.infoInput.start = 0
+        this.infoInput.limit = 15
+        this.infoInput.mark = '';
+        this.infoInput.prop = this.prop
+        this.infoInput.order = this.order
+        const params = {...this.infoInput}
+
+        await this.getSearchData(params)
+          let searchAllData = this.DataAll;
+
+        this.listLoading = true;
+        this.tableData = [];
+
+
+        this.tableData = this.tableData.concat(searchAllData.items)
+
+        this.listLoading = false
+
+
+      } else {
+        this.listLoading = true
+        this.tableData.length = null
+        this.get_data()
+
+      }
+
+    },
+    async getSearchData(data){ //调接口获取多条件搜索出的结果数据
+      const params={ ...data }
+      params.postName = this.DataName
+      params.status='0'
+      await searchComprehensiveInfoByMultipleConditions(params).then(res=>{
+        this.DataAll = [];
+        this.DataAll = res.data
+
+      })
     },
     receiveAllSearchData(searchAllData,infoInput,postNameReturn){
       this.dialogVisible = false;
@@ -446,6 +510,7 @@ export default {
         num++
       }
       this.tableData = this.tableData.concat(searchAllData.items)
+
       this.totalCount=searchAllData.total;
       this.listLoading=false
     },

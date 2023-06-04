@@ -12,6 +12,7 @@ export function getList(obj) {
     obj.dataName = [
       'basicInfoId',
       'ipAddress',
+      'guaranteePeriod',
       'macAddress',
       'equipmentName',
       'postName',
