@@ -815,7 +815,44 @@ export default {
       } else {
         this.order = column.order
       }
-      this.fetchData()
+      //判断 筛选
+      if (this.isMultiline) {
+        this.infoInput.start = (this.currentPage - 1) * this.limit
+        this.infoInput.limit = this.limit
+        this.infoInput.prop=this.prop
+        this.infoInput.order=this.order
+        const params = this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res => {
+          this.list = res.data.items
+          console.log( "22222",res.data.items)
+          let counter = params.start + 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          this.total = res.data.total
+          this.listLoading = false
+        })
+      } else if (this.isGuaranteePeriodSearch) {  //判断 保修期
+        const params = {
+          start: (this.currentPage - 1) * this.limit,
+          limit: this.limit,
+          prop:this.prop,
+          order:this.order,
+          searchCondition: this.tempGuaranteePeriodSearchCondition
+        }
+        console.log(222,this.initname)
+        guaranteePeriodSearchByTime(params).then(res => {
+          this.list = res.data.items
+          let counter = params.start + 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          this.total = res.data.total
+          this.listLoading = false
+        })
+      } else {this.fetchData()}
     },
     //单条件搜索
     searchOne() {
