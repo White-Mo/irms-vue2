@@ -451,14 +451,13 @@ export default {
   },
   methods: {
     async sortChange(column) {
-
       this.prop = column.prop
       if (column.order == null) {
         this.order = 'ASC'
       } else {
         this.order = column.order
       }
-
+      //   判断 多条件搜索筛选
       if (this.isMultiline) {
         this.infoInput.start = 0
         this.infoInput.limit = 15
@@ -466,26 +465,19 @@ export default {
         this.infoInput.prop = this.prop
         this.infoInput.order = this.order
         const params = {...this.infoInput}
-
+        //得到数据
         await this.getSearchData(params)
-          let searchAllData = this.DataAll;
-
+        let searchAllData = this.DataAll;
         this.listLoading = true;
         this.tableData = [];
-
-
+        //将数据添加到表格中
         this.tableData = this.tableData.concat(searchAllData.items)
-
         this.listLoading = false
-
-
       } else {
         this.listLoading = true
         this.tableData.length = null
         this.get_data()
-
       }
-
     },
     async getSearchData(data){ //调接口获取多条件搜索出的结果数据
       const params={ ...data }

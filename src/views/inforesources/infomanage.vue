@@ -840,6 +840,7 @@ export default {
       } else {
         this.order = column.order
       }
+      //判断 筛选
       if (this.isMultiline) {
         this.infoInput.start = (this.currentPage - 1) * this.limit
         this.infoInput.limit = this.limit
@@ -857,7 +858,7 @@ export default {
           this.total = res.data.total
           this.listLoading = false
         })
-      } else if (this.isGuaranteePeriodSearch) {
+      } else if (this.isGuaranteePeriodSearch) {  //判断 保修期
         const params = {
           start: (this.currentPage - 1) * this.limit,
           limit: this.limit,
