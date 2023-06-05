@@ -300,14 +300,14 @@ export default {
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           if(res.message==="填写错误"){
-            res.message=res.data
+            res.message=res.data.equipmentBasicInfo.message
           }
           this.$alert(res.message, '提示', {
             confirmButtonText: '确定',
             type: 'info',
             showClose: false
           }).then(() => {
-            this.$router.go(0)
+            // this.$router.go(0)
           })
         }).catch(err => {
           this.active = 0

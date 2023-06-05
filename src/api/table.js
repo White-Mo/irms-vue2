@@ -8,16 +8,10 @@ export function getList(obj) {
   if(obj.order==null){
     obj.order='ASC'
   }
-  if(obj.dataValue=="实体机"){
-    obj.dataValue = 1
-  } else if (obj.dataValue=="虚拟机"){
-    obj.dataValue = 0
-  }
   if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
     obj.dataName = [
       'basicInfoId',
       'ipAddress',
-      'guaranteePeriod',
       'macAddress',
       'equipmentName',
       'postName',
@@ -62,6 +56,7 @@ export function getList(obj) {
       'ns',
       'cname',
       'useCDN',
+      'trueOrVirtual',
     ]
   }
   const params = JSON.parse(JSON.stringify(obj));
@@ -92,11 +87,6 @@ export function getNetWorkList(obj) {
   })
 }
 export function getdataCount(obj) {
-  if(obj.dataValue=="实体机"){
-    obj.dataValue = 1
-  } else if (obj.dataValue=="虚拟机"){
-    obj.dataValue = 0
-  }
   if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
     obj.dataName = [
       'basicInfoId',
@@ -145,6 +135,7 @@ export function getdataCount(obj) {
       'ns',
       'cname',
       'useCDN',
+      'trueOrVirtual',
     ]
   }
   // 将有数组和字符串的对象转为符合JSON格式的对象

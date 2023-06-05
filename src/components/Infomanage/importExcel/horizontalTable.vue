@@ -200,7 +200,7 @@ export default {
           } else {
             this.uploadResult.fail = this.uploadResult.fail + 1
             replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-            replayInfoRow.errorData = JSON.stringify(readStatus)
+            replayInfoRow.errorData = readStatus[0].erro
             this.repalyInfo[index] = replayInfoRow
           }
           this.uploadResult.total = this.uploadResult.total + 1

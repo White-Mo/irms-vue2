@@ -404,36 +404,69 @@ export default {
           softwareLiaison: ''
         }],
         equipmentBaseInfo: {
-          postName: '',
-          cabinetUEnd: '',
-          shelfOff: '',
-          brandModelName: '',
-          cabinetUStart: '',
-          basicInfoId: '1223',
-          businessOrExperimental: '1',
-          appAdminPhone: '',
-          dataSources: '',
-          departmentName: '',
-          trueOrVirtual: '1',
-          mainOrBackup: '1',
-          serialNumber: '',
+          equipmentId: '', //  设备id,后端生成
+          equipmentTypeName: '', // 设备类型
+          postName: '', // 单位名称
+          cabinetUStart: '', // 机柜起点
+          cabinetUEnd: '', // 机柜终点
+          shelfOff: '', // 是否可下架
+          dataSources: '', // 数据来源
+          insertUserId: '', // 数据插入用户
+          remarks: '', // 备注
+          status: '', // 标志位
+          equipmentName: '', // 设备名称
+          businessSystem: '', // 所属二级系统
+          businessSystemLevel: '',//所属二级系统等保等级
+          businessSystemFirstName: '',//所属一级业务系统
+          hostName: '', // 主机名
+          departmentName: '', // 部门
+          basicInfoId: '', // 编号
+          equipmentAdminName: '', // 设备管理员
           equipmentAdminPhone: '',
-          brandName: '',
-          hostName: '',
-          appAdminName: '',
-          cabinetName: '',
-          migratable: '1',
-          machineRoomName: '',
-          equipmentName: '',
-          guaranteePeriod: '',
-          onlineTime: '',
-          insertUserId: '',
-          equipmentTypeName: '',
-          offlineTime: '',
-          remarks: '',
-          status: '',
-          equipmentAdminName: '',
-          equipmentId: ''
+          appAdminName: '', // 应用管理员
+          appAdminPhone: '',
+          businessOrExperimental: '', // 业务机试验机
+          mainOrBackup: '', // 主机 备机
+          trueOrVirtual: '', // 实体机虚拟机
+          migratable: '', // 是否可迁移
+          brandName: '', // 品牌
+          brandModelName: '', // 型号
+          machineRoomName: '', // 安装位置
+          cabinetName: '', // 机柜号
+          serialNumber: '', // 序列号
+          guaranteePeriod: '', // 保修期
+          onlineTime: '', // 上线时间
+          offlineTime: '', // 下线时间
+          //新增字段
+          accessLocation: '',//接入位置
+          singleAndDoublePowerSupply: '',//单双电源
+          agreedToTemporaryShutdown: '',//是否同意临时关停（是/否）
+          installSafetyMonitoringSoftware: '',//是否安装安全监测软件
+          deployStrongPassword: '',//是否部署强口令
+          cloudServiceUnit: '',//云服务单位
+          leasedComputingResources: '',//租用计算资源情况（CPU核数）（个）
+          leasedStorageResources: '',//租用存储资源情况（TB）
+          leasedNetworkBandwidth: '',//租用网络带宽（兆）
+          termOfLease: '',//租用期限（年）
+          domainName: '',//域名
+          domainNameRegistrationService: '',//域名注册服务商
+          ns: '',//NS记录
+          cname: '',//CNAME记录（别名）
+          useCDN: '',//是否使用CDN
+          deploymentEnvironment: '',//部署环境
+          networkArea: '', //网络区域
+
+          isUpdate: false,//是否覆盖更新
+          isChinaLocalization: false,//是否国产化
+          isTestBusinessSystem: false, //正式或者测试业务
+          pool:'',//所属资源池
+          isTransfer:false,//是否存在调拨
+          transferRecord:'',//设备调拨记录
+          transferRecordTime:'',//设备调拨记录时间
+          isMoving:false,//是否存在移动
+          movingRecord:'',//设备移动记录
+          movingRecordTime:'',//设备移动记录时间
+          businessApplicationName:'',//业务应用名称、
         },
         config: [{ projectName: '', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '', projectName: '', edition: '', type: '' }],
@@ -611,13 +644,13 @@ export default {
       addEquipment({ equipments: equipments }).then(res => {
         console.log(res)
         if (res.status != 200) {
-          res.data = res.status == 201 ? res.message : res.data
+          res.data = res.status == 201 ? res.message : res.data.equipmentBasicInfo.message
           this.$alert(res.data, '提示', {
             confirmButtonText: '确定',
             type: 'info',
             showClose: false
           }).then(() => {
-            this.$router.go(0)
+            // this.$router.go(0)
           })
           this.showDialog = false
         } else {

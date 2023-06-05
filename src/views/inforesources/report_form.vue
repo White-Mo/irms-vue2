@@ -205,7 +205,7 @@ export default {
           value: "trueOrVirtual",
           label:"实体机/虚拟机",
           formatter:function(row){
-            let trueOrVirtual =row.trueOrVirtual === '1' ? "实体机" : "虚拟机"
+            let trueOrVirtual =row.trueOrVirtual === 1 ? "实体机" : "虚拟机"
             return trueOrVirtual
           }
         },
