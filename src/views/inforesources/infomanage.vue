@@ -920,7 +920,6 @@ export default {
         })
       }
     },
-
     addInfo() {
       this.ifUpdate = '1'
     },
@@ -1108,7 +1107,11 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
+      this.prop = "insertDate"
+      this.order = "descending"
       this.fetchData()
+      this.prop = "basicInfoId"
+      this.order = "ASC"
     },
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index) {
