@@ -329,6 +329,8 @@ export default {
       postname: '',
       input3: '',
       ifUpdate: '0',
+      backToPage: '',  //判断是否是添加设备
+      backToPage0: '',  //判断是否是编辑
       listLoading: true,
       singalInfo: {},
       initval: [],
@@ -856,6 +858,7 @@ export default {
     },
     //单条件搜索
     searchOne() {
+      this.backToPage = "c"
       this.start = 0
       this.currentPage = 1
       this.fetchData()
@@ -922,19 +925,24 @@ export default {
     },
     addInfo() {
       this.ifUpdate = '1'
+      this.backToPage = 'a'   //判断是否是 新增
+      this.backToPage0 = "b"
     },
     handleDetail(index, row) {
       console.log('------------------------------')
       console.log(index, row)
       this.row = row
       this.ifUpdate = '2'
+      this.backToPage0 = 'a'  // 判断是否是 详情
     },
     handleEdit(index, row) {
       //console.log(index, row)
       this.row = row
       this.ifUpdate = '3'
+      this.backToPage0 = 'a'   //判断是否是 编辑
     },
     handleDelete(row) {
+      this.backToPage0 = 'a'  //  判断是否是删除
       this.$confirm(`是否永久删除设备：\"${row.equipmentName}\"信息`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -947,7 +955,49 @@ export default {
             type: 'info',
             showClose: false
           }).then(() => {
-            this.fetchData()
+            if (this.backToPage ==="a"){
+              this.prop = "insertDate"
+              this.order = "descending"
+              this.fetchData()
+              this.prop = "basicInfoId"
+              this.order = "ASC"
+            } else if (this.isMultiline){
+              this.infoInput.start = (this.currentPage - 1) * this.limit
+              this.infoInput.limit = this.limit
+              this.listLoading = true
+              const params = this.infoInput
+              searchComprehensiveInfoByMultipleConditions(params).then(res => {
+                this.list = res.data.items
+                let counter = params.start + 1
+                this.list.forEach(item => {
+                  item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+                  counter++ // 计数器自增
+                })
+                this.total = res.data.total
+                this.listLoading = false
+              })
+            } else if (this.isGuaranteePeriodSearch) {  //判断 保修期
+              const params = {
+                start: (this.currentPage - 1) * this.limit,
+                limit: this.limit,
+                prop:this.prop,
+                order:this.order,
+                searchCondition: this.tempGuaranteePeriodSearchCondition
+              }
+              console.log(222,this.initname)
+              guaranteePeriodSearchByTime(params).then(res => {
+                this.list = res.data.items
+                let counter = params.start + 1
+                this.list.forEach(item => {
+                  item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+                  counter++ // 计数器自增
+                })
+                this.total = res.data.total
+                this.listLoading = false
+              })
+            } else {
+              this.fetchData()
+            }
           })
         })
       }).catch(() => {
@@ -956,10 +1006,7 @@ export default {
           message: '已取消删除'
         })
       })
-
     },
-
-
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.limit = val
@@ -1032,6 +1079,30 @@ export default {
           this.total = res.data.total
           this.listLoading = false
         })
+      } else if(this.backToPage==="a"){
+        this.prop = "insertDate"
+        this.order = "descending"
+        const params = {
+          dataName: this.initname,
+          dataValue: this.inputValue,
+          status: '0',
+          start: (val - 1) * this.limit,
+          limit: this.limit,
+          prop: this.prop,
+          order: this.order
+        }
+        getList(params).then((response) => {
+          this.list = response.data.items
+          let counter = params.start + 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          this.total = response.data.total
+          this.listLoading = false
+        })
+        this.prop = "basicInfoId"
+        this.order = "ASC"
       } else {
         const params = {
           dataName: this.initname,
@@ -1107,11 +1178,61 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
-      this.prop = "insertDate"
-      this.order = "descending"
-      this.fetchData()
-      this.prop = "basicInfoId"
-      this.order = "ASC"
+      if (this.backToPage==='a' && this.backToPage0 ==="a"){
+        this.prop = "insertDate"
+        this.order = "descending"
+        this.fetchData()
+        this.prop = "basicInfoId"
+        this.order = "ASC"
+      } else if (this.backToPage==='a' && this.backToPage0==="b") {
+        this.prop = "insertDate"
+        this.order = "descending"
+        this.currentPage = "1"
+        this.fetchData()
+        this.prop = "basicInfoId"
+        this.order = "ASC"
+      } else if (this.isMultiline){
+        this.infoInput.start = (this.currentPage - 1) * this.limit
+        this.infoInput.limit = this.limit
+        const params = this.infoInput
+        searchComprehensiveInfoByMultipleConditions(params).then(res => {
+          this.list = res.data.items
+          let counter = params.start + 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          this.total = res.data.total
+          this.listLoading = false
+        })
+      } else if (this.backToPage === "b"){
+        this.prop = "insertDate"
+        this.order = "descending"
+        this.fetchData()
+        this.prop = "basicInfoId"
+        this.order = "ASC"
+      } else if (this.isGuaranteePeriodSearch) {  //判断 保修期
+        const params = {
+          start: (this.currentPage - 1) * this.limit,
+          limit: this.limit,
+          prop:this.prop,
+          order:this.order,
+          searchCondition: this.tempGuaranteePeriodSearchCondition
+        }
+        console.log(222,this.initname)
+        guaranteePeriodSearchByTime(params).then(res => {
+          this.list = res.data.items
+          let counter = params.start + 1
+          this.list.forEach(item => {
+            item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+            counter++ // 计数器自增
+          })
+          this.total = res.data.total
+          this.listLoading = false
+        })
+      }else {
+        this.fetchData()
+      }
     },
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index) {
