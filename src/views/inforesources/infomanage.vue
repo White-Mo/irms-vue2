@@ -330,7 +330,7 @@ export default {
       input3: '',
       ifUpdate: '0',
       backToPage: '',  //判断是否是添加设备
-      backToPage0: '',  //判断是否是编辑
+      backToPage0: '',  //判断是否是（详情，编辑，删除）
       listLoading: true,
       singalInfo: {},
       initval: [],
@@ -858,7 +858,7 @@ export default {
     },
     //单条件搜索
     searchOne() {
-      this.backToPage = "c"
+      this.backToPage = "c"  //判断  是否是单条件搜索
       this.start = 0
       this.currentPage = 1
       this.fetchData()
@@ -925,6 +925,7 @@ export default {
     },
     addInfo() {
       this.ifUpdate = '1'
+      this.isMultiline = false
       this.backToPage = 'a'   //判断是否是 新增
       this.backToPage0 = "b"
     },
@@ -955,13 +956,13 @@ export default {
             type: 'info',
             showClose: false
           }).then(() => {
-            if (this.backToPage ==="a"){
+            if (this.backToPage ==="a" && !this.isMultiline){   //判断  是否是新增设备
               this.prop = "insertDate"
               this.order = "descending"
               this.fetchData()
               this.prop = "basicInfoId"
               this.order = "ASC"
-            } else if (this.isMultiline){
+            } else if (this.isMultiline){  // 判断  是否是筛选
               this.infoInput.start = (this.currentPage - 1) * this.limit
               this.infoInput.limit = this.limit
               this.listLoading = true
@@ -976,7 +977,7 @@ export default {
                 this.total = res.data.total
                 this.listLoading = false
               })
-            } else if (this.isGuaranteePeriodSearch) {  //判断 保修期
+            } else if (this.isGuaranteePeriodSearch) {  //判断 是否是保修期
               const params = {
                 start: (this.currentPage - 1) * this.limit,
                 limit: this.limit,
@@ -995,7 +996,7 @@ export default {
                 this.total = res.data.total
                 this.listLoading = false
               })
-            } else {
+            } else {  //防止以后出现其他问题
               this.fetchData()
             }
           })
@@ -1048,7 +1049,7 @@ export default {
     handleCurrentChange(val) {
       this.listLoading = true
       this.currentPage = val
-      if (this.isMultiline) {
+      if (this.isMultiline) {  // 判断是否是筛选
         this.infoInput.start = (val - 1) * this.limit
         this.infoInput.limit = this.limit
         const params = this.infoInput
@@ -1062,7 +1063,7 @@ export default {
           this.total = res.data.total
           this.listLoading = false
         })
-      } else if (this.isGuaranteePeriodSearch) {
+      } else if (this.isGuaranteePeriodSearch) {   // 判断是否是  保修期
         const params = {
           start: (val - 1) * this.limit,
           limit: this.limit,
@@ -1178,13 +1179,13 @@ export default {
     },
     changeDiv(value) {
       this.ifUpdate = value
-      if (this.backToPage==='a' && this.backToPage0 ==="a"){
+      if (this.backToPage==='a' && this.backToPage0 ==="a" && !this.isMultiline){
         this.prop = "insertDate"
         this.order = "descending"
         this.fetchData()
         this.prop = "basicInfoId"
         this.order = "ASC"
-      } else if (this.backToPage==='a' && this.backToPage0==="b") {
+      } else if (this.backToPage==='a' && this.backToPage0==="b" && !this.isMultiline) {
         this.prop = "insertDate"
         this.order = "descending"
         this.currentPage = "1"
