@@ -19,8 +19,8 @@
             <img src='../../assets/dashboard_imgs/info_1.png'>
           </div>
           <div :span='8' class='child_count_box_p'>
-            <p class='mainfont'>总设备数据量(台)</p>
-            <p id='equipmentAll'>{{ allEquipmentNumber }}</p>
+            <p class='mainfont'>在用设备/停用设备/报废设备</p>
+            <p id='equipmentAll'>{{ useEquipmentNumber }}/{{pauseEquipmentNumber}}/{{endEquipmentNumber}}</p>
           </div>
         </div>
         <div :span='8' class='content_count_box right'>
@@ -114,7 +114,7 @@ import {
 import {
   getApplicationUserCount,
   getEquipmentCount, getEquipmentTypeCount, getEquipmentUserCount,
-  getBusinessSystemCount, getOverGuaranteePeriodCount
+  getBusinessSystemCount, getOverGuaranteePeriodCount, getPauseEquipmentCount, getEndEquipmentCount
 } from '@/api/cockpit_data'
 import * as echarts from 'echarts'
 import chinaJson from '@/assets/simlpe1.json'
@@ -127,6 +127,9 @@ export default {
       chart1Count: 0,
       postIndex: 0,
       ipTotal: 0,
+      useEquipmentNumber: '',
+      pauseEquipmentNumber: '',
+      endEquipmentNumber: '',
       allEquipmentNumber: '',
       equipmentTypeNumber: '',
       overPeriodEquipmentNumber: '',
@@ -164,8 +167,17 @@ export default {
       const that = this
       getEquipmentCount().then(function (res) {
         // //console.log("************总设备数据量:"+ res.data.total +"*********************")
-        that.allEquipmentNumber = res.data.total
+        that.useEquipmentNumber = res.data.total
       }),
+        getPauseEquipmentCount().then(function (res) {
+          // //console.log("************总设备数据量:"+ res.data.total +"*********************")
+          that.pauseEquipmentNumber = res.data.total
+        }),
+        getEndEquipmentCount().then(function (res) {
+          // //console.log("************总设备数据量:"+ res.data.total +"*********************")
+          that.endEquipmentNumber = res.data.total
+        }),
+        that.allEquipmentNumber=that.useEquipmentNumber+that.pauseEquipmentNumber+that.endEquipmentNumber
         getEquipmentTypeCount().then(function (res) {
           // //console.log("************设备类型数据量:"+ res.data +"*********************")
           that.equipmentTypeNumber = res.data

@@ -4,6 +4,12 @@ import request from '@/utils/request'
 export const getEquipmentCount= () => {
   return request.get( '/home/inforesources/getCompreDataCount?dataName[]=111&dataValue=&status=0')
 }
+export const getPauseEquipmentCount= () => {
+  return request.get( '/home/inforesources/getCompreDataCount?dataName[]=111&dataValue=&status=1')
+}
+export const getEndEquipmentCount= () => {
+  return request.get( '/home/inforesources/getCompreDataCount?dataName[]=111&dataValue=&status=2')
+}
 
 //总设备类型数据量
 export const getEquipmentTypeCount= () => {
