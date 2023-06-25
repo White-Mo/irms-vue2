@@ -38,7 +38,7 @@
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
             :header-cell-style="{borderColor:'#C0C0C0'}"
-            v-loading='listLoading'
+            v-loading="listLoading"
             :disable='true'
             :data='handlersData'
             element-loading-text='Loading'
@@ -62,10 +62,10 @@
         <el-col span='11'>
           <el-table
             height='77vh'
-            :row-style="{height:'6.26vh'}"
+            :row-style="{height:'7vh'}"
             :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
             :header-cell-style="{borderColor:'#C0C0C0'}"
-            v-loading='listLoading'
+            v-loading="listLoading"
             :disable='true'
             :data='tableData'
             element-loading-text='Loading'
@@ -73,7 +73,7 @@
             highlight-current-row
             stripe
           >
-            <el-table-column align='center' type='index' />
+            <el-table-column align="center" type="index" :index="typeIndex"/>
             <el-table-column
               v-for='(item,index) in basicValue'
               :key='index'
@@ -84,6 +84,16 @@
             >
             </el-table-column>
           </el-table>
+          <div style="margin-left: 50px">
+            <el-pagination
+              :page-size="10"
+              :current-page="currentPage"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -98,15 +108,19 @@ import {
   getLogDataByDateAndUser, getLogDateAndCount, getCurrentDayLogData
 } from '@/api/log_management'
 import moment from 'moment'
+import {getPostByPage} from "@/api/baseparameter";
 
 export default {
   name: 'logRecord',
   data() {
     return {
+      listLoading: true,
       date: null,
       tableData: [],
+      total: 0,
+      currentPage:1,
+      limit:10,
       handlersData: [],
-      listLoading: false,
       timeParams: '',
       dateArr: [],
       year: '',
@@ -138,41 +152,72 @@ export default {
   created() {
   },
   mounted() {
+    //获取从当天开始按日期降序的数据
+    this.getLogData()
     //默认显示当天操作用户
     this.getCurrentDayDate()
-    //获取从当天开始按日期降序的数据
-    getLogData().then(response => {
-      this.tableData = response.data.items
-    })
     //操作频率统计
     this.frequencyChart()
     //获取有用户操作的日期和该日期操作的次数
     getLogDateAndCount().then(response => {
       this.scheduleData = response.data.items
       this.counts = response.data.items
-      console.log('用户操作的日期和该日期操作的次数', this.scheduleData)
+      // console.log('用户操作的日期和该日期操作的次数', this.scheduleData)
     })
 
   },
 
   methods: {
+    //分页连续展示   currentPage页码  limit每页数量
+    typeIndex(index){
+      return index+(this.currentPage-1)*this.limit + 1
+    },
+    handleSizeChange(val) {
+      //console.log(`每页 ${val} 条`)
+      this.limit=val
+      this.getLogData()
+    },
+    handleCurrentChange(val) {
+      this.currentPage=val
+      const params = {
+        start: this.currentPage-1,
+        limit: this.limit
+      }
+      getLogData(params).then((response) => {
+        this.tableData = response.data.items
+        this.total = response.data.total
+      })
+    },
+    //获取从当天开始按日期降序的数据
+    getLogData(){
+      this.listLoading = true
+      const params = {
+        start: this.currentPage-1,
+        limit: this.limit
+      }
+      getLogData(params).then(response => {
+        this.tableData = response.data.items
+        this.total = response.data.total
+      })
+      this.listLoading=false
+    },
     getCurrentDayDate() {
+      this.listLoading = true
       const currentDate = moment(new Date()).format('YYYY-MM-DD')
-      console.log(currentDate)
       getCurrentDayLogData(currentDate).then(response => {
-        console.log(response.data)
         this.handlersData = response.data.items
       })
+      this.listLoading =  false
     },
     handleDateChange(date) {
       this.timeParams = moment(date).format('YYYY-MM-DD')
       const timeParams = this.timeParams
       getLogDataUserByTime(timeParams).then(response => {
-        // console.log(response)
         this.handlersData = response.data.items
       })
       getLogDataByTime(timeParams).then(response => {
         this.tableData = response.data.items
+        this.total = response.data.total
       })
     },
     searchLogByDateAndUser(row) {
@@ -182,6 +227,7 @@ export default {
       }
       getLogDataByDateAndUser(params).then(response => {
         this.tableData = response.data.items
+        this.total = response.data.total
       })
     },
     frequencyChart() {

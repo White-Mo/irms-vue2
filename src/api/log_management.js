@@ -34,9 +34,9 @@ export function getLogDataByDateAndUser(data) {
   })
 }
 //获取日志数据
-export function getLogData() {
+export function getLogData(data) {
   return request({
-    params: '',
+    params: data,
     url: '/home/log_management/getLogData',
     method: 'get',
   })
