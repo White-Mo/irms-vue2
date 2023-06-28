@@ -16,7 +16,7 @@
         </el-row>
     </div>
     <footer>
-      <p style="text-align: center">软件信息-中国地震台网中心信息资源管理系统v1.0 Beta</p>
+      <p style="text-align: center">软件信息-地震信息资源管理系统v1.0 Beta</p>
     </footer>
   </div>
 </template>
@@ -45,9 +45,9 @@ export default {
       // specification.docx文件存储在public文件夹下
       let a = document.createElement('a')
       // a.href = './static/specification.docx'  //下载链接
-      // a.download = '中国地震台网中心信息资源管理系统v1.0用户手册.docx'  //下载后文件名
+      // a.download = '地震信息资源管理系统v1.0用户手册.docx'  //下载后文件名
       a.href = './static/specification.pdf'  //下载链接
-      a.download = '中国地震台网中心信息资源管理系统v1.0用户手册.pdf'  //下载后文件名
+      a.download = '地震信息资源管理系统v1.0用户手册.pdf'  //下载后文件名
       // a.style.display = 'none'
       document.body.appendChild(a)
       a.click() //点击下载

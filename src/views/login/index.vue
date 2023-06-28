@@ -4,7 +4,7 @@
              label-position='left'>
 
       <div class='title-container'>
-        <h3 class='title'>中国地震台网中心信息资源管理系统</h3>
+        <h3 class='title'>地震信息资源管理系统</h3>
       </div>
       <el-row>
         <el-form-item prop='username'>
