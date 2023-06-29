@@ -16,7 +16,7 @@
         </el-row>
     </div>
     <footer>
-      <p style="text-align: center">软件信息-地震信息资源管理系统v1.0 Beta</p>
+      <p style="text-align: center">软件信息-地震信息资源管理系统v1.5 Beta</p>
     </footer>
   </div>
 </template>

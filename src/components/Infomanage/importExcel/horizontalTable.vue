@@ -200,6 +200,7 @@ export default {
           } else {
             this.uploadResult.fail = this.uploadResult.fail + 1
             replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
+            replayInfoRow.errorType = readStatus[0].type
             replayInfoRow.errorData = readStatus[0].erro
             this.repalyInfo[index] = replayInfoRow
           }

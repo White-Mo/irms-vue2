@@ -169,10 +169,7 @@ function getBaseinfo(outdata, postName, userInfo) {
   // debugger;
   const Serial = Object.values(outdata[1])[8].split('-')
   if (Serial.length != 4) {
-    Message({
-      type: 'error',
-      message: '编号格式错误'
-    })
+    equipmentBaseInfo.basicInfoId = Object.values(outdata[1])[8] // 编号
   } else {
     equipmentBaseInfo.basicInfoId = Object.values(outdata[1])[8] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
@@ -803,6 +800,8 @@ function getRowBaseinfo(outdata) {
     movingRecord:'',//设备移动记录
     movingRecordTime:'',//设备移动记录时间
     businessApplicationName:'',//业务应用名称、
+    allowVulnerabilityScanning:'',//是否允许漏洞扫描
+
   }
 
 
@@ -838,7 +837,8 @@ function getRowBaseinfo(outdata) {
   equipmentBaseInfo.movingRecord=outdata[0]['设备移动记录']
   equipmentBaseInfo.movingRecordTime=outdata[0]['设备移动记录时间']
   equipmentBaseInfo.businessApplicationName=outdata[0]['业务应用名称']
-  equipmentBaseInfo.isChinaLocalization=outdata[0]['是否国产化']
+  equipmentBaseInfo.isChinaLocalization=outdata[0]['硬件是否国产化']
+  equipmentBaseInfo.allowVulnerabilityScanning=outdata[0]['是否允许漏洞扫描']
 
   let readStatus0 = []
   // const { status: equipmentName, readStatus: readStatus1 } = underfindTransRow(outdata[0][3], '设备名称', readStatus0)// 设备名称
@@ -849,6 +849,8 @@ function getRowBaseinfo(outdata) {
     equipmentBaseInfo.status=1
   }else if(outdata[0]['设备状态']==='报废'){
     equipmentBaseInfo.status=2
+  }else if(outdata[0]['设备状态']==='数据错误'){
+    equipmentBaseInfo.status=3
   }else {
     const message = {}
     message.erro ='设备状态错误'
@@ -880,10 +882,11 @@ function getRowBaseinfo(outdata) {
   // debugger;
   const Serial = outdata[0]['设备编号'].split('-')
   if (Serial.length != 4) {
-    Message({
-      type: 'error',
-      message: '编号格式错误'
-    })
+    equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
+    const message = {}
+    message.type='填写错误'
+    message.erro ='设备编号格式错误'
+    readStatus4.push(message)
   } else if (Serial[2] === 'S' || Serial[2] === 's' || Serial[2] === 'X' || Serial[2] === 'x') {
     equipmentBaseInfo.basicInfoId = outdata[0]['设备编号'] // 编号
     equipmentBaseInfo.equipmentTypeName = Serial[1] // 设备类型
@@ -1049,6 +1052,7 @@ function getRowConfig(outdata) {
   softwareOperatingSystem.projectName = notNull('操作系统',2,'名称',outdata)
   softwareOperatingSystem.edition = notNull('操作系统',2,'版本',outdata)
   softwareOperatingSystem.type = notNull('操作系统',2,'类型',outdata)
+  softwareOperatingSystem.type = notNull('操作系统',2,'是否国产化',outdata)
   softwareOperatingSystem.buildDate = ''
   softwares.push(softwareOperatingSystem)
 
@@ -1056,6 +1060,7 @@ function getRowConfig(outdata) {
   softwareDatabase.projectName = notNull('数据库',3,'名称',outdata)
   softwareDatabase.edition = notNull('数据库',3,'版本',outdata)
   softwareDatabase.type = notNull('数据库',3,'类型',outdata)
+  softwareDatabase.type = notNull('数据库',3,'是否国产化',outdata)
   softwareDatabase.buildDate = ''
   softwares.push(softwareDatabase)
 
@@ -1063,6 +1068,7 @@ function getRowConfig(outdata) {
   softwareMiddleware.projectName = notNull('中间件',5,'名称',outdata)
   softwareMiddleware.edition = notNull('中间件',5,'版本',outdata)
   softwareMiddleware.type =notNull('中间件',5,'类型',outdata)
+  softwareMiddleware.type =notNull('中间件',5,'是否国产化',outdata)
   softwareMiddleware.buildDate = ''
   softwares.push(softwareMiddleware)
   return {

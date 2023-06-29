@@ -889,7 +889,7 @@ export default {
     },
 
     /**
-     * 遍历列的所有内容，获取最宽一列的宽度
+     * 遍历列的所有内容，获取最宽一行的宽度
      * @param arr
      */
     getMaxLength(arr) {
