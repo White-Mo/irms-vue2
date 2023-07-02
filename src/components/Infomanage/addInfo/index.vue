@@ -54,9 +54,6 @@
       </el-row>
       <hr>
     </div>
-
-
-
     <div v-show="active==1">
       <div class="detail-content">
         <div class="detail-table">
@@ -69,8 +66,9 @@
                 <el-col>
                   <div class="padding-shipx shadows">基本信息</div>
                 </el-col>
+<!--                :model="form = equipment.equipmentBaseInfo"-->
               </el-row>
-              <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="gray-bg">
+              <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="gray-bg" :rules="rules">
                 <el-row>
                   <el-col :span="2"><div class="label-style">设备名称</div></el-col>
                   <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
@@ -79,16 +77,30 @@
                   <el-col :span="2"><div class="label-style">主机名</div></el-col>
                   <el-col :span="22"><div class="label-style"><el-input v-model="form.hostName" size="medium" /></div></el-col>
                 </el-row>
+
+<!--                rxr-->
                 <el-row>
-                  <el-col :span="2"><div class="label-style">设备管理员</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.equipmentAdminName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">电 话</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.equipmentAdminPhone" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">应用管理员</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.appAdminName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">电 话</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.appAdminPhone" size="medium" /></div></el-col>
+                  <el-form-item >
+                    <el-col :span="9"><div class="label-style">设备管理员</div></el-col>
+                    <el-col :span="15"><div class="label-style"><el-input v-model="form.equipmentAdminName" size="medium" /></div></el-col>
+                  </el-form-item>
+
+                    <el-form-item prop="equipmentAdminPhone">
+                    <el-col :span="9"><div class="label-style">电 话</div></el-col>
+                    <el-col :span="15"><div class="label-style"><el-input v-model="form.equipmentAdminPhone" size="medium"/></div></el-col>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <el-col :span="9"><div class="label-style">应用管理员</div></el-col>
+                    <el-col :span="15"><div class="label-style"><el-input v-model="form.appAdminName" size="medium" /></div></el-col>
+                  </el-form-item>
+
+                  <el-form-item prop="appAdminPhone">
+                    <el-col :span="9"><div class="label-style">电 话</div></el-col>
+                    <el-col :span="15"><div class="label-style"><el-input v-model="form.appAdminPhone" size="medium"/></div></el-col>
+                  </el-form-item>
                 </el-row>
+
                 <el-row>
                   <el-col :span="6"><div class="label-style">
                     <el-radio-group v-model="form.businessOrExperimental">
@@ -187,6 +199,7 @@ import { getPost, getDepartment, getEquipmentType } from '@/api/select'
 import { addEquipment } from '@/api/table'
 import user from '@/store/modules/user'
 import { TrianglesDrawMode } from 'three'
+import { checkPostName } from '@/api/baseparameter'
 
 export default {
   components: {
@@ -203,7 +216,7 @@ export default {
         appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
         equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
           businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', trueOrVirtual: '1', mainOrBackup: '1',
-          serialNumber: '', equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
+          serialNumber: '',  equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
           machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
           remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
         config: [{ projectName: 'CPU', type:'',frequency: '', corenessOrCapacity: '', quantity: '' },
@@ -218,7 +231,8 @@ export default {
         appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
-        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
+        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }],
+
       },
       configLable: { projectName: '项目',type:'类型', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量', },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
@@ -238,13 +252,45 @@ export default {
       labels:
         // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
         //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
-        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
-    }
+        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' },
+      // rxr
+      rules: {
+        equipmentAdminPhone: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' , showInInput: true },
+          {
+            validator: this.checkPhone,
+            trigger: 'blur',
+            showInInput: true
+          },
+        ],
+        appAdminPhone: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          {
+            validator: this.checkPhone,
+            trigger: 'blur',
+          },
+        ],
+      },
+
+    };
   },
   created() {
     this.fetchData()
   },
   methods: {
+    // rxr
+      checkPhone(rules, value, callback) {
+        if (value !== '') {
+          // 11位电话号码和7位数字验证↓
+          // var reg = /^1[3456789]\d{9}$|^\d{7}$/;
+          // 手机号码和座机号↓
+          var reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
+          if (!reg.test(value)) {
+            callback(new Error('请输入有效的手机号码'));
+          }
+        }
+        callback();
+      },
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
@@ -455,6 +501,36 @@ export default {
 }
 .searchInput {
   text-align: center;
+}
+//rxr 设备管理员到电话一行的样式修改
+.el-form--inline .el-form-item{
+  display: inline-block;
+  margin-right: 0px;
+  vertical-align: top;
+}
+/deep/ .el-form-item__error {
+  color: #F56C6C;
+  font-size: 12px;
+  line-height: 1;
+  padding-top: 0px;
+  position: absolute;
+  top: 79%;
+  left: 150px;
+}
+/deep/ .el-form-item {
+  margin-bottom: 1px;
+}
+/deep/.el-form-item__content{
+  line-height: 40px;
+  position: relative;
+  font-size: 14px;
+  width: 395px;
+}
+.el-col-9[data-v-512e4b66]{
+  width: 33%;
+}
+.el-col-15{
+  width: 67%;
 }
 </style>
 
