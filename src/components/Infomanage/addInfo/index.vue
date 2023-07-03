@@ -11,7 +11,7 @@
     <div v-show="active==0">
       <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
         <el-row :gutter="30">
-          <el-col :span="5" :offset="1">
+          <el-col :span="7" :offset="1">
             <div class="selectLabel">单位</div>
             <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
               <el-option
@@ -22,9 +22,9 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="7">
             <div class="selectLabel">部门</div>
-            <el-select v-model="form.departmentName" placeholder="请选择">
+            <el-select v-model="form.departmentName" placeholder="请选择" @change="linkData1">
               <el-option
                 v-for="item in departmentAll"
                 :key="item.value"
@@ -32,9 +32,9 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="7">
             <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName"  placeholder="请选择">
+            <el-select v-model="form.equipmentTypeName"  placeholder="请选择" @change="linkData2">
               <el-option
                 v-for="item in equipmentTypeAll"
                 :key="item.value"
@@ -44,9 +44,20 @@
             </el-select>
           </el-col>
         </el-row>
-        <el-form-item v-for="(value,key,index) in labels" :key="index" :label="value">
-          <el-input v-model="form[key]" />
-        </el-form-item>
+        <el-row :gutter="30">
+          <el-col :span="7"  :offset="1">
+            <div class="selectLabel1">柜内U位开始位</div>
+            <el-input style="width: 200px" v-model="form.cabinetUStart"/>
+          </el-col>
+          <el-col :span="7">
+            <div class="selectLabel1">柜内U位结束位</div>
+            <el-input style="width: 200px" v-model="form.cabinetUEnd"/>
+          </el-col>
+          <el-col :span="7">
+            <div class="selectLabel1" v-model="connectedA">设备编号</div>
+            <el-input :value="connectedA" style="width: 200px"/>
+          </el-col>
+        </el-row>
       </el-form>
       <el-row>
         <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
@@ -184,16 +195,25 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import { addEquipment } from '@/api/table'
+import { addEquipment, getBasicInfoAll, getList } from '@/api/table'
 import user from '@/store/modules/user'
 import { TrianglesDrawMode } from 'three'
 
 export default {
   components: {
-    Othertable
   },
   data() {
     return {
+      connectedData:['36','CZ',''],
+      connectedData1:'',
+      connected:'',
+      initialNum:'',
+      connectedPostCode:'',
+      connectedDepartmentCode:'',
+      connectedEquipmentTypeCode:'',
+      connectNumber:'',
+      params:'',
+
       roleid: user.state.roleid,
       role: user.state.roles[0],
       role_department_name: user.state.role_department_name,
@@ -238,17 +258,58 @@ export default {
       labels:
         // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
         //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
-        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
+        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' }
     }
   },
   created() {
     this.fetchData()
   },
+  computed:{
+    connectedA(){
+      this.searchBasicInfoId(this.connectedData1)
+      this.params = this.connectedData1 + this.connectNumber
+      this.equipment.equipmentBaseInfo.basicInfoId = this.params
+      if(this.connectedData[2] !== ''){
+        return this.params
+      }
+    }
+  },
   methods: {
+    async searchBasicInfoId(param){
+      const params1 = {
+        dataName:['111'],
+        dataValue:param ,
+        status: '0',
+        start: 0,
+        limit: 1000000,
+        prop:null,
+        order: null
+      }
+      console.log("this.params",param)
+      await getList(params1).then((response) => {
+        this.list = response.data.items
+        console.log('response', response.data.items)
+        if(response.data.items.length !== 0 && this.connectedData[2] !== ''){
+          for(let i=0;i<response.data.items.length;i++){
+            let str = response.data.items[i].basicInfoId
+            let num = parseInt(str.slice(str.length-4,str.length)) + 1
+            if(num>this.initialNum){
+              this.initialNum=num
+            }
+          }
+          console.log("initialNum",this.initialNum)
+          let lastNum = ('000' + this.initialNum).slice(-4)
+          this.connectNumber = '-' + lastNum
+          console.log("lastNum",lastNum)
+        }else{
+          this.connectNumber = '-' + '0001'
+        }
+      })
+    },
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        //console.log(response)
+        console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
@@ -316,13 +377,44 @@ export default {
       }
     },
     changePost(val) {
-      //console.log(val)
-      this.postAll.forEach(element => {
-        if (element.postName === val) {
-          getDepartment(element.postId).then(response => {
-            this.departmentAll = response.data.items
-            this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
-          })
+      getPost().then(res => {
+        for (const ele of res.data.items){
+          if (ele.postName === val ){
+            this.connectedPostCode = ele.postCode
+            this.connectedData[0] = ele.postCode
+            getDepartment(ele.postId).then(response => {
+              this.connectedData[1] = response.data.items[0].departmentCode
+              this.departmentAll = response.data.items
+              this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+              this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
+            })
+          }
+        }
+      })
+    },
+
+    linkData1(val){
+      console.log("data1  val",val)
+      for(let i=0;i<this.departmentAll.length;i++){
+        if(this.departmentAll[i].departmentName === val){
+          this.connectedDepartmentCode = this.departmentAll[i].departmentCode
+          this.connectedData[1] = this.departmentAll[i].departmentCode
+          this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
+        }
+      }
+    },
+    linkData2(val){
+      getEquipmentType().then(res => {
+        if(val == null){
+          this.connectedData1 = null
+        }else{
+          for(let i=0;i<res.data.items.length;i++){
+            if(res.data.items[i].equipmentTypeName === val){
+              this.connectedEquipmentTypeCode = res.data.items[i].equipmentTypeCode
+              this.connectedData[2] = res.data.items[i].equipmentTypeCode
+              this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
+            }
+          }
         }
       })
     },
@@ -337,6 +429,11 @@ export default {
 *,el-form-item__label{
     font-size: 18px;
 }
+.flex-container {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+}
+
 .tile-content{
   padding: 9px;
   margin-bottom: 20px;
@@ -354,6 +451,16 @@ export default {
   font-weight: 700;
   font-size: 14px;
     color: #606266;
+  width: 70px;
+}
+.selectLabel1{
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 35px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #606266;
+  width: 95px;
 }
 .detail-content{
   padding: 9px;
