@@ -1,193 +1,323 @@
 <template>
   <div>
-    <el-row class="tile-content shadows">
-      <el-col :span="23"><div>添加设备</div></el-col>
-      <el-col :span="1"><el-button size="mini" @click="back">返回</el-button></el-col>
+    <el-row class='tile-content shadows'>
+      <el-col :span='23'>
+        <div>添加设备</div>
+      </el-col>
+      <el-col :span='1'>
+        <el-button size='mini' @click='back'>返回</el-button>
+      </el-col>
     </el-row>
-    <el-steps :active="active" finish-status="success" class="tile-content shadows">
-      <el-step title="综合表" />
-      <el-step title="详情表" />
+    <el-steps :active='active' finish-status='success' class='tile-content shadows'>
+      <el-step title='综合表' />
+      <el-step title='详情表' />
     </el-steps>
-    <div v-show="active==0">
-      <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
-        <el-row :gutter="30">
-          <el-col :span="5" :offset="1">
-            <div class="selectLabel">单位</div>
-            <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
+    <div v-show='active==0'>
+      <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
+               class='demo-form-inline'>
+        <el-row :gutter='30'>
+          <el-col :span='5' :offset='1'>
+            <div class='selectLabel'>单位</div>
+            <el-select v-model='form.postName' placeholder='请选择' @change='changePost' :popper-append-to-body='false'>
               <el-option
-                v-for="item in postAll"
-                :key="item.value"
-                :value="item.postName"
-                class="searchInput"
+                v-for='item in postAll'
+                :key='item.value'
+                :value='item.postName'
+                class='searchInput'
               />
             </el-select>
           </el-col>
-          <el-col :span="5">
-            <div class="selectLabel">部门</div>
-            <el-select v-model="form.departmentName" placeholder="请选择">
+          <el-col :span='5'>
+            <div class='selectLabel'>部门</div>
+            <el-select v-model='form.departmentName' placeholder='请选择'>
               <el-option
-                v-for="item in departmentAll"
-                :key="item.value"
-                :value="item.departmentName"
+                v-for='item in departmentAll'
+                :key='item.value'
+                :value='item.departmentName'
               />
             </el-select>
           </el-col>
-          <el-col :span="5">
-            <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName"  placeholder="请选择">
+          <el-col :span='5'>
+            <div class='selectLabel'>设备类型</div>
+            <el-select v-model='form.equipmentTypeName' placeholder='请选择'>
               <el-option
-                v-for="item in equipmentTypeAll"
-                :key="item.value"
-                :value="item.equipmentTypeName"
-                :title="item.equipmentTypeName"
+                v-for='item in equipmentTypeAll'
+                :key='item.value'
+                :value='item.equipmentTypeName'
+                :title='item.equipmentTypeName'
               />
             </el-select>
           </el-col>
         </el-row>
-        <el-form-item v-for="(value,key,index) in labels" :key="index" :label="value">
-          <el-input v-model="form[key]" />
+        <el-form-item v-for='(value,key,index) in labels' :key='index' :label='value'>
+          <el-input v-model='form[key]' />
         </el-form-item>
       </el-form>
       <el-row>
-        <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
-        <el-col :span="2"><el-button type="primary" @click="next">下一步</el-button></el-col>
+        <el-col :span='2' :offset='11'>
+          <el-button type='primary' @click='prev'>上一步</el-button>
+        </el-col>
+        <el-col :span='2'>
+          <el-button type='primary' @click='next'>下一步</el-button>
+        </el-col>
       </el-row>
       <hr>
     </div>
-    <div v-show="active==1">
-      <div class="detail-content">
-        <div class="detail-table">
+    <div v-show='active==1'>
+      <div class='detail-content'>
+        <div class='detail-table'>
           <el-row>
-            <el-col :span="24"><div class="grid-content bg-blue"><h4><b>信息资产基础信息表</b></h4></div></el-col>
+            <el-col :span='24'>
+              <div class='grid-content bg-blue'><h4><b>信息资产基础信息表</b></h4></div>
+            </el-col>
           </el-row>
-          <div class="basic-info shadows">
-            <div class="basic-table">
+          <div class='basic-info shadows'>
+            <div class='basic-table'>
               <el-row>
                 <el-col>
-                  <div class="padding-shipx shadows">基本信息</div>
+                  <div class='padding-shipx shadows'>基本信息</div>
                 </el-col>
-<!--                :model="form = equipment.equipmentBaseInfo"-->
+                <!--                :model="form = equipment.equipmentBaseInfo"-->
               </el-row>
-              <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="gray-bg" :rules="rules">
+              <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
+                       class='gray-bg' :rules='rules'>
                 <el-row>
-                  <el-col :span="2"><div class="label-style">设备名称</div></el-col>
-                  <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>设备名称</div>
+                  </el-col>
+                  <el-col :span='22'>
+                    <div class='label-style'>
+                      <el-input v-model='form.equipmentName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="2"><div class="label-style">主机名</div></el-col>
-                  <el-col :span="22"><div class="label-style"><el-input v-model="form.hostName" size="medium" /></div></el-col>
-                </el-row>
-
-<!--                rxr-->
-                <el-row>
-                  <el-form-item >
-                    <el-col :span="9"><div class="label-style">设备管理员</div></el-col>
-                    <el-col :span="15"><div class="label-style"><el-input v-model="form.equipmentAdminName" size="medium" /></div></el-col>
-                  </el-form-item>
-
-                    <el-form-item prop="equipmentAdminPhone">
-                    <el-col :span="9"><div class="label-style">电 话</div></el-col>
-                    <el-col :span="15"><div class="label-style"><el-input v-model="form.equipmentAdminPhone" size="medium"/></div></el-col>
-                  </el-form-item>
-
-                  <el-form-item>
-                    <el-col :span="9"><div class="label-style">应用管理员</div></el-col>
-                    <el-col :span="15"><div class="label-style"><el-input v-model="form.appAdminName" size="medium" /></div></el-col>
-                  </el-form-item>
-
-                  <el-form-item prop="appAdminPhone">
-                    <el-col :span="9"><div class="label-style">电 话</div></el-col>
-                    <el-col :span="15"><div class="label-style"><el-input v-model="form.appAdminPhone" size="medium"/></div></el-col>
-                  </el-form-item>
+                  <el-col :span='2'>
+                    <div class='label-style'>主机名</div>
+                  </el-col>
+                  <el-col :span='22'>
+                    <div class='label-style'>
+                      <el-input v-model='form.hostName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
 
+                <!--                rxr-->
                 <el-row>
-                  <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.businessOrExperimental">
-                      <el-radio label="0">业 务 机</el-radio>
-                      <el-radio label="1">实 验 机</el-radio>
-                    </el-radio-group>
-                  </div></el-col>
-                  <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.mainOrBackup">
-                      <el-radio label="0">主 机</el-radio>
-                      <el-radio label="1">备 机</el-radio>
-                    </el-radio-group>
-                  </div></el-col>
-                  <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.trueOrVirtual">
-                      <el-radio label="1">实 体 机</el-radio>
-                      <el-radio label="0">虚 拟 机</el-radio>
-                    </el-radio-group>
-                  </div></el-col>
-                  <el-col :span="6"><div class="label-style">
-                    <el-radio-group v-model="form.migratable">
-                      <el-radio label="0">可 迁 移</el-radio>
-                      <el-radio label="1">不可迁移</el-radio>
-                    </el-radio-group>
-                  </div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>设备管理员</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.equipmentAdminName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>电 话</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-form-item prop='equipmentAdminPhone'>
+                        <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                      </el-form-item>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>应用管理员</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.appAdminName' size='medium' />
+                    </div>
+                  </el-col>
+
+                  <el-col :span='2'>
+                    <div class='label-style'>电 话</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-form-item prop='appAdminPhone'>
+                        <el-input v-model='form.appAdminPhone' size='medium' />
+                      </el-form-item>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col :span='6'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.businessOrExperimental'>
+                        <el-radio label='0'>业 务 机</el-radio>
+                        <el-radio label='1'>实 验 机</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.mainOrBackup'>
+                        <el-radio label='0'>主 机</el-radio>
+                        <el-radio label='1'>备 机</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.trueOrVirtual'>
+                        <el-radio label='1'>实 体 机</el-radio>
+                        <el-radio label='0'>虚 拟 机</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.migratable'>
+                        <el-radio label='0'>可 迁 移</el-radio>
+                        <el-radio label='1'>不可迁移</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="24"><div class="grid-content bg-blue-dark"><h4>基本信息</h4></div></el-col>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark'><h4>基本信息</h4></div>
+                  </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="2"><div class="label-style">品 牌</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.brandName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">型 号</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.brandModelName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">安装位置</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.machineRoomName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">机柜号</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.cabinetName" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>品 牌</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.brandName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>型 号</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.brandModelName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>安装位置</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.machineRoomName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>机柜号</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cabinetName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="2"><div class="label-style">序列号</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.serialNumber" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">保修期</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.guaranteePeriod" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">上线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.onlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
-                  <el-col :span="2"><div class="label-style">下线时间</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-date-picker v-model="form.offlineTime" size="medium" style="width:auto" value-format="yyyy-MM-dd" format="yyyy-MM-dd"></el-date-picker></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>序列号</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.serialNumber' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>保修期</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.guaranteePeriod' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>上线时间</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-date-picker v-model='form.onlineTime' size='medium' style='width:auto'
+                                      value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>下线时间</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto'
+                                      value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                    </div>
+                  </el-col>
                 </el-row>
               </el-form>
-              <el-row :gutter="20">
-                <el-col :span="12"><othertable :form="equipment.config" :lable="configLable" :ch=2>配置信息</othertable></el-col>
-                <el-col :span="12"><othertable :form="equipment.software" :lable="softwareLable" :ch=3>通用软件信息</othertable></el-col>
+              <el-row :gutter='20'>
+                <el-col :span='12'>
+                  <othertable :form='equipment.config' :lable='configLable' :ch=2>配置信息</othertable>
+                </el-col>
+                <el-col :span='12'>
+                  <othertable :form='equipment.software' :lable='softwareLable' :ch=3>通用软件信息</othertable>
+                </el-col>
               </el-row>
-              <el-row :gutter="20">
-                <el-col :span="12"><othertable :form="equipment.network" :lable="networkLable">网络信息</othertable></el-col>
-                <el-col :span="12"><othertable :form="equipment.protocolPort" :lable="protocolPortLable">协议端口信息</othertable></el-col>
+              <el-row :gutter='20'>
+                <el-col :span='12'>
+                  <othertable :form='equipment.network' :lable='networkLable'>网络信息</othertable>
+                </el-col>
+                <el-col :span='12'>
+                  <othertable :form='equipment.protocolPort' :lable='protocolPortLable'>协议端口信息</othertable>
+                </el-col>
               </el-row>
             </div>
           </div>
-          <div class="business-info shadows">
+          <div class='business-info shadows'>
             <el-row>
-              <el-col :span="24"><div class="grid-content bg-blue"><h4><b>业 务 应 用 信 息</b></h4></div></el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24"><othertable :form="equipment.appSoftware" :lable="appSoftwareLable">专用软件信息</othertable></el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24"><othertable :form="equipment.appSystemUser" :lable="appSystemUserLable">系统用户信息</othertable></el-col>
+              <el-col :span='24'>
+                <div class='grid-content bg-blue'><h4><b>业 务 应 用 信 息</b></h4></div>
+              </el-col>
             </el-row>
             <el-row>
-              <el-col :span="24"><othertable :form="equipment.appBusiness" :lable="appBusinessLable">业务应用</othertable></el-col>
+              <el-col :span='24'>
+                <othertable :form='equipment.appSoftware' :lable='appSoftwareLable'>专用软件信息</othertable>
+              </el-col>
             </el-row>
-            <el-row :gutter="20">
-              <el-col :span="12"><othertable :form="equipment.appAccessRights" :lable="appAccessRightsLable">访问权限</othertable></el-col>
-              <el-col :span="12"><othertable :form="equipment.appLinksInfo" :lable="appLinksInfoLable">链接（服务）用户信息</othertable></el-col>
+            <el-row>
+              <el-col :span='24'>
+                <othertable :form='equipment.appSystemUser' :lable='appSystemUserLable'>系统用户信息</othertable>
+              </el-col>
             </el-row>
-            <el-row :gutter="20">
-              <el-col :span="12"><othertable :form="equipment.appStore" :lable="appStoreLable">存 储</othertable></el-col>
-              <el-col :span="12"><othertable :form="equipment.appNativeStore" :lable="appNativeStoreLable">本 机 存 储</othertable></el-col>
+            <el-row>
+              <el-col :span='24'>
+                <othertable :form='equipment.appBusiness' :lable='appBusinessLable'>业务应用</othertable>
+              </el-col>
+            </el-row>
+            <el-row :gutter='20'>
+              <el-col :span='12'>
+                <othertable :form='equipment.appAccessRights' :lable='appAccessRightsLable'>访问权限</othertable>
+              </el-col>
+              <el-col :span='12'>
+                <othertable :form='equipment.appLinksInfo' :lable='appLinksInfoLable'>链接（服务）用户信息</othertable>
+              </el-col>
+            </el-row>
+            <el-row :gutter='20'>
+              <el-col :span='12'>
+                <othertable :form='equipment.appStore' :lable='appStoreLable'>存 储</othertable>
+              </el-col>
+              <el-col :span='12'>
+                <othertable :form='equipment.appNativeStore' :lable='appNativeStoreLable'>本 机 存 储</othertable>
+              </el-col>
             </el-row>
           </div>
         </div>
       </div>
       <el-row>
-        <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
-        <el-col :span="2"><el-button type="primary" @click="next">保存</el-button></el-col>
+        <el-col :span='2' :offset='11'>
+          <el-button type='primary' @click='prev'>上一步</el-button>
+        </el-col>
+        <el-col :span='2'>
+          <el-button type='primary' @click='next'>保存</el-button>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -213,84 +343,163 @@ export default {
       department: {},
       equipmentType: {},
       equipment: {
-        appSoftware: [{ softwareName: '', softwareEdition: '', softwarePort: '', softwareOnlineTime: '', softwareDevelopCompany: '', softwareLiaison: '' }],
-        equipmentBaseInfo: { postName: '', cabinetUEnd: '', shelfOff: '', brandModelName: '', cabinetUStart: '', basicInfoId: '',
-          businessOrExperimental: '1', appAdminPhone: '', dataSources: '', departmentName: '', trueOrVirtual: '1', mainOrBackup: '1',
-          serialNumber: '',  equipmentAdminPhone: '', brandName: '', hostName: '', appAdminName: '', cabinetName: '', migratable: '1',
-          machineRoomName: '', equipmentName: '', guaranteePeriod: '', onlineTime: '', insertUserId: user.state.token, equipmentTypeName: '', offlineTime: '',
-          remarks: '', status: '', equipmentAdminName: '', equipmentId: '' },
-        config: [{ projectName: 'CPU', type:'',frequency: '', corenessOrCapacity: '', quantity: '' },
-          { projectName: '内存（GB）', type:'',frequency: '', corenessOrCapacity: '', quantity: '' }],
+        appSoftware: [{
+          softwareName: '',
+          softwareEdition: '',
+          softwarePort: '',
+          softwareOnlineTime: '',
+          softwareDevelopCompany: '',
+          softwareLiaison: ''
+        }],
+        equipmentBaseInfo: {
+          postName: '',
+          cabinetUEnd: '',
+          shelfOff: '',
+          brandModelName: '',
+          cabinetUStart: '',
+          basicInfoId: '',
+          businessOrExperimental: '1',
+          appAdminPhone: '',
+          dataSources: '',
+          departmentName: '',
+          trueOrVirtual: '1',
+          mainOrBackup: '1',
+          serialNumber: '',
+          equipmentAdminPhone: '',
+          brandName: '',
+          hostName: '',
+          appAdminName: '',
+          cabinetName: '',
+          migratable: '1',
+          machineRoomName: '',
+          equipmentName: '',
+          guaranteePeriod: '',
+          onlineTime: '',
+          insertUserId: user.state.token,
+          equipmentTypeName: '',
+          offlineTime: '',
+          remarks: '',
+          status: '',
+          equipmentAdminName: '',
+          equipmentId: ''
+        },
+        config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '', quantity: '' },
+          { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
         software: [{ project: '操作系统', projectName: '', edition: '', type: '' },
           { project: '数据库', projectName: '', edition: '', type: '' },
           { project: '中间件', projectName: '', edition: '', type: '' }],
         network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
-        appSystemUser: [{ userName: '', realName: '', userLevel: '', localAccessMode: '', remoteAccessMode: '', createDate: '', other: '' }],
+        appSystemUser: [{
+          userName: '',
+          realName: '',
+          userLevel: '',
+          localAccessMode: '',
+          remoteAccessMode: '',
+          createDate: '',
+          other: ''
+        }],
         appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
         appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
-        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }],
+        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
 
       },
-      configLable: { projectName: '项目',type:'类型', frequency: '频率', corenessOrCapacity: '核数/容量', quantity: '数量', },
+      configLable: {
+        projectName: '项目',
+        type: '类型',
+        frequency: '频率',
+        corenessOrCapacity: '核数/容量',
+        quantity: '数量'
+      },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
-      networkLable: { networkCardName: '网卡', ipAddress: 'IP地址', networkCardPort: '交换机',macAddress: 'MAC地址',switchInfo: '端口', },
+      networkLable: {
+        networkCardName: '网卡',
+        ipAddress: 'IP地址',
+        networkCardPort: '交换机',
+        macAddress: 'MAC地址',
+        switchInfo: '端口'
+      },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
-      appSoftwareLable: { softwareName: '名称', softwareEdition: '版本', softwarePort: '端口', softwareOnlineTime: '上线时间', softwareDevelopCompany: '研发单位', softwareLiaison: '联系人' },
-      appSystemUserLable: { userName: '用户名', realName: '使用人', userLevel: '级别权限', localAccessMode: '本地访问方式', remoteAccessMode: '远程访问方式', createDate: '创建时间', other: '其他' },
-      appBusinessLable: { businessName: 'HTTP应用 / FTP应用', domainName: '域名/地址', userScope: 'ICP号', ICPNum: '用户范围' },
+      appSoftwareLable: {
+        softwareName: '名称',
+        softwareEdition: '版本',
+        softwarePort: '端口',
+        softwareOnlineTime: '上线时间',
+        softwareDevelopCompany: '研发单位',
+        softwareLiaison: '联系人'
+      },
+      appSystemUserLable: {
+        userName: '用户名',
+        realName: '使用人',
+        userLevel: '级别权限',
+        localAccessMode: '本地访问方式',
+        remoteAccessMode: '远程访问方式',
+        createDate: '创建时间',
+        other: '其他'
+      },
+      appBusinessLable: {
+        businessName: 'HTTP应用 / FTP应用',
+        domainName: '域名/地址',
+        userScope: 'ICP号',
+        ICPNum: '用户范围'
+      },
       appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
-      appNativeStoreLable: { totalCapacity: '总容量', usedSpace: '已用空间', unusedSpace: '未用空间', annualGrowthSpace: '年增长空间' },
+      appNativeStoreLable: {
+        totalCapacity: '总容量',
+        usedSpace: '已用空间',
+        unusedSpace: '未用空间',
+        annualGrowthSpace: '年增长空间'
+      },
       postAll: [],
       departmentAll: [],
       equipmentTypeAll: [],
       active: 0,
       labels:
-        // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
-        //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
-        { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' },
+      // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
+      //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
+        { 'cabinetUStart': '柜内U位开始位', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' },
       // rxr
       rules: {
         equipmentAdminPhone: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' , showInInput: true },
+          { required: true, message: '手机号不能为空', trigger: 'blur', showInInput: true },
           {
             validator: this.checkPhone,
             trigger: 'blur',
             showInInput: true
-          },
+          }
         ],
         appAdminPhone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           {
             validator: this.checkPhone,
-            trigger: 'blur',
-          },
-        ],
-      },
+            trigger: 'blur'
+          }
+        ]
+      }
 
-    };
+    }
   },
   created() {
     this.fetchData()
   },
   methods: {
     // rxr
-      checkPhone(rules, value, callback) {
-        if (value !== '') {
-          // 11位电话号码和7位数字验证↓
-          // var reg = /^1[3456789]\d{9}$|^\d{7}$/;
-          // 手机号码和座机号↓
-          var reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
-          if (!reg.test(value)) {
-            callback(new Error('请输入有效的手机号码'));
-          }
+    checkPhone(rules, value, callback) {
+      if (value !== '') {
+        // 11位电话号码和7位数字验证↓
+        // var reg = /^1[3456789]\d{9}$|^\d{7}$/;
+        // 手机号码和座机号↓
+        var reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/
+        if (!reg.test(value)) {
+          callback(new Error('请输入有效的手机号码'))
         }
-        callback();
-      },
+      }
+      callback()
+    },
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
@@ -304,11 +513,10 @@ export default {
         })
       })
       getDepartment(this.roleid).then(response => {
-        if(this.role==='部门管理员'){
+        if (this.role === '部门管理员') {
           this.departmentAll = response.data.items.filter(element => element.departmentName === this.role_department_name)
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
-        }
-        else {
+        } else {
           this.departmentAll = response.data.items
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
         }
@@ -331,22 +539,22 @@ export default {
       this.active++
       const equipments = []
       if (this.active === 2) {
-        let formatOnlineTime=this.form.onlineTime.replace(/-/g, "");
-        let formatOfflineTime=this.form.offlineTime.replace(/-/g, "");
+        let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
+        let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
 
 
         const equip = { ...this.equipment }
-        equip.equipmentBaseInfo.onlineTime=formatOnlineTime
-        equip.equipmentBaseInfo.offlineTime=formatOfflineTime
-        equip.equipmentBaseInfo.status="0"
+        equip.equipmentBaseInfo.onlineTime = formatOnlineTime
+        equip.equipmentBaseInfo.offlineTime = formatOfflineTime
+        equip.equipmentBaseInfo.status = '0'
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
         console.log(equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
-          if(res.message==="填写错误"){
-            res.message=res.data.equipmentBasicInfo.message
+          if (res.message === '填写错误') {
+            res.message = res.data.equipmentBasicInfo.message
           }
           this.$alert(res.message, '提示', {
             confirmButtonText: '确定',
@@ -379,106 +587,130 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-*,el-form-item__label{
-    font-size: 18px;
+<style lang='less' scoped>
+*, el-form-item__label {
+  font-size: 18px;
 }
-.tile-content{
+
+.tile-content {
   padding: 9px;
   margin-bottom: 20px;
 }
-.shadows{
+
+.shadows {
   box-shadow: 0 0 4px #0000004d !important;
 }
-.el-form-item__label{
+
+.el-form-item__label {
   font-size: 18px !important;
 }
-.selectLabel{
+
+.selectLabel {
   display: inline-block;
   margin-right: 20px;
   margin-bottom: 35px;
   font-weight: 700;
   font-size: 14px;
-    color: #606266;
+  color: #606266;
 }
-.detail-content{
+
+.detail-content {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
   margin: 10px;
 }
-.detail-table{
+
+.detail-table {
   padding: 10px;
   border: 1px solid #dcd7d7;
 }
+
 .el-row {
   // margin-bottom: 20px;
   line-height: 33px;
   margin-bottom: 0px;
 }
+
 .el-col {
   border-radius: 4px;
 }
+
 .bg-purple-dark {
   background: #99a9bf;
 }
+
 .bg-blue {
   background: #5db2ff;
   height: 55px;
-  h4{
+
+  h4 {
     text-align: center;
     margin: 0;
     line-height: 55px;
     color: white;
   }
 }
+
 .bg-purple {
   background: #d3dce6;
 }
+
 .bg-purple-light {
   background: #e5e9f2;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
-.label-style{
+
+.label-style {
   border-right: 1px solid #eee;
   border-top: 1px solid #eee;
   padding: 12px;
   text-align: center;
 }
-.gray-bg{
+
+.gray-bg {
   background: #D6DCE4;
 }
-.padding-shipx{
+
+.padding-shipx {
   padding: 10px;
 }
-.el-radio{
+
+.el-radio {
   margin-right: 0px;
 }
-/deep/.el-radio__label{
+
+/deep/ .el-radio__label {
   font-size: 18px;
   font-weight: 500;
 }
-.bg-blue-dark{
+
+.bg-blue-dark {
   background: #1F4E78;
   height: 55px;
-  h4{
+
+  h4 {
     text-align: center;
     margin: 0;
     line-height: 55px;
     color: white;
   }
 }
-.business-info{
+
+.business-info {
   margin-top: 50px;
 }
-.el-radio:nth-of-type(1){
-    margin-right: 35px;
+
+.el-radio:nth-of-type(1) {
+  margin-right: 35px;
 }
 
 //覆盖全局样式代码
@@ -487,50 +719,22 @@ export default {
   flex: 1 0 20%;
   margin: 10px;
 }
-/deep/.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px!important;
-  height: auto!important;
-  width: 1200px!important;
-  display: flex!important;
-  justify-content: space-between!important;
-  flex-direction: row!important;
-  flex-wrap: wrap!important;
-  align-content: flex-start!important;
-  align-items: stretch!important;
-  max-height: 100vh!important;
+
+/deep/ .el-select-dropdown__list {
+  margin: 5px 20px 20px 5px !important;
+  height: auto !important;
+  width: 1200px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  align-items: stretch !important;
+  max-height: 100vh !important;
 }
+
 .searchInput {
   text-align: center;
-}
-//rxr 设备管理员到电话一行的样式修改
-.el-form--inline .el-form-item{
-  display: inline-block;
-  margin-right: 0px;
-  vertical-align: top;
-}
-/deep/ .el-form-item__error {
-  color: #F56C6C;
-  font-size: 12px;
-  line-height: 1;
-  padding-top: 0px;
-  position: absolute;
-  top: 79%;
-  left: 150px;
-}
-/deep/ .el-form-item {
-  margin-bottom: 1px;
-}
-/deep/.el-form-item__content{
-  line-height: 40px;
-  position: relative;
-  font-size: 14px;
-  width: 395px;
-}
-.el-col-9[data-v-512e4b66]{
-  width: 33%;
-}
-.el-col-15{
-  width: 67%;
 }
 </style>
 
