@@ -1052,7 +1052,7 @@ function getRowConfig(outdata) {
   softwareOperatingSystem.projectName = notNull('操作系统',2,'名称',outdata)
   softwareOperatingSystem.edition = notNull('操作系统',2,'版本',outdata)
   softwareOperatingSystem.type = notNull('操作系统',2,'类型',outdata)
-  softwareOperatingSystem.type = notNull('操作系统',2,'是否国产化',outdata)
+  softwareOperatingSystem.isChinaLocalization = notNull('操作系统',2,'是否国产化',outdata)
   softwareOperatingSystem.buildDate = ''
   softwares.push(softwareOperatingSystem)
 
@@ -1060,7 +1060,7 @@ function getRowConfig(outdata) {
   softwareDatabase.projectName = notNull('数据库',3,'名称',outdata)
   softwareDatabase.edition = notNull('数据库',3,'版本',outdata)
   softwareDatabase.type = notNull('数据库',3,'类型',outdata)
-  softwareDatabase.type = notNull('数据库',3,'是否国产化',outdata)
+  softwareDatabase.isChinaLocalization = notNull('数据库',3,'是否国产化',outdata)
   softwareDatabase.buildDate = ''
   softwares.push(softwareDatabase)
 
@@ -1068,7 +1068,7 @@ function getRowConfig(outdata) {
   softwareMiddleware.projectName = notNull('中间件',5,'名称',outdata)
   softwareMiddleware.edition = notNull('中间件',5,'版本',outdata)
   softwareMiddleware.type =notNull('中间件',5,'类型',outdata)
-  softwareMiddleware.type =notNull('中间件',5,'是否国产化',outdata)
+  softwareMiddleware.isChinaLocalization =notNull('中间件',5,'是否国产化',outdata)
   softwareMiddleware.buildDate = ''
   softwares.push(softwareMiddleware)
   return {

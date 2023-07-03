@@ -149,7 +149,7 @@ export default {
             return trueOrVirtual
           }
         },
-        {value: "isChinaLocalization", label:"是否国产化"},
+        {value: "isChinaLocalization", label:"硬件是否国产化"},
         {value: "equipmentName", label:"设备名称"},
         {value: "equipmentAdminName", label:"设备管理员"},
         {value: "equipmentAdminPhone", label:"设备管理员电话"},

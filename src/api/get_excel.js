@@ -174,7 +174,7 @@ export async function getExcelDemo1(data) {
     'equipmentTypeCode': '二级设备类型代码',
     'equipmentTypeName': '二级设备类型名称',
     'trueOrVirtual': '实体机/虚拟机',
-    'isChinaLocalization': '是否国产化',
+    'isChinaLocalization': '硬件是否国产化',
     'equipmentName': '设备名称',
     'equipmentAdminName': '设备管理员',
     'equipmentAdminPhone': '设备管理员电话',
