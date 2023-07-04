@@ -82,7 +82,8 @@
                   <div class="padding-shipx shadows">基本信息</div>
                 </el-col>
               </el-row>
-              <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="gray-bg">
+              <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
+                       class='gray-bg' :rules='rules'>
                 <el-row>
                   <el-col :span="2"><div class="label-style">设备名称</div></el-col>
                   <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
@@ -126,14 +127,43 @@
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="2"><div class="label-style">设备管理员</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.equipmentAdminName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">电 话</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.equipmentAdminPhone" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">应用管理员</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.appAdminName" size="medium" /></div></el-col>
-                  <el-col :span="2"><div class="label-style">电 话</div></el-col>
-                  <el-col :span="4"><div class="label-style"><el-input v-model="form.appAdminPhone" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>设备管理员</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.equipmentAdminName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>电 话</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-form-item prop='equipmentAdminPhone' class="dianhua">
+                        <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                      </el-form-item>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>应用管理员</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.appAdminName' size='medium' />
+                    </div>
+                  </el-col>
+
+                  <el-col :span='2'>
+                    <div class='label-style'>电 话</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-form-item prop='appAdminPhone' class="dianhua">
+                        <el-input v-model='form.appAdminPhone' size='medium' />
+                      </el-form-item>
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="6"><div class="label-style">
@@ -587,10 +617,7 @@ export default {
   methods: {
     checkPhone(rules, value, callback) {
       if (value !== '') {
-        // 11位电话号码和7位数字验证↓
-        // var reg = /^1[3456789]\d{9}$|^\d{7}$/;
-        // 手机号码和座机号↓
-        var reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/
+        const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
         if (!reg.test(value)) {
           callback(new Error('请输入有效的手机号码'))
         }
