@@ -331,7 +331,6 @@
           <el-col :span='2'>
             <el-button type='primary' @click='commit'>提交</el-button>
           </el-col>
-          <!--          <el-col :span="3"><el-button type="indo" @click="showResult">查看反馈信息1</el-button></el-col>-->
         </el-row>
       </el-tab-pane>
     </el-tabs>

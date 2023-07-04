@@ -77,7 +77,6 @@
                 <el-col>
                   <div class='padding-shipx shadows'>基本信息</div>
                 </el-col>
-                <!--                :model="form = equipment.equipmentBaseInfo"-->
               </el-row>
               <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
                        class='gray-bg' :rules='rules'>
@@ -85,24 +84,58 @@
                   <el-col :span='2'>
                     <div class='label-style'>设备名称</div>
                   </el-col>
-                  <el-col :span='22'>
+                  <el-col :span='10'>
                     <div class='label-style'>
                       <el-input v-model='form.equipmentName' size='medium' />
                     </div>
                   </el-col>
-                </el-row>
-                <el-row>
                   <el-col :span='2'>
                     <div class='label-style'>主机名</div>
                   </el-col>
-                  <el-col :span='22'>
+                  <el-col :span='10'>
                     <div class='label-style'>
                       <el-input v-model='form.hostName' size='medium' />
                     </div>
                   </el-col>
                 </el-row>
-
-                <!--                rxr-->
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>硬件是否国产化</div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>
+                      <el-select v-model='form.isChinaLocalization' placeholder='请选择' clearable>
+                        <el-option
+                          v-for='item in isHomegrown'
+                          :key='item.value'
+                          :value='item.value'
+                        />
+                      </el-select>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>设备状态</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-select v-model='form.status' placeholder='请选择' clearable>
+                        <el-option
+                          v-for='item in statusItem'
+                          :key='item.value'
+                          :value='item.value'
+                        />
+                      </el-select>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>所属资源池</div>
+                  </el-col>
+                  <el-col :span='10'>
+                    <div class='label-style'>
+                      <el-input v-model='form.pool' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
                 <el-row>
                   <el-col :span='2'>
                     <div class='label-style'>设备管理员</div>
@@ -117,7 +150,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-form-item prop='equipmentAdminPhone'>
+                      <el-form-item prop='equipmentAdminPhone' class="dianhua">
                         <el-input v-model='form.equipmentAdminPhone' size='medium' />
                       </el-form-item>
                     </div>
@@ -136,7 +169,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-form-item prop='appAdminPhone'>
+                      <el-form-item prop='appAdminPhone' class="dianhua">
                         <el-input v-model='form.appAdminPhone' size='medium' />
                       </el-form-item>
                     </div>
@@ -175,11 +208,6 @@
                         <el-radio label='1'>不可迁移</el-radio>
                       </el-radio-group>
                     </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span='24'>
-                    <div class='grid-content bg-blue-dark'><h4>基本信息</h4></div>
                   </el-col>
                 </el-row>
                 <el-row>
@@ -252,6 +280,111 @@
                     </div>
                   </el-col>
                 </el-row>
+                <el-row>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark'><h4>调拨移动信息</h4></div>
+                  </el-col>
+                </el-row>
+<!---------------------------调拨移动信息开始------------------------------------------------>
+                <el-row>
+                  <el-col :span='12'>
+                    <el-row>
+                      <el-col :span='24' class='grid-content'>
+                        <div class='label-style'>
+                          <el-radio-group v-model='form.isTransfer'>
+                            <el-radio label='0'>存 在 调 拨</el-radio>
+                            <el-radio label='1'>不 存 在 调 拨</el-radio>
+                          </el-radio-group>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨记录1</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecord1' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨1时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecordTime1' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨记录2</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecord2' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨2时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecordTime2' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                  <el-col :span='12'>
+                    <el-row>
+                      <el-col :span='24' class='grid-content'>
+                        <div class='label-style'>
+                          <el-radio-group v-model='form.isMoving'>
+                            <el-radio label='0'>存 在 移 动</el-radio>
+                            <el-radio label='1'>不 存 在 移 动</el-radio>
+                          </el-radio-group>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动记录1</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecord1' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动1时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecordTime1' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动记录2</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecord2' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动2时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecordTime2' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+<!---------------------------调拨移动信息结束------------------------------------------------>
               </el-form>
               <el-row :gutter='20'>
                 <el-col :span='12'>
@@ -342,6 +475,14 @@ export default {
       role_department_name: user.state.role_department_name,
       department: {},
       equipmentType: {},
+      transferRecord1: '',
+      transferRecordTime1: '',
+      transferRecord2: '',
+      transferRecordTime2: '',
+      movingRecord1: '',
+      movingRecordTime1: '',
+      movingRecord2: '',
+      movingRecordTime2: '',
       equipment: {
         appSoftware: [{
           softwareName: '',
@@ -353,6 +494,7 @@ export default {
         }],
         equipmentBaseInfo: {
           postName: '',
+          pool:'',
           cabinetUEnd: '',
           shelfOff: '',
           brandModelName: '',
@@ -364,6 +506,10 @@ export default {
           departmentName: '',
           trueOrVirtual: '1',
           mainOrBackup: '1',
+          isTransfer:'1',
+          transferRecord: '',
+          isMoving:'1',
+          movingRecord: '',
           serialNumber: '',
           equipmentAdminPhone: '',
           brandName: '',
@@ -381,7 +527,9 @@ export default {
           remarks: '',
           status: '',
           equipmentAdminName: '',
-          equipmentId: ''
+          equipmentId: '',
+          isChinaLocalization:'',
+
         },
         config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '', quantity: '' },
           { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
@@ -456,6 +604,8 @@ export default {
       },
       postAll: [],
       departmentAll: [],
+      statusItem:[{label:"running",value:"在用"},{label:"stopped",value:"停用"},{label:"scrapped",value:"报废"}],
+      isHomegrown:[{label:"isHomegrown",value:"是"},{label:"noHomegrown",value:"否"}],
       equipmentTypeAll: [],
       active: 0,
       labels:
@@ -503,11 +653,9 @@ export default {
     fetchData() {
       this.listLoading = true
       getPost().then(response => {
-        //console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            //console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
           }
         })
@@ -527,11 +675,9 @@ export default {
       })
     },
     onSubmit() {
-      //console.log('submit!')
     },
     prev() {
       if (--this.active < 0) {
-        //console.log(this.active)
         this.active = 0
       }
     },
@@ -542,15 +688,19 @@ export default {
         let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
         let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
 
-
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
-        equip.equipmentBaseInfo.status = '0'
+        equip.equipmentBaseInfo.movingRecord = this.movingRecord1 !=='' ? this.movingRecord1+';'+this.movingRecord2 : ''
+        equip.equipmentBaseInfo.movingRecordTime = this.movingRecordTime1 !== '' ? this.movingRecordTime1+';'+this.movingRecordTime2 : ''
+        equip.equipmentBaseInfo.transferRecord = this.transferRecord1 !== '' ? this.transferRecord1+';'+this.transferRecord2 : ''
+        equip.equipmentBaseInfo.transferRecordTime = this.transferRecordTime1 !=='' ? this.transferRecordTime1+';'+this.transferRecordTime2 :''
+        equip.equipmentBaseInfo.status = equip.equipmentBaseInfo.status === '在用'? '0' :
+          (equip.equipmentBaseInfo.status === '停用'? '1' : '2')
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
-        console.log(equipments)
+        console.log("负载参数：",equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           if (res.message === '填写错误') {
@@ -565,12 +715,10 @@ export default {
           })
         }).catch(err => {
           this.active = 0
-          //console.log(err)
         })
       }
     },
     changePost(val) {
-      //console.log(val)
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {
@@ -735,6 +883,9 @@ export default {
 
 .searchInput {
   text-align: center;
+}
+.dianhua{
+  height: 25px !important;
 }
 </style>
 
