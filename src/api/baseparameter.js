@@ -224,6 +224,10 @@ export function checkFirstLevelBusinessSystemName(data) {
   })
 }
 
+
+
+
+
 //删除业务系统---------------------赵长开----------------------
 export function delBusinessSystem(data) {
   return request({
@@ -468,4 +472,6 @@ export function updateCabinetAction(data) {
     responseType: 'json'
   })
 }
+
+
 

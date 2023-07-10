@@ -177,6 +177,8 @@ export function AddExcel(eq) {
   })
 }
 
+
+
 export function importMachineRoom(machineRoom) {
   return request({
     data: machineRoom,
@@ -265,3 +267,4 @@ export function solelySearchIdAndMacAddress(data){
     responseType: 'json',
   })
 }
+

@@ -17,7 +17,7 @@
         <el-row :gutter="30">
           <el-col :span="7" :offset="1">
             <div class="selectLabel">单位</div>
-            <el-select v-model="form.postName" placeholder="请选择" @change="changePost" :popper-append-to-body ="false">
+            <el-select v-model="form.postName" placeholder="请选择" @change="changePost"  :popper-append-to-body="false">
               <el-option
                 v-for="item in postAll"
                 :key="item.value"
@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="7">
             <div class="selectLabel">设备类型</div>
-            <el-select v-model="form.equipmentTypeName"  placeholder="请选择" @change="linkData2">
+            <el-select v-model="form.equipmentTypeName" placeholder="请选择" @change="linkData2">
               <el-option
                 v-for="item in equipmentTypeAll"
                 :key="item.value"
@@ -47,9 +47,8 @@
               />
             </el-select>
           </el-col>
-        </el-row>
-        <el-row :gutter="30">
-          <el-col :span="7"  :offset="1">
+
+          <el-col :span="7" :offset="1">
             <div class="selectLabel1">柜内U位开始位</div>
             <el-input style="width: 200px" v-model="form.cabinetUStart"/>
           </el-col>
@@ -120,7 +119,7 @@
                   <el-col :span='2'>
                     <div class='label-style'>所属资源池</div>
                   </el-col>
-                  <el-col :span='10'>
+                  <el-col :span='4'>
                     <div class='label-style'>
                       <el-input v-model='form.pool' size='medium' />
                     </div>
@@ -366,6 +365,57 @@
                   </el-col>
                 </el-row>
 <!---------------------------调拨移动信息结束------------------------------------------------>
+<!---------------------------业务系统信息开始------------------------------------------------>
+                <el-row>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark' style="background-color: #547dbb"><h4>业务系统信息</h4></div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>所属业务系统</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemFirstName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>所属业务子系统</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>所属业务子系统等保等级</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemLevel' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>业务应用</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessApplicationName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='16' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.isTestBusinessSystem'>
+                        <el-radio label='1'>正 式 业 务</el-radio>
+                        <el-radio label='0'>测 试 业 务</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                </el-row>
+
               </el-form>
               <el-row :gutter='20'>
                 <el-col :span='12'>
@@ -420,10 +470,10 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import { addEquipment, getBasicInfoAll, getList } from '@/api/table'
+import {addEquipment, getBasicInfoAll, getList} from '@/api/table'
 import user from '@/store/modules/user'
 import { TrianglesDrawMode } from 'three'
-import { checkPostName } from '@/api/baseparameter'
+import {checkPostName, getBusinessSystemFirstByPostName} from '@/api/baseparameter'
 
 export default {
   components: {
@@ -500,7 +550,11 @@ export default {
           equipmentAdminName: '',
           equipmentId: '',
           isChinaLocalization:'',
-
+          businessSystemFirstName:'', //所属业务系统
+          businessSystemName:'',  //所属业务子系统
+          businessSystemLevel:'',  //所属业务系统等保等级
+          businessApplicationName:'', //业务应用
+          isTestBusinessSystem:'1',  //是正式业务还是测试业务
         },
         config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '', quantity: '' },
           { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
@@ -523,7 +577,6 @@ export default {
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
-
       },
       configLable: {
         projectName: '项目',
@@ -634,10 +687,8 @@ export default {
         prop:null,
         order: null
       }
-      console.log("this.params",param)
       await getList(params1).then((response) => {
         this.list = response.data.items
-        console.log('response', response.data.items)
         if(response.data.items.length !== 0 && this.connectedData[2] !== ''){
           for(let i=0;i<response.data.items.length;i++){
             let str = response.data.items[i].basicInfoId
@@ -646,10 +697,8 @@ export default {
               this.initialNum=num
             }
           }
-          console.log("initialNum",this.initialNum)
           let lastNum = ('000' + this.initialNum).slice(-4)
           this.connectNumber = '-' + lastNum
-          console.log("lastNum",lastNum)
         }else{
           this.connectNumber = '-' + '0001'
         }
@@ -686,6 +735,7 @@ export default {
         this.active = 0
       }
     },
+
     next() {
       this.active++
       const equipments = []
@@ -700,8 +750,9 @@ export default {
         equip.equipmentBaseInfo.movingRecordTime = this.movingRecordTime1 !== '' ? this.movingRecordTime1+';'+this.movingRecordTime2 : ''
         equip.equipmentBaseInfo.transferRecord = this.transferRecord1 !== '' ? this.transferRecord1+';'+this.transferRecord2 : ''
         equip.equipmentBaseInfo.transferRecordTime = this.transferRecordTime1 !=='' ? this.transferRecordTime1+';'+this.transferRecordTime2 :''
-        equip.equipmentBaseInfo.status = equip.equipmentBaseInfo.status === '在用'? '0' :
-          (equip.equipmentBaseInfo.status === '停用'? '1' : '2')
+        equip.equipmentBaseInfo.status = equip.equipmentBaseInfo.status === '在用'? '0' : (equip.equipmentBaseInfo.status === '停用'? '1' : '2')
+        equip.equipmentBaseInfo.isTestBusinessSystem = equip.equipmentBaseInfo.isTestBusinessSystem === '1' ? '正式业务':'测试业务'
+
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
@@ -741,7 +792,6 @@ export default {
     },
 
     linkData1(val){
-      console.log("data1  val",val)
       for(let i=0;i<this.departmentAll.length;i++){
         if(this.departmentAll[i].departmentName === val){
           this.connectedDepartmentCode = this.departmentAll[i].departmentCode
@@ -936,7 +986,7 @@ export default {
   text-align: center;
 }
 .dianhua{
-  height: 25px !important;
+  height: 1px !important;
 }
 </style>
 
