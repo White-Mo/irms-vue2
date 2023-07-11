@@ -16,44 +16,6 @@
       <div >
         <div style="background: #eaeef5">
           <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
-            <!--        <el-row :gutter="30">
-                      <el-col :span="7" :offset="1">
-                        <div class="selectLabel">单位</div>
-                        <el-select v-model="form.postName" placeholder="请选择" @change="changePost"  :popper-append-to-body="false">
-                          <el-option
-                            v-for="item in postAll"
-                            :key="item.value"
-                            :value="item.postName"
-                            class="searchInput"
-                          />
-                        </el-select>
-                      </el-col>
-                      <el-col :span="7">
-                        <div class="selectLabel">部门</div>
-                        <el-select v-model="form.departmentName" placeholder="请选择" @change="linkData1">
-                          <el-option
-                            v-for="item in departmentAll"
-                            :key="item.value"
-                            :value="item.departmentName"
-                          />
-                        </el-select>
-                      </el-col>
-                      <el-col :span="7">
-                        <div class="selectLabel">设备类型</div>
-                        <el-select v-model="form.equipmentTypeName" placeholder="请选择" @change="linkData2">
-                          <el-option
-                            v-for="item in equipmentTypeAll"
-                            :key="item.value"
-                            :value="item.equipmentTypeName"
-                            :title="item.equipmentTypeName"
-                          />
-                        </el-select>
-                      </el-col>
-                      <el-col :span="7">
-                        <div class="selectLabel1" v-model="connectedA">设备编号</div>
-                        <el-input :value="connectedA" style="width: 200px"/>
-                      </el-col>
-                    </el-row>-->
             <el-row>
               <el-col :span='2'>
                 <div class="label-style">单位</div>
