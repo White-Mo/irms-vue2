@@ -794,7 +794,7 @@ export default {
           realName: '',
           userLevel: '',
           localAccessMode: '',
-          remoteAccessMode: '',
+          // remoteAccessMode: '',
           createDate: '',
           other: ''
         }],
@@ -830,8 +830,8 @@ export default {
         userName: '用户名',
         realName: '使用人',
         userLevel: '级别权限',
-        localAccessMode: '本地访问方式',
-        remoteAccessMode: '远程访问方式',
+        localAccessMode: '访问方式(本地/远程)',  //原应该是本地访问方式，但由于数据库设计错误，应该只有一个字段，却又两个（本地和远程），所以先把这个字段当两个用
+        // remoteAccessMode: '远程访问方式',
         createDate: '创建时间',
         other: '其他'
       },
