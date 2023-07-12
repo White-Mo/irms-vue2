@@ -66,7 +66,7 @@
               </el-col>
               <el-col :span='4'>
                 <div class="label-style">
-                  <el-input v-model="connectedA"/>
+                  <el-input v-model="connectedA" :value="connectedA"/>
                 </div>
               </el-col>
             </el-row>
@@ -672,7 +672,7 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import {addEquipment, getBasicInfoAll, getList} from '@/api/table'
+import {addEquipment, getBasicInfoAll, getEquipmentByBaseInfoId, getList} from '@/api/table'
 import user from '@/store/modules/user'
 import { TrianglesDrawMode } from 'three'
 import {checkPostName, getBusinessSystemFirstByPostName} from '@/api/baseparameter'
@@ -720,7 +720,7 @@ export default {
           softwareLiaison: ''
         }],
         equipmentBaseInfo: {
-          postName: user.state.role_name.split("/")[0],  //默认单位，当前登录的单位
+          postName: '',
           pool:'',
           cabinetUEnd: '',
           brandModelName: '',
@@ -906,50 +906,58 @@ export default {
       }
       callback()
     },
-    async autoHandleBasicInfoId(incompleteConnectBaseInfoId){
-      const params = {
-        dataName:['111'],
-        dataValue:incompleteConnectBaseInfoId ,
-        status: '0',
-        start: 0,
-        limit: 1000000,
-        prop:null,
-        order: null
-      }
-      await getList(params).then((response) => {
-        this.list = response.data.items
-        if(response.data.items.length !== 0 && this.connectedData[2] !== ''){
-          for(let i=0;i<response.data.items.length;i++){
-            let str = response.data.items[i].basicInfoId
-            let num = parseInt(str.slice(str.length-4,str.length)) + 1
-            if(num>this.initialNum){
-              this.initialNum=num
+    async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
+      await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
+        // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
+        let allDataByBaseInfoId = response.data.items;
+        if (allDataByBaseInfoId.total !== null && this.connectedEquipmentTypeCode !== '') {
+          const numbers = allDataByBaseInfoId.map((item) => {
+            const baseInfoId = item.basicInfoId;
+            const splitIndex = baseInfoId.lastIndexOf('-');
+            const numberStr = baseInfoId.slice(splitIndex + 1);
+            return parseInt(numberStr, 10);
+          });
+          numbers.sort((a, b) => a - b);
+          if(numbers[0] !== 1){
+            this.connectNumber = '-' + '0001';
+          }else {
+            let i;
+            for (i = 0; i < numbers.length - 1; i++) {
+              if (numbers[i + 1] - numbers[i] > 1) {
+                this.connectNumber = '-' + String(numbers[i] + 1).padStart(4, '0');
+                break;
+              }
+            }
+            if (i === numbers.length - 1) {
+              this.connectNumber = '-' + String(numbers[numbers.length - 1] + 1).padStart(4, '0');
             }
           }
-          let lastNum = ('000' + this.initialNum).slice(-4)
-          this.connectNumber = '-' + lastNum
-        }else{
-          this.connectNumber = '-' + '0001'
+        } else {
+          this.connectNumber = '-' + '0001';
         }
       })
     },
     fetchData() {
       this.listLoading = true
+      // this.equipment.equipmentBaseInfo.postName = this.user.state.role_name.split("/")[0] //默认单位，当前登录的单位
       getPost().then(response => {
         this.postAll = response.data.items
-        /*this.postAll.forEach(element => {
+        this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
             this.equipment.equipmentBaseInfo.postName = element.postName
+            this.connectedPostCode =  element.postCode
           }
-        })*/
+        })
       })
       getDepartment(this.roleid).then(response => {
         if (this.role === '部门管理员') {
           this.departmentAll = response.data.items.filter(element => element.departmentName === this.role_department_name)
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+          this.connectedDepartmentCode = this.departmentAll[0].departmentCode
         } else {
           this.departmentAll = response.data.items
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+          this.connectedDepartmentCode = this.departmentAll[0].departmentCode
         }
       })
       getEquipmentType().then(response => {
@@ -1008,25 +1016,13 @@ export default {
         if(postItem.postName === selectedPostName){
           this.connectedPostCode = postItem.postCode
           getDepartment(postItem.postId).then(response=>{
+            this.departmentAll = response.data.items
+            this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
             this.connectedDepartmentCode = response.data.items[0].departmentCode
             this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
           })
         }
       })
-      /*getPost().then(res => {
-        for (const element of res.data.items){
-          if (element.postName === selectedPostName ){
-            this.connectedPostCode = element.postCode
-            this.connectedData[0] = element.postCode
-            getDepartment(element.postId).then(response => {
-              this.connectedData[1] = response.data.items[0].departmentCode
-              this.departmentAll = response.data.items
-              this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
-              this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
-            })
-          }
-        }
-      })*/
     },
 
     handleBaseInfoIdByDepartmentName(val){
@@ -1036,35 +1032,14 @@ export default {
           this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
         }
       })
-      /*for(let i=0;i<this.departmentAll.length;i++){
-        if(this.departmentAll[i].departmentName === val){
-          this.connectedDepartmentCode = this.departmentAll[i].departmentCode
-          this.connectedData[1] = this.departmentAll[i].departmentCode
-          this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
-        }
-      }*/
     },
     handleBaseInfoIdByEquipmentType(val){
-      console.log("所有设备类型：",this.equipmentTypeAll)
       this.equipmentTypeAll.forEach(equipmentTypeItem =>{
         if(equipmentTypeItem.equipmentTypeName === val){
           this.connectedEquipmentTypeCode = equipmentTypeItem.equipmentTypeCode
           this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
         }
       })
-      /*getEquipmentType().then(res => {
-        if(val == null){
-          this.connectedData1 = null
-        }else{
-          for(let i=0;i<res.data.items.length;i++){
-            if(res.data.items[i].equipmentTypeName === val){
-              this.connectedEquipmentTypeCode = res.data.items[i].equipmentTypeCode
-              this.connectedData[2] = res.data.items[i].equipmentTypeCode
-              this.connectedData1 = this.connectedData[0] + '-' + this.connectedData[1] + '-' + this.connectedData[2]
-            }
-          }
-        }
-      })*/
     },
     back() {
       this.$emit('changeDiv', '0')
