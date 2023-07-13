@@ -14,7 +14,7 @@
     </el-steps>
     <div v-show="active==0">
       <div >
-        <div style="background: #eaeef5">
+        <div style="background: rgba(94,135,217,0.4)">
           <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
             <el-row>
               <el-col :span='2'>
@@ -95,7 +95,15 @@
               <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true' class='gray-bg' :rules='rules'>
                 <el-row>
                   <el-col :span="2"><div class="label-style">设备名称</div></el-col>
-                  <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span="10"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>主机名</div>
+                  </el-col>
+                  <el-col :span='10'>
+                    <div class='label-style'>
+                      <el-input v-model='form.hostName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span='3'>
@@ -684,16 +692,11 @@ export default {
   },
   data() {
     return {
-      connectedData:['36','CZ',''],
-      connectedData1:'',
-      connected:'',
-      initialNum:1,
       connectedPostCode:'',
       connectedDepartmentCode:'',
       connectedEquipmentTypeCode:'',
       connectBaseInfoId:'',
       connectNumber:'',
-      params:'',
 
       roleid: user.state.roleid,
       role: user.state.roles[0],
@@ -841,7 +844,7 @@ export default {
         userScope: 'ICP号',
         ICPNum: '用户范围'
       },
-      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
+      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '预警网' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '非本机存储卷信息', SAN_NAS: 'SAN/NAS分布式存储', capacity: '非本机存已用/分配容量(G)' },
       appNativeStoreLable: {
@@ -858,7 +861,7 @@ export default {
       isHomegrown:[{label:"isHomegrown",value:"是"},{label:"noHomegrown",value:"否"}],
       equipmentTypeAll: [],
       active: 0,
-      labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
+      // labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
       // rxr
       rules: {
         equipmentAdminPhone: [
@@ -889,10 +892,9 @@ export default {
   computed:{
     connectedA(){
       this.autoHandleBasicInfoId(this.connectBaseInfoId)
-      this.params = this.connectBaseInfoId + this.connectNumber
-      this.equipment.equipmentBaseInfo.basicInfoId = this.params
+      this.equipment.equipmentBaseInfo.basicInfoId = this.connectBaseInfoId + this.connectNumber
       if(this.connectedEquipmentTypeCode !== ''){
-        return this.params
+        return this.equipment.equipmentBaseInfo.basicInfoId
       }
     }
   },

@@ -1,5 +1,5 @@
-// author:wr
-// time:2022/10/10
+<!--// author:wr-->
+<!--// time:2022/10/10-->
 <template>
   <div class='update_detail'>
     <el-row class='tile-content shadows'>
@@ -11,32 +11,63 @@
       </el-col>
     </el-row>
     <el-tabs v-model='tab_name' type='border-card' @tab-click='changeTab'>
-      <el-tab-pane label='综合表' name='0' style='height: 75vh'>
+      <el-tab-pane label='综合表' name='0' style='height: 10vh'>
         <el-form ref='form' :model='form = row' label-width='120px' :inline='true' class='demo-form-inline'>
-          <el-row v-show="currentShow === '2'">
-            <el-form-item label='单位'>
-              <el-input v-model='form.postName' />
-            </el-form-item>
-            <el-form-item label='部门'>
-              <el-input v-model='form.departmentName' />
-            </el-form-item>
-            <el-form-item label='设备类型'>
-              <el-input v-model='form.equipmentTypeName' />
-            </el-form-item>
-          </el-row>
-          <el-row v-show="currentShow === '3'">
-            <el-col :span='5' :offset='1'>
-              <div class='selectLabel'>单位</div>
-              <el-select v-model='form.postName' placeholder='请选择' @change='changePost'
-                         :popper-append-to-body='false'>
-                <el-option
-                  v-for='item in postAll'
-                  :key='item.value'
-                  :value='item.postName'
-                />
-              </el-select>
+          <el-row style="background: rgba(94,135,217,0.4)" v-show="currentShow === '2'">
+            <!--            <el-form-item label='单位'>
+                          <el-input v-model='form.postName' />
+                        </el-form-item>
+                        <el-form-item label='部门'>
+                          <el-input v-model='form.departmentName' />
+                        </el-form-item>
+                        <el-form-item label='设备类型'>
+                          <el-input v-model='form.equipmentTypeName' />
+                        </el-form-item>-->
+            <el-col :span='2'>
+              <div class="label-style">单位</div>
             </el-col>
-            <el-col :span='5'>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-input v-model='form.postName'/>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">部门</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-input v-model='form.departmentName'/>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">设备类型</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-input v-model='form.equipmentTypeName'/>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">设备编号</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-input v-model="form.basicInfoId"/>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row style="background: rgba(94,135,217,0.4)" v-show="currentShow === '3'">
+<!--                        <el-col :span='5' :offset='1'>
+                          <div class='selectLabel'>单位</div>
+                          <el-select v-model='form.postName' placeholder='请选择' @change='changePost' :popper-append-to-body='false'>
+                            <el-option
+                              v-for='item in postAll'
+                              :key='item.value'
+                              :value='item.postName'
+                            />
+                          </el-select>
+                        </el-col>
+                        <el-col :span='5'>
               <div class='selectLabel'>部门</div>
               <el-select v-model='form.departmentName' placeholder='请选择'>
                 <el-option
@@ -46,7 +77,7 @@
                 />
               </el-select>
             </el-col>
-            <el-col :span='5'>
+                        <el-col :span='5'>
               <div class='selectLabel'>设备类型</div>
               <el-select v-model='form.equipmentTypeName' placeholder='请选择'>
                 <el-option
@@ -55,11 +86,63 @@
                   :value='item.equipmentTypeName'
                 />
               </el-select>
+            </el-col>-->
+            <el-col :span='2'>
+              <div class="label-style">单位</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-select v-model='form.postName' placeholder='请选择' @change="changePost" :popper-append-to-body='false'>
+                  <el-option
+                    v-for='item in postAll'
+                    :key='item.value'
+                    :value='item.postName'
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">部门</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-select v-model='form.departmentName' placeholder='请选择' @change="handleBaseInfoIdByDepartmentName">
+                  <el-option
+                    v-for='item in departmentAll'
+                    :key='item.value'
+                    :value='item.departmentName'
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">设备类型</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-select v-model='form.equipmentTypeName' placeholder='请选择' @change="handleBaseInfoIdByEquipmentType">
+                  <el-option
+                    v-for='item in equipmentTypeAll'
+                    :key='item.value'
+                    :value='item.equipmentTypeName'
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="label-style">设备编号</div>
+            </el-col>
+            <el-col :span='4'>
+              <div class="label-style">
+                <el-input v-model="form.basicInfoId" />
+              </div>
             </el-col>
           </el-row>
-          <el-form-item v-for='(value,key,index) in labels' :key='index' :label='value'>
-            <el-input v-model='form[key]' />
-          </el-form-item>
+          <hr>
+
+<!--          <el-form-item v-for='(value,key,index) in labels' :key='index' :label='value'>
+            <el-input v-model='form[key]'/>
+          </el-form-item>-->
         </el-form>
         <el-row v-show="currentShow === '3'">
           <el-col :span='2' :offset='9'>
@@ -68,10 +151,7 @@
           <el-col :span='2'>
             <el-button type='primary' @click='commit'>提交</el-button>
           </el-col>
-          <!--          <el-col :span="2"><el-button type="indo" @click="showResult">查看反馈信息</el-button></el-col>-->
-
         </el-row>
-        <hr>
       </el-tab-pane>
       <el-tab-pane label='详情表' name='1'>
         <div class='detail-content'>
@@ -93,19 +173,27 @@
                     <el-col :span='2'>
                       <div class='label-style'>设备名称</div>
                     </el-col>
-                    <el-col :span='22'>
+                    <el-col :span='10'>
                       <div class='label-style'>
-                        <el-input v-model='form.equipmentName' size='medium' />
+                        <el-input v-model='form.equipmentName' size='medium'/>
+                      </div>
+                    </el-col>
+                    <el-col :span='2'>
+                      <div class='label-style'>主机名</div>
+                    </el-col>
+                    <el-col :span='10'>
+                      <div class='label-style'>
+                        <el-input v-model='form.hostName' size='medium'/>
                       </div>
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span='2'>
-                      <div class='label-style'>主机名</div>
+                    <el-col :span='3'>
+                      <div class='label-style'>硬件是否国产化</div>
                     </el-col>
-                    <el-col :span='22'>
+                    <el-col :span='3'>
                       <div class='label-style'>
-                        <el-input v-model='form.hostName' size='medium' />
+                        <el-input v-model='form.isChinaLocalization' size='medium'/>
                       </div>
                     </el-col>
                   </el-row>
@@ -115,7 +203,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.equipmentAdminName' size='medium' />
+                        <el-input v-model='form.equipmentAdminName' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -123,7 +211,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                        <el-input v-model='form.equipmentAdminPhone' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -131,7 +219,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.appAdminName' size='medium' />
+                        <el-input v-model='form.appAdminName' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -139,7 +227,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.appAdminPhone' size='medium' />
+                        <el-input v-model='form.appAdminPhone' size='medium'/>
                       </div>
                     </el-col>
                   </el-row>
@@ -188,7 +276,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.brandName' size='medium' />
+                        <el-input v-model='form.brandName' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -196,7 +284,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.brandModelName' size='medium' />
+                        <el-input v-model='form.brandModelName' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -204,7 +292,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.machineRoomName' size='medium' />
+                        <el-input v-model='form.machineRoomName' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -212,7 +300,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.cabinetName' size='medium' />
+                        <el-input v-model='form.cabinetName' size='medium'/>
                       </div>
                     </el-col>
                   </el-row>
@@ -222,7 +310,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.serialNumber' size='medium' />
+                        <el-input v-model='form.serialNumber' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -230,7 +318,7 @@
                     </el-col>
                     <el-col :span='4'>
                       <div class='label-style'>
-                        <el-input v-model='form.guaranteePeriod' size='medium' />
+                        <el-input v-model='form.guaranteePeriod' size='medium'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -239,7 +327,7 @@
                     <el-col :span='4'>
                       <div class='label-style'>
                         <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' format='yyyy-MM-dd'
-                                        value-format='yyyy-MM-dd' style='width:auto' />
+                                        value-format='yyyy-MM-dd' style='width:auto'/>
                       </div>
                     </el-col>
                     <el-col :span='2'>
@@ -248,7 +336,7 @@
                     <el-col :span='4'>
                       <div class='label-style'>
                         <el-date-picker v-model='form.offlineTime' size='medium' :clearable='false' format='yyyy-MM-dd'
-                                        value-format='yyyy-MM-dd' style='width:auto' />
+                                        value-format='yyyy-MM-dd' style='width:auto'/>
                       </div>
                     </el-col>
                   </el-row>
@@ -364,10 +452,10 @@
 
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
-import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import { addEquipment, getbasic } from '@/api/table'
+import {getPost, getDepartment, getEquipmentType} from '@/api/select'
+import {addEquipment, getbasic} from '@/api/table'
 import user from '@/store/modules/user'
-import { analysisReply } from '@/utils/xlsx'
+import {analysisReply} from '@/utils/xlsx'
 
 export default {
   components: {
@@ -385,6 +473,12 @@ export default {
   },
   data() {
     return {
+      connectedPostCode:'',
+      connectedDepartmentCode:'',
+      connectedEquipmentTypeCode:'',
+      connectBaseInfoId:'',
+      connectNumber:'',
+
       replayData: [],
       allTableData: [],
       dialogVisible: false,
@@ -456,21 +550,21 @@ export default {
           networkArea: '', //网络区域
 
           isUpdate: false,//是否覆盖更新
-          isChinaLocalization: false,//是否国产化
+          isChinaLocalization: '',//是否国产化
           isTestBusinessSystem: false, //正式或者测试业务
-          pool:'',//所属资源池
-          isTransfer:false,//是否存在调拨
-          transferRecord:'',//设备调拨记录
-          transferRecordTime:'',//设备调拨记录时间
-          isMoving:false,//是否存在移动
-          movingRecord:'',//设备移动记录
-          movingRecordTime:'',//设备移动记录时间
-          businessApplicationName:'',//业务应用名称、
+          pool: '',//所属资源池
+          isTransfer: false,//是否存在调拨
+          transferRecord: '',//设备调拨记录
+          transferRecordTime: '',//设备调拨记录时间
+          isMoving: false,//是否存在移动
+          movingRecord: '',//设备移动记录
+          movingRecordTime: '',//设备移动记录时间
+          businessApplicationName: '',//业务应用名称、
         },
-        config: [{ projectName: '', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
-        software: [{ project: '', projectName: '', edition: '', type: '' }],
-        network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
-        protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
+        config: [{projectName: '', type: '', frequency: '', corenessOrCapacity: '', quantity: ''}],
+        software: [{project: '', projectName: '', edition: '', type: ''}],
+        network: [{networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: ''}],
+        protocolPort: [{protocolName: '', appName: '', networkCardPort: ''}],
         appSystemUser: [{
           userName: '',
           realName: '',
@@ -480,11 +574,11 @@ export default {
           createDate: '',
           other: ''
         }],
-        appBusiness: [{ businessName: '', domainName: '', userScope: '', ICPNum: '' }],
-        appAccessRights: [{ intranet: '', industryNetwork: '', internet: '', other: '' }],
-        appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
-        appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
-        appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
+        appBusiness: [{businessName: '', domainName: '', userScope: '', ICPNum: ''}],
+        appAccessRights: [{intranet: '', industryNetwork: '', internet: '', other: ''}],
+        appLinksInfo: [{company: '', userName: '', IPAddress: '', other: ''}],
+        appStore: [{volume: '', SAN_NAS: '', capacity: ''}],
+        appNativeStore: [{totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: ''}]
       },
       // appNativeStoreLable: { total_capacity: '总容量', used_space: '已用空间', unused_space: '未用空间', annual_growth_space: '年增长空间' },
       configLable: {
@@ -494,7 +588,7 @@ export default {
         corenessOrCapacity: '核数/容量',
         quantity: '数量'
       },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
+      softwareLable: {project: '项目', projectName: '名称', edition: '版本', type: '类型'},
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
@@ -502,7 +596,7 @@ export default {
         macAddress: 'MAC地址',
         switchInfo: '端口'
       },
-      protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
+      protocolPortLable: {protocolName: '协议', appName: '应用名称', networkCardPort: '端口'},
       appSoftwareLable: {
         softwareName: '名称',
         softwareEdition: '版本',
@@ -526,9 +620,9 @@ export default {
         userScope: 'ICP号',
         ICPNum: '用户范围'
       },
-      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
-      appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
-      appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
+      appAccessRightsLable: {intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他'},
+      appLinksInfoLable: {company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址'},
+      appStoreLable: {volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)'},
       appNativeStoreLable: {
         totalCapacity: '总容量',
         usedSpace: '已用空间',
@@ -552,18 +646,25 @@ export default {
       departmentAll: [],
       equipmentTypeAll: [],
       active: 0,
-      labels:
-        { 'basicInfoId': '设备编号', 'cabinetUStart': '柜内U位开始位', 'cabinetUEnd': '柜内U位结束位' }
+      // labels: { 'basicInfoId': '设备编号', 'cabinetUStart': '柜内U位开始位', 'cabinetUEnd': '柜内U位结束位' }
     }
   },
   created() {
     this.fetchData()
   },
+  computed:{
+    connectedA(){
+      this.autoHandleBasicInfoId(this.connectBaseInfoId)
+      this.equipment.equipmentBaseInfo.basicInfoId = this.connectBaseInfoId + this.connectNumber
+      if(this.connectedEquipmentTypeCode !== ''){
+        return this.equipment.equipmentBaseInfo.basicInfoId
+      }
+    }
+  },
   mounted() {
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
-
       inputDom.forEach(e => {
         console.log(e.parentNode.classList)
         const parentNode = e.parentNode
@@ -627,7 +728,7 @@ export default {
       this.form.offlineTime = new Date(this.form.offlineTime)
       let formatOnlineTime = this.form.onlineTime.toLocaleDateString()
       let formatOfflineTime = this.form.offlineTime.toLocaleDateString()
-      const equip = { ...this.equipment }
+      const equip = {...this.equipment}
       const equipmentBaseInfo = equip.equipmentBaseInfo
       Object.keys(equipmentBaseInfo).forEach(key => {
         equipmentBaseInfo[key] = this.row[key] === undefined ? '' : this.row[key]
@@ -640,7 +741,7 @@ export default {
       // console.log(equip)
       equipments.push(equip)
 
-      addEquipment({ equipments: equipments }).then(res => {
+      addEquipment({equipments: equipments}).then(res => {
         console.log(res)
         if (res.status != 200) {
           res.data = res.status == 201 ? res.message : res.data.equipmentBasicInfo.message
@@ -664,8 +765,8 @@ export default {
     },
 
 
-    changePost(val) {
-      //console.log(val)
+
+/*    changePost(val) {
       this.postAll.forEach(element => {
         if (element.postName === val) {
           getDepartment(element.postId).then(response => {
@@ -674,7 +775,41 @@ export default {
           })
         }
       })
+    },*/
+
+    changePost(selectedPostName) {
+      this.postAll.forEach(postItem =>{
+        if(postItem.postName === selectedPostName){
+          this.connectedPostCode = postItem.postCode
+          getDepartment(postItem.postId).then(response=>{
+            this.departmentAll = response.data.items
+            this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+            this.connectedDepartmentCode = response.data.items[0].departmentCode
+            this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
+          })
+        }
+      })
     },
+
+    handleBaseInfoIdByDepartmentName(val){
+      this.departmentAll.forEach(departmentItem=>{
+        if(departmentItem.departmentName === val){
+          this.connectedDepartmentCode = departmentItem.departmentCode
+          this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
+        }
+      })
+    },
+    handleBaseInfoIdByEquipmentType(val){
+      this.equipmentTypeAll.forEach(equipmentTypeItem =>{
+        if(equipmentTypeItem.equipmentTypeName === val){
+          this.connectedEquipmentTypeCode = equipmentTypeItem.equipmentTypeCode
+          this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
+        }
+      })
+    },
+
+
+
     changeTab(name) {
     },
     back() {
@@ -687,9 +822,9 @@ export default {
       const a = this.handleList(listname)
       const arr = []
       if (a !== -1) {
-        const objKey = { ...this.equipment[a][0] }
+        const objKey = {...this.equipment[a][0]}
         value.forEach(e => {
-          const obj = { ...objKey }
+          const obj = {...objKey}
           for (const k in obj) {
             if (Object.hasOwnProperty.call(obj, k)) {
               obj[k] = e[k] === undefined ? '' : e[k]
