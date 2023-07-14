@@ -714,11 +714,9 @@ export default {
         ? restaurants.filter(this.createFilter(queryString))
         : restaurants
       // 调用 callback 返回建议列表的数据
-      //console.log(results)
       cb(results)
     },
     createFilter(queryString) {
-      //console.log(queryString)
       return (restaurant) => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
@@ -727,7 +725,6 @@ export default {
       }
     },
     loadAll() {
-      //console.log(this.foad)
       return this.foad
     },
 
@@ -739,18 +736,15 @@ export default {
     handleSelectChange(val) {
       //当特殊字段选择框的值被取消勾选的时候，需要清空下拉框初始化的值
       if (val.indexOf('type') === -1 && this.type === 1) {
-        // console.log("删除CPU类型");
         this.deleteSelect(this.typeID)
         this.type = 0
       } else if (val.indexOf('edition') === -1 && this.edition === 1) {
-        // console.log("删除中间件版本");
         this.deleteSelect(this.editionID)
         this.edition = 0
       } else if (
         val.indexOf('guaranteePeriod') === -1 &&
         this.guaranteePeriod === 1
       ) {
-        // console.log("删除保修期");
         this.deleteSelect(this.guaranteePeriodID)
         this.guaranteePeriod = 0
       }
@@ -782,7 +776,6 @@ export default {
     //清空下拉框的值
     deleteSelect(deleteName) {
       let dfata = JSON.parse(JSON.stringify(this.foad))
-      //console.log(dfata)
       let num = 0
       let flag = 0
       for (let index = 0; index < dfata.length; index++) {
@@ -795,11 +788,9 @@ export default {
       }
       dfata.splice(flag, num)
       this.foad = dfata
-      // console.log(this.foad)
       this.restaurants = this.loadAll()
     },
     tbCellDoubleClick(row, column, cell, event) {
-      //console.log(cell)
       this.$alert(row[column.property], '单元格值', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -810,7 +801,6 @@ export default {
       this.$refs.table.doLayout()
     },
     sortChange(column) {
-      console.log(column)
       this.prop = column.prop
       if (column.order == null) {
         this.order = 'ASC'
@@ -826,7 +816,6 @@ export default {
         const params = this.infoInput
         searchComprehensiveInfoByMultipleConditions(params).then(res => {
           this.list = res.data.items
-          console.log( "22222",res.data.items)
           let counter = params.start + 1
           this.list.forEach(item => {
             item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
@@ -843,7 +832,6 @@ export default {
           order:this.order,
           searchCondition: this.tempGuaranteePeriodSearchCondition
         }
-        console.log(222,this.initname)
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
           let counter = params.start + 1
@@ -868,18 +856,12 @@ export default {
       this.listLoading = true
       this.isMultiline = false
       this.isGuaranteePeriodSearch = false
-      // console.log(this.basicValue)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
       if (this.DataName === 'all' || this.DataName.length === 0) {
         this.initname = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.DataName)))
-        // if (this.eselect == true) {
-        //   this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
-        // }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
-      // console.log("initname",this.initname)
       const params = {
         dataName: this.initname,
         dataValue: this.inputValue,
@@ -889,35 +871,16 @@ export default {
         prop: this.prop,
         order: this.order
       }
-      // console.log('11',this.initname)
-      var flog = false
-      // for (let i = 0; i <= this.initname.length; i++) {
-      //   if (this.initname[i] === 'ipAddress' || this.initname[i] === 'macAddress') {
-      //     // console.log("参数1",params)
-      //     solelySearchIdAndMacAddress(params).then((response) => {
-      //       let IpOrMacSearchAllData = response.data  //返回的数据包括“code”和“data”
-      //       console.log(IpOrMacSearchAllData)
-      //       this.list = IpOrMacSearchAllData
-      //       this.total = IpOrMacSearchAllData.length
-      //       // this.$emit('changList2', IpOrMacSearchAllData); //$emit()--将子组件的数据传递给父组件
-      //       this.listLoading = false
-      //     })
-      //     flog = true
-      //     break
-      //   }
-      // }单独搜索ip和mac
+      const flog = false;
       if (flog === false) {
-        console.log('参数2', params)
         getList(params).then((response) => {
           this.list = response.data.items
-          console.log('+++++++++', this.list)
           //由于用组件列自动序号会导致拖动是数据错乱，故自定义一个序号属性
           let counter = params.start + 1
           this.list.forEach(item => {
             item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
             counter++ // 计数器自增
           })
-          console.log('---------------', this.list)
           this.total = response.data.total
           this.listLoading = false
         })
@@ -1048,7 +1011,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.listLoading = true
-      this.currentPage = val
+      this.currentPage = val;
       if (this.isMultiline) {  // 判断是否是筛选
         this.infoInput.start = (val - 1) * this.limit
         this.infoInput.limit = this.limit
@@ -1188,7 +1151,7 @@ export default {
       } else if (this.backToPage==='a' && this.backToPage0==="b" && !this.isMultiline) {
         this.prop = "insertDate"
         this.order = "descending"
-        this.currentPage = "1"
+        this.currentPage = 1
         this.fetchData()
         this.prop = "basicInfoId"
         this.order = "ASC"

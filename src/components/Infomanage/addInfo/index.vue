@@ -12,97 +12,135 @@
       <el-step title='综合表' />
       <el-step title='详情表' />
     </el-steps>
-    <div v-show='active==0'>
-      <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
-               class='demo-form-inline'>
-        <el-row :gutter='30'>
-          <el-col :span='5' :offset='1'>
-            <div class='selectLabel'>单位</div>
-            <el-select v-model='form.postName' placeholder='请选择' @change='changePost' :popper-append-to-body='false'>
-              <el-option
-                v-for='item in postAll'
-                :key='item.value'
-                :value='item.postName'
-                class='searchInput'
-              />
-            </el-select>
-          </el-col>
-          <el-col :span='5'>
-            <div class='selectLabel'>部门</div>
-            <el-select v-model='form.departmentName' placeholder='请选择'>
-              <el-option
-                v-for='item in departmentAll'
-                :key='item.value'
-                :value='item.departmentName'
-              />
-            </el-select>
-          </el-col>
-          <el-col :span='5'>
-            <div class='selectLabel'>设备类型</div>
-            <el-select v-model='form.equipmentTypeName' placeholder='请选择'>
-              <el-option
-                v-for='item in equipmentTypeAll'
-                :key='item.value'
-                :value='item.equipmentTypeName'
-                :title='item.equipmentTypeName'
-              />
-            </el-select>
-          </el-col>
+    <div v-show="active==0">
+      <div >
+        <div style="background: #eaeef5">
+          <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
+            <el-row>
+              <el-col :span='2'>
+                <div class="label-style">单位</div>
+              </el-col>
+              <el-col :span='4'  >
+                <div class="label-style">
+                  <el-select v-model="form.postName" placeholder="请选择" @change="changePost"  :popper-append-to-body="false">
+                    <el-option
+                      v-for="item in postAll"
+                      :key="item.value"
+                      :value="item.postName"
+                      class="searchInput"
+                    />
+                  </el-select>
+                </div>
+              </el-col>
+              <el-col :span='2'>
+                <div class="label-style">部门</div>
+              </el-col>
+              <el-col :span='4'>
+                <div class="label-style">
+                  <el-select v-model="form.departmentName" placeholder="请选择" @change="handleBaseInfoIdByDepartmentName">
+                    <el-option
+                      v-for="item in departmentAll"
+                      :key="item.value"
+                      :value="item.departmentName"
+                    />
+                  </el-select>
+                </div>
+              </el-col>
+              <el-col :span='2'>
+                <div class="label-style">设备类型</div>
+              </el-col>
+              <el-col :span='4'>
+                <div class="label-style">
+                  <el-select v-model="form.equipmentTypeName" placeholder="请选择" @change="handleBaseInfoIdByEquipmentType">
+                    <el-option
+                      v-for="item in equipmentTypeAll"
+                      :key="item.value"
+                      :value="item.equipmentTypeName"
+                      :title="item.equipmentTypeName"
+                    />
+                  </el-select>
+                </div>
+              </el-col>
+              <el-col :span='2'>
+                <div class="label-style">设备编号</div>
+              </el-col>
+              <el-col :span='4'>
+                <div class="label-style">
+                  <el-input v-model="connectedA" :value="connectedA"/>
+                </div>
+              </el-col>
+            </el-row>
+            <hr>
+          </el-form>
+        </div>
+        <el-row>
+          <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
+          <el-col :span="2"><el-button type="primary" @click="next">下一步</el-button></el-col>
         </el-row>
-        <el-form-item v-for='(value,key,index) in labels' :key='index' :label='value'>
-          <el-input v-model='form[key]' />
-        </el-form-item>
-      </el-form>
-      <el-row>
-        <el-col :span='2' :offset='11'>
-          <el-button type='primary' @click='prev'>上一步</el-button>
-        </el-col>
-        <el-col :span='2'>
-          <el-button type='primary' @click='next'>下一步</el-button>
-        </el-col>
-      </el-row>
-      <hr>
+      </div>
     </div>
     <div v-show='active==1'>
       <div class='detail-content'>
         <div class='detail-table'>
           <el-row>
-            <el-col :span='24'>
-              <div class='grid-content bg-blue'><h4><b>信息资产基础信息表</b></h4></div>
-            </el-col>
+            <el-col :span="24"><div class="grid-content bg-blue"><h4><b>信息资产基础信息表</b></h4></div></el-col>
           </el-row>
-          <div class='basic-info shadows'>
-            <div class='basic-table'>
+          <div class="basic-info shadows">
+            <div class="basic-table">
               <el-row>
                 <el-col>
-                  <div class='padding-shipx shadows'>基本信息</div>
+                  <div class="padding-shipx shadows">基本信息</div>
                 </el-col>
-                <!--                :model="form = equipment.equipmentBaseInfo"-->
               </el-row>
-              <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'
-                       class='gray-bg' :rules='rules'>
+              <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true' class='gray-bg' :rules='rules'>
                 <el-row>
-                  <el-col :span='2'>
-                    <div class='label-style'>设备名称</div>
-                  </el-col>
-                  <el-col :span='22'>
-                    <div class='label-style'>
-                      <el-input v-model='form.equipmentName' size='medium' />
-                    </div>
-                  </el-col>
+                  <el-col :span="2"><div class="label-style">设备名称</div></el-col>
+                  <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span='2'>
-                    <div class='label-style'>主机名</div>
+                  <el-col :span='3'>
+                    <div class='label-style'>硬件是否国产化</div>
                   </el-col>
-                  <el-col :span='22'>
+                  <el-col :span='3'>
                     <div class='label-style'>
-                      <el-input v-model='form.hostName' size='medium' />
+                      <el-select v-model='form.isChinaLocalization' placeholder='请选择' clearable>
+                        <el-option
+                          v-for='item in isHomegrown'
+                          :key='item.value'
+                          :value='item.value'
+                        />
+                      </el-select>
                     </div>
                   </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>设备状态</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-select v-model='form.status' placeholder='请选择' clearable>
+                        <el-option
+                          v-for='item in statusItem'
+                          :key='item.value'
+                          :value='item.value'
+                        />
+                      </el-select>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>所属资源池</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.pool' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span="6"><div class="label-style">
+                    <el-radio-group v-model="form.trueOrVirtual">
+                      <el-radio label="1">实 体 机</el-radio>
+                      <el-radio label="0">虚 拟 机</el-radio>
+                    </el-radio-group>
+                  </div></el-col>
                 </el-row>
-
-                <!--                rxr-->
                 <el-row>
                   <el-col :span='2'>
                     <div class='label-style'>设备管理员</div>
@@ -117,7 +155,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-form-item prop='equipmentAdminPhone'>
+                      <el-form-item prop='equipmentAdminPhone' class="dianhua">
                         <el-input v-model='form.equipmentAdminPhone' size='medium' />
                       </el-form-item>
                     </div>
@@ -136,50 +174,70 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-form-item prop='appAdminPhone'>
+                      <el-form-item prop='appAdminPhone' class="dianhua">
                         <el-input v-model='form.appAdminPhone' size='medium' />
                       </el-form-item>
                     </div>
                   </el-col>
                 </el-row>
-
                 <el-row>
-                  <el-col :span='6'>
-                    <div class='label-style'>
-                      <el-radio-group v-model='form.businessOrExperimental'>
-                        <el-radio label='0'>业 务 机</el-radio>
-                        <el-radio label='1'>实 验 机</el-radio>
-                      </el-radio-group>
-                    </div>
-                  </el-col>
-                  <el-col :span='6'>
-                    <div class='label-style'>
-                      <el-radio-group v-model='form.mainOrBackup'>
-                        <el-radio label='0'>主 机</el-radio>
-                        <el-radio label='1'>备 机</el-radio>
-                      </el-radio-group>
-                    </div>
-                  </el-col>
-                  <el-col :span='6'>
-                    <div class='label-style'>
-                      <el-radio-group v-model='form.trueOrVirtual'>
-                        <el-radio label='1'>实 体 机</el-radio>
-                        <el-radio label='0'>虚 拟 机</el-radio>
-                      </el-radio-group>
-                    </div>
-                  </el-col>
-                  <el-col :span='6'>
-                    <div class='label-style'>
-                      <el-radio-group v-model='form.migratable'>
-                        <el-radio label='0'>可 迁 移</el-radio>
-                        <el-radio label='1'>不可迁移</el-radio>
-                      </el-radio-group>
-                    </div>
-                  </el-col>
+                  <el-col :span="6"><div class="label-style">
+                    <el-radio-group v-model="form.businessOrExperimental">
+                      <el-radio label="0">业 务 机</el-radio>
+                      <el-radio label="1">实 验 机</el-radio>
+                    </el-radio-group>
+                  </div></el-col>
+                  <el-col :span="6"><div class="label-style">
+                    <el-radio-group v-model="form.mainOrBackup">
+                      <el-radio label="0">主 机</el-radio>
+                      <el-radio label="1">备 机</el-radio>
+                    </el-radio-group>
+                  </div></el-col>
+                  <el-col :span="6"><div class="label-style">
+                    <el-radio-group v-model="form.migratable">
+                      <el-radio label="0">可 迁 移</el-radio>
+                      <el-radio label="1">不可迁移</el-radio>
+                    </el-radio-group>
+                  </div></el-col>
+                  <el-col :span="6"><div class="label-style">
+                    <el-radio-group v-model="form.shelfOff">
+                      <el-radio label="0">可 下 架</el-radio>
+                      <el-radio label="1">不 可 下 架</el-radio>
+                    </el-radio-group>
+                  </div></el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span='24'>
-                    <div class='grid-content bg-blue-dark'><h4>基本信息</h4></div>
+                  <el-col :span='2'>
+                    <div class='label-style'>所属机房</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.machineRoomName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>所属机柜</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cabinetName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>U位开始位</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cabinetUStart' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>U位结束位</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cabinetUEnd' size='medium' />
+                    </div>
                   </el-col>
                 </el-row>
                 <el-row>
@@ -200,24 +258,6 @@
                     </div>
                   </el-col>
                   <el-col :span='2'>
-                    <div class='label-style'>安装位置</div>
-                  </el-col>
-                  <el-col :span='4'>
-                    <div class='label-style'>
-                      <el-input v-model='form.machineRoomName' size='medium' />
-                    </div>
-                  </el-col>
-                  <el-col :span='2'>
-                    <div class='label-style'>机柜号</div>
-                  </el-col>
-                  <el-col :span='4'>
-                    <div class='label-style'>
-                      <el-input v-model='form.cabinetName' size='medium' />
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span='2'>
                     <div class='label-style'>序列号</div>
                   </el-col>
                   <el-col :span='4'>
@@ -233,6 +273,8 @@
                       <el-input v-model='form.guaranteePeriod' size='medium' />
                     </div>
                   </el-col>
+                </el-row>
+                <el-row>
                   <el-col :span='2'>
                     <div class='label-style'>上线时间</div>
                   </el-col>
@@ -247,11 +289,335 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto'
-                                      value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto' value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>部署环境</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-select v-model='form.deploymentEnvironment' placeholder='请选择' clearable>
+                        <el-option
+                          v-for='item in deploymentEnvironmentAll'
+                          :key='item.value'
+                          :value='item.value'
+                        />
+                      </el-select>
+                    </div>
+                  </el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>备注</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.remarks' size='medium' />
                     </div>
                   </el-col>
                 </el-row>
+                <el-row>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark'><h4>调拨移动信息</h4></div>
+                  </el-col>
+                </el-row>
+<!---------------------------调拨移动信息开始------------------------------------------------>
+                <el-row>
+                  <el-col :span='12'>
+                    <el-row>
+                      <el-col :span='24' class='grid-content'>
+                        <div class='label-style'>
+                          <el-radio-group v-model='form.isTransfer'>
+                            <el-radio label='0'>存 在 调 拨</el-radio>
+                            <el-radio label='1'>不 存 在 调 拨</el-radio>
+                          </el-radio-group>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨记录1</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecord1' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨1时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecordTime1' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨记录2</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecord2' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>调拨2时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='transferRecordTime2' :disabled="form.isTransfer === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                  <el-col :span='12'>
+                    <el-row>
+                      <el-col :span='24' class='grid-content'>
+                        <div class='label-style'>
+                          <el-radio-group v-model='form.isMoving'>
+                            <el-radio label='0'>存 在 移 动</el-radio>
+                            <el-radio label='1'>不 存 在 移 动</el-radio>
+                          </el-radio-group>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动记录1</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecord1' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动1时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecordTime1' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动记录2</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecord2' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                      <el-col :span='4'>
+                        <div class='label-style'>移动2时间</div>
+                      </el-col>
+                      <el-col :span='8'>
+                        <div class='label-style'>
+                          <el-input v-model='movingRecordTime2' :disabled="form.isMoving === '1'" size='medium' />
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+<!---------------------------调拨移动信息结束------------------------------------------------>
+<!---------------------------业务系统信息开始------------------------------------------------>
+                <el-row>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark' style="background-color: #547dbb"><h4>业务系统信息</h4></div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>所属业务系统</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemFirstName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>所属业务子系统</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>所属业务子系统等保等级</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessSystemLevel' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>业务应用</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.businessApplicationName' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='16' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.isTestBusinessSystem'>
+                        <el-radio label='1'>正 式 业 务</el-radio>
+                        <el-radio label='0'>测 试 业 务</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                </el-row>
+<!---------------------------业务系统信息结束------------------------------------------------------->
+<!---------------------------其他信息开始------------------------------------------------------->
+                <el-row>
+                  <el-col :span='24'>
+                    <div class='grid-content bg-blue-dark' style="background-color: #54a3bb"><h4>其他信息</h4></div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>云服务单位</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cloudServiceUnit' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>租用网络带宽(兆)</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.leasedNetworkBandwidth' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>租用存储资源情况(TB)</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.leasedStorageResources' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>租用期限（年）</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.termOfLease' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>NS记录</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.ns' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>CNAME记录（别名）</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.cname' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='3'>
+                    <div class='label-style'>网络区域</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.networkArea' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='3'>
+                    <div class='label-style'>接入位置</div>
+                  </el-col>
+                  <el-col :span='5'>
+                    <div class='label-style'>
+                      <el-input v-model='form.accessLocation' size='medium' />
+                    </div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>域名注册服务商</div>
+                  </el-col>
+                  <el-col :span='4'>
+                    <div class='label-style'>
+                      <el-input v-model='form.domainNameRegistrationService' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='8'>
+                    <div class='label-style'>租用计算资源情况（CPU核数）（个）</div>
+                  </el-col>
+                  <el-col :span='8'>
+                    <div class='label-style'>
+                      <el-input v-model='form.leasedComputingResources' size='medium' />
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='6' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.singleAndDoublePowerSupply'>
+                        <el-radio label='单'>单 电 源</el-radio>
+                        <el-radio label='双'>双 电 源</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.agreedToTemporaryShutdown'>
+                        <el-radio label='是'>同意临时关停</el-radio>
+                        <el-radio label='否'>不同意临时关停</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.useCDN'>
+                        <el-radio label='是'>使用CDN</el-radio>
+                        <el-radio label='否'>没有使用CDN</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='6' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.deployStrongPassword'>
+                        <el-radio label='是'>是强口令部署</el-radio>
+                        <el-radio label='否'>不是是强口令部署</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span='8' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.installSafetyMonitoringSoftware'>
+                        <el-radio label='是'>安装安全监测软件</el-radio>
+                        <el-radio label='否'>没有安装安全监测软件</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                  <el-col :span='8' class='grid-content'>
+                    <div class='label-style'>
+                      <el-radio-group v-model='form.allowVulnerabilityScanning'>
+                        <el-radio label='是'>允许漏洞扫描</el-radio>
+                        <el-radio label='否'>不允许漏洞扫描</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </el-col>
+                </el-row>
+<!---------------------------其他信息结束------------------------------------------------------->
               </el-form>
               <el-row :gutter='20'>
                 <el-col :span='12'>
@@ -271,53 +637,33 @@
               </el-row>
             </div>
           </div>
-          <div class='business-info shadows'>
+          <div class="business-info shadows">
             <el-row>
-              <el-col :span='24'>
-                <div class='grid-content bg-blue'><h4><b>业 务 应 用 信 息</b></h4></div>
-              </el-col>
+              <el-col :span="24"><div class="grid-content bg-blue"><h4><b>业 务 应 用 信 息</b></h4></div></el-col>
             </el-row>
             <el-row>
-              <el-col :span='24'>
-                <othertable :form='equipment.appSoftware' :lable='appSoftwareLable'>专用软件信息</othertable>
-              </el-col>
+              <el-col :span="24"><othertable :form="equipment.appSoftware" :lable="appSoftwareLable">专用软件信息</othertable></el-col>
             </el-row>
             <el-row>
-              <el-col :span='24'>
-                <othertable :form='equipment.appSystemUser' :lable='appSystemUserLable'>系统用户信息</othertable>
-              </el-col>
+              <el-col :span="24"><othertable :form="equipment.appSystemUser" :lable="appSystemUserLable">系统用户信息</othertable></el-col>
             </el-row>
             <el-row>
-              <el-col :span='24'>
-                <othertable :form='equipment.appBusiness' :lable='appBusinessLable'>业务应用</othertable>
-              </el-col>
+              <el-col :span="24"><othertable :form="equipment.appBusiness" :lable="appBusinessLable">业务应用</othertable></el-col>
             </el-row>
-            <el-row :gutter='20'>
-              <el-col :span='12'>
-                <othertable :form='equipment.appAccessRights' :lable='appAccessRightsLable'>访问权限</othertable>
-              </el-col>
-              <el-col :span='12'>
-                <othertable :form='equipment.appLinksInfo' :lable='appLinksInfoLable'>链接（服务）用户信息</othertable>
-              </el-col>
+            <el-row :gutter="20">
+              <el-col :span="12"><othertable :form="equipment.appAccessRights" :lable="appAccessRightsLable">访问权限</othertable></el-col>
+              <el-col :span="12"><othertable :form="equipment.appLinksInfo" :lable="appLinksInfoLable">链接（服务）用户信息</othertable></el-col>
             </el-row>
-            <el-row :gutter='20'>
-              <el-col :span='12'>
-                <othertable :form='equipment.appStore' :lable='appStoreLable'>存 储</othertable>
-              </el-col>
-              <el-col :span='12'>
-                <othertable :form='equipment.appNativeStore' :lable='appNativeStoreLable'>本 机 存 储</othertable>
-              </el-col>
+            <el-row :gutter="20">
+              <el-col :span="12"><othertable :form="equipment.appStore" :lable="appStoreLable">非 本 机 存 储</othertable></el-col>
+              <el-col :span="12"><othertable :form="equipment.appNativeStore" :lable="appNativeStoreLable">本 机 存 储</othertable></el-col>
             </el-row>
           </div>
         </div>
       </div>
       <el-row>
-        <el-col :span='2' :offset='11'>
-          <el-button type='primary' @click='prev'>上一步</el-button>
-        </el-col>
-        <el-col :span='2'>
-          <el-button type='primary' @click='next'>保存</el-button>
-        </el-col>
+        <el-col :span="2" :offset="11"><el-button type="primary" @click="prev">上一步</el-button></el-col>
+        <el-col :span="2"><el-button type="primary" @click="next">保存</el-button></el-col>
       </el-row>
     </div>
   </div>
@@ -326,10 +672,11 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import { addEquipment } from '@/api/table'
+import {addEquipment, getBasicInfoAll, getEquipmentByBaseInfoId, getList} from '@/api/table'
 import user from '@/store/modules/user'
 import { TrianglesDrawMode } from 'three'
-import { checkPostName } from '@/api/baseparameter'
+import {checkPostName, getBusinessSystemFirstByPostName} from '@/api/baseparameter'
+import department from "@/views/baseparameter/department";
 
 export default {
   components: {
@@ -337,11 +684,32 @@ export default {
   },
   data() {
     return {
+      connectedData:['36','CZ',''],
+      connectedData1:'',
+      connected:'',
+      initialNum:1,
+      connectedPostCode:'',
+      connectedDepartmentCode:'',
+      connectedEquipmentTypeCode:'',
+      connectBaseInfoId:'',
+      connectNumber:'',
+      params:'',
+
       roleid: user.state.roleid,
       role: user.state.roles[0],
+      role_name:user.state.role_name,
+      defaultUnit:user.state.role_name.split("/")[0],
       role_department_name: user.state.role_department_name,
       department: {},
       equipmentType: {},
+      transferRecord1: '',
+      transferRecordTime1: '',
+      transferRecord2: '',
+      transferRecordTime2: '',
+      movingRecord1: '',
+      movingRecordTime1: '',
+      movingRecord2: '',
+      movingRecordTime2: '',
       equipment: {
         appSoftware: [{
           softwareName: '',
@@ -353,8 +721,8 @@ export default {
         }],
         equipmentBaseInfo: {
           postName: '',
+          pool:'',
           cabinetUEnd: '',
-          shelfOff: '',
           brandModelName: '',
           cabinetUStart: '',
           basicInfoId: '',
@@ -364,6 +732,10 @@ export default {
           departmentName: '',
           trueOrVirtual: '1',
           mainOrBackup: '1',
+          isTransfer:'1',
+          transferRecord: '',
+          isMoving:'1',
+          movingRecord: '',
           serialNumber: '',
           equipmentAdminPhone: '',
           brandName: '',
@@ -371,6 +743,7 @@ export default {
           appAdminName: '',
           cabinetName: '',
           migratable: '1',
+          shelfOff: '1',
           machineRoomName: '',
           equipmentName: '',
           guaranteePeriod: '',
@@ -378,17 +751,43 @@ export default {
           insertUserId: user.state.token,
           equipmentTypeName: '',
           offlineTime: '',
+          deploymentEnvironment: '',//部署环境
           remarks: '',
           status: '',
           equipmentAdminName: '',
-          equipmentId: ''
+          equipmentId: '',
+          isChinaLocalization:'',
+          businessSystemFirstName:'', //所属业务系统
+          businessSystemName:'',  //所属业务子系统
+          businessSystemLevel:'',  //所属业务系统等保等级
+          businessApplicationName:'', //业务应用
+          isTestBusinessSystem:'1',  //是正式业务还是测试业务
+
+          accessLocation: '',//接入位置
+          singleAndDoublePowerSupply: '',//单双电源
+          agreedToTemporaryShutdown: '',//是否同意临时关停（是/否）
+          installSafetyMonitoringSoftware: '',//是否安装安全监测软件
+          deployStrongPassword: '',//是否部署强口令
+          cloudServiceUnit: '',//云服务单位
+          leasedComputingResources: '',//租用计算资源情况（CPU核数）（个）
+          leasedStorageResources: '',//租用存储资源情况（TB）
+          leasedNetworkBandwidth: '',//租用网络带宽（兆）
+          termOfLease: '',//租用期限（年）
+          domainName: '',//域名
+          domainNameRegistrationService: '',//域名注册服务商
+          ns: '',//NS记录
+          cname: '',//CNAME记录（别名）
+          useCDN: '',//是否使用CDN
+          networkArea: '', //网络区域
+          allowVulnerabilityScanning:'', //是否运行漏洞扫描
         },
-        config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '', quantity: '' },
-          { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
+        config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '' },
+          { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '' }],
         software: [{ project: '操作系统', projectName: '', edition: '', type: '' },
           { project: '数据库', projectName: '', edition: '', type: '' },
           { project: '中间件', projectName: '', edition: '', type: '' }],
-        network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
+        // network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
+        network: [{ networkCardName: '网卡1', ipAddress: '', networkCardPort: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
         appSystemUser: [{
           userName: '',
@@ -404,22 +803,19 @@ export default {
         appLinksInfo: [{ company: '', userName: '', IPAddress: '', other: '' }],
         appStore: [{ volume: '', SAN_NAS: '', capacity: '' }],
         appNativeStore: [{ totalCapacity: '', usedSpace: '', unusedSpace: '', annualGrowthSpace: '' }]
-
       },
       configLable: {
         projectName: '项目',
         type: '类型',
         frequency: '频率',
         corenessOrCapacity: '核数/容量',
-        quantity: '数量'
+        // quantity: '数量'
       },
       softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
-        networkCardPort: '交换机',
         macAddress: 'MAC地址',
-        switchInfo: '端口'
       },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: {
@@ -447,21 +843,22 @@ export default {
       },
       appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
-      appStoreLable: { volume: '卷信息', SAN_NAS: 'SAN/NAS', capacity: '已用/分配容量(G)' },
+      appStoreLable: { volume: '非本机存储卷信息', SAN_NAS: 'SAN/NAS分布式存储', capacity: '非本机存已用/分配容量(G)' },
       appNativeStoreLable: {
-        totalCapacity: '总容量',
-        usedSpace: '已用空间',
+        totalCapacity: '本地存储总容量',
+        usedSpace: '本地存储已用容量',
         unusedSpace: '未用空间',
-        annualGrowthSpace: '年增长空间'
+        annualGrowthSpace: '本地存储年增长空间'
       },
       postAll: [],
       departmentAll: [],
+      statusItem:[{label:"running",value:"在用"},{label:"stopped",value:"停用"},{label:"scrapped",value:"报废"}],
+      deploymentEnvironmentAll:[{name:"internet",value:"互联网"},{name:"earthquake",value:"地震行业网"},
+        {name:"government",value:"政务外网"},{name:"earlyWarning",value:"预警网"},{name:"emergencyCommand",value:"应急指挥信息网"}],
+      isHomegrown:[{label:"isHomegrown",value:"是"},{label:"noHomegrown",value:"否"}],
       equipmentTypeAll: [],
       active: 0,
-      labels:
-      // { 'businessSystemName': '业务系统', 'cabinetUStart': '柜内U位开始位', 'shelfOff': '是否可下架',
-      //   'remarks': '备注', 'dataSources': '数据来源', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' }
-        { 'cabinetUStart': '柜内U位开始位', 'cabinetUEnd': '柜内U位结束位', 'basicInfoId': '设备编号' },
+      labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
       // rxr
       rules: {
         equipmentAdminPhone: [
@@ -483,32 +880,72 @@ export default {
 
     }
   },
+  mounted() {
+
+  },
   created() {
     this.fetchData()
   },
+  computed:{
+    connectedA(){
+      this.autoHandleBasicInfoId(this.connectBaseInfoId)
+      this.params = this.connectBaseInfoId + this.connectNumber
+      this.equipment.equipmentBaseInfo.basicInfoId = this.params
+      if(this.connectedEquipmentTypeCode !== ''){
+        return this.params
+      }
+    }
+  },
   methods: {
-    // rxr
     checkPhone(rules, value, callback) {
       if (value !== '') {
-        // 11位电话号码和7位数字验证↓
-        // var reg = /^1[3456789]\d{9}$|^\d{7}$/;
-        // 手机号码和座机号↓
-        var reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/
+        const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
         if (!reg.test(value)) {
           callback(new Error('请输入有效的手机号码'))
         }
       }
       callback()
     },
+    async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
+      await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
+        // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
+        let allDataByBaseInfoId = response.data.items;
+        if (allDataByBaseInfoId.total !== null && this.connectedEquipmentTypeCode !== '') {
+          const numbers = allDataByBaseInfoId.map((item) => {
+            const baseInfoId = item.basicInfoId;
+            const splitIndex = baseInfoId.lastIndexOf('-');
+            const numberStr = baseInfoId.slice(splitIndex + 1);
+            return parseInt(numberStr, 10);
+          });
+          numbers.sort((a, b) => a - b);
+          if(numbers[0] !== 1){
+            this.connectNumber = '-' + '0001';
+          }else {
+            let i;
+            for (i = 0; i < numbers.length - 1; i++) {
+              if (numbers[i + 1] - numbers[i] > 1) {
+                this.connectNumber = '-' + String(numbers[i] + 1).padStart(4, '0');
+                break;
+              }
+            }
+            if (i === numbers.length - 1) {
+              this.connectNumber = '-' + String(numbers[numbers.length - 1] + 1).padStart(4, '0');
+            }
+          }
+        } else {
+          this.connectNumber = '-' + '0001';
+        }
+      })
+    },
     fetchData() {
       this.listLoading = true
+      // this.equipment.equipmentBaseInfo.postName = this.user.state.role_name.split("/")[0] //默认单位，当前登录的单位
       getPost().then(response => {
-        //console.log(response)
         this.postAll = response.data.items
         this.postAll.forEach(element => {
           if (element.postId === this.roleid) {
-            //console.log(element.postName)
             this.equipment.equipmentBaseInfo.postName = element.postName
+            this.connectedPostCode =  element.postCode
           }
         })
       })
@@ -516,9 +953,11 @@ export default {
         if (this.role === '部门管理员') {
           this.departmentAll = response.data.items.filter(element => element.departmentName === this.role_department_name)
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+          this.connectedDepartmentCode = this.departmentAll[0].departmentCode
         } else {
           this.departmentAll = response.data.items
           this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+          this.connectedDepartmentCode = this.departmentAll[0].departmentCode
         }
       })
       getEquipmentType().then(response => {
@@ -527,14 +966,13 @@ export default {
       })
     },
     onSubmit() {
-      //console.log('submit!')
     },
     prev() {
       if (--this.active < 0) {
-        //console.log(this.active)
         this.active = 0
       }
     },
+
     next() {
       this.active++
       const equipments = []
@@ -542,15 +980,20 @@ export default {
         let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
         let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
 
-
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
-        equip.equipmentBaseInfo.status = '0'
+        equip.equipmentBaseInfo.movingRecord = this.movingRecord1 !=='' ? this.movingRecord1+';'+this.movingRecord2 : ''
+        equip.equipmentBaseInfo.movingRecordTime = this.movingRecordTime1 !== '' ? this.movingRecordTime1+';'+this.movingRecordTime2 : ''
+        equip.equipmentBaseInfo.transferRecord = this.transferRecord1 !== '' ? this.transferRecord1+';'+this.transferRecord2 : ''
+        equip.equipmentBaseInfo.transferRecordTime = this.transferRecordTime1 !=='' ? this.transferRecordTime1+';'+this.transferRecordTime2 :''
+        equip.equipmentBaseInfo.status = equip.equipmentBaseInfo.status === '在用'? '0' : (equip.equipmentBaseInfo.status === '停用'? '1' : '2')
+        equip.equipmentBaseInfo.isTestBusinessSystem = equip.equipmentBaseInfo.isTestBusinessSystem === '1' ? '正式业务':'测试业务'
+
         equip.appAccessRights = equip.appAccessRights[0]
         equip.appNativeStore = equip.appNativeStore[0]
         equipments.push(equip)
-        console.log(equipments)
+        console.log("负载参数：",equipments)
         addEquipment({ equipments: equipments }).then(res => {
           this.active = 0
           if (res.message === '填写错误') {
@@ -565,18 +1008,36 @@ export default {
           })
         }).catch(err => {
           this.active = 0
-          //console.log(err)
         })
       }
     },
-    changePost(val) {
-      //console.log(val)
-      this.postAll.forEach(element => {
-        if (element.postName === val) {
-          getDepartment(element.postId).then(response => {
+    changePost(selectedPostName) {
+      this.postAll.forEach(postItem =>{
+        if(postItem.postName === selectedPostName){
+          this.connectedPostCode = postItem.postCode
+          getDepartment(postItem.postId).then(response=>{
             this.departmentAll = response.data.items
             this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
+            this.connectedDepartmentCode = response.data.items[0].departmentCode
+            this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
           })
+        }
+      })
+    },
+
+    handleBaseInfoIdByDepartmentName(val){
+      this.departmentAll.forEach(departmentItem=>{
+        if(departmentItem.departmentName === val){
+          this.connectedDepartmentCode = departmentItem.departmentCode
+          this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
+        }
+      })
+    },
+    handleBaseInfoIdByEquipmentType(val){
+      this.equipmentTypeAll.forEach(equipmentTypeItem =>{
+        if(equipmentTypeItem.equipmentTypeName === val){
+          this.connectedEquipmentTypeCode = equipmentTypeItem.equipmentTypeCode
+          this.connectBaseInfoId = this.connectedPostCode + '-' +this.connectedDepartmentCode+ '-' + this.connectedEquipmentTypeCode
         }
       })
     },
@@ -587,16 +1048,20 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-*, el-form-item__label {
-  font-size: 18px;
+<style lang="less" scoped>
+*,el-form-item__label{
+    font-size: 18px;
 }
+.flex-container {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+}
+
 
 .tile-content {
   padding: 9px;
   margin-bottom: 20px;
 }
-
 .shadows {
   box-shadow: 0 0 4px #0000004d !important;
 }
@@ -612,6 +1077,16 @@ export default {
   font-weight: 700;
   font-size: 14px;
   color: #606266;
+  width: 70px;
+}
+.selectLabel1{
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 35px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #606266;
+  width: 95px;
 }
 
 .detail-content {
@@ -735,6 +1210,13 @@ export default {
 
 .searchInput {
   text-align: center;
+}
+.dianhua{
+  height: 1px !important;
+}
+
+.deploymentEnvironmentOption{
+  width: 100px !important;
 }
 </style>
 

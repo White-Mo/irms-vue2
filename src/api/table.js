@@ -67,6 +67,16 @@ export function getList(obj) {
     responseType: 'json'
   })
 }
+
+export function getEquipmentByBaseInfoId(basicInfoId) {
+  return request({
+    params: {basicInfoId: basicInfoId},
+    url: '/home/inforesources/getEquipmentByBaseInfoId',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 export function getBasicInfoAll() {
   return request({
     url: '/home/inforesources/getBasicInfoAll',
@@ -177,6 +187,8 @@ export function AddExcel(eq) {
   })
 }
 
+
+
 export function importMachineRoom(machineRoom) {
   return request({
     data: machineRoom,
@@ -265,3 +277,4 @@ export function solelySearchIdAndMacAddress(data){
     responseType: 'json',
   })
 }
+
