@@ -57,36 +57,6 @@
             </el-col>
           </el-row>
           <el-row style="background: rgba(94,135,217,0.4)" v-show="currentShow === '3'">
-<!--                        <el-col :span='5' :offset='1'>
-                          <div class='selectLabel'>单位</div>
-                          <el-select v-model='form.postName' placeholder='请选择' @change='changePost' :popper-append-to-body='false'>
-                            <el-option
-                              v-for='item in postAll'
-                              :key='item.value'
-                              :value='item.postName'
-                            />
-                          </el-select>
-                        </el-col>
-                        <el-col :span='5'>
-              <div class='selectLabel'>部门</div>
-              <el-select v-model='form.departmentName' placeholder='请选择'>
-                <el-option
-                  v-for='item in departmentAll'
-                  :key='item.value'
-                  :value='item.departmentName'
-                />
-              </el-select>
-            </el-col>
-                        <el-col :span='5'>
-              <div class='selectLabel'>设备类型</div>
-              <el-select v-model='form.equipmentTypeName' placeholder='请选择'>
-                <el-option
-                  v-for='item in equipmentTypeAll'
-                  :key='item.value'
-                  :value='item.equipmentTypeName'
-                />
-              </el-select>
-            </el-col>-->
             <el-col :span='2'>
               <div class="label-style">单位</div>
             </el-col>
@@ -139,10 +109,6 @@
             </el-col>
           </el-row>
           <hr>
-
-<!--          <el-form-item v-for='(value,key,index) in labels' :key='index' :label='value'>
-            <el-input v-model='form[key]'/>
-          </el-form-item>-->
         </el-form>
         <el-row v-show="currentShow === '3'">
           <el-col :span='2' :offset='9'>
@@ -1194,19 +1160,6 @@ export default {
         console.log(err)
       })
     },
-
-
-
-/*    changePost(val) {
-      this.postAll.forEach(element => {
-        if (element.postName === val) {
-          getDepartment(element.postId).then(response => {
-            this.departmentAll = response.data.items
-            this.equipment.equipmentBaseInfo.departmentName = this.departmentAll[0].departmentName
-          })
-        }
-      })
-    },*/
 
     changePost(selectedPostName) {
       this.postAll.forEach(postItem =>{
