@@ -14,7 +14,7 @@
     </el-steps>
     <div v-show="active==0">
       <div >
-        <div style="background: #eaeef5">
+        <div style="background: rgba(94,135,217,0.4)">
           <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
             <el-row>
               <el-col :span='2'>
@@ -95,7 +95,15 @@
               <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true' class='gray-bg' :rules='rules'>
                 <el-row>
                   <el-col :span="2"><div class="label-style">设备名称</div></el-col>
-                  <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span="10"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>主机名</div>
+                  </el-col>
+                  <el-col :span='10'>
+                    <div class='label-style'>
+                      <el-input v-model='form.hostName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span='3'>
@@ -440,7 +448,7 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemName' size='medium' />
+                      <el-input v-model='form.businessSystem' size='medium' />
                     </div>
                   </el-col>
                   <el-col :span='4'>
@@ -684,16 +692,11 @@ export default {
   },
   data() {
     return {
-      connectedData:['36','CZ',''],
-      connectedData1:'',
-      connected:'',
-      initialNum:1,
       connectedPostCode:'',
       connectedDepartmentCode:'',
       connectedEquipmentTypeCode:'',
       connectBaseInfoId:'',
       connectNumber:'',
-      params:'',
 
       roleid: user.state.roleid,
       role: user.state.roles[0],
@@ -758,7 +761,7 @@ export default {
           equipmentId: '',
           isChinaLocalization:'',
           businessSystemFirstName:'', //所属业务系统
-          businessSystemName:'',  //所属业务子系统
+          businessSystem:'',  //所属业务子系统
           businessSystemLevel:'',  //所属业务系统等保等级
           businessApplicationName:'', //业务应用
           isTestBusinessSystem:'1',  //是正式业务还是测试业务
@@ -794,7 +797,7 @@ export default {
           realName: '',
           userLevel: '',
           localAccessMode: '',
-          remoteAccessMode: '',
+          // remoteAccessMode: '',
           createDate: '',
           other: ''
         }],
@@ -830,8 +833,8 @@ export default {
         userName: '用户名',
         realName: '使用人',
         userLevel: '级别权限',
-        localAccessMode: '本地访问方式',
-        remoteAccessMode: '远程访问方式',
+        localAccessMode: '访问方式(本地/远程)',  //原应该是本地访问方式，但由于数据库设计错误，应该只有一个字段，却又两个（本地和远程），所以先把这个字段当两个用
+        // remoteAccessMode: '远程访问方式',
         createDate: '创建时间',
         other: '其他'
       },
@@ -841,7 +844,7 @@ export default {
         userScope: 'ICP号',
         ICPNum: '用户范围'
       },
-      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
+      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '预警网' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '非本机存储卷信息', SAN_NAS: 'SAN/NAS分布式存储', capacity: '非本机存已用/分配容量(G)' },
       appNativeStoreLable: {
@@ -858,7 +861,7 @@ export default {
       isHomegrown:[{label:"isHomegrown",value:"是"},{label:"noHomegrown",value:"否"}],
       equipmentTypeAll: [],
       active: 0,
-      labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
+      // labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
       // rxr
       rules: {
         equipmentAdminPhone: [
@@ -889,10 +892,9 @@ export default {
   computed:{
     connectedA(){
       this.autoHandleBasicInfoId(this.connectBaseInfoId)
-      this.params = this.connectBaseInfoId + this.connectNumber
-      this.equipment.equipmentBaseInfo.basicInfoId = this.params
+      this.equipment.equipmentBaseInfo.basicInfoId = this.connectBaseInfoId + this.connectNumber
       if(this.connectedEquipmentTypeCode !== ''){
-        return this.params
+        return this.equipment.equipmentBaseInfo.basicInfoId
       }
     }
   },
@@ -908,9 +910,9 @@ export default {
     },
     async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
       await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
-        // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
+         console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
         let allDataByBaseInfoId = response.data.items;
-        if (allDataByBaseInfoId.total !== null && this.connectedEquipmentTypeCode !== '') {
+        if (response.data.total !== null && this.connectedEquipmentTypeCode !== '') {
           const numbers = allDataByBaseInfoId.map((item) => {
             const baseInfoId = item.basicInfoId;
             const splitIndex = baseInfoId.lastIndexOf('-');
@@ -979,7 +981,6 @@ export default {
       if (this.active === 2) {
         let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
         let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
-
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
