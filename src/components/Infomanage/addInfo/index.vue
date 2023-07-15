@@ -448,7 +448,7 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemName' size='medium' />
+                      <el-input v-model='form.businessSystem' size='medium' />
                     </div>
                   </el-col>
                   <el-col :span='4'>
@@ -761,7 +761,7 @@ export default {
           equipmentId: '',
           isChinaLocalization:'',
           businessSystemFirstName:'', //所属业务系统
-          businessSystemName:'',  //所属业务子系统
+          businessSystem:'',  //所属业务子系统
           businessSystemLevel:'',  //所属业务系统等保等级
           businessApplicationName:'', //业务应用
           isTestBusinessSystem:'1',  //是正式业务还是测试业务
@@ -910,9 +910,9 @@ export default {
     },
     async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
       await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
-        // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
+         console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
         let allDataByBaseInfoId = response.data.items;
-        if (allDataByBaseInfoId.total !== null && this.connectedEquipmentTypeCode !== '') {
+        if (response.data.total !== null && this.connectedEquipmentTypeCode !== '') {
           const numbers = allDataByBaseInfoId.map((item) => {
             const baseInfoId = item.basicInfoId;
             const splitIndex = baseInfoId.lastIndexOf('-');
@@ -981,7 +981,6 @@ export default {
       if (this.active === 2) {
         let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
         let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
-
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
