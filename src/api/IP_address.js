@@ -8,7 +8,7 @@ export function getNetWorkList(obj) {
   // //console.log(typeof (params))
   return request({
     params,
-    url: '/home/IPaddress/getBasicInfoNetworkByPage1',
+    url: '/home/IPaddress/getBasicInfoNetworkByPage',
     method: 'get',
     responseType: 'json'
   })
@@ -26,14 +26,9 @@ export function updateBasicInfoNetwork(obj) {
     responseType: 'json'
   })
 }
-export function getdataCount(obj) {
-  // 将有数组和字符串的对象转为符合JSON格式的对象
-  var params = JSON.parse(JSON.stringify(obj))
-  // //console.log(params)
-  // //console.log(typeof (params))
+export function getBasicInfoNetworkCount() {
   return request({
-    params,
-    url: '/home/IPaddress/getBasicInfoNetworkCount1',
+    url: '/home/IPaddress/getBasicInfoNetworkCount',
     method: 'get',
     responseType: 'json'
   })
