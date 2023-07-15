@@ -57,10 +57,14 @@
           element-loading-text='Loading'
           highlight-current-row
           stripe
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
         >
           <el-table-column :index='(index) => {return index + (this.currentPage - 1) * this.limit + 1}' align='center'
                            label='序号' width='80px'
                            fixed='left'
+
                            show-overflow-tooltip type='index' />
           <af-table-column
             v-for='(value, key, index) in labels'
@@ -103,7 +107,8 @@
             :current-page='currentPage'
             :page-size='limit'
             :total='total'
-            layout='total, prev, pager, next, jumper'
+            layout='total, sizes, prev, pager, next, jumper'
+            @size-change='handleSizeChange'
             @current-change='handleCurrentChange'
           />
         </div>
@@ -113,7 +118,7 @@
 </template>
 
 <script>
-import { getBasicInfoNetworkCount, getNetWorkList, updateBasicInfoNetwork } from '@/api/IP_address'
+import { getBasicInfoNetworkByPage, updateBasicInfoNetwork } from '@/api/IP_address'
 import user from '@/store/modules/user'
 
 import { validateIP, validateMAC } from '@/api/validate'
@@ -128,7 +133,7 @@ export default {
       total: 0,
       isEdit: false,
       list: null,
-      DataName: 'all',
+      DataName: '',
       initname: [],
       inputValue: '',
       listLoading: true,
@@ -212,8 +217,8 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      if (this.DataName === 'all' || this.DataName.length === 0) {
-        this.initname = ['']
+      if (this.DataName.length === 0) {
+        this.initname = ['111']
       } else {
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
@@ -222,30 +227,39 @@ export default {
         dataValue: this.inputValue,
         status: '0',
         start: (this.currentPage - 1) * this.limit,
-        limit: this.limit
+        limit: this.limit,
       }
 
-      getNetWorkList(params).then((res) => {
-        this.total=res.data.total
-        let data = [];
+      getBasicInfoNetworkByPage(params).then((res) => {
+        this.total = res.data.total
+        let data = []
         res.data.items.forEach(element => {
-          element[0].isEdit = false;
+          element[0].isEdit = false
           data.push(Object.assign(element[0], element[1]))
-        });
+        })
         this.list = data
         this.listLoading = false
       })
     },
+
     search() {
       this.start = 0
       this.currentPage = 1
       this.fetchData()
     },
+
+
+    handleSizeChange(val){
+      this.limit = val
+      this.fetchData()
+    },
+
     handleDetail(index, row) {
       if (row.isEdit) {
         row.isEdit = !row.isEdit
       }
     },
+
     handleMove(index, row) {
       row.isEdit = !row.isEdit
       if (!row.isEdit) {
