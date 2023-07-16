@@ -1,103 +1,115 @@
 <template>
-  <div class="infobody">
-    <div class="grid-content bg-purple">
-      <i class="el-icon-s-order" /><span>全生命周期管理</span>
+  <div class='infobody'>
+    <div class='grid-content bg-purple'>
+      <i class='el-icon-s-order' /><span>全生命周期管理</span>
     </div>
-    <div class="app-container">
-      <div class="show">
+    <div class='app-container'>
+      <div class='show'>
         <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">资源申请</div>
+          <el-col :span='24'>
+            <div class='grid-content bg-purple-dark'>资源申请</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10" class="bg-condition">
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+        <el-row :gutter='10' class='bg-condition'>
+          <el-col :lg='2' :md='2' :sm='2' :xl='2' :xs='2'>
             <span>查询条件：</span>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <el-col :lg='3' :md='3' :sm='3' :xl='3' :xs='3'>
             <el-select
-              v-model="DataName"
-              placeholder="详细字段查询"
+              v-model='DataName'
               multiple
-              size="medium"
+              placeholder='详细字段查询'
+              size='medium'
             >
               <el-option
-                v-for="(item, index) in dataname"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                class="searchInput"
+                v-for='(item, index) in dataname'
+                :key='index'
+                :label='item.label'
+                :value='item.value'
+                class='searchInput'
               />
             </el-select>
           </el-col>
-          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+          <el-col :lg='4' :md='4' :sm='4' :xl='4' :xs='4'>
             <el-input
-              v-model="inputValue"
-              placeholder="输入查询内容"
+              v-model='inputValue'
               clearable
-              size="medium"
+              placeholder='输入查询内容'
+              size='medium'
             />
           </el-col>
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :lg='2' :md='2' :sm='2' :xl='2' :xs='2'>
             <el-button
-              size="medium"
-              type="primary"
-              icon="el-icon-search"
-              clearable="true"
-              @click="search()"
-            >搜索</el-button
+              clearable='true'
+              icon='el-icon-search'
+              size='medium'
+              type='primary'
+              @click='search()'
+            >搜索
+            </el-button
             >
           </el-col>
         </el-row>
         <el-table
-          v-loading="listLoading"
-          :data="list_network"
-          element-loading-text="Loading"
+          v-loading='listLoading'
+          :data='list'
           border
+          element-loading-text='Loading'
           highlight-current-row
           stripe
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
         >
-          <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
+          <el-table-column :index='(index) => {return index + (this.currentPage - 1) * this.limit + 1}' align='center'
+                           label='序号' width='80px'
+                           fixed='left'
+
+                           show-overflow-tooltip type='index' />
           <af-table-column
-            v-for="(value, key, index) in labels"
-            :key="index"
-            align="center"
-            :label="value"
-            width="180px"
+            v-for='(value, key, index) in labels'
+            :key='index'
+            :label='value'
+            align='center'
+            width='180px'
           >
-            <template slot-scope="scope">
-              <el-form :ref="labels" :model="labels">
-                <el-form-item style="height:20px">
-                  <el-input v-if="scope.row.isEdit && (key ==='ip_address' || key ==='switch_info')" v-model="scope.row[key]" placeholder="请输入">
+            <template slot-scope='scope'>
+              <el-form :ref='labels' :model='labels'>
+                <el-form-item style='height:20px'>
+                  <el-input v-if="scope.row.isEdit && (key ==='ipAddress' || key ==='macAddress')"
+                            v-model='scope.row[key]' placeholder='请输入'>
                   </el-input>
                   <span v-else>{{ scope.row[key] }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </af-table-column>
-          <el-table-column align="center" label="操作" width="200px"  fixed="right">
-            <template slot-scope="scope">
+          <el-table-column align='center' fixed='right' label='操作' width='200px'>
+            <template slot-scope='scope'>
               <el-button
-                size="mini"
-                :style="{ display: scope.row.isEdit==false?'none':'' }"
-                @click="handleDetail(scope.$index, scope.row)"
-              >{{scope.row.isEdit ? '取消' : '详情'}}</el-button
+                :style="{ display: scope.row.isEdit===false?'none':'' }"
+                size='mini'
+                @click='handleDetail(scope.$index, scope.row)'
+              >{{ scope.row.isEdit ? '取消' : '详情' }}
+              </el-button
               >
               <el-button
-                size="mini"
-                @click="handleMove(scope.$index, scope.row)"
-              >{{scope.row.isEdit ? '提交' : '申请'}}</el-button
+                size='mini'
+                @click='handleMove(scope.$index, scope.row)'
+              >{{ scope.row.isEdit ? '提交' : '申请' }}
+              </el-button
               >
             </template>
           </el-table-column>
         </el-table>
-        <div class="block">
+        <div class='block'>
           <el-pagination
-            :page-size="limit"
-            :current-page="currentPage"
-            layout="total, prev, pager, next, jumper"
-            :total="total_N"
-            @current-change="handleCurrentChange"
+            :current-page='currentPage'
+            :page-size='limit'
+            :total='total'
+            layout='total, sizes, prev, pager, next, jumper'
+            @size-change='handleSizeChange'
+            @current-change='handleCurrentChange'
           />
         </div>
       </div>
@@ -106,49 +118,25 @@
 </template>
 
 <script>
-import { hunhe1 } from '@/layout/mixin/IP_address_Mix'
-import { updateBasicInfoNetwork } from '@/api/IP_address'
+import { getBasicInfoNetworkByPage, updateBasicInfoNetwork } from '@/api/IP_address'
 import user from '@/store/modules/user'
-import { getMachineRoom,getCabinet } from '@/api/select'
 
-import {validateIP, validateMAC} from '@/api/validate'
+import { validateIP, validateMAC } from '@/api/validate'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
-  mixins: [hunhe1],
   data() {
     return {
       roleid: user.state.roleid,
-      visiblePublish:false,
-      machineRoomAll: [],
-      cabinetAll: [],
-      start:0,
-      limit:10,
-      isEdit:false,
-      tempIndex:0,
-      tab_name: '0',
-      list: null,
-      list_network:null,
-      total: 0,
-      total_N:0,
+      start: 0,
+      limit: 10,
       currentPage: 1,
-      DataName: 'all',
-      initname: ['123'],
-      department: '',
+      total: 0,
+      isEdit: false,
+      list: null,
+      DataName: '',
+      initname: [],
       inputValue: '',
-      postname: '',
-      input3: '',
       listLoading: true,
-      singalInfo: {},
       dataname: [
         {
           value: 'postName',
@@ -180,7 +168,7 @@ export default {
           label: 'IP 地址'
         },
         {
-          value: 'mAC_address',
+          value: 'MAC_address',
           label: 'MAC 地址'
         },
         {
@@ -202,139 +190,117 @@ export default {
         {
           value: 'guaranteePeriod',
           label: '保修期'
-        },
+        }
       ],
       value: '',
       labels: {
         postName: '所属单位',
         departmentName: '所属部门',
-        basicInfoId:'设备编号',
+        basicInfoId: '设备编号',
         equipmentTypeName: '设备类型',
         equipmentName: '设备名',
-        ip_address: 'ip 地址',
-        switch_info: 'MAC 地址',
+        ipAddress: 'IP 地址',
+        macAddress: 'MAC 地址',
+        networkCardName: '网卡名',
         brandName: '设备品牌',
         onlineTime: '上线时间',
         hostName: '主机名',
         guaranteePeriod: '保修期',
-        network_card_name:'网卡名',
         machineRoomName: '安装位置',
-        cabinetName: '机柜编号',
+        cabinetName: '机柜编号'
       }
     }
   },
-  async created() {
+  created() {
     this.fetchData()
-    let a = 0
-    a = await this.handleAsync(a)
-    // console.log(a);
-    // console.log(this.list_network)
-    // console.log(this.list)
   },
   methods: {
-    search(){
-      this.start = 0
-      this.currentPage=1
-      this.fetchData()
-    },
-    async handleAsync(val){
-      return new Promise((resolve,reject)=>{
-        let arr = [1,2,3]
-        for (let i = 0; i < arr.length; i++) {
-          const e = arr[i];
-          setTimeout(() => {
-            if (e == 2) {
-              val = e;
-              console.log(val);
-              resolve(val)
-            }
+    fetchData() {
+      this.listLoading = true
+      if (this.DataName.length === 0) {
+        this.initname = ['111']
+      } else {
+        this.initname = JSON.parse(JSON.stringify(this.DataName))
+      }
+      const params = {
+        dataName: this.initname,
+        dataValue: this.inputValue,
+        status: '0',
+        start: (this.currentPage - 1) * this.limit,
+        limit: this.limit,
+      }
 
-          }, 1000);
-        }
+      getBasicInfoNetworkByPage(params).then((res) => {
+        this.total = res.data.total
+        let data = []
+        res.data.items.forEach(element => {
+          element[0].isEdit = false
+          data.push(Object.assign(element[0], element[1]))
+        })
+        this.list = data
+        this.listLoading = false
       })
     },
-    handleDetail(index, row) {
-      this.visiblePublish=false
-      console.log(row.isEdit)
-      if (row.isEdit) {
-        row.isEdit = !row.isEdit;
-      }
+
+    search() {
+      this.start = 0
+      this.currentPage = 1
       this.fetchData()
     },
+
+
+    handleSizeChange(val){
+      this.limit = val
+      this.fetchData()
+    },
+
+    handleDetail(index, row) {
+      if (row.isEdit) {
+        row.isEdit = !row.isEdit
+      }
+    },
+
     handleMove(index, row) {
-      this.visiblePublish=true
-      row.isEdit = !row.isEdit;
-      console.log(row.isEdit)
+      row.isEdit = !row.isEdit
       if (!row.isEdit) {
         const params = {
           equipmentId: row.equipmentId,
-          ip_address:row.ip_address,
-          switch_info: row.switch_info,
-          cabinetUStart: row.cabinetUStart,
-          cabinetUEnd: row.cabinetUEnd
-        };
+          ip_address: row.ipAddress,
+          mac_address: row.macAddress,
+          network_card_name: row.networkCardName
+        }
+        // 判断 IP和MAC格式是否正确
         const checkIp = validateIP(params.ip_address)
-        const checkSwitch = validateMAC(params.switch_info)
-        if(checkIp && checkSwitch){
-          updateBasicInfoNetwork(params).then( res=>{
-          console.log(res);
-          this.$message({
-            message: '申请成功',
-            type: 'success'
+        const checkSwitch = validateMAC(params.mac_address)
+        if (checkIp && checkSwitch) {
+          updateBasicInfoNetwork(params).then(res => {
+            this.$message({
+              message: '申请成功',
+              type: 'success'
+            })
           })
-        } )}
-        else if(checkIp == false || checkSwitch == false){
+        } else {
           this.$message({
-          message: '申请失败，IP地址或MAC地址有误',
-          type: 'error'
-        });
-        this.fetchData()}
-        else {};
-      }else{
-        //
-        // getMachineRoom(row.postId).then(response => {
-        //   this.machineRoomAll = response.data.items
-        //   this.fetchCabinet(row.machineRoomName)
-        // })
-
+            message: '申请失败，IP地址或MAC地址有误',
+            type: 'error'
+          })
+          this.fetchData()
+        }
+      } else {
+        // 不提交申请
       }
     },
     handleCurrentChange(val) {
       this.start = (val - 1) * this.limit
-      this.currentPage=val
+      this.currentPage = val
       this.fetchData()
-    },
-    async changeRoom(row) {
-      // let val = row.machineRoomName
-      // await this.fetchCabinet(val)
-      // console.log(this.cabinetAll[0].cabinetName);
-      // row.cabinetName = this.cabinetAll[0].cabinetName
-    },
-    async fetchCabinet(val) {
-      return new Promise((resolve,reject) => {
-        this.machineRoomAll.forEach(element => {
-          if (element.machineRoomName === val) {
-            getCabinet(element.machineRoomId).then(response => {
-              this.cabinetAll = response.data.items
-              console.log(this.cabinetAll[0].cabinetName);
-              resolve()
-            })
-          }
-        })
-      })
-    },
-    //分页连续展示   currentPage页码  limit每页数量
-    typeIndex(index){
-      return index+(this.currentPage-1)*this.limit + 1
     }
+
   }
 }
 </script>
 
-<style lang="less" scoped>
-//*{
-//  font-size: 18px;
-//}
+<style lang='less' scoped>
 
 .searchInput {
   height: 40px;
@@ -342,67 +308,69 @@ export default {
   color: #0b0c10;
   background-color: #deecff;
 }
-// .el-scrollbar {
-//   overflow: hidden;
-//   position: relative;
-// }
 
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
-}
 .el-col {
   border-radius: 4px;
 }
+
 .bg-purple-dark {
   background: #99a9bf;
 }
+
 .bg-purple {
   background: #d3dce6;
 }
+
 .bg-condition {
   line-height: 50px;
   text-align: center;
   height: 54px;
-  margin: 0px !important;
+  margin: 0 !important;
   background: #d3dce6;
 }
+
 .bg-purple-light {
   background: #e5e9f2;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+
 .app-container {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
+
 .grid-content {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
+
 .font {
   font-size: 18px;
 }
+
 .el-cascader .el-input {
   width: 130px;
 }
+
 .el-pagination > * {
   font-size: 18px;
 }
+
 .block {
   text-align: center;
 }
 </style>
-<style  lang="less" scoped>
-/* //需要覆盖的组件样式 */
-// .el-scrollbar /deep/
+
+/* 需要覆盖的组件样式 */
+<style lang='less' scoped>
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -423,26 +391,25 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
+
 .el-scrollbar {
   // height: 380px;
   overflow: hidden;
   position: relative;
 }
+
 .el-scrollbar .el-scrollbar__wrap {
   overflow: auto;
   height: 100%;
 }
+
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
   background-color: #d2d2d2;
 }
+
 .el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
-//.el-button--primary {
-//  height: 58px;
-//  color: #fff;
-//  background-color: #409eff;
-//  border-color: #409eff;
-//}
+
 </style>
