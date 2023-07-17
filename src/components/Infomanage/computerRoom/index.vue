@@ -111,6 +111,7 @@
 <script>
 import screenfull from 'screenfull'
 import * as THREE from "three";
+import {Mesh, MeshBasicMaterial, Raycaster,Vector2} from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
@@ -192,23 +193,23 @@ export default {
       let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight.position.set(10, 10, 10);
       this.scene.add(directionalLight);
-// 平行光2
+      // 平行光2
       let directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight2.position.set(-400, -200, -300);
       this.scene.add(directionalLight2);
-//环境光
+      //环境光
       let ambient = new THREE.AmbientLight(0xffffff, 0.5);
       this.scene.add(ambient);
       //网格模型添加到场景中
-      // let geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-      // let material = new THREE.MeshNormalMaterial({
-      //   color: "white"
-      // });
-      // this.mesh = new THREE.Mesh(geometry, material);
-      // this.scene.add(this.mesh);
-      // 坐标轴
-      // let axes = new THREE.AxesHelper(1000);
-      // this.scene.add(axes);
+      let geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+      let material = new THREE.MeshNormalMaterial({
+        color: "white"
+      });
+      this.mesh = new THREE.Mesh(geometry, material);
+      this.scene.add(this.mesh);
+      //坐标轴
+      let axes = new THREE.AxesHelper(1000);
+      this.scene.add(axes);
       /**
        * 相机设置
        */
@@ -234,11 +235,32 @@ export default {
        */
       this.renderer = new THREE.WebGLRenderer({ antialias: true });
       this.renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(this.renderer.domElement);
-      //创建控件对象
-      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     },
 
+    // 动画
+    animate() {
+      if (this.mesh) {
+        requestAnimationFrame(this.animate);
+        // this.mesh.rotation.y += 0.004;//绕Y轴旋转0.004°
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+    // 加载外部模型
+    // 外部模型加载函数
+    loadGltf() {
+      let self = this;
+      let loader = new GLTFLoader();
+      //本地模型路径：public/static/mod/Xbot.glb
+      loader.load("static/c.glb", function (gltf) {
+        //console.log(gltf)
+        self.isLoading = false;//关闭载入中效果
+        self.mesh = gltf.scene;
+        // self.mesh.scale.set(5,5,5);//设置大小比例
+        self.mesh.position.set(0, 0, 0);//设置位置
+        self.scene.add(self.mesh); // 将模型引入three、
+        self.animate();
+      });
+    },
     //右上角数据
     initCount(){
       // equipmentBaseInfo:{
@@ -271,31 +293,6 @@ export default {
       getList(params).then((response)=> {
         this.equipmentBaseInfo.equipmentCount = response.data.total
       })
-    },
-
-    // 动画
-    animate() {
-      if (this.mesh) {
-        requestAnimationFrame(this.animate);
-        // this.mesh.rotation.y += 0.004;//绕Y轴旋转0.004°
-        this.renderer.render(this.scene, this.camera);
-      }
-    },
-    // 加载外部模型
-    // 外部模型加载函数
-    loadGltf() {
-      let self = this;
-      let loader = new GLTFLoader();
-      //本地模型路径：public/static/mod/Xbot.glb
-      loader.load("static/c.glb", function (gltf) {
-        //console.log(gltf)
-        self.isLoading = false;//关闭载入中效果
-        self.mesh = gltf.scene;
-        // self.mesh.scale.set(5,5,5);//设置大小比例
-        self.mesh.position.set(0, 0, 0);//设置位置
-        self.scene.add(self.mesh); // 将模型引入three、
-        self.animate();
-      });
     },
     backPage(){
       this.$emit('changeDiv5', '0')
