@@ -703,7 +703,7 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import { getPost, getDepartment, getMachineRoom,getCabinet,getEquipmentType } from '@/api/select'
-import {addEquipment, getBasicInfoAll, getEquipmentByBaseInfoId, getList} from '@/api/table'
+import {addEquipment, getBasicInfoAll, getEquipmentsByBaseInfoId, getList} from '@/api/table'
 import user from '@/store/modules/user'
 import { getBusinessSystemAll,getAllFirstLevelBusinessSystem } from "@/api/baseparameter";
 import { TrianglesDrawMode } from 'three'
@@ -975,7 +975,7 @@ export default {
       callback()
     },
     async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
-      await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
+      await getEquipmentsByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
          console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
         let allDataByBaseInfoId = response.data.items;
         if (response.data.total !== null && this.connectedEquipmentTypeCode !== '') {

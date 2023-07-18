@@ -789,7 +789,7 @@
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
 import {getPost, getDepartment, getEquipmentType} from '@/api/select'
-import {addEquipment, getbasic, getEquipmentByBaseInfoId} from '@/api/table'
+import {addEquipment, getbasic, getEquipmentsByBaseInfoId} from '@/api/table'
 import user from '@/store/modules/user'
 import {analysisReply} from '@/utils/xlsx'
 
@@ -1192,7 +1192,7 @@ export default {
       })
     },
     async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
-      await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
+      await getEquipmentsByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
         // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
         let allDataByBaseInfoId = response.data.items;
         if (response.data.total !== null && this.connectedEquipmentTypeCode !== '') {
