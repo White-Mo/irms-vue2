@@ -145,7 +145,7 @@
 <script>
 import {getAllmachineroom} from "@/api/machineRoom";
 import {getPostMachineRoom} from "@/api/dashboard";
-import computerRoom from "@/components/Infomanage/computerRoom/index_tlj.vue";
+import computerRoom from "@/components/Infomanage/computerRoom/index.vue";
 
 export default {
   name: 'search-computer-room-by-post-name',
