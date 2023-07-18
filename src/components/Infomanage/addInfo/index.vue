@@ -220,7 +220,12 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.machineRoomName' size='medium' />
+                      <el-select v-model="form.machineRoomName" filterable placeholder="请选择"  @change="SelectmachineRoomName"  :popper-append-to-body="false">
+                      <el-option
+                        v-for='item in machineRoomNames'
+                        :key='item.value'
+                        :value='item.machineRoomName'
+                      /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -228,7 +233,12 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetName' size='medium' />
+                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择"   :popper-append-to-body="false">
+                        <el-option
+                          v-for='item in cabinetAll'
+                          :key='item.value'
+                          :value='item.cabinetName'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -440,7 +450,13 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemFirstName' size='medium' />
+<!--                      <el-input v-model='form.businessSystemFirstName' size='medium' />-->
+                      <el-select v-model="form.businessSystemFirstName" filterable  @change="selectbusinessSubsystem" placeholder="请选择" :popper-append-to-body="false">
+                        <el-option
+                          v-for='item in businessSystem'
+                          :key='item.value'
+                          :value='item.businessSystemFirstName'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='3'>
@@ -449,6 +465,13 @@
                   <el-col :span='5'>
                     <div class='label-style'>
                       <el-input v-model='form.businessSystem' size='medium' />
+<!--                      <el-input v-model='form.businessSystem' size='medium' />-->
+                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择" :popper-append-to-body="false">
+                        <el-option
+                          v-for='item in successbusinessSubsystem'
+                          :key='item.value'
+                          :value='item.businessSystem'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='4'>
@@ -456,7 +479,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemLevel' size='medium' />
+                      <el-input v-model='form.businessSystemLevel'  size='medium' />
                     </div>
                   </el-col>
                 </el-row>
@@ -679,11 +702,11 @@
 
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
-import { getPost, getDepartment, getEquipmentType } from '@/api/select'
+import { getPost, getDepartment, getMachineRoom,getCabinet,getEquipmentType } from '@/api/select'
 import {addEquipment, getBasicInfoAll, getEquipmentByBaseInfoId, getList} from '@/api/table'
 import user from '@/store/modules/user'
+import { getBusinessSystemAll,getAllFirstLevelBusinessSystem } from "@/api/baseparameter";
 import { TrianglesDrawMode } from 'three'
-import {checkPostName, getBusinessSystemFirstByPostName} from '@/api/baseparameter'
 import department from "@/views/baseparameter/department";
 
 export default {
@@ -692,6 +715,12 @@ export default {
   },
   data() {
     return {
+      determineLevel:'',//确定的等保等级
+      successbusinessSubsystem:[],//筛选之后的业务子系统
+      businessSubsystem:[],//获取的业务子系统
+      businessSystem: [],//获取的业务系统
+      machineRoomNames:[],//所属机房
+      cabinetAll:[],//所属机柜
       connectedPostCode:'',
       connectedDepartmentCode:'',
       connectedEquipmentTypeCode:'',
@@ -899,6 +928,43 @@ export default {
     }
   },
   methods: {
+    bindLevel(){
+      this.determineLevel = ''
+      for (const element of this.successbusinessSubsystem){
+        if(this.equipment.equipmentBaseInfo.businessSystemName === element.businessSystemName){
+          this.determineLevel = element.businessSystemLevel
+        }
+      }
+      this.equipment.equipmentBaseInfo.businessSystemLevel=this.determineLevel
+      console.log('等级',this.determineLevel)
+    },
+    selectbusinessSubsystem(){//获取对应的二级业务系统
+      this.equipment.equipmentBaseInfo.businessSystemName=''
+      this.equipment.equipmentBaseInfo.businessSystemLevel=''
+      this.determineLevel=''
+      this.successbusinessSubsystem = []
+      for (const element of this.businessSubsystem){
+        if(this.equipment.equipmentBaseInfo.businessSystemFirstName === element.businessSystemFirstName){
+          this.successbusinessSubsystem.push(element);
+        }
+      }
+      console.log('筛选完的结果是',this.successbusinessSubsystem)
+    },
+    SelectmachineRoomName() {//获取机房对应的机柜
+      this.equipment.equipmentBaseInfo.cabinetName= ''
+      this.cabinetAll = []
+      for (const element of this.machineRoomNames){
+        if(element.machineRoomName === this.equipment.equipmentBaseInfo.machineRoomName)
+        {
+          console.log("888888888",element.machineRoomName)
+          console.log("对应的id",element.machineRoomId)
+          this.machineRoomId= element.machineRoomId
+          getCabinet(this.machineRoomId).then(response => {
+            this.cabinetAll = response.data.items
+          })
+        }
+      }
+    },
     checkPhone(rules, value, callback) {
       if (value !== '') {
         const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
@@ -965,6 +1031,23 @@ export default {
       getEquipmentType().then(response => {
         this.equipmentTypeAll = response.data.items
         this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
+      })
+      getMachineRoom(this.roleid).then(response => {
+        this.machineRoomNames = response.data.items
+      })
+      getAllFirstLevelBusinessSystem().then(res => {
+        this.businessSystem = res.data.items
+        console.log('8888',this.businessSystem)
+      })
+      const params = {
+        dataName: ['111'],
+        dataValue: '',
+        status:"0"
+      }
+      getBusinessSystemAll(params).then((response) => {//获取业务子系统
+        this.businessSubsystem = response.data.items
+        this.total = response.data.total
+        console.log('9999',this.businessSubsystem)
       })
     },
     onSubmit() {
