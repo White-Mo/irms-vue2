@@ -154,17 +154,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  checkAccountName,
-  createFosUser,
-  deleteFosUser,
-  getFosUserByPage,
-  getFosUserCount,
-  getPostDepartmentAll,
-  getQComSelect,
-  isdeleteFosUser,
-  updateFosUserAction
-} from '@/api/user'
+import { deleteFosUser, getFosUserByPage, getFosUserCount, getQComSelect, isdeleteFosUser } from '@/api/user'
 import UpdateUser from '@/components/authority/user/updateUser/index.vue'
 import AddUser from '@/components/authority/user/addUser/index.vue'
 
@@ -289,34 +279,6 @@ export default {
       this.get_user()
     },
 
-    //登陆账号检查是否重复
-    checkAccount() {
-      if (this.action !== 'add') {
-        this.action = 'update'
-      }
-      const params = {
-        account: this.update_data.account,
-        action: this.action,
-        accountId: this.accountId
-      }
-      checkAccountName(params).then((res) => {
-        if (res.data.valid != true) {
-          this.disabled = true
-          this.$message({
-            message: '此账号已存在，请更改',
-            type: 'error'
-          })
-        } else {
-          this.disabled = false
-        }
-      })
-      //防止直接点击修改按钮而导致判断失效
-      if (this.disabled = true) {
-        return false
-      } else {
-        return true
-      }
-    },
     search() {
       this.currentPage = 0
       this.get_user()
@@ -465,7 +427,7 @@ export default {
     updateUser(row) {
       this.row = row
       this.ifShow = '2'
-    },
+    }
   }
 }
 
