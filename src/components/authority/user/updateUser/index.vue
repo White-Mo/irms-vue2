@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label='登录密码' prop='password'>
             <el-col :span='10'>
-              <el-input v-model='user.password' show-password/>
+              <el-input v-model='user.password' show-password />
             </el-col>
           </el-form-item>
           <el-form-item label='角色权限' prop='groupId'>
@@ -85,12 +85,10 @@ import { getPost } from '@/api/select'
 import {
   checkRealName,
   checkUserName,
-  createFosUser,
   getDepartmentByGroupIdAndPostName,
   getGroupAll,
   updateFosUserAction
 } from '@/api/user'
-import updateUser from '@/components/authority/user/updateUser/index.vue'
 
 export default {
   name: 'updateUser',
@@ -189,7 +187,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = {
-            userId : this.row.id,
+            userId: this.row.id,
             realname: this.user.realname, // 用户姓名
             username: this.user.username, // 登录帐号
             password: this.user.password, //密码
@@ -231,7 +229,7 @@ export default {
 
     // 获取部门
     changeGroupAndPost() {
-      this.user.departmentName = ''
+      this.user.departmentId = ''
       const params = {
         'groupId': this.user.groupId,
         'postId': this.user.postId

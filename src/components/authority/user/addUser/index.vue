@@ -206,7 +206,7 @@ export default {
 
     // 获取部门
     changeGroupAndPost() {
-      this.user.departmentName = ''
+      this.user.departmentId = ''
       const params = {
         'groupId': this.user.groupId,
         'postId': this.user.postId
