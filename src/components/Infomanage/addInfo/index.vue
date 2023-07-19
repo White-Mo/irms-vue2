@@ -233,7 +233,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择"   :popper-append-to-body="false">
+                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择">
                         <el-option
                           v-for='item in cabinetAll'
                           :key='item.value'
