@@ -1,14 +1,28 @@
 import request from '@/utils/request'
 // 综合数据管理展示与查询--lry
 //IP 地址数据获取
-export function getNetWorkList(obj) {
-  // 将有数组和字符串的对象转为符合JSON格式的对象
-  var params = JSON.parse(JSON.stringify(obj))
-  //console.log(params)
-  // //console.log(typeof (params))
+export function getBasicInfoNetworkByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'postName',
+      'departmentName',
+      'basicInfoId',
+      'equipmentName',
+      'brandName',
+      'network_card_name',
+      'ip_address',
+      'MAC_address',
+      'machineRoomName',
+      'cabinetName',
+      'onlineTime',
+      'hostName',
+      'guaranteePeriod'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
     params,
-    url: '/home/IPaddress/getBasicInfoNetworkByPage1',
+    url: '/home/IPaddress/getBasicInfoNetworkByPage',
     method: 'get',
     responseType: 'json'
   })
@@ -26,14 +40,9 @@ export function updateBasicInfoNetwork(obj) {
     responseType: 'json'
   })
 }
-export function getdataCount(obj) {
-  // 将有数组和字符串的对象转为符合JSON格式的对象
-  var params = JSON.parse(JSON.stringify(obj))
-  // //console.log(params)
-  // //console.log(typeof (params))
+export function getBasicInfoNetworkCount() {
   return request({
-    params,
-    url: '/home/IPaddress/getBasicInfoNetworkCount1',
+    url: '/home/IPaddress/getBasicInfoNetworkCount',
     method: 'get',
     responseType: 'json'
   })
