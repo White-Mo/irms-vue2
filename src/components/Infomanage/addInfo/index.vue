@@ -22,7 +22,7 @@
               </el-col>
               <el-col :span='4'  >
                 <div class="label-style">
-                  <el-select v-model="form.postName" placeholder="请选择" @change="changePost"  :popper-append-to-body="false">
+                  <el-select v-model="form.postName" placeholder="请选择" filterable @change="changePost"  :popper-append-to-body="false">
                     <el-option
                       v-for="item in postAll"
                       :key="item.value"
@@ -37,7 +37,7 @@
               </el-col>
               <el-col :span='4'>
                 <div class="label-style">
-                  <el-select v-model="form.departmentName" placeholder="请选择" @change="handleBaseInfoIdByDepartmentName">
+                  <el-select v-model="form.departmentName"  filterable placeholder="请选择" @change="handleBaseInfoIdByDepartmentName">
                     <el-option
                       v-for="item in departmentAll"
                       :key="item.value"
@@ -51,7 +51,7 @@
               </el-col>
               <el-col :span='4'>
                 <div class="label-style">
-                  <el-select v-model="form.equipmentTypeName" placeholder="请选择" @change="handleBaseInfoIdByEquipmentType">
+                  <el-select v-model="form.equipmentTypeName" placeholder="请选择" filterable @change="handleBaseInfoIdByEquipmentType">
                     <el-option
                       v-for="item in equipmentTypeAll"
                       :key="item.value"
@@ -220,7 +220,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-select v-model="form.machineRoomName" filterable placeholder="请选择"  @change="SelectmachineRoomName"  :popper-append-to-body="false">
+                      <el-select v-model="form.machineRoomName" filterable placeholder="请选择" :disabled="isBanned === false"  @change="SelectmachineRoomName"  :popper-append-to-body="false">
                       <el-option
                         v-for='item in machineRoomNames'
                         :key='item.value'
@@ -233,7 +233,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择">
+                      <el-select v-model="form.cabinetName" :disabled="isBanned === false"  filterable placeholder="请选择">
                         <el-option
                           v-for='item in cabinetAll'
                           :key='item.value'
@@ -246,7 +246,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetUStart' size='medium' />
+                      <el-input v-model='form.cabinetUStart' :disabled="isBanned === false" size='medium' />
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -254,7 +254,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetUEnd' size='medium' />
+                      <el-input v-model='form.cabinetUEnd' :disabled="isBanned === false" size='medium' />
                     </div>
                   </el-col>
                 </el-row>
@@ -713,6 +713,7 @@ export default {
   },
   data() {
     return {
+      isBanned:true,
       determineLevel:'',//确定的等保等级
       successbusinessSubsystem:[],//筛选之后的业务子系统
       businessSubsystem:[],//获取的业务子系统
@@ -918,6 +919,15 @@ export default {
   },
   computed:{
     connectedA(){
+      //判断是虚拟机还是实体机，并做绑定
+      if(this.connectedEquipmentTypeCode[1]==='X' || this.connectedEquipmentTypeCode[1]==='x'){
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '0'
+        this.isBanned = false
+      }else {
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '1'
+        this.isBanned = true
+      }
+      //自动生成编号
       this.autoHandleBasicInfoId(this.connectBaseInfoId)
       this.equipment.equipmentBaseInfo.basicInfoId = this.connectBaseInfoId + this.connectNumber
       if(this.connectedEquipmentTypeCode !== ''){
@@ -926,6 +936,7 @@ export default {
     }
   },
   methods: {
+
     bindLevel(){
       this.determineLevel = ''
       for (const element of this.successbusinessSubsystem){
@@ -1301,5 +1312,3 @@ export default {
   width: 100px !important;
 }
 </style>
-
-
