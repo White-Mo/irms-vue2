@@ -132,8 +132,6 @@
               @size-change='handleSizeChange'
               @current-change='handleCurrentChange'
               :current-page='currentPage'
-              :page-sizes='pageSizes'
-              :page-size='PageSize'
               layout='total, sizes, prev, pager, next, jumper'
               :total='totalCount'
             >
@@ -172,7 +170,6 @@ export default {
     return {
       ifShow: '0',
       row: {},
-      PageSize: '10',
       //提交按钮禁用
       disabled: false,
       //登陆账号重复判断
@@ -278,6 +275,9 @@ export default {
       this.currentPage = this.currentPage
       this.get_user()
     },
+    add_user(){
+      this.ifShow = '1'
+    },
 
     search() {
       this.currentPage = 0
@@ -359,7 +359,7 @@ export default {
       //console.log(params)
       this.totalCount = (await getFosUserCount(params)).data
       params['start'] = this.currentPage - 1
-      params['limit'] = this.PageSize
+      params['limit'] = 10
       getFosUserByPage(params).then(res => {
         for (let i of res.data.items) {
           i.roles = get_roles(i.groupid)
