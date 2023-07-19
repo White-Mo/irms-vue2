@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label='所属部门' prop='departmentId'>
-            <el-select v-model='user.departmentId' placeholder='请选择'>
+            <el-select v-model='user.departmentId' placeholder='请选择' :popper-append-to-body='false'>
               <el-option
                 v-for='item in departmentAll'
                 :key='item.departmentName'

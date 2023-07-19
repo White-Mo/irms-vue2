@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label='所属部门' prop='departmentId'>
-            <el-select v-model='user.departmentId' placeholder='请选择'>
+            <el-select v-model='user.departmentId' placeholder='请选择' :popper-append-to-body='false'>
               <el-option
                 v-for='item in departmentAll'
                 :key='item.departmentName'
@@ -223,7 +223,7 @@ export default {
         action: this.user.action
       }
       await checkRealName(user).then((res) => {
-        this.nameRules = res.data.valid === true;
+        this.nameRules = res.data.valid === true
       })
     },
 
@@ -234,7 +234,7 @@ export default {
         action: this.user.action
       }
       await checkUserName(user).then((res) => {
-        this.nameRules = res.data.valid === true;
+        this.nameRules = res.data.valid === true
       })
     }
 
@@ -253,16 +253,17 @@ export default {
   flex: 1 0 14%;
   margin: 10px;
 }
-/deep/.el-select-dropdown__list {
-  margin: 5px 20px 20px 5px!important;
-  height: auto!important;
-  width: 1400px!important;
-  display: flex!important;
-  justify-content: space-between!important;
-  flex-direction: row!important;
-  flex-wrap: wrap!important;
-  align-content: flex-start!important;
-  align-items: stretch!important;
-  max-height: 100vh!important;
+
+/deep/ .el-select-dropdown__list {
+  margin: 5px 20px 20px 5px !important;
+  height: auto !important;
+  width: 1400px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  align-items: stretch !important;
+  max-height: 100vh !important;
 }
 </style>
