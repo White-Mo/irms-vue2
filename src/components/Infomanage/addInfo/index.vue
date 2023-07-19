@@ -937,7 +937,7 @@ export default {
       console.log('等级',this.determineLevel)
     },
     selectbusinessSubsystem(){//获取对应的二级业务系统
-      this.equipment.equipmentBaseInfo.businessSystemName=''
+      this.equipment.equipmentBaseInfo.businessSystem=''
       this.equipment.equipmentBaseInfo.businessSystemLevel=''
       this.determineLevel=''
       this.successbusinessSubsystem = []
