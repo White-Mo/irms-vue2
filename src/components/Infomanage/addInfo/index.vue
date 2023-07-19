@@ -464,7 +464,7 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择" :popper-append-to-body="false">
+                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择">
                         <el-option
                           v-for='item in successbusinessSubsystem'
                           :key='item.value'
