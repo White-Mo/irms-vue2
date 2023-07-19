@@ -272,16 +272,22 @@ export default {
 .source {
   padding: 24px;
 }
-
-/deep/ .el-select-dropdown__list {
-  width: 900px;
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 14%;
+  margin: 10px;
+}
+/deep/.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px!important;
+  height: auto!important;
+  width: 1400px!important;
+  display: flex!important;
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important;
+  align-content: flex-start!important;
+  align-items: stretch!important;
+  max-height: 100vh!important;
 }
 
-/deep/ .el-select-dropdown__item {
-  height: 27px;
-}
-
-/deep/ .el-popper {
-  top: -225px !important;
-}
 </style>
