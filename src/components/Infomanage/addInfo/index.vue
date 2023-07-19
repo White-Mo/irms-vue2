@@ -464,13 +464,11 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystem' size='medium' />
-<!--                      <el-input v-model='form.businessSystem' size='medium' />-->
                       <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择" :popper-append-to-body="false">
                         <el-option
                           v-for='item in successbusinessSubsystem'
                           :key='item.value'
-                          :value='item.businessSystem'
+                          :value='item.businessSystemName'
                         /></el-select>
                     </div>
                   </el-col>
@@ -931,7 +929,7 @@ export default {
     bindLevel(){
       this.determineLevel = ''
       for (const element of this.successbusinessSubsystem){
-        if(this.equipment.equipmentBaseInfo.businessSystemName === element.businessSystemName){
+        if(this.equipment.equipmentBaseInfo.businessSystem === element.businessSystemName){
           this.determineLevel = element.businessSystemLevel
         }
       }
