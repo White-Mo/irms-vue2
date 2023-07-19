@@ -99,7 +99,12 @@
               :header-cell-style="{ background: '#f5f7fa', color: '#606266','text-align':'center' }"
               :cell-style="{'text-align':'center'}"
             >
-              <!-- <el-table-column label="" width="40" type="selection" /> -->
+              <el-table-column :index='(index) => {return index + (this.currentPage - 1) * this.limit + 1}'
+                               align='center'
+                               label='序号' width='80px'
+                               fixed='left'
+
+                               show-overflow-tooltip type='index' />
               <el-table-column
                 v-for='(item, index) in dataname'
                 :key='index'
@@ -170,10 +175,7 @@ export default {
     return {
       ifShow: '0',
       row: {},
-      //提交按钮禁用
-      disabled: false,
-      //登陆账号重复判断
-      accountId: '',
+      limit: 10,
       action: '',
       user_input: {
         username: '',
@@ -275,7 +277,7 @@ export default {
       this.currentPage = this.currentPage
       this.get_user()
     },
-    add_user(){
+    add_user() {
       this.ifShow = '1'
     },
 
@@ -359,7 +361,7 @@ export default {
       //console.log(params)
       this.totalCount = (await getFosUserCount(params)).data
       params['start'] = this.currentPage - 1
-      params['limit'] = 10
+      params['limit'] = this.limit
       getFosUserByPage(params).then(res => {
         for (let i of res.data.items) {
           i.roles = get_roles(i.groupid)
@@ -369,9 +371,7 @@ export default {
       })
     },
     handleSizeChange(val) {
-      // 改变每页显示的条数
-      this.PageSize = val
-      // 注意：在改变每页显示的条数时，要将页码显示到第一页
+      this.limit = val
       this.currentPage = 1
       this.get_user()
     },
