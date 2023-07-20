@@ -123,7 +123,7 @@
                 <template slot-scope='scope'>
                   <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit'>修改
                   </el-button>
-                  <el-button @click='deleteUser(scope.row)' type='danger' size='small' icon='el-icon-delete'>删除
+                  <el-button @click='deleteUser(scope.row)' type='danger' size='small' icon='el-icon-delete' v-if='scope.row.roles !== "超级管理员"'>删除
                   </el-button>
                   <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play'
                   >{{ isActivation(scope.row.isdel) === true ? '激活' : '冻结' }}
