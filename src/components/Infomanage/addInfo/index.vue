@@ -233,7 +233,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择"   :popper-append-to-body="false">
+                      <el-select v-model="form.cabinetName"  filterable placeholder="请选择" >
                         <el-option
                           v-for='item in cabinetAll'
                           :key='item.value'
@@ -464,7 +464,7 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择" :popper-append-to-body="false">
+                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择">
                         <el-option
                           v-for='item in successbusinessSubsystem'
                           :key='item.value'
@@ -937,7 +937,7 @@ export default {
       console.log('等级',this.determineLevel)
     },
     selectbusinessSubsystem(){//获取对应的二级业务系统
-      this.equipment.equipmentBaseInfo.businessSystemName=''
+      this.equipment.equipmentBaseInfo.businessSystem=''
       this.equipment.equipmentBaseInfo.businessSystemLevel=''
       this.determineLevel=''
       this.successbusinessSubsystem = []
