@@ -328,7 +328,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' style='width:auto' value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                          <el-date-picker v-model='form.onlineTime' readonly="true" :editable="false" size='medium' :clearable='false' style='width:auto' value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -336,7 +336,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.offlineTime' size='medium' :clearable='false' format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto'/>
+                          <el-date-picker v-model='form.offlineTime' readonly="true" size='medium' :clearable='false' format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto'/>
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -344,13 +344,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.deploymentEnvironment' placeholder='请选择' clearable>
-                            <el-option
-                              v-for='item in deploymentEnvironmentAll'
-                              :key='item.value'
-                              :value='item.value'
-                            />
-                          </el-select>
+                          <el-input v-model='form.deploymentEnvironment' size='medium' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
