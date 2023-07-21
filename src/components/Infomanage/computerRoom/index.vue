@@ -1,6 +1,32 @@
 <template>
   <div class = "mains">
     <dv-loading>Loading...</dv-loading>
+
+    <!-- 模型悬浮时显示的气泡 -->
+    <div v-if="showTooltip"  class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
+      <!-- 这里展示预先写好的数据 -->
+<!--      <table style="height:20%;width: 90%;color: #FFFFFF;text-align: center;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">-->
+<!--        <tr style="height: 45px;">-->
+<!--          <th style="color: #0a72c7;width: 110px">机柜名：</th>-->
+<!--          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{ tooltipText }}</span></th>-->
+<!--        </tr>-->
+<!--      </table>-->
+      <el-table
+        :data="equipmentTableData"
+        height="250"
+        border
+        style="width: 100%">
+        <el-table-column
+          v-for="columns in equipmentTableColumns"
+          :prop="columns.prop"
+          :label="columns.label"
+          width="180"
+          style="text-align: center"
+        >
+        </el-table-column>
+      </el-table>
+    </div>
+
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
         <el-row :gutter="20" style="height: 5rem;display: flex">
@@ -19,7 +45,7 @@
     </div>
 
     <div id="container"></div>
-    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background: #142437" v-show="datacard">
+    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
         <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #0a72c7;width: 110px">管理员：</th>
@@ -36,10 +62,10 @@
         </table>
       <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
       </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background: #142437" v-show="datacard">
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5)" v-show="datacard">
         <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
       </dv-border-box-12>
-    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 1vw;top: 10rem;background: #142437" v-show="datacard">
+    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
       <div style="height:35%;width:100%;position: absolute;left:10px;top: 35%;">
         <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 60px">
@@ -50,14 +76,14 @@
           </tr>
           <tr style="height: 60px" >
             <th>机房机柜数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.cabinetCount}}</th>
+            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px ">{{this.equipmentBaseInfo.cabinetCount}}</th>
             <th>机房设备数:</th>
             <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: right;padding-right: 10px">{{this.equipmentBaseInfo.equipmentCount}}</th>
           </tr>
         </table>
       </div>
     </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background: #142437" v-show="datacard">
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
       <el-row style="position: relative;top:5%">
         <el-col :span="12" :offset="8">
           <h2 style="position: relative;left:15px;color: #06e1f4">机房机柜</h2>
@@ -111,6 +137,7 @@
 <script>
 import screenfull from 'screenfull'
 import * as THREE from "three";
+import * as TWEEN from 'tween.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
@@ -118,11 +145,15 @@ import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom} from "@/api/dashboard";
 import {getList} from "@/api/table";
+import axios from 'axios'
+import { getEquipmentByCabinet } from '@/api/baseparameter'
+import async from 'async'
 export default {
   name:'computerRoom',
   components: {
     InfoTemplate
   },
+  props: ['machineRoomId'],
   data() {
     return {
       datavcolor:['#0e94eb','#0e94eb'],
@@ -144,11 +175,61 @@ export default {
         equipmentCount:0
       },
       tableData:[],
+      clickedCabinet:[],
+
+      equipmentTableData:[],
+      equipmentTableColumns:[
+        {
+          prop:'equipmentName',
+          label:'设备名称'
+        },
+        {
+          prop:'cabinetUStart',
+          label: '起始U位'
+        },
+        {
+          prop: 'cabinetUEnd',
+          label: '结束U位'
+        }
+      ],
+
       camera: null,
       scene: null,
       renderer: null,
       mesh: null,
+      model:null,
       controls:null,
+      isRotating:false,
+      cabinetClickCount: {
+        '机柜门001':0,
+        '机柜门005':0,
+        '机柜门006':0,
+        '机柜门007':0
+      },
+      equipmentClickedCount:{
+        '服务器022':0,
+        '服务器023':0,
+        '服务器024':0,
+        '服务器025':0,
+        '服务器026':0
+      },
+      equipmentClickedSum:0,
+      isMoving:false,
+
+      cabinetArray:['机柜门001','机柜门007','机柜门006','机柜门005'],
+      // equipmentArray:['服务器022','服务器023'],
+      cabinetNum:0,
+
+      showTooltip: false,
+      tooltipPosition: { x: 0, y: 0 },
+      tooltipText : '',
+
+      machineRoomId:this.machineRoomId,
+
+      raycaster: new THREE.Raycaster(),
+      mouse: new THREE.Vector2(),
+      rotationSpeed: 0.02,
+
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
       logoImgetype:'.png'
@@ -158,6 +239,9 @@ export default {
     // this.full()
   },
   mounted() {
+    //获取当前机房下的机柜
+    // this.fetchData()
+
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
     } else {
@@ -165,10 +249,45 @@ export default {
       this.unitid = this.$store.state.machineRoom.unitid
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
       getCabinet(machineRoomId).then((res) =>{
-        // //console.log(res)
         this.tableData = res.data.items
+        // console.log('this.tableData',this.tableData)
+        for(let i=0; i < Math.min(this.tableData.length, 4);i++){
+          this.tableData[i].clickedCount = 0
+          this.clickedCabinet.push(this.tableData[i])
+        }
+        this.clickedCabinet.forEach((element) =>{
+          getEquipmentByCabinet(element.cabinetId).then((res) =>{
+            let equipmentObject = {
+              equipmentName:'',
+              cabinetUStart:'',
+              cabinetUEnd:''
+            }
+            res.data.forEach((element) =>{
+              equipmentObject.equipmentName = element[0]
+              equipmentObject.cabinetUStart = element[1]
+              equipmentObject.cabinetUEnd = element[2]
+              this.equipmentTableData.push(equipmentObject)
+            })
+            console.log('this.equipmentTableData',this.equipmentTableData)
+            // console.log("Promise resolved:", res);
+          }).catch((error) => {
+            console.log("Promise rejected:", error);
+          });
+          console.log('this.tableData',this.tableData)
+          // console.log(this.clickedCabinet[0].clickedCount)
+        })
+
       })
     }
+
+    // 监听鼠标按下事件
+    document.addEventListener('mousedown', this.onMouseDown);
+
+    // 添加鼠标移动事件监听
+    document.addEventListener('mousemove', this.onMouseMove);
+    // 添加鼠标离开事件监听
+    document.addEventListener('mouseleave', this.onMouseLeave);
+
     let that = this
     setTimeout(function () {
       that.echartsDraw()
@@ -176,10 +295,21 @@ export default {
       that.init();
       that.animate();
       that.loadGltf()
-
     }, 200);
   },
+  beforeDestroy() {
+    // 移除鼠标事件监听，避免内存泄漏
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseleave', this.onMouseLeave);
+  },
   methods: {
+    // fetchData(){
+    //   getCabinet(this.machineRoomId).then(res =>{
+    //     // console.log('res',res.data.items)
+    //   })
+    // },
+
+
     //为解决threejs射线不准问题，设置全屏
     full () {
       //console.log(this.$store.state.machineRoom.department)
@@ -192,11 +322,11 @@ export default {
       let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight.position.set(10, 10, 10);
       this.scene.add(directionalLight);
-// 平行光2
+      // 平行光2
       let directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight2.position.set(-400, -200, -300);
       this.scene.add(directionalLight2);
-//环境光
+      //环境光
       let ambient = new THREE.AmbientLight(0xffffff, 0.5);
       this.scene.add(ambient);
       //网格模型添加到场景中
@@ -212,7 +342,6 @@ export default {
       /**
        * 相机设置
        */
-
       let width = window.outerWidth; //窗口宽度
       let height = window.outerHeight; //窗口高度
       let k = width / height; //Three.js输出的Cnavas画布宽高比
@@ -220,7 +349,6 @@ export default {
       this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 3000);
       this.camera.position.set(-537, 76, -615); //设置相机位置
       this.camera.lookAt(0,0,0);
-
       // let container = document.getElementById("container");
       // this.camera = new THREE.PerspectiveCamera(
       //   70,
@@ -237,6 +365,227 @@ export default {
       container.appendChild(this.renderer.domElement);
       //创建控件对象
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    },
+
+
+    // 加载外部模型
+    // 外部模型加载函数
+    loadGltf() {
+      let self = this;
+      let loader = new GLTFLoader();
+      //本地模型路径：public/static/mod/Xbot.glb
+      loader.load("static/c.glb",  (gltf) => {
+        //console.log(gltf)
+        self.isLoading = false;//关闭载入中效果
+        self.mesh = gltf.scene;
+        // self.mesh.scale.set(5,5,5);//设置大小比例
+        self.mesh.position.set(0, 0, 0);//设置位置
+        self.scene.add(self.mesh); // 将模型引入three、
+        self.animate();
+      })
+    },
+
+    //修改模型的名称
+    // findModelByName(model, oleName) {
+    //   if (model !== null && typeof model === 'object' && model.isMesh && model.object.name === oleName) {
+    //     // 找到了匹配的小模型
+    //     return model;
+    //   }
+    //   if (model !== null && typeof model === 'object' && model.isGroup) {
+    //     for (let i = 0; i < model.children.length; i++) {
+    //       const foundModel = this.findModelByName(model.children[i], oleName);
+    //       if (foundModel) {
+    //         // 如果在子元素中找到了匹配的小模型，返回它
+    //         return foundModel;
+    //       }
+    //     }
+    //   }
+    //   // 没有找到匹配的小模型，返回 null
+    //   return null;
+    // },
+
+    // 动画-循环渲染每一帧
+    animate() {
+      if (this.mesh) {
+        requestAnimationFrame(this.animate);
+        TWEEN.update();
+        this.renderScene()
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+
+    //鼠标点击事件
+    onMouseDown(event) {
+      // console.log('machineRoomId',this.machineRoomId)
+      // 计算鼠标点击位置在屏幕坐标的归一化设备坐标（NDC）范围[-1, 1]
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.children);
+      if (intersects.length > 0) {
+        let clickObject = intersects[0].object;
+        console.log('intersects[0].object',intersects[0].object.name)
+        // for(let i=0;i<intersects.length;i++){
+        //   console.log('被点击的',intersects[i].object.name)
+        // }
+
+        //机柜门开关
+        for(let i=0;i<4;i++){
+          if(clickObject.name === Object.keys(this.cabinetClickCount)[i]){
+            // console.log('clickObject.name',clickObject.name)
+            let flag = 0
+            let equipmentClickedCountArray = Object.values(this.equipmentClickedCount)
+            equipmentClickedCountArray.forEach((element) =>{
+              if(element % 2 !== 0){
+                flag = 1
+              }
+            })
+            // console.log('flag',flag)
+            if(flag === 0){
+              // 点击后执行旋转动画
+              this.rotateCabinetDoor(clickObject);
+              break
+            }
+          }
+        }
+
+        //设备移动
+        if(this.cabinetClickCount[this.cabinetArray[0]] % 2 === 1){
+          for(let j=0;j<5;j++){
+            if(clickObject.name === Object.keys(this.equipmentClickedCount)[j]){
+              //点击后执行移动动画
+              this.moveEquipment(clickObject)
+              // this.equipmentClickedSum += Object.values(this.equipmentClickedCount)[j]
+              // console.log('this.equipmentClickedSum',this.equipmentClickedSum)
+              break
+            }
+          }
+        }
+      }
+    },
+
+    //打开机柜门
+    rotateCabinetDoor(targetObject) {
+      if (!this.isRotating) {
+        this.isRotating = true;
+        // console.log('targetObject',targetObject)
+        // console.log(222,this.cabinetClickCount[targetObject.name])
+        this.cabinetClickCount[targetObject.name] = this.cabinetClickCount[targetObject.name] + 1
+        // 根据点击次数的奇偶性来确定目标旋转角度的正负
+        const isPositiveRotation = this.cabinetClickCount[targetObject.name] % 2 === 1;
+        const targetRotation = isPositiveRotation
+          ? targetObject.rotation.y - Math.PI / 2 // 旋转九十度
+          : targetObject.rotation.y + Math.PI / 2; // 旋转负九十度
+        const initialRotation = targetObject.rotation.y;
+        const duration = 1000; // 旋转动画的持续时间为1000毫秒（1秒）
+        const startTime = performance.now();
+        const animateRotation = (timestamp) => {
+          const progress = timestamp - startTime;
+          const rotationProgress = Math.min(progress / duration, 1);
+          targetObject.rotation.y = initialRotation + (targetRotation - initialRotation) * rotationProgress;
+          if (rotationProgress < 1 ) {
+            requestAnimationFrame(animateRotation);
+          } else {
+            this.isRotating = false;
+          }
+        };
+        // 启动动画循环
+        requestAnimationFrame(animateRotation);
+      }
+    },
+
+    //拉出设备
+    moveEquipment(targetObject){
+      if(!this.isMoving){
+        this.isMoving = true
+        this.equipmentClickedCount[targetObject.name] = this.equipmentClickedCount[targetObject.name] + 1
+        // 根据点击次数的奇偶性来确定目标移动的正负
+        const isPositionMovement = this.equipmentClickedCount[targetObject.name] % 2 === 1
+        console.log('this.equipmentClickedCount[targetObject.name]',this.equipmentClickedCount[targetObject.name])
+        const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
+        const duration = 1000; // 动画持续时间为1000毫秒（1秒）
+        const startTime = performance.now();
+        const animatePosition = (timestamp) => {
+          const progress = timestamp - startTime;
+          const positionProgress = Math.min(progress / duration, 1);
+          targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
+          if (positionProgress < 1) {
+            requestAnimationFrame(animatePosition);
+          } else {
+            this.isMoving = false;
+          }
+        };
+        // 启动动画循环
+        requestAnimationFrame(animatePosition);
+      }
+    },
+
+    //鼠标悬停
+    renderScene() {
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+      if (intersects.length > 0) {
+        // 鼠标悬停在模型上
+        const object = intersects[0].object;
+        let cabinetArray = Object.keys(this.cabinetClickCount)
+        if(cabinetArray.includes(object.name)){
+          // console.log('位置',object.name,object.position.x,object.position.y)
+          // console.log('this.tooltipText',this.tooltipText)
+          this.showCabinetData(object.name)
+        }else {
+          // 不再悬停在模型上，隐藏气泡
+          this.showTooltip = false;
+        }
+      }else {
+        // 不再悬停在模型上，隐藏气泡
+        this.showTooltip = false;
+      }
+    },
+    onMouseMove(event) {
+      // 将鼠标坐标归一化为[-1, 1]
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      // 悬停时更新气泡位置
+      if (this.showTooltip) {
+        this.tooltipPosition.x = event.clientX;
+        this.tooltipPosition.y = event.clientY;
+      }
+    },
+    onMouseLeave() {
+      // 鼠标离开时，隐藏气泡
+      this.tooltipText = '';
+      this.tooltipPosition = { x: 0, y: 0 }
+      this.showTooltip = false;
+    },
+
+    //机柜数据交互
+    showCabinetData(modelName){
+      //modelName是机柜模型的原名字
+      //this.cabinetArray内含机房内不大于四个机柜
+      this.cabinetArray.forEach((element,index) =>{
+        if (this.clickedCabinet.length >= index && element === modelName) {
+          //使用可选链运算符（?）来进行安全访问-存在才进行后续操作
+          if (this.clickedCabinet[index]?.cabinetName) {
+            // console.log('element === modelName')
+            this.tooltipText = this.clickedCabinet[index].cabinetName;
+            this.cabinetNum = index;
+            this.showTooltip = true;
+          }
+        }
+      })
+    },
+
+    backPage(){
+      this.$emit('changeDiv5', '0')
+      // this.full()
+    },
+    handchangedatacardstate(){
+      this.datacard = !this.datacard
+      this.showButton = !this.showButton
+    },
+    handleCurrentChange(val){
+      this.dialogVisible = true
+      // this.dialog_description = val
     },
 
     //右上角数据
@@ -273,45 +622,11 @@ export default {
       })
     },
 
-    // 动画
-    animate() {
-      if (this.mesh) {
-        requestAnimationFrame(this.animate);
-        // this.mesh.rotation.y += 0.004;//绕Y轴旋转0.004°
-        this.renderer.render(this.scene, this.camera);
-      }
-    },
-    // 加载外部模型
-    // 外部模型加载函数
-    loadGltf() {
-      let self = this;
-      let loader = new GLTFLoader();
-      //本地模型路径：public/static/mod/Xbot.glb
-      loader.load("static/c.glb", function (gltf) {
-        //console.log(gltf)
-        self.isLoading = false;//关闭载入中效果
-        self.mesh = gltf.scene;
-        // self.mesh.scale.set(5,5,5);//设置大小比例
-        self.mesh.position.set(0, 0, 0);//设置位置
-        self.scene.add(self.mesh); // 将模型引入three、
-        self.animate();
-      });
-    },
-    backPage(){
-      this.$emit('changeDiv5', '0')
-      // this.full()
-    },
-    handchangedatacardstate(){
-      this.datacard = !this.datacard
-      this.showButton = !this.showButton
-    },
-    handleCurrentChange(val){
-      this.dialogVisible = true
-      // this.dialog_description = val
-    },
+    //Echarts
     echartsDraw() {
       let myChart = this.$echarts.init(document.getElementById('myechart'));
       const option = {
+        backgroundColor: ' rgba(20, 36, 55, 0.5)',
         title: {
           text: '设备故障年趋势（示例图）',
           left:"center",
@@ -398,6 +713,7 @@ export default {
     },
   }
 };
+
 </script>
 
 <style>
@@ -424,5 +740,19 @@ export default {
 }
 .msgTable{
   z-index:99
+}
+.tooltip {
+  position: absolute;
+  width: 540px;
+  height: 270px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  pointer-events: none;
+  text-align: center;
+  /* 添加 z-index 确保气泡在画布上方显示 */
+  z-index: 100;
 }
 </style>

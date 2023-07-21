@@ -137,7 +137,7 @@
   </div>
 </div>
     <div v-if="isShow==='2'">
-      <computer-room @changeDiv5="changeDiv5"></computer-room>
+      <computer-room v-bind:machineRoomId="this.machineRoomId"    @changeDiv5="changeDiv5"></computer-room>
     </div>
   </div>
 </template>
@@ -173,6 +173,7 @@ export default {
           label: '机房状态'
         }
       ],
+      machineRoomId:''
     };
   },
   mounted() {
@@ -241,8 +242,11 @@ export default {
       var machineAdministrator = this.ComputerRoomCard[index].machineAdministrator
       var machineLocation = this.ComputerRoomCard[index].machineLocation
 
-      // //console.log(unit,department)
-      // //console.log(this.ComputerRoomCard[index])
+      console.log( 'unit,department',unit,department)
+      console.log('this.ComputerRoomCard[index]',this.ComputerRoomCard[index])
+      this.machineRoomId = this.ComputerRoomCard[index].machineRoomId
+      console.log('this.machineRoomId',this.machineRoomId)
+
       this.$store.commit('machineRoom/SET_UnitId', unitid)
       this.$store.commit('machineRoom/SET_MachineRoomId', machineRoomId)
       this.$store.commit('machineRoom/SET_Unit', unit)
@@ -258,10 +262,12 @@ export default {
     fetchData() {
       this.loading = true;
       getPostMachineRoom(this.postId).then((res) => {
+        console.log("getPostMachineRoom",res)
         setTimeout(() => {
           let searchResults = [];
           searchResults = res.data.items;
           this.ComputerRoomCard = searchResults;
+          console.log('this.ComputerRoomCard',this.ComputerRoomCard)
           this.tempTotalData = this.ComputerRoomCard;
           this.listLoading = false;
           this.loading = false
