@@ -41,6 +41,7 @@
               :fetch-suggestions="querySearchPost"
               placeholder="请输入单位"
               @select="handleSelectUnit"
+              :popper-append-to-body="false"
               style="width: 8rem;"
             ></el-autocomplete>
           </el-col>
@@ -151,14 +152,28 @@
               </el-select>
             </div>
             <div>
+              单位
+              <el-select v-model="update_data.RoleName" placeholder="请选择":popper-append-to-body ="false" style="width: 20rem;left:2.8rem;">
+                <el-option
+                  v-for="(item, index) in departmentAll"
+                  :key="index"
+                  :label="item.postName"
+                  :value="item.postId">
+                </el-option>
+              </el-select>
+            </div>
+            <div v-show="condition">
               部门
               <el-select v-model="update_data.department" placeholder="请选择":popper-append-to-body ="false" style="width: 20rem;left:2.8rem;">
-                <el-option
-                  v-for="item in departmentAll"
-                  :key="item.departmentId"
-                  :label="item.postAnddepartment"
-                  :value="item.departmentId">
-                </el-option>
+                <template v-for="(item, index) in filteredDepartmentAll">
+                  <el-option
+                    v-for="(dept, deptIndex) in item.children"
+                    :key="deptIndex"
+                    :label="dept.departmentName"
+                    :value="dept.departmentId"
+                  >
+                  </el-option>
+                </template>
               </el-select>
             </div>
             <div>
@@ -181,7 +196,7 @@
             </div>
           </div>
             <span slot="footer" class="dialog-footer">
-              <el-button style="height: 2.8rem;" @click="userDialogDisplay = false">返回</el-button>
+              <el-button style="height: 2.8rem;" @click="handleReturnButtonClick">返回</el-button>
               <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="updateUserPlus" v-if="updateOrAdd">更新</el-button>
               <el-button :disabled='disabled' type="primary" style="height: 2.8rem;" @click="addUserPlus" v-else>添加</el-button>
             </span>
@@ -221,6 +236,12 @@ import {delMachineRoom} from "@/api/baseparameter";
 export default {
   name: 'Dashboard',
   computed: {
+    filteredDepartmentAll() {
+      if (!this.update_data.RoleName) {
+        return this.departmentAll; // 如果未选择单位，返回完整的departmentAll数组
+      }
+      return this.departmentAll.filter(item => item.postId === this.update_data.RoleName);
+    },
     ...mapGetters([
       'realname',
       'roles',
@@ -234,7 +255,7 @@ export default {
       //登陆账号重复判断
       accountId:'',
       action:'',
-
+      condition:false ,
       user_input:{
         username:"",
         username_id:"",
@@ -273,8 +294,12 @@ export default {
           label: '登录帐号'
         },
         {
-          value: 'role',
-          label: '单位（部门）'
+          value: 'roleName',
+          label: '单位'
+        },
+        {
+          value: 'roleDepartmentName',
+          label: '部门'
         },
         {
           value: 'roles',
@@ -290,6 +315,7 @@ export default {
         }
 
       ],
+      previousRoleName: '', // 存储上一个值的变量
       // 显示弹窗
       centerDialogVisible: false,
       deleteUseRparams:{},
@@ -300,6 +326,7 @@ export default {
         account:"",
         password:"",
         Unit:"",
+        RoleName: '',
         department:"",
         Roles:"",
         telephone:"",
@@ -309,11 +336,18 @@ export default {
       departmentAll: [],
       updateOrAdd:false,
       tempDepartmentId:'',
-      tempDepartmentPostOrName:''
+      tempDepartmentPost:''
+    }
+  },
+  watch: {
+    'update_data.RoleName': function(newValue, oldValue) {
+      // console.log('监听器触发了');
+      if (newValue !== oldValue && oldValue !== '') {
+        this.update_data.department = ''; // 清空部门选择
+      }
     }
   },
   mounted() {
-
     for (let i of ['getRealnameAll','getPostAll','getFosGroupAll']){
       getQComSelect(i).then(res => {
         if(i == 'getRealnameAll'){
@@ -334,6 +368,12 @@ export default {
     this.changeGroupID()
   },*/
   methods: {
+    handleReturnButtonClick() {
+      this.userDialogDisplay = false; // 关闭弹窗
+
+      // 将 update_data.RoleName 设置为空
+      this.update_data.RoleName = "";
+    },
     //登陆账号检查是否重复
     checkAccount(){
       if (this.action!=='add'){
@@ -447,6 +487,17 @@ export default {
           i.status = i.isdel == "0" ? "激活" : "冻结"
         }
         this.tableData = res.data.items
+        //处理传过来的数据
+        for (let item of this.tableData) {
+          if (item.role) {
+            const splitIndex = item.role.indexOf('/');
+            if (splitIndex !== -1) {
+              item.roleName = item.role.substring(0, splitIndex).trim();
+              item.roleDepartmentName = item.role.substring(splitIndex + 1).trim();
+            }
+          }
+        }
+        console.log("++",this.tableData)
       })
     },
     handleSizeChange(val) {
@@ -505,55 +556,101 @@ export default {
         })
     },
 
-    async updateUser(row){
-      getPostDepartmentAll({groupid:row.groupid}).then(res=>{
-        for(let i of res.data.items){
-          i["postAnddepartment"] = i.postName + '/' + i.departmentName
-        }
-        this.departmentAll = res.data.items
-        for (let i = 0; i < this.departmentAll.length; i++) {
-          if(this.departmentAll[i].departmentId === row.roleDepartmentId){
-            this.tempDepartmentId = this.departmentAll[i].departmentId
-            this.tempDepartmentPostOrName = this.departmentAll[i].postAnddepartment
-            break
-          }
-        }
+    async updateUser(row) {
+      const { groupid, id, role, realname, username, telephone, status } = row;
+      const res = await getPostDepartmentAll({ groupid });
 
-        this.accountId=row.id   //获取用户ID
-        this.disabled=false      //点击修改按钮，提交按钮不禁用
-        let temp = row.role.split("/")
-        this.userDialogDisplay = true
-        this.updateOrAdd = true
-        this.headInfo = "更新用户信息"
-        this.update_data.username = row.realname
-        this.update_data.account = row.username
-        this.update_data.password = ''
-        this.update_data.Unit = temp[0]
-        this.update_data.department =this.tempDepartmentPostOrName
-        this.update_data.Roles = row.roles
-        this.update_data.telephone = row.telephone
-        this.update_data.Status = row.status==="激活" ? '0':'1'
-        // this.update_data.Status = row.status==="激活" ? '0':'1'
-        this.update_data.row = row
-        //console.log(row)
-        //console.log(this.RealnameAll,this.PostAll,this.FosGroupAll)
-        // this.departmentAll = (await getDepartment(row.roleid)).data.items
-      })
+      this.departmentAll = res.data.items;
+
+      function groupByPostId(departmentAll) {
+        return departmentAll.reduce((result, item) => {
+          const postId = item.postId;
+          if (!result[postId]) {
+            result[postId] = [];
+          }
+          result[postId].push(item);
+          return result;
+        }, {});
+      }
+
+      function transformDepartmentData(groupByPostId) {
+        return Object.entries(groupByPostId).map(([postId, items]) => ({
+          postId,
+          postName: items[0].postName,
+          department: items[0].departmentCode,
+          children: items.map(({ departmentId, departmentName }) => ({
+            departmentId,
+            departmentName,
+          })),
+        }));
+      }
+
+      const groupByPostIdData = groupByPostId(this.departmentAll);
+      this.departmentAll = transformDepartmentData(groupByPostIdData);
+
+      console.log("666666", this.departmentAll);
+
+      this.condition = true;
+      this.accountId = id;   //获取用户ID
+      this.disabled = false;     //点击修改按钮，提交按钮不禁用S
+
+      const temp = role.split("/");
+      this.userDialogDisplay = true;
+      this.updateOrAdd = true;
+      this.headInfo = "更新用户信息";
+      this.update_data = {
+        username: realname,
+        account: username,
+        password: '',
+        Unit: temp[0],
+        RoleName: '',
+        department: '',
+        Roles: '',
+        telephone,
+        Status: status === "激活" ? '0' : '1',
+        row,
+      };
     },
     changeGroupID(groupid){
       this.update_data.row.groupid=groupid
+      this.update_data.postId = groupid; // 将选中的单位ID存储到update_data.RoleName
+
+      // console.log('+++',groupid) 因为权限是根据groupid的值进行判断，添加此段代码为了区分单位和部门
+      if (groupid === '2c90a10051abb2f80151abb5be340001' || groupid === '402880857d197662017d19cc83f6002b') {
+        this.condition = true;
+      } else {
+        this.condition = true;
+      }
       this.update_data.department = ""
       let _this = this
       getPostDepartmentAll({groupid:groupid}).then(res=>{
       // getPostDepartmentAll({groupid:this.$store.state.user.roleid}).then(res=>{
-        for(let i of res.data.items){
-          i["postAnddepartment"] = i.postName + '/' + i.departmentName
-        }
         _this.departmentAll = res.data.items
+        // 根据postId对departmentAll进行分组
+        const groupByPostId = _this.departmentAll.reduce((result, item) => {
+          const postId = item.postId;
+          if (!result[postId]) {
+            result[postId] = [];
+          }
+          result[postId].push(item);
+          return result;
+        }, {});
+        // 将分组后的数据整理到一个新的数组中
+        _this.departmentAll = Object.entries(groupByPostId).map(([postId, items]) => ({
+          postId,
+          postName:items[0].postName,
+          department: items[0].departmentCode,
+          children: items.map(({ departmentId, departmentName }) => ({
+            departmentId,
+            departmentName,
+          })),
+        }));
       })
     },
     closeDialog(){
+      this.condition = false
       this.departmentAll = []
+      this.update_data.RoleName = "";
     },
     async updateUserPlus(){
       if(this.update_data.account===""||this.update_data.password===""||this.update_data.username===""|| this.update_data.telephone===""){
@@ -582,7 +679,7 @@ export default {
         password:this.update_data.password, //
         controlid:"", // 暂时为空的字段
       }
-      console.log(params)
+      // console.log("2222",params)
       let _this = this
       updateFosUserAction(params).then((res)=>{
         //console.log(res)
@@ -606,6 +703,7 @@ export default {
       this.update_data.username = ""
       this.update_data.account = ""
       this.update_data.password = ""
+      // this.update_data.RoleName = ""
       this.update_data.department = ""
       this.update_data.Roles = ""
       this.update_data.telephone = ""
@@ -686,5 +784,8 @@ export default {
 }
 .update_class div{
   margin-top:0.3rem;
+}
+/deep/ .el-autocomplete-suggestion{
+  width: 210px !important;
 }
 </style>
