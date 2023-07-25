@@ -13,6 +13,16 @@ export function getDepartmentAllCountData() {
   })
 }
 
+
+//---------田累积----------------
+export function getInfo() {
+  return request({
+    url: '/home/inforesources/getInfo',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+
 export function getEquipmentAllCountData(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   let params = JSON.parse(JSON.stringify(obj))
