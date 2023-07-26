@@ -51,6 +51,9 @@
           <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportEscel(2)">统计表导出</el-button>
           </el-col>
+          <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1">
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="ExportTable">填报表导出</el-button>
+          </el-col>
           <el-col
             :xs="1"
             :sm="1"
@@ -166,10 +169,13 @@ import {
   getOverGuaranteePeriodCount, getStatusCount, getTrueOrVirtualCount
 } from '@/api/cockpit_data'
 import { getPost } from '@/api/select'
+const {getInfo} = require("@/api/dashboard");
+const {getExcelDemo4} = require("@/api/get_excel");
 export default {
 
   data() {
     return {
+      resultArray:[],
       prop:'',
       order:'',
       listLoading:false,
@@ -372,6 +378,9 @@ export default {
   },
   created() {
     this.listLoading=true
+    getInfo().then(res=>{
+      this.resultArray.push(res.data);
+    })
   },
   mounted() {
     this.get_data()
@@ -450,6 +459,9 @@ export default {
     }
   },
   methods: {
+    async ExportTable(){
+      await getExcelDemo4(this.resultArray[0])
+    },
     async sortChange(column) {
       this.prop = column.prop
       if (column.order == null) {
