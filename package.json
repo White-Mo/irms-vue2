@@ -38,6 +38,7 @@
     "three-gltf-loader": "^1.111.0",
     "three-orbit-controls": "^82.1.0",
     "three.js": "^0.77.1",
+    "tween.js": "^16.6.0",
     "v-calendar": "^2.4.1",
     "vue": "2.6.10",
     "vue-i18n": "^6.1.3",

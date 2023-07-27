@@ -14,7 +14,7 @@
     </el-steps>
     <div v-show="active==0">
       <div >
-        <div style="background: #eaeef5">
+        <div style="background: rgba(94,135,217,0.4)">
           <el-form ref="form" :model="form = equipment.equipmentBaseInfo" label-width="120px" :inline="true" class="demo-form-inline">
             <el-row>
               <el-col :span='2'>
@@ -22,7 +22,7 @@
               </el-col>
               <el-col :span='4'  >
                 <div class="label-style">
-                  <el-select v-model="form.postName" placeholder="请选择" @change="changePost"  :popper-append-to-body="false">
+                  <el-select v-model="form.postName" placeholder="请选择" filterable @change="changePost"  :popper-append-to-body="false">
                     <el-option
                       v-for="item in postAll"
                       :key="item.value"
@@ -37,7 +37,7 @@
               </el-col>
               <el-col :span='4'>
                 <div class="label-style">
-                  <el-select v-model="form.departmentName" placeholder="请选择" @change="handleBaseInfoIdByDepartmentName">
+                  <el-select v-model="form.departmentName"  filterable placeholder="请选择" @change="handleBaseInfoIdByDepartmentName">
                     <el-option
                       v-for="item in departmentAll"
                       :key="item.value"
@@ -51,7 +51,7 @@
               </el-col>
               <el-col :span='4'>
                 <div class="label-style">
-                  <el-select v-model="form.equipmentTypeName" placeholder="请选择" @change="handleBaseInfoIdByEquipmentType">
+                  <el-select v-model="form.equipmentTypeName" placeholder="请选择" filterable @change="handleBaseInfoIdByEquipmentType">
                     <el-option
                       v-for="item in equipmentTypeAll"
                       :key="item.value"
@@ -95,7 +95,15 @@
               <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true' class='gray-bg' :rules='rules'>
                 <el-row>
                   <el-col :span="2"><div class="label-style">设备名称</div></el-col>
-                  <el-col :span="22"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span="10"><div class="label-style"><el-input v-model="form.equipmentName" size="medium" /></div></el-col>
+                  <el-col :span='2'>
+                    <div class='label-style'>主机名</div>
+                  </el-col>
+                  <el-col :span='10'>
+                    <div class='label-style'>
+                      <el-input v-model='form.hostName' size='medium' />
+                    </div>
+                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span='3'>
@@ -212,7 +220,12 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.machineRoomName' size='medium' />
+                      <el-select v-model="form.machineRoomName" filterable placeholder="请选择" :disabled="isBanned === false"  @change="SelectmachineRoomName"  :popper-append-to-body="false">
+                      <el-option
+                        v-for='item in machineRoomNames'
+                        :key='item.value'
+                        :value='item.machineRoomName'
+                      /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -220,7 +233,12 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetName' size='medium' />
+                      <el-select v-model="form.cabinetName" :disabled="isBanned === false"  filterable placeholder="请选择">
+                        <el-option
+                          v-for='item in cabinetAll'
+                          :key='item.value'
+                          :value='item.cabinetName'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -228,7 +246,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetUStart' size='medium' />
+                      <el-input v-model='form.cabinetUStart' :disabled="isBanned === false" size='medium' />
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -236,7 +254,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.cabinetUEnd' size='medium' />
+                      <el-input v-model='form.cabinetUEnd' :disabled="isBanned === false" size='medium' />
                     </div>
                   </el-col>
                 </el-row>
@@ -432,7 +450,13 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemFirstName' size='medium' />
+<!--                      <el-input v-model='form.businessSystemFirstName' size='medium' />-->
+                      <el-select v-model="form.businessSystemFirstName" filterable  @change="selectbusinessSubsystem" placeholder="请选择" :popper-append-to-body="false">
+                        <el-option
+                          v-for='item in businessSystem'
+                          :key='item.value'
+                          :value='item.businessSystemFirstName'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='3'>
@@ -440,7 +464,12 @@
                   </el-col>
                   <el-col :span='5'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemName' size='medium' />
+                      <el-select v-model="form.businessSystem" filterable  @change="bindLevel" placeholder="请选择">
+                        <el-option
+                          v-for='item in successbusinessSubsystem'
+                          :key='item.value'
+                          :value='item.businessSystemName'
+                        /></el-select>
                     </div>
                   </el-col>
                   <el-col :span='4'>
@@ -448,7 +477,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-input v-model='form.businessSystemLevel' size='medium' />
+                      <el-input v-model='form.businessSystemLevel'  size='medium' />
                     </div>
                   </el-col>
                 </el-row>
@@ -671,11 +700,11 @@
 
 <script>
 import Othertable from '@/components/Infomanage/otherTable'
-import { getPost, getDepartment, getEquipmentType } from '@/api/select'
-import {addEquipment, getBasicInfoAll, getEquipmentByBaseInfoId, getList} from '@/api/table'
+import { getPost, getDepartment, getMachineRoom,getCabinet,getEquipmentType } from '@/api/select'
+import {addEquipment, getBasicInfoAll, getEquipmentsByBaseInfoId, getList} from '@/api/table'
 import user from '@/store/modules/user'
+import { getBusinessSystemAll,getAllFirstLevelBusinessSystem } from "@/api/baseparameter";
 import { TrianglesDrawMode } from 'three'
-import {checkPostName, getBusinessSystemFirstByPostName} from '@/api/baseparameter'
 import department from "@/views/baseparameter/department";
 
 export default {
@@ -684,16 +713,18 @@ export default {
   },
   data() {
     return {
-      connectedData:['36','CZ',''],
-      connectedData1:'',
-      connected:'',
-      initialNum:1,
+      isBanned:true,
+      determineLevel:'',//确定的等保等级
+      successbusinessSubsystem:[],//筛选之后的业务子系统
+      businessSubsystem:[],//获取的业务子系统
+      businessSystem: [],//获取的业务系统
+      machineRoomNames:[],//所属机房
+      cabinetAll:[],//所属机柜
       connectedPostCode:'',
       connectedDepartmentCode:'',
       connectedEquipmentTypeCode:'',
       connectBaseInfoId:'',
       connectNumber:'',
-      params:'',
 
       roleid: user.state.roleid,
       role: user.state.roles[0],
@@ -758,7 +789,7 @@ export default {
           equipmentId: '',
           isChinaLocalization:'',
           businessSystemFirstName:'', //所属业务系统
-          businessSystemName:'',  //所属业务子系统
+          businessSystem:'',  //所属业务子系统
           businessSystemLevel:'',  //所属业务系统等保等级
           businessApplicationName:'', //业务应用
           isTestBusinessSystem:'1',  //是正式业务还是测试业务
@@ -794,7 +825,7 @@ export default {
           realName: '',
           userLevel: '',
           localAccessMode: '',
-          remoteAccessMode: '',
+          // remoteAccessMode: '',
           createDate: '',
           other: ''
         }],
@@ -830,8 +861,8 @@ export default {
         userName: '用户名',
         realName: '使用人',
         userLevel: '级别权限',
-        localAccessMode: '本地访问方式',
-        remoteAccessMode: '远程访问方式',
+        localAccessMode: '访问方式(本地/远程)',  //原应该是本地访问方式，但由于数据库设计错误，应该只有一个字段，却又两个（本地和远程），所以先把这个字段当两个用
+        // remoteAccessMode: '远程访问方式',
         createDate: '创建时间',
         other: '其他'
       },
@@ -841,7 +872,7 @@ export default {
         userScope: 'ICP号',
         ICPNum: '用户范围'
       },
-      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '其他' },
+      appAccessRightsLable: { intranet: '内网', industryNetwork: '行内网', internet: '互联网', other: '预警网' },
       appLinksInfoLable: { company: '单位', userName: '用户名', IPAddress: '其他', other: 'IP地址' },
       appStoreLable: { volume: '非本机存储卷信息', SAN_NAS: 'SAN/NAS分布式存储', capacity: '非本机存已用/分配容量(G)' },
       appNativeStoreLable: {
@@ -858,7 +889,7 @@ export default {
       isHomegrown:[{label:"isHomegrown",value:"是"},{label:"noHomegrown",value:"否"}],
       equipmentTypeAll: [],
       active: 0,
-      labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
+      // labels: { 'cabinetUStart': '柜内U位开始位','cabinetUEnd': '柜内U位结束位' },
       // rxr
       rules: {
         equipmentAdminPhone: [
@@ -888,15 +919,61 @@ export default {
   },
   computed:{
     connectedA(){
+      //判断是虚拟机还是实体机，并做绑定
+      if(this.connectedEquipmentTypeCode[1]==='X' || this.connectedEquipmentTypeCode[1]==='x'){
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '0'
+        this.isBanned = false
+      }else {
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '1'
+        this.isBanned = true
+      }
+      //自动生成编号
       this.autoHandleBasicInfoId(this.connectBaseInfoId)
-      this.params = this.connectBaseInfoId + this.connectNumber
-      this.equipment.equipmentBaseInfo.basicInfoId = this.params
+      this.equipment.equipmentBaseInfo.basicInfoId = this.connectBaseInfoId + this.connectNumber
       if(this.connectedEquipmentTypeCode !== ''){
-        return this.params
+        return this.equipment.equipmentBaseInfo.basicInfoId
       }
     }
   },
   methods: {
+
+    bindLevel(){
+      this.determineLevel = ''
+      for (const element of this.successbusinessSubsystem){
+        if(this.equipment.equipmentBaseInfo.businessSystem === element.businessSystemName){
+          this.determineLevel = element.businessSystemLevel
+        }
+      }
+      this.equipment.equipmentBaseInfo.businessSystemLevel=this.determineLevel
+      console.log('等级',this.determineLevel)
+    },
+    selectbusinessSubsystem(){//获取对应的二级业务系统
+      this.equipment.equipmentBaseInfo.businessSystem=''
+      this.equipment.equipmentBaseInfo.businessSystemLevel=''
+      this.determineLevel=''
+      this.successbusinessSubsystem = []
+      for (const element of this.businessSubsystem){
+        if(this.equipment.equipmentBaseInfo.businessSystemFirstName === element.businessSystemFirstName){
+          this.successbusinessSubsystem.push(element);
+        }
+      }
+      console.log('筛选完的结果是',this.successbusinessSubsystem)
+    },
+    SelectmachineRoomName() {//获取机房对应的机柜
+      this.equipment.equipmentBaseInfo.cabinetName= ''
+      this.cabinetAll = []
+      for (const element of this.machineRoomNames){
+        if(element.machineRoomName === this.equipment.equipmentBaseInfo.machineRoomName)
+        {
+          console.log("888888888",element.machineRoomName)
+          console.log("对应的id",element.machineRoomId)
+          this.machineRoomId= element.machineRoomId
+          getCabinet(this.machineRoomId).then(response => {
+            this.cabinetAll = response.data.items
+          })
+        }
+      }
+    },
     checkPhone(rules, value, callback) {
       if (value !== '') {
         const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^(0\d{2,3})-?(\d{7,8})$/;
@@ -907,10 +984,10 @@ export default {
       callback()
     },
     async autoHandleBasicInfoId(incompleteConnectBaseInfoId) {
-      await getEquipmentByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
-        // console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
+      await getEquipmentsByBaseInfoId(incompleteConnectBaseInfoId).then((response) =>{
+         console.log("根据单位、部门、设备类型代码查找到的数据：", response.data);
         let allDataByBaseInfoId = response.data.items;
-        if (allDataByBaseInfoId.total !== null && this.connectedEquipmentTypeCode !== '') {
+        if (response.data.total !== null && this.connectedEquipmentTypeCode !== '') {
           const numbers = allDataByBaseInfoId.map((item) => {
             const baseInfoId = item.basicInfoId;
             const splitIndex = baseInfoId.lastIndexOf('-');
@@ -964,6 +1041,23 @@ export default {
         this.equipmentTypeAll = response.data.items
         this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
       })
+      getMachineRoom(this.roleid).then(response => {
+        this.machineRoomNames = response.data.items
+      })
+      getAllFirstLevelBusinessSystem().then(res => {
+        this.businessSystem = res.data.items
+        console.log('8888',this.businessSystem)
+      })
+      const params = {
+        dataName: ['111'],
+        dataValue: '',
+        status:"0"
+      }
+      getBusinessSystemAll(params).then((response) => {//获取业务子系统
+        this.businessSubsystem = response.data.items
+        this.total = response.data.total
+        console.log('9999',this.businessSubsystem)
+      })
     },
     onSubmit() {
     },
@@ -979,7 +1073,6 @@ export default {
       if (this.active === 2) {
         let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
         let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
-
         const equip = { ...this.equipment }
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
@@ -1219,5 +1312,3 @@ export default {
   width: 100px !important;
 }
 </style>
-
-
