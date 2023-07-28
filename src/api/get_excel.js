@@ -2359,17 +2359,15 @@ export async function getExcelDemo4(data) {
         cell_B.value = 0;
       }
     }
-    if(i===12){
-      sheet.getCell(14,2).value = num_B;
-      sheet.getCell(14,3).value = num_C;
-      sheet.getCell(14,4).value = num_D;
-      sheet.getCell(14,5).value = num_E;
-      sheet.getCell(14,6).value = num_F;
-      sheet.getCell(14,7).value = num_G;
-    }
   }
+    sheet.getCell(arr_name.length+1,2).value = num_B;
+    sheet.getCell(arr_name.length+1,3).value = num_C;
+    sheet.getCell(arr_name.length+1,4).value = num_D;
+    sheet.getCell(arr_name.length+1,5).value = num_E;
+    sheet.getCell(arr_name.length+1,6).value = num_F;
+    sheet.getCell(arr_name.length+1,7).value = num_G;
   for(let i=0;i<7;i++){
-    sheet.getCell(14,i+1).fill={
+    sheet.getCell(arr_name.length+1,i+1).fill={
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFF0000' } // 红色
