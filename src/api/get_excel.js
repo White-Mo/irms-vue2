@@ -2172,23 +2172,90 @@ export async function getExcelDemo3(StatisticsData, state) {
 export async function getExcelDemo4(data) {
   console.log('6666666666', data)
   let arr_name1 =[];
-  for(let i=0;i<data.business.length;i++){
-      arr_name1.push(data.business[i][0])
-  }
-  for(let i=0;i<data.subCount.length;i++){
-      arr_name1.push(data.subCount[i][0])
-  }
-  for(let i=0;i<data.businessSon.length;i++){
-    arr_name1.push(data.businessSon[i][0])
-  }
-  for(let i=0;i<data.fixCount.length;i++){
-    arr_name1.push(data.fixCount[i][0])
-  }
-  for(let i=0;i<data.normalCount.length;i++){
-    arr_name1.push(data.normalCount[i][0])
-  }
-  for(let i=0;i<data.scrapCount.length;i++){
-    arr_name1.push(data.scrapCount[i][0])
+  for (let i = 0; i < 6; i++) {
+    if (i === 0) {
+      if (data.business === null) {
+        continue;
+      } else {
+        if (data.business.length === 1) {
+          arr_name1.push(data.business[0][0]);
+        } else {
+          for (let j = 0; j < data.business.length; j++) {
+            arr_name1.push(data.business[j][0]);
+          }
+        }
+      }
+    }
+
+    if (i === 1) {
+      if (data.subCount === null) {
+        continue;
+      } else {
+        if (data.subCount.length === 1) {
+          arr_name1.push(data.subCount[0][0]);
+        } else {
+          for (let j = 0; j < data.subCount.length; j++) {
+            arr_name1.push(data.subCount[j][0]);
+          }
+        }
+      }
+    }
+
+    if (i === 2) {
+      if (data.businessSon === null) {
+        continue;
+      } else {
+        if (data.businessSon.length === 1) {
+          arr_name1.push(data.businessSon[0][0]);
+        } else {
+          for (let j = 0; j < data.businessSon.length; j++) {
+            arr_name1.push(data.businessSon[j][0]);
+          }
+        }
+      }
+    }
+
+    if (i === 3) {
+      if (data.fixCount === null) {
+        continue;
+      } else {
+        if (data.fixCount.length === 1) {
+          arr_name1.push(data.fixCount[0][0]);
+        } else {
+          for (let j = 0; j < data.fixCount.length; j++) {
+            arr_name1.push(data.fixCount[j][0]);
+          }
+        }
+      }
+    }
+
+    if (i === 4) {
+      if (data.normalCount === null) {
+        continue;
+      } else {
+        if (data.normalCount.length === 1) {
+          arr_name1.push(data.normalCount[0][0]);
+        } else {
+          for (let j = 0; j < data.normalCount.length; j++) {
+            arr_name1.push(data.normalCount[j][0]);
+          }
+        }
+      }
+    }
+
+    if (i === 5) {
+      if (data.scrapCount === null) {
+        continue;
+      } else {
+        if (data.scrapCount.length === 1) {
+          arr_name1.push(data.scrapCount[0][0]);
+        } else {
+          for (let j = 0; j < data.scrapCount.length; j++) {
+            arr_name1.push(data.scrapCount[j][0]);
+          }
+        }
+      }
+    }
   }
   const arr_name = arr_name1.filter((value, index, self) => {
     return self.indexOf(value) === index;
@@ -2272,91 +2339,192 @@ export async function getExcelDemo4(data) {
   }
   // sheet.getCell(arr_name.length+1,1).value='总计';
   let num_B=0 ,num_C =0,num_D =0,num_E =0,num_F=0,num_G=0;
-  for(let i=0;i<data.subCount.length;i++){
-    num_B += data.subCount[i][1];
-  }
-  for(let i=0;i<data.normalCount.length;i++){
-    num_C += data.normalCount[i][1];
-  }
-  for(let i=0;i<data.fixCount.length;i++){
-    num_D += data.fixCount[i][1];
-  }
-  for(let i=0;i<data.scrapCount.length;i++){
-    num_E += data.scrapCount[i][1];
-  }
-  for(let i=0;i<data.businessSon.length;i++){
-    num_F += data.businessSon[i][1];
-  }
-  for(let i=0;i<data.business.length;i++){
-    num_G += data.business[i][1];
+  for (let j = 0; j < 6; j++) {
+    if (j === 0) {
+      if (data.subCount === null ) {
+        continue;
+      } else {
+        for (let i = 0; i < data.subCount.length; i++) {
+          num_B += data.subCount[i][1];
+        }
+      }
+    }
+
+    if (j === 1) {
+      if (data.normalCount === null ) {
+        continue;
+      } else {
+        for (let i = 0; i < data.normalCount.length; i++) {
+          num_C += data.normalCount[i][1];
+        }
+      }
+    }
+
+    if (j === 2) {
+      if (data.fixCount === null ) {
+        continue;
+      } else {
+        for (let i = 0; i < data.fixCount.length; i++) {
+          num_D += data.fixCount[i][1];
+        }
+      }
+    }
+
+    if (j === 3) {
+      if (data.scrapCount === null) {
+        continue;
+      } else {
+        for (let i = 0; i < data.scrapCount.length; i++) {
+          num_E += data.scrapCount[i][1];
+        }
+      }
+    }
+
+    if (j === 4) {
+      if (data.businessSon === null ) {
+        continue;
+      } else {
+        for (let i = 0; i < data.businessSon.length; i++) {
+          num_F += data.businessSon[i][1];
+        }
+      }
+    }
+
+    if (j === 5) {
+      if (data.business === null ) {
+        continue;
+      } else {
+        for (let i = 0; i < data.business.length; i++) {
+          num_G += data.business[i][1];
+        }
+      }
+    }
   }
   // console.log(num_B)
   // sheet.getCell(arr_name.length+1,2).value=num_B;
   for (let i = 0; i < arr_name.length; i++) {
-    for(let u=0;u<data.business.length;u++) {
+    if(data.business === null){
       const cell_G = sheet.getCell(i + 2, 7);
       cell_G.alignment = {horizontal: 'center'};
       cell_G.font={size:18};
-      if(data.business[u][0] === arr_name[i]){
-        cell_G.value = data.business[u][1];
-        break;
-      }else {
-        cell_G.value =0;
+      cell_G.value =0;
+      continue;
+    }else{
+      for(let u=0;u<data.business.length;u++) {
+        const cell_G = sheet.getCell(i + 2, 7);
+        cell_G.alignment = {horizontal: 'center'};
+        cell_G.font={size:18};
+        if(data.business[u][0] === arr_name[i]){
+          cell_G.value = data.business[u][1];
+          break;
+        }else {
+          cell_G.value =0;
+        }
       }
     }
-    for (let j = 0; j < data.businessSon.length; j++) {
+  }
+  for (let i = 0; i < arr_name.length; i++) {
+    if(data.businessSon === null){
       const cell_F = sheet.getCell(i + 2, 6);
       cell_F.alignment = {horizontal: 'center'};
       cell_F.font={size:18};
-      if (data.businessSon[j][0] === arr_name[i]) {
-        cell_F.value = data.businessSon[j][1];
-        break;
-      } else {
-        cell_F.value = 0;
+      cell_F.value =0;
+      continue;
+    }else {
+      for (let j = 0; j < data.businessSon.length; j++) {
+        const cell_F = sheet.getCell(i + 2, 6);
+        cell_F.alignment = {horizontal: 'center'};
+        cell_F.font={size:18};
+        if (data.businessSon[j][0] === arr_name[i]) {
+          cell_F.value = data.businessSon[j][1];
+          break;
+        } else {
+          cell_F.value = 0;
+        }
       }
     }
-    for(let y=0;y<data.fixCount.length;y++){
+  }
+  for (let i = 0; i < arr_name.length; i++) {
+    if(data.fixCount === null){
       const cell_D = sheet.getCell(i + 2, 4);
       cell_D.alignment = {horizontal: 'center'};
       cell_D.font={size:18};
-      if(data.fixCount[y][0] === arr_name[i]){
-        cell_D.value = data.fixCount[y][1];
-        break;
-      }else{
-        cell_D.value =0;
+      cell_D.value = 0;
+      continue;
+    }else {
+      for(let y=0;y<data.fixCount.length;y++){
+        const cell_D = sheet.getCell(i + 2, 4);
+        cell_D.alignment = {horizontal: 'center'};
+        cell_D.font={size:18};
+        if(data.fixCount[y][0] === arr_name[i]){
+          cell_D.value = data.fixCount[y][1];
+          break;
+        }else{
+          cell_D.value =0;
+        }
       }
     }
-    for(let x=0;x<data.normalCount.length;x++){
+  }
+  for (let i = 0; i < arr_name.length; i++) {
+    if(data.normalCount === null){
       const cell_C = sheet.getCell(i + 2, 3);
       cell_C.alignment = {horizontal: 'center'};
       cell_C.font={size:18};
-      if(data.normalCount[x][0] === arr_name[i]){
-        cell_C.value=data.normalCount[x][1];
-        break;
-      }else{
-        cell_C.value = 0;
+      cell_C.value =0;
+      continue;
+    }else{
+      for(let x=0;x<data.normalCount.length;x++){
+        const cell_C = sheet.getCell(i + 2, 3);
+        cell_C.alignment = {horizontal: 'center'};
+        cell_C.font={size:18};
+        if(data.normalCount[x][0] === arr_name[i]){
+          cell_C.value=data.normalCount[x][1];
+          break;
+        }else{
+          cell_C.value = 0;
+        }
       }
     }
-    for(let p=0;p<data.scrapCount.length;p++){
+  }
+  for (let i = 0; i < arr_name.length; i++) {
+    if(data.scrapCount ===null){
       const cell_E= sheet.getCell(i + 2, 5);
       cell_E.alignment = {horizontal: 'center'};
       cell_E.font={size:18};
-      if(data.scrapCount[p][0] === arr_name[i]){
-        cell_E.value=data.scrapCount[p][1];
-        break;
-      }else{
-        cell_E.value=0;
+      cell_E.value =0;
+      continue;
+    }else {
+      for(let p=0;p<data.scrapCount.length;p++){
+        const cell_E= sheet.getCell(i + 2, 5);
+        cell_E.alignment = {horizontal: 'center'};
+        cell_E.font={size:18};
+        if(data.scrapCount[p][0] === arr_name[i]){
+          cell_E.value=data.scrapCount[p][1];
+          break;
+        }else{
+          cell_E.value=0;
+        }
       }
     }
-    for(let r=0;r<data.subCount.length;r++){
+  }
+  for (let i = 0; i < arr_name.length; i++) {
+    if(data.subCount === null){
       const cell_B = sheet.getCell(i + 2, 2);
       cell_B.alignment = {horizontal: 'center'};
       cell_B.font={size:18};
-      if(data.subCount[r][0] === arr_name[i]){
-        cell_B.value=data.subCount[r][1];
-        break;
-      }else{
-        cell_B.value = 0;
+      cell_B.value =0;
+      continue;
+    }else{
+      for(let r=0;r<data.subCount.length;r++){
+        const cell_B = sheet.getCell(i + 2, 2);
+        cell_B.alignment = {horizontal: 'center'};
+        cell_B.font={size:18};
+        if(data.subCount[r][0] === arr_name[i]){
+          cell_B.value=data.subCount[r][1];
+          break;
+        }else{
+          cell_B.value = 0;
+        }
       }
     }
   }

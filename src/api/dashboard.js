@@ -15,8 +15,10 @@ export function getDepartmentAllCountData() {
 
 
 //---------田累积----------------
-export function getInfo() {
+export function getInfo(obj) {
+  let params = JSON.parse(JSON.stringify(obj))
   return request({
+    params,
     url: '/home/inforesources/getInfo',
     method: 'get',
     responseType: 'json'
