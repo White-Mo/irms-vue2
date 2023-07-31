@@ -90,11 +90,12 @@
             </el-col>
             <el-col :span='4'>
               <div class="label-style">
-                <el-select v-model='form.equipmentTypeName' placeholder='请选择' @change="handleBaseInfoIdByEquipmentType">
+                <el-select v-model='form.equipmentTypeName' placeholder='请选择' filterable @change="handleBaseInfoIdByEquipmentType">
                   <el-option
                     v-for='item in equipmentTypeAll'
                     :key='item.value'
                     :value='item.equipmentTypeName'
+                    :title="item.equipmentTypeName"
                   />
                 </el-select>
               </div>

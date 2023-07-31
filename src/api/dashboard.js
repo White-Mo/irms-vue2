@@ -84,3 +84,12 @@ export function getUnitWithExistData(){
     responseType: 'json',
   })
 }
+
+/*//获取所有单位的设备总数
+export function getAllPostEquipmentCount(){
+  return request({
+    url: '/home/inforesources/getAllPostEquipmentCount',
+    method: 'get',
+    responseType: 'json',
+  })
+}*/

@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <div ref='bgMain' class='bg-main'>
     <el-row>
       <el-col :span='7' class='nav2'>
@@ -101,7 +101,6 @@
     </el-row>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import {
@@ -161,8 +160,8 @@ export default {
     ])
   },
   methods: {
-    //----------------赵长开-------------
-    //----------------渲染设备概况数据开始-----------------------------
+    //&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;赵长开-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;
+    //&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;渲染设备概况数据开始-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;
     RenderingData() {
       const that = this
       getEquipmentCount().then(function (res) {
@@ -199,7 +198,7 @@ export default {
           that.equipmentUserNumber = res
         })
     },
-    //---------------------渲染设备概况数据结束--------------------------------------------
+    //-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;渲染设备概况数据结束&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;
     // 判断该用户是否为super
     async currentRole() {
       let endIndex = this.role_name.indexOf('/')
@@ -207,6 +206,7 @@ export default {
       if (this.roles[0] === '超级管理员') {
         this.chart1name = '各单位设备数据量'
         let chart1Count = await this.handleDepartmentAllCountData()
+        console.log("各单位设备数据量", this.chart1name)
         let postIndex = 0
         for (let i = 0; i < chart1Count.length; i++) {
           if (chart1Count[i].name == currentPost) {
@@ -1359,7 +1359,6 @@ export default {
 
 }
 </script>
-
 <style lang='scss' scoped>
 
 * {
@@ -1534,4 +1533,225 @@ export default {
   left: 35% !important;
 }
 
+</style>-->
+
+
+
+<template>
+  <div class="bg-main" >
+<!--    头部开始-->
+    <el-row>
+      <div class="title_wrap" >
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+        <div class="shine"></div>
+        <div>
+          <div class="title">
+            <span class="title-text">设备概况可视化平台</span>
+          </div>
+        </div>
+        <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
+        <el-button round class="download_report" v-text="downloadReport"></el-button>
+      </div>
+    </el-row>
+<!--    头部结束-->
+<!--    主体部分开始-->
+    <el-row>
+      <el-col :span="7" class="classLeftHeight">
+        <el-row class="anlageuebersicht">
+          <anlageuebersicht></anlageuebersicht>
+        </el-row>
+        <el-row class="carouselList">
+          <carouselList></carouselList>
+        </el-row>
+        <el-row class="equipmentAndMachineRoomProportion">
+          <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
+        </el-row>
+      </el-col>
+      <el-col :span="10" class="classCenterHeight">
+        <el-row class="map">
+          <echartsMap></echartsMap>
+        </el-row>
+        <el-row class="departmentAndEquipmentType">
+          <departmentAndEquipmentType></departmentAndEquipmentType>
+        </el-row>
+      </el-col>
+      <el-col :span="7" class="classRightHeight">
+        <el-row class="equipmentStatus">
+          <equipmentStatus></equipmentStatus>
+        </el-row>
+        <el-row class="equipmentStatusCarouselList">
+          <equipmentStatusCarouselList></equipmentStatusCarouselList>
+        </el-row>
+        <el-row class="undetermined">
+          <undetermined></undetermined>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+<script>
+import anlageuebersicht from "@/components/visualization/anlageuebersicht";
+import carouselList from "@/components/visualization/carouselList";
+import echartsMap from "@/components/visualization/echartsMap";
+import departmentAndEquipmentType from "@/components/visualization/departmentAndEquipmentType";
+import equipmentStatus from "@/components/visualization/equipmentStatus";
+import equipmentStatusCarouselList from "@/components/visualization/equipmentStatusCarouselList";
+import undetermined from "@/components/visualization/undetermined";
+import equipmentAndMachineRoomProportion from "@/components/visualization/equipmentAndMachineRoomProportion";
+
+export default {
+  components: {anlageuebersicht,carouselList,departmentAndEquipmentType,
+    echartsMap,equipmentAndMachineRoomProportion,equipmentStatus,equipmentStatusCarouselList,undetermined},
+  data(){
+    return{
+      isFullScreenText:"点击全屏显示",
+      downloadReport:"生成统计报表",
+    }
+  },
+  mounted() {
+
+  },
+  methods:{
+    isFullScreen(){
+      console.log("展开全屏")
+    }
+  }
+}
+
+</script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+
+}
+.bg-main {
+  background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;
+  color: white;
+  text-align: center;
+  min-height: calc(100vh - 50px);
+}
+
+.title_wrap {
+  top: 10px;
+  height: 10%;
+  width: 100%;
+  background-image: url("../../assets/img/top.png");
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  margin-bottom: 4px;
+}
+.shine {
+  position: absolute;
+  bottom: -26px;
+  background-image: url("../../assets/img/guang.png");
+  background-position: 80px center;
+  width: 100%;
+  height: 56px;
+}
+.left_line,
+.right_line {
+  position: absolute;
+  top: -2px;
+  width: 140px;
+  height: 6px;
+  background-image: url("../../assets/img/headers/juxing1.png");
+}
+.left_line {
+  left: 5%;
+}
+
+.right_line {
+  right: 5%;
+  transform: rotate(180deg);
+}
+
+.title {
+  position: relative;
+  text-align: center;
+  background-size: cover;
+  color: transparent;
+  height: 60px;
+  line-height: 46px;
+}
+.title-text {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  width: 100%;
+  background: linear-gradient(92deg, #0072FF 0%, #00EAFF 48.8525390625%, #01AAFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.is_full_screen{
+  background-color: rgba(22, 87, 185, 0.56);
+  width: 200px;
+  border: rgba(255, 255, 255, 0.54);
+  position: absolute;
+  top: 10px;
+  left: 3%;
+  color: rgba(0, 216, 255, 0.83);
+  font-size: 20px;
+}
+.download_report{
+  background-color: rgba(22, 87, 185, 0.56);
+  width: 200px;
+  border: rgba(255, 255, 255, 0.54);
+  position: absolute;
+  top: 10px;
+  right: 3%;
+  color: rgba(0, 216, 255, 0.83);
+  font-size: 20px;
+}
+.classLeftHeight{
+  margin-top: 17px;
+  min-height: 86vh;
+  /*background-color: #00EAFF;*/
+}
+.classCenterHeight{
+  margin-top: 17px;
+  min-height: 86vh;
+  /*background-color: #ea4b4b;*/
+}
+.classRightHeight{
+  margin-top: 17px;
+  min-height: 86vh;
+  /*background-color: #91d524;*/
+}
+.anlageuebersicht{
+  height: 15vh;
+  /*background-color: #B3C0D1;*/
+}
+.carouselList{
+  height: 40vh;
+  /*background-color: #91d524;*/
+}
+.departmentAndEquipmentType{
+  height: 31vh;
+  /*background-color: rgba(35, 20, 241, 0.5);*/
+}
+.map{
+  height: 55vh;
+  /*background-color: #ea4bd5;*/
+}
+.equipmentAndMachineRoomProportion{
+  height: 31vh;
+  /*background-color: rgba(0, 216, 255, 0.38);*/
+}
+.equipmentStatus{
+  height: 15vh;
+  /*background-color: #B3C0D1;*/
+}
+.equipmentStatusCarouselList{
+  height: 40vh;
+  /*background-color: #91d524;*/
+}
+.undetermined{
+  height: 31vh;
+  /*background-color: rgba(0, 216, 255, 0.38);*/
+}
 </style>
