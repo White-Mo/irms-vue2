@@ -227,9 +227,8 @@ export default {
         dataValue: this.inputValue,
         status: '0',
         start: (this.currentPage - 1) * this.limit,
-        limit: this.limit,
+        limit: this.limit
       }
-
       getBasicInfoNetworkByPage(params).then((res) => {
         this.total = res.data.total
         let data = []
@@ -248,8 +247,7 @@ export default {
       this.fetchData()
     },
 
-
-    handleSizeChange(val){
+    handleSizeChange(val) {
       this.limit = val
       this.fetchData()
     },

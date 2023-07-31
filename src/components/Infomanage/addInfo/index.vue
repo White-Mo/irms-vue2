@@ -299,7 +299,7 @@
                   <el-col :span='4'>
                     <div class='label-style'>
                       <el-date-picker v-model='form.onlineTime' size='medium' style='width:auto'
-                                      value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                                      value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -307,7 +307,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto' value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
+                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto' value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
                   <el-col :span='2'>
@@ -1070,12 +1070,15 @@ export default {
     next() {
       this.active++
       const equipments = []
+
       if (this.active === 2) {
-        let formatOnlineTime = this.form.onlineTime.replace(/-/g, '')
-        let formatOfflineTime = this.form.offlineTime.replace(/-/g, '')
+        let formatOnlineTime = JSON.parse(JSON.stringify(this.form.onlineTime)).replace(/-/g, '');//深拷贝不改变原有值
+        let formatOfflineTime = JSON.parse(JSON.stringify(this.form.offlineTime)).replace(/-/g, '');//深拷贝不改变原有值
         const equip = { ...this.equipment }
+        equip.equipmentBaseInfo = {...this.equipment.equipmentBaseInfo,}//深拷贝不改变原有值,使用...完成深拷贝时，多层对象嵌套只有第一层是深拷贝
         equip.equipmentBaseInfo.onlineTime = formatOnlineTime
         equip.equipmentBaseInfo.offlineTime = formatOfflineTime
+
         equip.equipmentBaseInfo.movingRecord = this.movingRecord1 !=='' ? this.movingRecord1+';'+this.movingRecord2 : ''
         equip.equipmentBaseInfo.movingRecordTime = this.movingRecordTime1 !== '' ? this.movingRecordTime1+';'+this.movingRecordTime2 : ''
         equip.equipmentBaseInfo.transferRecord = this.transferRecord1 !== '' ? this.transferRecord1+';'+this.transferRecord2 : ''
@@ -1098,6 +1101,7 @@ export default {
             showClose: false
           }).then(() => {
             // this.$router.go(0)
+            console.log(this.form.onlineTime)
           })
         }).catch(err => {
           this.active = 0

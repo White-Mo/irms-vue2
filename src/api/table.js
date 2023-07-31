@@ -1,14 +1,15 @@
 import request from '@/utils/request'
+
 // 综合数据管理展示与查询--lry
 export function getList(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
-  if(obj.prop==null){
-    obj.prop='basicInfoId'
+  if (obj.prop == null) {
+    obj.prop = 'basicInfoId'
   }
-  if(obj.order==null){
-    obj.order='ASC'
+  if (obj.order == null) {
+    obj.order = 'ASC'
   }
-  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+  if (obj.dataName[0] === '111' && obj.dataValue !== ' ') {
     obj.dataName = [
       'basicInfoId',
       'ipAddress',
@@ -56,10 +57,10 @@ export function getList(obj) {
       'ns',
       'cname',
       'useCDN',
-      'trueOrVirtual',
+      'trueOrVirtual'
     ]
   }
-  const params = JSON.parse(JSON.stringify(obj));
+  const params = JSON.parse(JSON.stringify(obj))
   return request({
     params,
     url: '/home/inforesources/getCompreDataAll',
@@ -70,7 +71,7 @@ export function getList(obj) {
 
 export function getEquipmentsByBaseInfoId(basicInfoId) {
   return request({
-    params: {basicInfoId: basicInfoId},
+    params: { basicInfoId: basicInfoId },
     url: '/home/inforesources/getEquipmentsByBaseInfoId',
     method: 'post',
     responseType: 'json'
@@ -84,20 +85,9 @@ export function getBasicInfoAll() {
     responseType: 'json'
   })
 }
-//IP 地址数据获取
-export function getNetWorkList(obj) {
-  // 将有数组和字符串的对象转为符合JSON格式的对象
-  let params = JSON.parse(JSON.stringify(obj))
-  // console.log(typeof (params))
-  return request({
-    params,
-    url: '/home/IPaddress/getBasicInfoNetworkByPage1',
-    method: 'get',
-    responseType: 'json'
-  })
-}
+
 export function getdataCount(obj) {
-  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+  if (obj.dataName[0] === '111' && obj.dataValue !== ' ') {
     obj.dataName = [
       'basicInfoId',
       'ipAddress',
@@ -145,7 +135,7 @@ export function getdataCount(obj) {
       'ns',
       'cname',
       'useCDN',
-      'trueOrVirtual',
+      'trueOrVirtual'
     ]
   }
   // 将有数组和字符串的对象转为符合JSON格式的对象
@@ -159,6 +149,7 @@ export function getdataCount(obj) {
     responseType: 'json'
   })
 }
+
 // 获取统计数据
 export function getStatisticsData(par) {
   return request({
@@ -167,6 +158,7 @@ export function getStatisticsData(par) {
     responseType: 'json'
   })
 }
+
 export function addEquipment(eq) {
   console.log(eq)
   return request({
@@ -188,7 +180,6 @@ export function AddExcel(eq) {
 }
 
 
-
 export function importMachineRoom(machineRoom) {
   return request({
     data: machineRoom,
@@ -208,6 +199,7 @@ export function delEquipment(equipmentId) {
     responseType: 'json'
   })
 }
+
 export function getbasic(equipmentId) {
   return request({
     params: { equipmentId: equipmentId },
@@ -216,6 +208,7 @@ export function getbasic(equipmentId) {
     responseType: 'json'
   })
 }
+
 export function changeStatus(eq) {
   var params = JSON.parse(JSON.stringify(eq))
   return request({
@@ -237,7 +230,7 @@ export function batchChangeEquipmentStatus(params) {
 
 
 export function InitValue(initdata) {
-console.log(initdata);
+  console.log(initdata)
   return request({
     params: { initValue: initdata },
     url: '/home/inforesources/getInitDataAll',
@@ -247,14 +240,13 @@ console.log(initdata);
 }
 
 
-
 //综合信息管理表多条件查询
 export function searchComprehensiveInfoByMultipleConditions(data) {
   return request({
     params: data,
     url: '/home/inforesources/searchComprehensiveInfoByMultipleConditions',
     method: 'post',
-    responseType: 'json',
+    responseType: 'json'
   })
 }
 
@@ -264,17 +256,17 @@ export function guaranteePeriodSearchByTime(data) {
     params: data,
     url: '/home/inforesources/guaranteePeriodSearchByTime',
     method: 'post',
-    responseType: 'json',
+    responseType: 'json'
   })
 }
 
 //综合信息管理-新添IP地址、Mac地址查询
-export function solelySearchIdAndMacAddress(data){
+export function solelySearchIdAndMacAddress(data) {
   return request({
     params: data,
     url: '/home/inforesources/solelySearchIdAndMacAddress',
     method: 'post',
-    responseType: 'json',
+    responseType: 'json'
   })
 }
 
