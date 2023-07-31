@@ -33,7 +33,9 @@
             </el-upload>
           </el-col>
           <el-col :span='12'>
-            <el-button style='float: right' size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>详情表导入</el-button>
+            <el-button style='float: right' size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>
+              详情表导入
+            </el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -163,50 +165,56 @@ export default {
         const outdata = await importfile(this.checkList[0].value, this.value)
         //console.log("@",this.checkList[index].value.name)
         console.log('文件内容', outdata)
+        let turnSize = 10
+        let turnNum = outdata.length / turnSize
 
-
-        for (let index = 0; index < outdata.length; index++) {
-          const replayInfoRow = {
-            equipmentId: '',
-            errorType: '',
-            errorData: ''
-          }
-          const userInfo=this.$store.state.user
-          const { equipment, readStatus } = getRowEquipment([outdata[index]],userInfo)
-          console.log(equipment)
-          if (readStatus.length == 0) {
-            const equipments = [equipment]
-            await AddExcel({ equipments: equipments }).then((res) => {
-              this.loading = false
-              if (res.status === 200) {
-                this.uploadResult.success = this.uploadResult.success + 1
-              } else {
-                this.uploadResult.fail = this.uploadResult.fail + 1
-                replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-                replayInfoRow.errorType = res.message
-                console.log(res.data)
-                console.log(res.data.equipmentBaseInfo)
-                replayInfoRow.errorData = res.data.equipmentBasicInfo.message
-
-                this.repalyInfo[index] = replayInfoRow
-              }
-            }).catch((error) => {
-              this.uploadResult.noReturn = this.uploadResult.noReturn + 1
+        for (let turnIndex = 0; turnIndex < turnNum; turnIndex++) {
+          let index=turnIndex*turnSize
+          let equipments = []
+          for (index; index < turnSize*(turnIndex+1); index++) {
+            const replayInfoRow = {
+              equipmentId: '',
+              errorType: '',
+              errorData: ''
+            }
+            const userInfo = this.$store.state.user
+            const { equipment, readStatus } = getRowEquipment([outdata[index]], userInfo)
+            if (readStatus.length == 0) {
+              equipments.push(equipment)
+            } else {
+              this.uploadResult.fail = this.uploadResult.fail + 1
               replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-              replayInfoRow.errorType = '未知错误'
-              replayInfoRow.errorData = error
+              replayInfoRow.errorType = readStatus[0].type
+              replayInfoRow.errorData = readStatus[0].erro
               this.repalyInfo[index] = replayInfoRow
-            })
-          } else {
-            this.uploadResult.fail = this.uploadResult.fail + 1
-            replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-            replayInfoRow.errorType = readStatus[0].type
-            replayInfoRow.errorData = readStatus[0].erro
-            this.repalyInfo[index] = replayInfoRow
+            }
           }
-          this.uploadResult.total = this.uploadResult.total + 1
+          console.log(equipments[0].equipmentBaseInfo.basicInfoId)
+          await AddExcel({ equipments: equipments }).then((res) => {
+            this.loading = false
+            if (res.status === 200) {
+              this.uploadResult.success = this.uploadResult.success + turnSize
+            } else {
+              this.uploadResult.fail = this.uploadResult.fail + 1
+              replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
+              replayInfoRow.errorType = res.message
+              console.log(res.data)
+              console.log(res.data.equipmentBaseInfo)
+              replayInfoRow.errorData = res.data.equipmentBasicInfo.message
+
+              this.repalyInfo[index] = replayInfoRow
+            }
+          }).catch((error) => {
+            this.uploadResult.noReturn = this.uploadResult.noReturn + 1
+            replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
+            replayInfoRow.errorType = '未知错误'
+            replayInfoRow.errorData = error
+            this.repalyInfo[index] = replayInfoRow
+          })
+          this.uploadResult.total = this.uploadResult.total + turnSize
           this.percent = parseFloat((this.uploadResult.total * 100 / (outdata.length - 1)).toFixed(2))
         }
+
         console.log(this.uploadResult)
         console.log('repaly', this.repalyInfo)
         let useTime = (new Date().getTime() - start) / 1000

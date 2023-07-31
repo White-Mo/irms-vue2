@@ -95,6 +95,7 @@
                     v-for='item in equipmentTypeAll'
                     :key='item.value'
                     :value='item.equipmentTypeName'
+                    :title="item.equipmentTypeName"
                   />
                 </el-select>
               </div>
