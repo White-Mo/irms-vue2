@@ -4,7 +4,7 @@
       <div>
         <dv-decoration-7 style="width:100%;height:40px; font-size: 15px;color:rgba(0,234,255,0.96);">设备总览</dv-decoration-7>
         <div style="height: 100%; width: 90%;margin-left: 20px;">
-          <div id="myChart" style="height: 470px; width: 620px;"></div>
+          <div id="myChart" style="height: 750px; width: 620px;"></div>
         </div>
       </div>
     </dv-border-box-12>
@@ -38,7 +38,7 @@ export default {
           {
             type: "map",
             map: "china",
-            center: [103.823557, 36.058039], // 设置地图的中心点为甘肃的经纬度
+            center: [104.113478, 26.578343], // 设置地图的中心点为贵州的经纬度
             roam: true,
             label: {
               show: true,
@@ -56,7 +56,7 @@ export default {
               },
             },
             // 设置地图的缩放级别
-            zoom: 1.7, // 调整此值以放大或缩小地图
+            zoom: 1.2, // 调整此值以放大或缩小地图
           },
 
         ],

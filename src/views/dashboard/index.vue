@@ -1536,7 +1536,7 @@ export default {
 </style>-->
 
 
-
+<!--没有自适应-->
 <template>
   <div class="bg-main" >
 <!--    头部开始-->
@@ -1572,9 +1572,9 @@ export default {
         <el-row class="map">
           <echartsMap></echartsMap>
         </el-row>
-        <el-row class="departmentAndEquipmentType">
-          <departmentAndEquipmentType></departmentAndEquipmentType>
-        </el-row>
+<!--        <el-row class="departmentAndEquipmentType">-->
+<!--          <departmentAndEquipmentType></departmentAndEquipmentType>-->
+<!--        </el-row>-->
       </el-col>
       <el-col :span="7" class="classRightHeight">
         <el-row class="equipmentStatus">
@@ -1626,7 +1626,6 @@ export default {
   padding: 0;
   text-decoration: none;
   list-style: none;
-
 }
 .bg-main {
   background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;
@@ -1735,7 +1734,7 @@ export default {
   /*background-color: rgba(35, 20, 241, 0.5);*/
 }
 .map{
-  height: 55vh;
+  height: 86vh;
   /*background-color: #ea4bd5;*/
 }
 .equipmentAndMachineRoomProportion{
@@ -1755,3 +1754,8 @@ export default {
   /*background-color: rgba(0, 216, 255, 0.38);*/
 }
 </style>
+
+
+
+
+
