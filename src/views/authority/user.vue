@@ -295,7 +295,7 @@ export default {
     },
 
     search() {
-      this.currentPage = 0
+      this.currentPage = 1
       this.get_user()
     },
     querySearchName(queryString, cb) {
