@@ -735,6 +735,7 @@ export default {
     },
 
     cabinetDetail(index, row) {
+      console.log("8888888888888888888888",row)
       this.row = row
       console.log(row.cabinetId)
       this.showEquipment =true

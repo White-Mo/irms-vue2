@@ -514,7 +514,3 @@ export function getEquipmentByCabinet(cabinetId){
     responseType: 'json'
   })
 }
-
-
-
-
