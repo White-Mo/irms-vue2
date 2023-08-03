@@ -3,25 +3,26 @@
     <dv-loading>Loading...</dv-loading>
 
     <!-- 模型悬浮时显示的气泡 -->
-    <div v-if="showTooltip"  class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
-      <!-- 这里展示预先写好的数据 -->
-<!--      <table style="height:20%;width: 90%;color: #FFFFFF;text-align: center;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">-->
-<!--        <tr style="height: 45px;">-->
-<!--          <th style="color: #0a72c7;width: 110px">机柜名：</th>-->
-<!--          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{ tooltipText }}</span></th>-->
-<!--        </tr>-->
-<!--      </table>-->
+    <div v-if="showTooltip" style="position: fixed" class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
+      <table
+        border
+        height="40"
+        style="width: 100%;color: #FFFFFF;text-align: center;left: 5%;top:30%;font-size:20px;margin-top: 10px;margin-bottom: 10px" >
+        <tr style="height: 45px;">
+          <th style="color: #0a72c7;width: 210px">机柜名：</th>
+          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{ clickedCabinetName }}</span></th>
+        </tr>
+      </table>
       <el-table
-        :data="equipmentTableData"
+        :data="tooltipText"
         height="250"
         border
-        style="width: 100%">
+        style="width: 100%;text-align: center;">
         <el-table-column
           v-for="columns in equipmentTableColumns"
           :prop="columns.prop"
           :label="columns.label"
           width="180"
-          style="text-align: center"
         >
         </el-table-column>
       </el-table>
@@ -45,28 +46,28 @@
     </div>
 
     <div id="container"></div>
-    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
-        <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 110px">管理员：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
-          </tr>
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房面积：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
-          </tr>
-          <tr style="height: 45px">
-            <th style="color: #0a72c7;width: 80px">机房位置：</th>
-            <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
-          </tr>
-        </table>
-      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
-      </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5)" v-show="datacard">
-        <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
-      </dv-border-box-12>
-    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
-      <div style="height:35%;width:100%;position: absolute;left:10px;top: 35%;">
+    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
+      <table style="opacity: 1;width: 70%;color: #FFFFFF;text-align: left;position: relative;left: 26%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
+        <tr style="height: 45px">
+          <th style="color: #FFFFFF;width: 110px">管理员：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
+        </tr>
+        <tr style="height: 45px">
+          <th style="color: #FFFFFF;width: 80px">机房面积：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
+        </tr>
+        <tr style="height: 45px">
+          <th style="color: #FFFFFF;width: 80px">机房位置：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
+        </tr>
+      </table>
+      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 25px;top:100px;z-index: 99">
+    </dv-border-box-11>
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
+      <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
+    </dv-border-box-12>
+    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
+      <div style="opacity: 0.8;height:35%;width:100%;position: absolute;left:10px;top: 35%;">
         <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 60px">
             <th>设备总数:</th>
@@ -83,23 +84,21 @@
         </table>
       </div>
     </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
       <el-row style="position: relative;top:5%">
         <el-col :span="12" :offset="8">
-          <h2 style="position: relative;left:15px;color: #06e1f4">机房机柜</h2>
+          <h2 style="position: relative;left:15px;color: #FFFFFF">机房机柜</h2>
         </el-col>
       </el-row>
       <el-table
         border
-        height="370"
+        height="320"
         class="show_table"
         :data="tableData"
-        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-        style="position:relative;left:5%;width:90%;top: 10%;background: #142437;">
+        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
+        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
+        style="position:relative;left:5%;width:90%;top: 5%;background: rgba(20,36,55,0.3);">
         <el-table-column  type="index" label="#" width="50" show-overflow-tooltip></el-table-column>
-        <!--          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>-->
-        <!--          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>-->
         <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
         <el-table-column
           align="center"
@@ -107,7 +106,7 @@
           label="操作"
           width="250px"
         >
-          <template slot-scope="scope">
+          <template v-slot:="scope">
             <el-button
               type="success" plain
               size="mini"
@@ -115,14 +114,7 @@
             >详情</el-button>
           </template>
         </el-table-column>
-        <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
       </el-table>
-<!--      <el-popover-->
-<!--        popper-class="popoverBackB"-->
-<!--        placement="top-start"-->
-<!--        >-->
-<!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
-<!--      </el-popover>-->
     </dv-border-box-12>
     <el-dialog
       :visible.sync="showEquipment"
@@ -153,7 +145,7 @@ export default {
   components: {
     InfoTemplate
   },
-  props: ['machineRoomId'],
+  // props: ['machineRoomId'],
   data() {
     return {
       datavcolor:['#0e94eb','#0e94eb'],
@@ -176,6 +168,7 @@ export default {
       },
       tableData:[],
       clickedCabinet:[],
+      clickedCabinetName:'',
 
       equipmentTableData:[],
       equipmentTableColumns:[
@@ -206,13 +199,42 @@ export default {
         '机柜门006':0,
         '机柜门007':0
       },
-      equipmentClickedCount:{
-        '服务器022':0,
+      equipmentClickedCount:[
+        //机柜1中设备(从右向左)
+        {'服务器022':0,
         '服务器023':0,
         '服务器024':0,
         '服务器025':0,
         '服务器026':0
-      },
+        },
+        //机柜2中设备
+        {
+          '服务器016':0,
+          '服务器017':0,
+          '服务器018':0,
+          '服务器019':0,
+          '服务器020':0,
+          '服务器021':0
+        },
+        //机柜3中设备
+        {
+          '服务器009':0,
+          '服务器010':0,
+          '服务器011':0,
+          '服务器012':0,
+          '服务器013':0,
+          '服务器014':0
+        },
+        //机柜4中设备
+        {
+          '服务器002':0,
+          '服务器003':0,
+          '服务器004':0,
+          '服务器005':0,
+          '服务器006':0,
+          '服务器007':0
+        }
+      ],
       equipmentClickedSum:0,
       isMoving:false,
 
@@ -222,7 +244,7 @@ export default {
 
       showTooltip: false,
       tooltipPosition: { x: 0, y: 0 },
-      tooltipText : '',
+      tooltipText : [],
 
       machineRoomId:this.machineRoomId,
 
@@ -256,27 +278,31 @@ export default {
           this.clickedCabinet.push(this.tableData[i])
         }
         this.clickedCabinet.forEach((element) =>{
+          let equipmentArray = []
           getEquipmentByCabinet(element.cabinetId).then((res) =>{
-            let equipmentObject = {
-              equipmentName:'',
-              cabinetUStart:'',
-              cabinetUEnd:''
-            }
+
+            // console.log("res.data",res.data)
             res.data.forEach((element) =>{
+              let equipmentObject = {
+                equipmentName:'',
+                cabinetUStart:'',
+                cabinetUEnd:''
+              }
+              // console.log("element",element)
               equipmentObject.equipmentName = element[0]
               equipmentObject.cabinetUStart = element[1]
               equipmentObject.cabinetUEnd = element[2]
-              this.equipmentTableData.push(equipmentObject)
+              equipmentArray.push(equipmentObject)
+              // console.log('equipmentObject',equipmentObject)
             })
-            console.log('this.equipmentTableData',this.equipmentTableData)
-            // console.log("Promise resolved:", res);
+            console.log("equipmentArray",equipmentArray)
           }).catch((error) => {
             console.log("Promise rejected:", error);
           });
-          console.log('this.tableData',this.tableData)
-          // console.log(this.clickedCabinet[0].clickedCount)
+          this.equipmentTableData.push(equipmentArray)
+          // console.log("this.equipmentTableData",this.equipmentTableData)
         })
-
+        // console.log('this.equipmentTableData',this.equipmentTableData)
       })
     }
 
@@ -424,23 +450,23 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       if (intersects.length > 0) {
         let clickObject = intersects[0].object;
-        console.log('intersects[0].object',intersects[0].object.name)
+        // console.log('intersects[0].object',intersects[0].object.name)
         // for(let i=0;i<intersects.length;i++){
-        //   console.log('被点击的',intersects[i].object.name)
+        //   console.log('被点击的所有',intersects[i].object.name)
         // }
-
         //机柜门开关
         for(let i=0;i<4;i++){
-          if(clickObject.name === Object.keys(this.cabinetClickCount)[i]){
+          if(clickObject.name === this.cabinetArray[i]){
             // console.log('clickObject.name',clickObject.name)
             let flag = 0
-            let equipmentClickedCountArray = Object.values(this.equipmentClickedCount)
+            let equipmentClickedCountArray = Object.values(this.equipmentClickedCount[i])
             equipmentClickedCountArray.forEach((element) =>{
               if(element % 2 !== 0){
                 flag = 1
               }
             })
             // console.log('flag',flag)
+            //设备推入的情况下才能关闭机柜门
             if(flag === 0){
               // 点击后执行旋转动画
               this.rotateCabinetDoor(clickObject);
@@ -448,19 +474,22 @@ export default {
             }
           }
         }
-
         //设备移动
-        if(this.cabinetClickCount[this.cabinetArray[0]] % 2 === 1){
-          for(let j=0;j<5;j++){
-            if(clickObject.name === Object.keys(this.equipmentClickedCount)[j]){
+        let shouldStop = true;
+        this.equipmentClickedCount.forEach((elements,index) =>{
+          for(const element of Object.keys(elements)){
+            if(clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)){
               //点击后执行移动动画
-              this.moveEquipment(clickObject)
-              // this.equipmentClickedSum += Object.values(this.equipmentClickedCount)[j]
-              // console.log('this.equipmentClickedSum',this.equipmentClickedSum)
-              break
+              //clickObject为要旋转的模型，index是该模型所处的机柜索引
+              this.moveEquipment(clickObject,index)
+              shouldStop = true;
+              break //结束内层遍历
             }
           }
-        }
+          if (shouldStop) {
+            return; // 直接返回，结束外层遍历
+          }
+        })
       }
     },
 
@@ -495,13 +524,12 @@ export default {
     },
 
     //拉出设备
-    moveEquipment(targetObject){
+    moveEquipment(targetObject,index){
       if(!this.isMoving){
         this.isMoving = true
-        this.equipmentClickedCount[targetObject.name] = this.equipmentClickedCount[targetObject.name] + 1
+        this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
         // 根据点击次数的奇偶性来确定目标移动的正负
-        const isPositionMovement = this.equipmentClickedCount[targetObject.name] % 2 === 1
-        console.log('this.equipmentClickedCount[targetObject.name]',this.equipmentClickedCount[targetObject.name])
+        const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
         const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
         const duration = 1000; // 动画持续时间为1000毫秒（1秒）
         const startTime = performance.now();
@@ -529,7 +557,6 @@ export default {
         const object = intersects[0].object;
         let cabinetArray = Object.keys(this.cabinetClickCount)
         if(cabinetArray.includes(object.name)){
-          // console.log('位置',object.name,object.position.x,object.position.y)
           // console.log('this.tooltipText',this.tooltipText)
           this.showCabinetData(object.name)
         }else {
@@ -567,7 +594,10 @@ export default {
           //使用可选链运算符（?）来进行安全访问-存在才进行后续操作
           if (this.clickedCabinet[index]?.cabinetName) {
             // console.log('element === modelName')
-            this.tooltipText = this.clickedCabinet[index].cabinetName;
+            this.clickedCabinetName = this.clickedCabinet[index].cabinetName
+            // console.log("this.clickedCabinet[index].cabinetName",this.clickedCabinet[index].cabinetName)
+            this.tooltipText = this.equipmentTableData[index];
+
             this.cabinetNum = index;
             this.showTooltip = true;
           }
@@ -625,14 +655,12 @@ export default {
     //Echarts
     echartsDraw() {
       let myChart = this.$echarts.init(document.getElementById('myechart'));
-      const option = {
-        backgroundColor: ' rgba(20, 36, 55, 0.5)',
-        title: {
+      const option = { title: {
           text: '设备故障年趋势（示例图）',
           left:"center",
           textStyle:{
             fontSize:20,
-            color:"#06e1f4"
+            color:"#fdfdfd"
           }
         },
         tooltip: {
@@ -743,8 +771,10 @@ export default {
 }
 .tooltip {
   position: absolute;
-  width: 540px;
-  height: 270px;
+  width: 560px;
+  height: 340px;
+  margin-left: 5px;
+  margin-right: 5px;
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   padding: 5px;
