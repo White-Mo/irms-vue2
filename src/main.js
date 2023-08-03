@@ -22,7 +22,7 @@ import dataV from '@jiaminghi/data-view'
 Vue.use(dataV)
 
 
-
+export const eventBus = new Vue();
 
 /*
 import { detectZoom } from '@/utils/detectZoom.js';

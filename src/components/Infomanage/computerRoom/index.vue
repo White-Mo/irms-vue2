@@ -140,14 +140,17 @@ import {getList} from "@/api/table";
 import axios from 'axios'
 import { getEquipmentByCabinet } from '@/api/baseparameter'
 import async from 'async'
+import { eventBus } from '@/main'
+// import { eventBus } from '../main'; // 导入事件总线
 export default {
   name:'computerRoom',
   components: {
-    InfoTemplate
+    InfoTemplate,
   },
   // props: ['machineRoomId'],
   data() {
     return {
+      clickable: false, // 一开始禁用B组件的点击事件
       datavcolor:['#0e94eb','#0e94eb'],
       computerTitle: '',
       datacard:true,
@@ -258,11 +261,15 @@ export default {
     };
   },
   created() {
-    // this.full()
+    this.full()
+    // 在A组件的created钩子中触发事件总线的事件，从而在B组件中禁用点击事件
+    eventBus.$emit('disableBClick', true);
+  },
+  beforeMount() {
+    // 在A组件挂载前将clickable设置为false，禁用B组件的点击事件
+    this.clickable = false;
   },
   mounted() {
-    //获取当前机房下的机柜
-    // this.fetchData()
 
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
@@ -327,6 +334,7 @@ export default {
     // 移除鼠标事件监听，避免内存泄漏
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseleave', this.onMouseLeave);
+    eventBus.$emit('disableBClick', false);
   },
   methods: {
     // fetchData(){
