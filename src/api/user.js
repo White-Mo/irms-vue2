@@ -104,19 +104,37 @@ export function createFosUser(params) {
     responseType: 'json'
   })
 }
-export function getPostDepartmentAll(params) {
+export function getDepartmentByGroupIdAndPostName(params) {
   return request({
     params,
-    url: '/home/authority/getPostDepartmentAll',
+    url: '/home/authority/getDepartmentByGroupIdAndPostName',
     method: 'post',
     responseType: 'json'
   })
 }
-//登陆账号重复判断
-export function checkAccountName(data) {
+//  登陆账号重复判断
+export function checkUserName(data) {
   return request({
     params: data,
-    url: '/home/authority/checkAccountName',
+    url: '/home/authority/checkUserName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+//  用户名称重复判断
+export function checkRealName(data) {
+  return request({
+    params: data,
+    url: '/home/authority/checkRealName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function getGroupAll() {
+  return request({
+    url: 'home/authority/getFosGroupAll',
     method: 'post',
     responseType: 'json'
   })
