@@ -33,6 +33,14 @@ export function getLogDataByDateAndUser(data) {
     method: 'get',
   })
 }
+// 通过单位获取日志数据
+export function getRoleAndCountByCurrentDay(data) {
+  return request({
+    params: data,
+    url: '/home/log_management/getRoleAndCountByCurrentDay',
+    method: 'get',
+  })
+}
 //获取日志数据
 export function getLogData(data) {
   return request({
