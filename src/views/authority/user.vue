@@ -275,6 +275,19 @@ export default {
     changeDiv(value) {
       this.ifShow = value
       this.currentPage = this.currentPage
+
+      for (let i of ['getRealnameAll', 'getPostAll', 'getFosGroupAll']) {
+        getQComSelect(i).then(res => {
+          if (i === 'getRealnameAll') {
+            this.RealnameAll = res.data.items
+          } else if (i === 'getPostAll') {
+            this.PostAll = res.data.items
+          } else {
+            this.FosGroupAll = res.data.items
+          }
+        })
+      }
+
       this.get_user()
     },
     add_user() {
