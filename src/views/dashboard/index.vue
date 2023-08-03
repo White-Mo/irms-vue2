@@ -1167,7 +1167,7 @@ export default {
               {
                 name: '宁夏回族自治区',
                 itemStyle: {
-                  areaColor: unit.includes("宁夏古地震局") ? 'rgba(255,196,0,0.99)' : 'rgb(0,255,255)' // 背景颜色
+                  areaColor: unit.includes("宁夏地震局") ? 'rgba(255,196,0,0.99)' : 'rgb(0,255,255)' // 背景颜色
                 }
               },
               {

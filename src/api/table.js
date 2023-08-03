@@ -68,10 +68,10 @@ export function getList(obj) {
   })
 }
 
-export function getEquipmentByBaseInfoId(basicInfoId) {
+export function getEquipmentsByBaseInfoId(basicInfoId) {
   return request({
     params: {basicInfoId: basicInfoId},
-    url: '/home/inforesources/getEquipmentByBaseInfoId',
+    url: '/home/inforesources/getEquipmentsByBaseInfoId',
     method: 'post',
     responseType: 'json'
   })

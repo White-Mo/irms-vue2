@@ -209,6 +209,14 @@ export default {
           label: '安装位置'
         },
         {
+          value: 'ipAddress',
+          label: 'IP地址'
+        },
+        {
+          value: 'macAddress',
+          label: 'MAC地址'
+        },
+        {
           value: 'guaranteePeriod',
           label: '保修期'
         }
@@ -222,6 +230,8 @@ export default {
         equipmentName: '设备名',
         brandName: '设备品牌',
         machineRoomName: '安装位置',
+        ipAddress: 'IP地址',
+        macAddress: 'MAc地址',
         cabinetName: '机柜编号',
         onlineTime: '上线时间',
         guaranteePeriod: '保修期',

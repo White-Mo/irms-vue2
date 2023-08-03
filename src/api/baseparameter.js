@@ -109,6 +109,24 @@ export function getBusinessSystemByPage(obj) {
     method: 'get',
   })
 }
+//不通过页码获取业务子系统
+export function getBusinessSystemAll(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'businessSystemName',
+      'businessSystemLevel',
+      'businessSystemFirstName',
+      'departmentName',
+      'postName'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
+  return request({
+    params,
+    url: '/home/baseparameter/getBusinessSystemAll',
+    method: 'get',
+  })
+}
 
 //通过页码获取一级业务系统
 export function getFirstLevelBusinessSystemByPage(data) {
