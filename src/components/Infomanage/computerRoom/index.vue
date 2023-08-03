@@ -261,7 +261,7 @@ export default {
     };
   },
   created() {
-    this.full()
+    // this.full()
     // 在A组件的created钩子中触发事件总线的事件，从而在B组件中禁用点击事件
     eventBus.$emit('disableBClick', true);
   },
@@ -347,7 +347,7 @@ export default {
     //为解决threejs射线不准问题，设置全屏
     full () {
       //console.log(this.$store.state.machineRoom.department)
-      screenfull.toggle()
+      // screenfull.toggle()
     },
     //初始化
     init: function() {
