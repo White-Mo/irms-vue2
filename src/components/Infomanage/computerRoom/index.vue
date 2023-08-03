@@ -1,11 +1,33 @@
 <template>
   <div class = "mains">
     <dv-loading>Loading...</dv-loading>
+
     <!-- 模型悬浮时显示的气泡 -->
-<!--    <div v-if="showTooltip" class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">-->
-<!--      &lt;!&ndash; 这里展示预先写好的数据 &ndash;&gt;-->
-<!--      <p>{{ tooltipData }}</p>-->
-<!--    </div>-->
+    <div v-if="showTooltip" style="position: fixed" class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
+      <table
+        border
+        height="40"
+        style="width: 100%;color: #FFFFFF;text-align: center;left: 5%;top:30%;font-size:20px;margin-top: 10px;margin-bottom: 10px" >
+        <tr style="height: 45px;">
+          <th style="color: #0a72c7;width: 210px">机柜名：</th>
+          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{ clickedCabinetName }}</span></th>
+        </tr>
+      </table>
+      <el-table
+        :data="tooltipText"
+        height="250"
+        border
+        style="width: 100%;text-align: center;">
+        <el-table-column
+          v-for="columns in equipmentTableColumns"
+          :prop="columns.prop"
+          :label="columns.label"
+          width="180"
+        >
+        </el-table-column>
+      </el-table>
+    </div>
+
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
         <el-row :gutter="20" style="height: 5rem;display: flex">
@@ -24,28 +46,28 @@
     </div>
 
     <div id="container"></div>
-    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;left: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
-      <table style="width: 90%;color: #FFFFFF;text-align: left;position: relative;left: 5%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
+    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
+      <table style="opacity: 1;width: 70%;color: #FFFFFF;text-align: left;position: relative;left: 26%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
         <tr style="height: 45px">
-          <th style="color: #0a72c7;width: 110px">管理员：</th>
-          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
+          <th style="color: #FFFFFF;width: 110px">管理员：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
         </tr>
         <tr style="height: 45px">
-          <th style="color: #0a72c7;width: 80px">机房面积：</th>
-          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
+          <th style="color: #FFFFFF;width: 80px">机房面积：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
         </tr>
         <tr style="height: 45px">
-          <th style="color: #0a72c7;width: 80px">机房位置：</th>
-          <th><span style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
+          <th style="color: #FFFFFF;width: 80px">机房位置：</th>
+          <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
         </tr>
       </table>
-      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 360px;top:80px;z-index: 99">
+      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 25px;top:100px;z-index: 99">
     </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;left: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5)" v-show="datacard">
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
       <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
     </dv-border-box-12>
-    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 1vw;top: 10rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
-      <div style="height:35%;width:100%;position: absolute;left:10px;top: 35%;">
+    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
+      <div style="opacity: 0.8;height:35%;width:100%;position: absolute;left:10px;top: 35%;">
         <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 60px">
             <th>设备总数:</th>
@@ -62,23 +84,21 @@
         </table>
       </div>
     </dv-border-box-11>
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 1vw;top: 28rem;background-color: rgba(20, 36, 55, 0.5);" v-show="datacard">
+    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
       <el-row style="position: relative;top:5%">
         <el-col :span="12" :offset="8">
-          <h2 style="position: relative;left:15px;color: #06e1f4">机房机柜</h2>
+          <h2 style="position: relative;left:15px;color: #FFFFFF">机房机柜</h2>
         </el-col>
       </el-row>
       <el-table
         border
-        height="370"
+        height="320"
         class="show_table"
         :data="tableData"
-        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',borderColor:'#ffffff'}"
-        style="position:relative;left:5%;width:90%;top: 10%;background: #142437;">
+        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
+        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
+        style="position:relative;left:5%;width:90%;top: 5%;background: rgba(20,36,55,0.3);">
         <el-table-column  type="index" label="#" width="50" show-overflow-tooltip></el-table-column>
-        <!--          <el-table-column prop="equipment_type" label="设备类型" width="90"></el-table-column>-->
-        <!--          <el-table-column prop="equipment_name" label="设备名称" ></el-table-column>-->
         <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
         <el-table-column
           align="center"
@@ -86,7 +106,7 @@
           label="操作"
           width="250px"
         >
-          <template slot-scope="scope">
+          <template v-slot:="scope">
             <el-button
               type="success" plain
               size="mini"
@@ -94,14 +114,7 @@
             >详情</el-button>
           </template>
         </el-table-column>
-        <!--          <el-table-column prop="equipment_brand" label="品牌" width="90"></el-table-column>-->
       </el-table>
-      <!--      <el-popover-->
-      <!--        popper-class="popoverBackB"-->
-      <!--        placement="top-start"-->
-      <!--        >-->
-      <!--        <p style="color:#0ad8ee;">点击查看详情</p>-->
-      <!--      </el-popover>-->
     </dv-border-box-12>
     <el-dialog
       :visible.sync="showEquipment"
@@ -125,11 +138,14 @@ import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom} from "@/api/dashboard";
 import {getList} from "@/api/table";
 import axios from 'axios'
+import { getEquipmentByCabinet } from '@/api/baseparameter'
+import async from 'async'
 export default {
   name:'computerRoom',
   components: {
     InfoTemplate
   },
+  // props: ['machineRoomId'],
   data() {
     return {
       datavcolor:['#0e94eb','#0e94eb'],
@@ -151,6 +167,25 @@ export default {
         equipmentCount:0
       },
       tableData:[],
+      clickedCabinet:[],
+      clickedCabinetName:'',
+
+      equipmentTableData:[],
+      equipmentTableColumns:[
+        {
+          prop:'equipmentName',
+          label:'设备名称'
+        },
+        {
+          prop:'cabinetUStart',
+          label: '起始U位'
+        },
+        {
+          prop: 'cabinetUEnd',
+          label: '结束U位'
+        }
+      ],
+
       camera: null,
       scene: null,
       renderer: null,
@@ -164,17 +199,54 @@ export default {
         '机柜门006':0,
         '机柜门007':0
       },
-      equipmentClickedCount:{
-        '服务器010':0,
-        '服务器011':0,
-        '服务器012':0,
-        '服务器013':0,
-        '服务器014':0
-      },
+      equipmentClickedCount:[
+        //机柜1中设备(从右向左)
+        {'服务器022':0,
+        '服务器023':0,
+        '服务器024':0,
+        '服务器025':0,
+        '服务器026':0
+        },
+        //机柜2中设备
+        {
+          '服务器016':0,
+          '服务器017':0,
+          '服务器018':0,
+          '服务器019':0,
+          '服务器020':0,
+          '服务器021':0
+        },
+        //机柜3中设备
+        {
+          '服务器009':0,
+          '服务器010':0,
+          '服务器011':0,
+          '服务器012':0,
+          '服务器013':0,
+          '服务器014':0
+        },
+        //机柜4中设备
+        {
+          '服务器002':0,
+          '服务器003':0,
+          '服务器004':0,
+          '服务器005':0,
+          '服务器006':0,
+          '服务器007':0
+        }
+      ],
+      equipmentClickedSum:0,
+      isMoving:false,
+
+      cabinetArray:['机柜门001','机柜门007','机柜门006','机柜门005'],
+      // equipmentArray:['服务器022','服务器023'],
+      cabinetNum:0,
 
       showTooltip: false,
       tooltipPosition: { x: 0, y: 0 },
-      tooltipData: '',
+      tooltipText : [],
+
+      machineRoomId:this.machineRoomId,
 
       raycaster: new THREE.Raycaster(),
       mouse: new THREE.Vector2(),
@@ -189,6 +261,9 @@ export default {
     // this.full()
   },
   mounted() {
+    //获取当前机房下的机柜
+    // this.fetchData()
+
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
     } else {
@@ -196,15 +271,48 @@ export default {
       this.unitid = this.$store.state.machineRoom.unitid
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
       getCabinet(machineRoomId).then((res) =>{
-        // //console.log(res)
         this.tableData = res.data.items
+        // console.log('this.tableData',this.tableData)
+        for(let i=0; i < Math.min(this.tableData.length, 4);i++){
+          this.tableData[i].clickedCount = 0
+          this.clickedCabinet.push(this.tableData[i])
+        }
+        this.clickedCabinet.forEach((element) =>{
+          let equipmentArray = []
+          getEquipmentByCabinet(element.cabinetId).then((res) =>{
+
+            // console.log("res.data",res.data)
+            res.data.forEach((element) =>{
+              let equipmentObject = {
+                equipmentName:'',
+                cabinetUStart:'',
+                cabinetUEnd:''
+              }
+              // console.log("element",element)
+              equipmentObject.equipmentName = element[0]
+              equipmentObject.cabinetUStart = element[1]
+              equipmentObject.cabinetUEnd = element[2]
+              equipmentArray.push(equipmentObject)
+              // console.log('equipmentObject',equipmentObject)
+            })
+            console.log("equipmentArray",equipmentArray)
+          }).catch((error) => {
+            console.log("Promise rejected:", error);
+          });
+          this.equipmentTableData.push(equipmentArray)
+          // console.log("this.equipmentTableData",this.equipmentTableData)
+        })
+        // console.log('this.equipmentTableData',this.equipmentTableData)
       })
     }
 
     // 监听鼠标按下事件
     document.addEventListener('mousedown', this.onMouseDown);
-    // 监听鼠标按下事件
+
+    // 添加鼠标移动事件监听
     document.addEventListener('mousemove', this.onMouseMove);
+    // 添加鼠标离开事件监听
+    document.addEventListener('mouseleave', this.onMouseLeave);
 
     let that = this
     setTimeout(function () {
@@ -214,9 +322,20 @@ export default {
       that.animate();
       that.loadGltf()
     }, 200);
-    // this.addClickEventListener()
+  },
+  beforeDestroy() {
+    // 移除鼠标事件监听，避免内存泄漏
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseleave', this.onMouseLeave);
   },
   methods: {
+    // fetchData(){
+    //   getCabinet(this.machineRoomId).then(res =>{
+    //     // console.log('res',res.data.items)
+    //   })
+    // },
+
+
     //为解决threejs射线不准问题，设置全屏
     full () {
       //console.log(this.$store.state.machineRoom.department)
@@ -292,17 +411,38 @@ export default {
       })
     },
 
+    //修改模型的名称
+    // findModelByName(model, oleName) {
+    //   if (model !== null && typeof model === 'object' && model.isMesh && model.object.name === oleName) {
+    //     // 找到了匹配的小模型
+    //     return model;
+    //   }
+    //   if (model !== null && typeof model === 'object' && model.isGroup) {
+    //     for (let i = 0; i < model.children.length; i++) {
+    //       const foundModel = this.findModelByName(model.children[i], oleName);
+    //       if (foundModel) {
+    //         // 如果在子元素中找到了匹配的小模型，返回它
+    //         return foundModel;
+    //       }
+    //     }
+    //   }
+    //   // 没有找到匹配的小模型，返回 null
+    //   return null;
+    // },
+
     // 动画-循环渲染每一帧
     animate() {
       if (this.mesh) {
         requestAnimationFrame(this.animate);
         TWEEN.update();
+        this.renderScene()
         this.renderer.render(this.scene, this.camera);
       }
     },
 
     //鼠标点击事件
     onMouseDown(event) {
+      // console.log('machineRoomId',this.machineRoomId)
       // 计算鼠标点击位置在屏幕坐标的归一化设备坐标（NDC）范围[-1, 1]
       this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -310,20 +450,51 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       if (intersects.length > 0) {
         let clickObject = intersects[0].object;
-        for(let i=0;i<intersects.length;i++){
-          console.log('被点击的',intersects[i].object.name)
-        }
+        // console.log('intersects[0].object',intersects[0].object.name)
+        // for(let i=0;i<intersects.length;i++){
+        //   console.log('被点击的所有',intersects[i].object.name)
+        // }
+        //机柜门开关
         for(let i=0;i<4;i++){
-          if(clickObject.name === Object.keys(this.cabinetClickCount)[i]){
-            // console.log(Object.keys(this.cabinetClickCount)[i])
-            // console.log('点击了模型');
-            // 点击后执行旋转动画
-            this.rotateModel(clickObject);
+          if(clickObject.name === this.cabinetArray[i]){
+            // console.log('clickObject.name',clickObject.name)
+            let flag = 0
+            let equipmentClickedCountArray = Object.values(this.equipmentClickedCount[i])
+            equipmentClickedCountArray.forEach((element) =>{
+              if(element % 2 !== 0){
+                flag = 1
+              }
+            })
+            // console.log('flag',flag)
+            //设备推入的情况下才能关闭机柜门
+            if(flag === 0){
+              // 点击后执行旋转动画
+              this.rotateCabinetDoor(clickObject);
+              break
+            }
           }
         }
+        //设备移动
+        let shouldStop = true;
+        this.equipmentClickedCount.forEach((elements,index) =>{
+          for(const element of Object.keys(elements)){
+            if(clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)){
+              //点击后执行移动动画
+              //clickObject为要旋转的模型，index是该模型所处的机柜索引
+              this.moveEquipment(clickObject,index)
+              shouldStop = true;
+              break //结束内层遍历
+            }
+          }
+          if (shouldStop) {
+            return; // 直接返回，结束外层遍历
+          }
+        })
       }
     },
-    rotateModel(targetObject) {
+
+    //打开机柜门
+    rotateCabinetDoor(targetObject) {
       if (!this.isRotating) {
         this.isRotating = true;
         // console.log('targetObject',targetObject)
@@ -341,7 +512,7 @@ export default {
           const progress = timestamp - startTime;
           const rotationProgress = Math.min(progress / duration, 1);
           targetObject.rotation.y = initialRotation + (targetRotation - initialRotation) * rotationProgress;
-          if (rotationProgress < 1) {
+          if (rotationProgress < 1 ) {
             requestAnimationFrame(animateRotation);
           } else {
             this.isRotating = false;
@@ -352,49 +523,91 @@ export default {
       }
     },
 
-    // //鼠标移动事件
-    // onMouseMove(event) {
-    //   // 计算鼠标位置在屏幕坐标的归一化设备坐标（NDC）范围[-1, 1]
-    //   const mouse = new THREE.Vector2();
-    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    //
-    //   // 创建Raycaster对象
-    //   const raycaster = new THREE.Raycaster();
-    //   raycaster.setFromCamera(mouse, this.camera);
-    //
-    //   // 检测是否有模型被选中
-    //   const intersects = raycaster.intersectObjects(this.scene.children, true);
-    //   if (intersects.length > 0) {
-    //     const selectedModel = intersects[0].object;
-    //     // 这里可以根据模型的userData获取模型的交互数据，然后设置气泡中的数据
-    //     this.tooltipData = '这里是模型的数据'; // 这里使用了预先写好的数据，你可以根据实际情况从后端获取数据
-    //
-    //     // 更新气泡的位置
-    //     const { x, y } = event;
-    //     this.tooltipPosition = { x, y };
-    //     this.showTooltip = true;
-    //   } else {
-    //     // 如果没有模型被选中，隐藏气泡
-    //     this.showTooltip = false;
-    //   }
-    // },
-    // fetchDataFromBackend(modelId) {
-    //   // 发送HTTP请求，获取后端数据
-    //   // 假设后端返回的数据是一个字符串，用来展示在气泡中
-    //   axios.get(`/api/getData/${modelId}`)
-    //     .then((response) => {
-    //       this.modelData = response.data;
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching data from backend:', error);
-    //     });
-    // },
+    //拉出设备
+    moveEquipment(targetObject,index){
+      if(!this.isMoving){
+        this.isMoving = true
+        this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
+        // 根据点击次数的奇偶性来确定目标移动的正负
+        const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
+        const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
+        const duration = 1000; // 动画持续时间为1000毫秒（1秒）
+        const startTime = performance.now();
+        const animatePosition = (timestamp) => {
+          const progress = timestamp - startTime;
+          const positionProgress = Math.min(progress / duration, 1);
+          targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
+          if (positionProgress < 1) {
+            requestAnimationFrame(animatePosition);
+          } else {
+            this.isMoving = false;
+          }
+        };
+        // 启动动画循环
+        requestAnimationFrame(animatePosition);
+      }
+    },
 
+    //鼠标悬停
+    renderScene() {
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+      if (intersects.length > 0) {
+        // 鼠标悬停在模型上
+        const object = intersects[0].object;
+        let cabinetArray = Object.keys(this.cabinetClickCount)
+        if(cabinetArray.includes(object.name)){
+          // console.log('this.tooltipText',this.tooltipText)
+          this.showCabinetData(object.name)
+        }else {
+          // 不再悬停在模型上，隐藏气泡
+          this.showTooltip = false;
+        }
+      }else {
+        // 不再悬停在模型上，隐藏气泡
+        this.showTooltip = false;
+      }
+    },
+    onMouseMove(event) {
+      // 将鼠标坐标归一化为[-1, 1]
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      // 悬停时更新气泡位置
+      if (this.showTooltip) {
+        this.tooltipPosition.x = event.clientX;
+        this.tooltipPosition.y = event.clientY;
+      }
+    },
+    onMouseLeave() {
+      // 鼠标离开时，隐藏气泡
+      this.tooltipText = '';
+      this.tooltipPosition = { x: 0, y: 0 }
+      this.showTooltip = false;
+    },
+
+    //机柜数据交互
+    showCabinetData(modelName){
+      //modelName是机柜模型的原名字
+      //this.cabinetArray内含机房内不大于四个机柜
+      this.cabinetArray.forEach((element,index) =>{
+        if (this.clickedCabinet.length >= index && element === modelName) {
+          //使用可选链运算符（?）来进行安全访问-存在才进行后续操作
+          if (this.clickedCabinet[index]?.cabinetName) {
+            // console.log('element === modelName')
+            this.clickedCabinetName = this.clickedCabinet[index].cabinetName
+            // console.log("this.clickedCabinet[index].cabinetName",this.clickedCabinet[index].cabinetName)
+            this.tooltipText = this.equipmentTableData[index];
+
+            this.cabinetNum = index;
+            this.showTooltip = true;
+          }
+        }
+      })
+    },
 
     backPage(){
       this.$emit('changeDiv5', '0')
-      this.full()
+      // this.full()
     },
     handchangedatacardstate(){
       this.datacard = !this.datacard
@@ -442,14 +655,12 @@ export default {
     //Echarts
     echartsDraw() {
       let myChart = this.$echarts.init(document.getElementById('myechart'));
-      const option = {
-        backgroundColor: ' rgba(20, 36, 55, 0.5)',
-        title: {
+      const option = { title: {
           text: '设备故障年趋势（示例图）',
           left:"center",
           textStyle:{
             fontSize:20,
-            color:"#06e1f4"
+            color:"#fdfdfd"
           }
         },
         tooltip: {
@@ -530,6 +741,7 @@ export default {
     },
   }
 };
+
 </script>
 
 <style>
@@ -559,8 +771,18 @@ export default {
 }
 .tooltip {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 8px;
-  border-radius: 4px;
+  width: 560px;
+  height: 340px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  pointer-events: none;
+  text-align: center;
+  /* 添加 z-index 确保气泡在画布上方显示 */
+  z-index: 100;
 }
 </style>

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { getMachineRoom } from '@/api/select'
 
 
 
@@ -490,6 +491,30 @@ export function updateCabinetAction(data) {
     responseType: 'json'
   })
 }
+
+//获取机柜内设备信息
+// export function getEquipmentByCabinet(machineRoomId, cabinetName) {
+//   return request({
+//     data: {
+//       machineRoomName: machineRoomId,
+//       cabinetName: cabinetName
+//     },
+//     url: '/home/baseparameter/getEquipmentByCabinet',
+//     method: 'post',
+//     responseType: 'json'
+//   });
+// }
+export function getEquipmentByCabinet(cabinetId){
+  return request({
+    params:{
+      cabinetId:cabinetId
+    },
+    url:'/home/baseparameter/getEquipmentByCabinet',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
 
 
 
