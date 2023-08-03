@@ -15,7 +15,7 @@
       </table>
       <el-table
         :data="tooltipText"
-        height="250"
+        height="260"
         border
         style="width: 100%;text-align: center;">
         <el-table-column
@@ -524,29 +524,29 @@ export default {
     },
 
     //拉出设备
-    moveEquipment(targetObject,index){
-      if(!this.isMoving){
-        this.isMoving = true
-        this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
-        // 根据点击次数的奇偶性来确定目标移动的正负
-        const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
-        const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
-        const duration = 1000; // 动画持续时间为1000毫秒（1秒）
-        const startTime = performance.now();
-        const animatePosition = (timestamp) => {
-          const progress = timestamp - startTime;
-          const positionProgress = Math.min(progress / duration, 1);
-          targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
-          if (positionProgress < 1) {
-            requestAnimationFrame(animatePosition);
-          } else {
-            this.isMoving = false;
-          }
-        };
-        // 启动动画循环
-        requestAnimationFrame(animatePosition);
-      }
-    },
+    // moveEquipment(targetObject,index){
+    //   if(!this.isMoving){
+    //     this.isMoving = true
+    //     this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
+    //     // 根据点击次数的奇偶性来确定目标移动的正负
+    //     const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
+    //     const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
+    //     const duration = 1000; // 动画持续时间为1000毫秒（1秒）
+    //     const startTime = performance.now();
+    //     const animatePosition = (timestamp) => {
+    //       const progress = timestamp - startTime;
+    //       const positionProgress = Math.min(progress / duration, 1);
+    //       targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
+    //       if (positionProgress < 1) {
+    //         requestAnimationFrame(animatePosition);
+    //       } else {
+    //         this.isMoving = false;
+    //       }
+    //     };
+    //     // 启动动画循环
+    //     requestAnimationFrame(animatePosition);
+    //   }
+    // },
 
     //鼠标悬停
     renderScene() {
@@ -607,7 +607,7 @@ export default {
 
     backPage(){
       this.$emit('changeDiv5', '0')
-      // this.full()
+      this.full()
     },
     handchangedatacardstate(){
       this.datacard = !this.datacard
