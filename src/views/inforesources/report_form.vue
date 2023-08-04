@@ -384,8 +384,11 @@ export default {
       postName:this.userName,
       roleId: this.roleId
     }
+    console.log("params",params)
     getInfo(params).then(res=>{
       this.resultArray.push(res.data);
+      console.log("this.resultArray",this.resultArray)
+      console.log("res",res)
     })
   },
   mounted() {

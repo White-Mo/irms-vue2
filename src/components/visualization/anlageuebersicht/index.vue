@@ -6,8 +6,8 @@
         <div style="height: 70%;width: 96%;">
           <el-row>
             <el-col :span="8" style="color:#00ffd9;">
-              <div style="font-size: 40px;margin-bottom: 10px;">{{equipmentTypeCount}}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>设备类型</span>
+              <div style="font-size: 40px;margin-bottom: 10px;">{{allEquipmentNumber}}</div>
+              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>总设备数</span>
             </el-col>
             <el-col :span="8" style="color:#00c4ff;">
               <div style="font-size: 40px;margin-bottom: 10px;">{{businessSystemCount}}</div>
@@ -26,32 +26,49 @@
 </template>
 
 <script>
-import {getBusinessSystemCount, getEquipmentTypeCount, getOverGuaranteePeriodCount} from "@/api/cockpit_data";
+import {
+  getBusinessSystemCount, getEndEquipmentCount,
+  getEquipmentCount,
+  getEquipmentTypeCount,
+  getOverGuaranteePeriodCount, getPauseEquipmentCount
+} from "@/api/cockpit_data";
 
 export default {
   name: "anlageuebersicht",
   data(){
     return{
-      equipmentTypeCount:'',
-      businessSystemCount:'',
-      overGuaranteePeriodEquipmentCount:'',
+      equipmentTypeCount:0,
+      businessSystemCount:0,
+      overGuaranteePeriodEquipmentCount:0,
+      useEquipmentNumber: '',
+      pauseEquipmentNumber: '',
+      endEquipmentNumber: '',
+      allEquipmentNumber: 0,
     }
   },
   mounted() {
     this.initData()
   },
   methods: {
-    initData(){
-      getEquipmentTypeCount().then(res=>{
-        console.log("设备类型：",res)
-        this.equipmentTypeCount = res.data
-      })
-      getBusinessSystemCount().then(res=>{
+     async initData(){
+       await getBusinessSystemCount().then(res=>{
         this.businessSystemCount = res.data
       })
-      getOverGuaranteePeriodCount().then(res=>{
+       await getOverGuaranteePeriodCount().then(res=>{
         this.overGuaranteePeriodEquipmentCount = res
       })
+
+       await getEquipmentCount().then(res => {
+        this.useEquipmentNumber = res.data.total
+      })
+       await getPauseEquipmentCount().then(res => {
+        this.pauseEquipmentNumber = res.data.total
+      })
+       await getEndEquipmentCount().then(res => {
+        this.endEquipmentNumber = res.data.total
+      })
+      this.allEquipmentNumber=this.useEquipmentNumber+this.pauseEquipmentNumber+this.endEquipmentNumber
+      console.log("this.allEquipmentNumber",this.allEquipmentNumber)
     }
   }
 

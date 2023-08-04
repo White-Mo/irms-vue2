@@ -2,20 +2,21 @@
   <div style="height: 100%;width: 100%;">
     <dv-border-box-13>
       <div>
-        <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">设备总览</dv-decoration-7>
+        <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">各状态设备数
+        </dv-decoration-7>
         <div style="height: 70%;width: 96%;">
           <el-row>
-            <el-col :span="8" style="color:#00ffd9;">
-              <div style="font-size: 40px;margin-bottom: 10px;">{{equipmentTypeCount}}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>设备类型</span>
+            <el-col :span="8" style="color:#bf00ff;">
+              <div style="font-size: 40px;margin-bottom: 10px;">{{ useEquipmentNumber }}</div>
+              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>在用设备</span>
             </el-col>
-            <el-col :span="8" style="color:#00c4ff;">
-              <div style="font-size: 40px;margin-bottom: 10px;">{{businessSystemCount}}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>业务系统</span>
+            <el-col :span="8" style="color:#e77272;">
+              <div style="font-size: 40px;margin-bottom: 10px;">{{ pauseEquipmentNumber }}</div>
+              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>停用设备</span>
             </el-col>
-            <el-col :span="8" style="color:#b7ff00;">
-              <div style="font-size: 40px;margin-bottom: 10px;">{{overGuaranteePeriodEquipmentCount}}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>过保设备</span>
+            <el-col :span="8" style="color:rgba(239,41,41,0.92);">
+              <div style="font-size: 40px;margin-bottom: 10px;">{{ endEquipmentNumber }}</div>
+              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>报废设备</span>
             </el-col>
           </el-row>
         </div>
@@ -26,31 +27,34 @@
 </template>
 
 <script>
-import {getBusinessSystemCount, getEquipmentTypeCount, getOverGuaranteePeriodCount} from "@/api/cockpit_data";
+import {
+  getEndEquipmentCount,
+  getEquipmentCount,
+  getPauseEquipmentCount
+} from "@/api/cockpit_data";
 
 export default {
   name: "equipmentStatus",
-  data(){
-    return{
-      equipmentTypeCount:'',
-      businessSystemCount:'',
-      overGuaranteePeriodEquipmentCount:'',
+  data() {
+    return {
+      useEquipmentNumber: '',
+      pauseEquipmentNumber: '',
+      endEquipmentNumber: '',
     }
   },
   mounted() {
     this.initData()
   },
   methods: {
-    initData(){
-      getEquipmentTypeCount().then(res=>{
-        console.log("设备类型：",res)
-        this.equipmentTypeCount = res.data
+    initData() {
+      getEquipmentCount().then(res => {
+        this.useEquipmentNumber = res.data.total
       })
-      getBusinessSystemCount().then(res=>{
-        this.businessSystemCount = res.data
+      getPauseEquipmentCount().then(res => {
+        this.pauseEquipmentNumber = res.data.total
       })
-      getOverGuaranteePeriodCount().then(res=>{
-        this.overGuaranteePeriodEquipmentCount = res
+      getEndEquipmentCount().then(res => {
+        this.endEquipmentNumber = res.data.total
       })
     }
   }
