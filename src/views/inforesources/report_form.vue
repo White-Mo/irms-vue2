@@ -177,6 +177,7 @@ export default {
     return {
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
+      roleName:this.$store.state.user.roles,
       resultArray:[],
       prop:'',
       order:'',
@@ -382,7 +383,8 @@ export default {
     this.listLoading=true
     let params={
       postName:this.userName,
-      roleId: this.roleId
+      roleId: this.roleId,
+      roleName:this.roleName[0],
     }
     console.log("params",params)
     getInfo(params).then(res=>{
@@ -470,8 +472,6 @@ export default {
   methods: {
     async ExportTable(){
       await getExcelDemo4(this.resultArray[0])
-      console.log('roleid',this.roleId)
-      console.log('name',this.userName)
     },
     async sortChange(column) {
       this.prop = column.prop
