@@ -1538,10 +1538,10 @@ export default {
 
 <!--没有自适应-->
 <template>
-  <div class="bg-main" >
-<!--    头部开始-->
+  <div class="bg-main">
+    <!--    头部开始-->
     <el-row>
-      <div class="title_wrap" >
+      <div class="title_wrap">
         <div class="left_line"></div>
         <div class="right_line"></div>
         <div class="shine"></div>
@@ -1554,8 +1554,8 @@ export default {
         <el-button round class="download_report" v-text="downloadReport"></el-button>
       </div>
     </el-row>
-<!--    头部结束-->
-<!--    主体部分开始-->
+    <!--    头部结束-->
+    <!--    主体部分开始-->
     <el-row>
       <el-col :span="7" class="classLeftHeight">
         <el-row class="anlageuebersicht">
@@ -1572,19 +1572,16 @@ export default {
         <el-row class="map">
           <echartsMap></echartsMap>
         </el-row>
-<!--        <el-row class="departmentAndEquipmentType">-->
-<!--          <departmentAndEquipmentType></departmentAndEquipmentType>-->
-<!--        </el-row>-->
       </el-col>
       <el-col :span="7" class="classRightHeight">
         <el-row class="equipmentStatus">
           <equipmentStatus></equipmentStatus>
         </el-row>
-        <el-row class="equipmentStatusCarouselList">
-          <equipmentStatusCarouselList></equipmentStatusCarouselList>
+        <el-row class="operationCountCarouselList">
+          <operationCountCarouselList></operationCountCarouselList>
         </el-row>
-        <el-row class="undetermined">
-          <undetermined></undetermined>
+        <el-row class="departmentAndEquipmentType">
+          <departmentAndEquipmentType></departmentAndEquipmentType>
         </el-row>
       </el-col>
     </el-row>
@@ -1596,24 +1593,25 @@ import carouselList from "@/components/visualization/carouselList";
 import echartsMap from "@/components/visualization/echartsMap";
 import departmentAndEquipmentType from "@/components/visualization/departmentAndEquipmentType";
 import equipmentStatus from "@/components/visualization/equipmentStatus";
-import equipmentStatusCarouselList from "@/components/visualization/equipmentStatusCarouselList";
-import undetermined from "@/components/visualization/undetermined";
+import operationCountCarouselList from "@/components/visualization/operationCountCarouselList";
 import equipmentAndMachineRoomProportion from "@/components/visualization/equipmentAndMachineRoomProportion";
 
 export default {
-  components: {anlageuebersicht,carouselList,departmentAndEquipmentType,
-    echartsMap,equipmentAndMachineRoomProportion,equipmentStatus,equipmentStatusCarouselList,undetermined},
-  data(){
-    return{
-      isFullScreenText:"点击全屏显示",
-      downloadReport:"生成统计报表",
+  components: {
+    anlageuebersicht, carouselList, departmentAndEquipmentType,
+    echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList
+  },
+  data() {
+    return {
+      isFullScreenText: "点击全屏显示",
+      downloadReport: "生成统计报表",
     }
   },
   mounted() {
 
   },
-  methods:{
-    isFullScreen(){
+  methods: {
+    isFullScreen() {
       console.log("展开全屏")
     }
   }
@@ -1627,6 +1625,7 @@ export default {
   text-decoration: none;
   list-style: none;
 }
+
 .bg-main {
   background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;
   color: white;
@@ -1644,6 +1643,7 @@ export default {
   position: relative;
   margin-bottom: 4px;
 }
+
 .shine {
   position: absolute;
   bottom: -26px;
@@ -1652,6 +1652,7 @@ export default {
   width: 100%;
   height: 56px;
 }
+
 .left_line,
 .right_line {
   position: absolute;
@@ -1660,6 +1661,7 @@ export default {
   height: 6px;
   background-image: url("../../assets/img/headers/juxing1.png");
 }
+
 .left_line {
   left: 5%;
 }
@@ -1677,6 +1679,7 @@ export default {
   height: 60px;
   line-height: 46px;
 }
+
 .title-text {
   font-size: 38px;
   font-weight: 900;
@@ -1686,7 +1689,8 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.is_full_screen{
+
+.is_full_screen {
   background-color: rgba(22, 87, 185, 0.56);
   width: 200px;
   border: rgba(255, 255, 255, 0.54);
@@ -1696,7 +1700,8 @@ export default {
   color: rgba(0, 216, 255, 0.83);
   font-size: 20px;
 }
-.download_report{
+
+.download_report {
   background-color: rgba(22, 87, 185, 0.56);
   width: 200px;
   border: rgba(255, 255, 255, 0.54);
@@ -1706,52 +1711,58 @@ export default {
   color: rgba(0, 216, 255, 0.83);
   font-size: 20px;
 }
-.classLeftHeight{
+
+.classLeftHeight {
   margin-top: 17px;
   min-height: 86vh;
   /*background-color: #00EAFF;*/
 }
-.classCenterHeight{
+
+.classCenterHeight {
   margin-top: 17px;
   min-height: 86vh;
   /*background-color: #ea4b4b;*/
 }
-.classRightHeight{
+
+.classRightHeight {
   margin-top: 17px;
   min-height: 86vh;
   /*background-color: #91d524;*/
 }
-.anlageuebersicht{
+
+.anlageuebersicht {
   height: 15vh;
   /*background-color: #B3C0D1;*/
 }
-.carouselList{
+
+.carouselList {
   height: 40vh;
   /*background-color: #91d524;*/
 }
-.departmentAndEquipmentType{
+
+.departmentAndEquipmentType {
   height: 31vh;
   /*background-color: rgba(35, 20, 241, 0.5);*/
 }
-.map{
+
+.map {
   height: 86vh;
   /*background-color: #ea4bd5;*/
 }
-.equipmentAndMachineRoomProportion{
+
+.equipmentAndMachineRoomProportion {
   height: 31vh;
   /*background-color: rgba(0, 216, 255, 0.38);*/
 }
-.equipmentStatus{
+
+.equipmentStatus {
   height: 15vh;
   /*background-color: #B3C0D1;*/
 }
-.equipmentStatusCarouselList{
+
+.operationCountCarouselList {
   height: 40vh;
   /*background-color: #91d524;*/
-}
-.undetermined{
-  height: 31vh;
-  /*background-color: rgba(0, 216, 255, 0.38);*/
 }
 </style>
 

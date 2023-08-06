@@ -85,6 +85,15 @@ export function getUserAndCountByCurrentDay(currentDate) {
   })
 }
 
+//获取当天单位角色或部门角色的操作的操作次数
+export function getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate(currenDayDate) {
+  return request({
+    params: {currenDayDate: currenDayDate},
+    url: '/home/log_management/getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate',
+    method: 'get',
+  })
+}
+
 
 //获取每个单位操作的次数
 export function getPostAndOperationCount() {
