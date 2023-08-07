@@ -1,3 +1,4 @@
+<!--
 <template>
   <div style="height: 100%; width: 100%;">
     <dv-border-box-12>
@@ -10,7 +11,6 @@
     </dv-border-box-12>
   </div>
 </template>
-
 <script>
 import * as echarts from "echarts";
 import chinaJson from "@/assets/china.json";
@@ -67,7 +67,6 @@ export default {
         {name: '防灾科技学院', value: [116.808554, 39.969103]},
         {name: '中国地震局地球物理研究所', value: [116.309863, 39.962051]},
       ]
-
 
       getUnitWithExistData().then(res => {
         this.existDataUnit = res.data.items
@@ -353,7 +352,118 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-/* 可在此处添加组件的自定义样式 */
+</style>
+-->
+
+
+
+
+
+<template>
+  <div style="height: 100%; width: 100%;">
+    <dv-border-box-12>
+      <div>
+        <dv-decoration-7 style="width:100%;height:40px; font-size: 15px;color:rgba(0,234,255,0.96);">设备分布</dv-decoration-7>
+        <div style="height: 100%; width: 90%;margin-left: 20px;">
+          <div id="myChart" style="height: 750px; width: 620px;"></div>
+        </div>
+      </div>
+    </dv-border-box-12>
+  </div>
+</template>
+<script>
+import * as echarts from "echarts";
+import chinaJson from "@/assets/china.json";
+import {getDepartmentAllCountData, getUnitWithExistData} from "@/api/dashboard";
+import {getPost} from "@/api/select";
+
+export default {
+  name: "map",
+  data(){
+    return{
+      postAllName:[],
+      unitEquipmentCountData:[],
+    }
+  },
+  mounted() {
+    this.mapInit();
+    this.handlePostEquipmentCountData()
+  },
+  methods: {
+    async handelPostCountData(){
+      let list = []
+      let result = []
+      await getPost().then(response => {
+        list = response.data.items
+      })
+      for (let i = 0; i < list.length; i++) {
+        result.push({postName: list[i].postName})
+      }
+      return result
+    },
+    async handlePostEquipmentCountData() {
+      let list = []
+      let result = []
+      await getUnitWithExistData().then((response) => {
+        list = response.data.items
+      })
+      for (let i = 0; i < list.length; i++) {
+        result.push({name: list[i][0], value: list[i][1]})
+      }
+      return result
+    },
+    async initData(){
+      // 获取所有单位名字
+      this.postAllName = await this.handelPostCountData()
+      this.unitEquipmentCountData = await this.handlePostEquipmentCountData()
+
+    },
+
+    mapInit() {
+        // 初始化 echarts 实例
+        let myChart = echarts.init(document.getElementById("myChart"));
+        // 注册中国地图
+        echarts.registerMap("china", chinaJson);
+        // 设置地图图表的选项
+        const options = {
+          tooltip: {
+            trigger: 'item',
+            textStyle:{
+              fontSize: 18,
+              color: 'red'
+            },
+          },
+          geo: {
+            map: 'china',
+            roam: true,
+            zoom: 1.2,
+            center: [104.113478, 26.578343], // 设置地图的中心点为贵州的经纬度
+            itemStyle: {
+              normal: {
+                areaColor: 'rgba(0,255,255,0.16)',
+                borderColor: 'rgb(242,246,250)',
+              },
+              emphasis: {
+                areaColor: '#ffffff',// 省份鼠标悬停时颜色
+              }
+            },
+            label: {
+              show: true, // 是否显示标签
+              color:'rgba(255,255,255,0.65)', // 标签文本颜色
+              fontSize: 11, // 标签文本大小
+              formatter: function (params) { // 标签文本格式化函数
+                return params.name;
+              }
+            },
+          },
+        };
+        // 将选项设置给 echarts 实例以渲染地图
+        myChart.setOption(options);
+
+    },
+  },
+};
+</script>
+<style scoped>
 </style>
