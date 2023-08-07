@@ -3,8 +3,8 @@
     <dv-border-box-12>
       <div>
         <dv-decoration-7 style="width:100%;height:40px; font-size: 15px;color:rgba(0,234,255,0.96);">设备分布</dv-decoration-7>
-        <div style="height: 100%; width: 90%;margin-left: 20px;">
-          <div id="myChart" style="height: 750px; width: 620px;"></div>
+        <div style="height: 100%; width: 100%;margin-left: 5px;">
+          <div id="myChart" style="height: 81.5vh; width: 34.5vw;"></div>
         </div>
       </div>
     </dv-border-box-12>

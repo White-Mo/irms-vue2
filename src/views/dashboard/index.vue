@@ -1536,57 +1536,59 @@ export default {
 </style>-->
 
 
-<!--没有自适应-->
 <template>
   <div class="bg-main">
-    <!--    头部开始-->
-    <el-row>
-      <div class="title_wrap">
-        <div class="left_line"></div>
-        <div class="right_line"></div>
-        <div class="shine"></div>
-        <div>
-          <div class="title">
-            <span class="title-text">设备概况可视化平台</span>
-          </div>
+    <!-- 头部开始 -->
+    <div class="title_wrap">
+      <div class="left_line"></div>
+      <div class="right_line"></div>
+      <div class="shine"></div>
+      <div>
+        <div class="title">
+          <span class="title-text">设备概况可视化平台</span>
         </div>
-        <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
-        <el-button round class="download_report" v-text="downloadReport"></el-button>
       </div>
-    </el-row>
-    <!--    头部结束-->
-    <!--    主体部分开始-->
-    <el-row>
-      <el-col :span="7" class="classLeftHeight">
-        <el-row class="anlageuebersicht">
+      <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
+      <el-button round class="download_report" v-text="downloadReport"></el-button>
+    </div>
+    <!-- 头部结束 -->
+    <!-- 主体部分开始 -->
+    <div class="main">
+      <!-- 左边板块 -->
+      <div class="left-sidebar">
+        <div class="anlageuebersicht">
           <anlageuebersicht></anlageuebersicht>
-        </el-row>
-        <el-row class="carouselList">
-          <carouselList></carouselList>
-        </el-row>
-        <el-row class="equipmentAndMachineRoomProportion">
+        </div>
+        <div class="carouselList">
+          <carouselList style="width: 100%;"></carouselList>
+        </div>
+        <div class="equipmentAndMachineRoomProportion">
           <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
-        </el-row>
-      </el-col>
-      <el-col :span="10" class="classCenterHeight">
-        <el-row class="map">
+        </div>
+      </div>
+      <!-- 中间板块 -->
+      <div class="middle-content">
+        <div class="map">
           <echartsMap></echartsMap>
-        </el-row>
-      </el-col>
-      <el-col :span="7" class="classRightHeight">
-        <el-row class="equipmentStatus">
+        </div>
+      </div>
+      <!-- 右边板块 -->
+      <div class="right-sidebar">
+        <div class="equipmentStatus">
           <equipmentStatus></equipmentStatus>
-        </el-row>
-        <el-row class="operationCountCarouselList">
+        </div>
+        <div class="equipmentStatusCarouselList">
           <operationCountCarouselList></operationCountCarouselList>
-        </el-row>
-        <el-row class="commonEquipmentInformation">
+        </div>
+        <div class="undetermined">
           <commonEquipmentInformation></commonEquipmentInformation>
-        </el-row>
-      </el-col>
-    </el-row>
+        </div>
+      </div>
+    </div>
+    <!-- 主体部分结束 -->
   </div>
 </template>
+
 <script>
 import anlageuebersicht from "@/components/visualization/anlageuebersicht";
 import carouselList from "@/components/visualization/carouselList";
@@ -1618,7 +1620,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped lang="less">
 * {
   margin: 0;
   padding: 0;
@@ -1627,15 +1629,78 @@ export default {
 }
 
 .bg-main {
+  width: 100%;
   background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;
   color: white;
   text-align: center;
   min-height: calc(100vh - 50px);
+  // display: flex;
+  align-items: stretch;
+  /*flex-direction: column;*/
+  /*height: 100vh;*/
+}
+
+.main {
+  /* flex: 1; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin-top: 1%;
+  justify-content: space-around;
+  /* align-items: stretch; */
+
+  .left-sidebar {
+    width: 27vw;
+    .carouselList {
+      width: 27vw;
+      height: 40vh;
+      /*background-color: #91d524;*/
+    }
+  }
+  .middle-content {
+    .map{
+      width: 35vw;
+    }
+  }
+  .right-sidebar {
+    width: 27vw;
+    .equipmentStatusCarouselList {
+      width: 27vw;
+      height: 40vh;
+      /*background-color: #91d524;*/
+    }
+  }
+}
+
+// .left-sidebar,
+// .middle-content,
+// .right-sidebar {
+//   /* flex: 1; */
+//   width: 33.3%;
+// }
+
+.left-sidebar,
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.middle-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-sidebar>div,
+.middle-content>div,
+.right-sidebar>div {
+  // margin: 1%;
+  // top:2000px;
 }
 
 .title_wrap {
   top: 10px;
-  height: 10%;
+  height: 6vh;
   width: 100%;
   background-image: url("../../assets/img/top.png");
   background-size: cover;
@@ -1676,14 +1741,14 @@ export default {
   text-align: center;
   background-size: cover;
   color: transparent;
-  height: 60px;
-  line-height: 46px;
+  height: 3.5rem;
+  line-height: 3rem;
 }
 
 .title-text {
-  font-size: 38px;
+  font-size: 2.8rem;
   font-weight: 900;
-  letter-spacing: 6px;
+  letter-spacing: 0.5rem;
   width: 100%;
   background: linear-gradient(92deg, #0072FF 0%, #00EAFF 48.8525390625%, #01AAFF 100%);
   -webkit-background-clip: text;
@@ -1692,40 +1757,40 @@ export default {
 
 .is_full_screen {
   background-color: rgba(22, 87, 185, 0.56);
-  width: 200px;
+  width: 9vw;
   border: rgba(255, 255, 255, 0.54);
   position: absolute;
-  top: 10px;
+  top: 16%;
   left: 3%;
   color: rgba(0, 216, 255, 0.83);
-  font-size: 20px;
+  font-size: 1.3rem;
 }
 
 .download_report {
   background-color: rgba(22, 87, 185, 0.56);
-  width: 200px;
+  width: 11rem;
   border: rgba(255, 255, 255, 0.54);
   position: absolute;
-  top: 10px;
+  top: 1rem;
   right: 3%;
   color: rgba(0, 216, 255, 0.83);
-  font-size: 20px;
+  font-size: 1.3rem;
 }
 
 .classLeftHeight {
-  margin-top: 17px;
+  margin-top: 0.8rem;
   min-height: 86vh;
   /*background-color: #00EAFF;*/
 }
 
 .classCenterHeight {
-  margin-top: 17px;
+  margin-top: 0.9rem;
   min-height: 86vh;
   /*background-color: #ea4b4b;*/
 }
 
 .classRightHeight {
-  margin-top: 17px;
+  margin-top: 1vh;
   min-height: 86vh;
   /*background-color: #91d524;*/
 }
@@ -1735,12 +1800,8 @@ export default {
   /*background-color: #B3C0D1;*/
 }
 
-.carouselList {
-  height: 40vh;
-  /*background-color: #91d524;*/
-}
 
-.commonEquipmentInformation {
+.departmentAndEquipmentType {
   height: 31vh;
   /*background-color: rgba(35, 20, 241, 0.5);*/
 }
@@ -1760,9 +1821,10 @@ export default {
   /*background-color: #B3C0D1;*/
 }
 
-.operationCountCarouselList {
-  height: 40vh;
-  /*background-color: #91d524;*/
+
+.undetermined {
+  height: 31vh;
+  /*background-color: rgba(0, 216, 255, 0.38);*/
 }
 </style>
 
