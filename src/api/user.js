@@ -57,7 +57,18 @@ export function getQComSelect(model) {
     responseType: 'json'
   })
 }
-export function getFosUserByPage(params) {
+export function getFosUserByPage(obj) {
+  if (obj.dataName[0] === '111' && obj.dataValue !== ' ') {
+    obj.dataName = [
+      'realname',
+      'username',
+      'role',
+      'name',
+      'telephone',
+      'isdel',
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj))
   return request({
     params,
     url: '/home/authority/getFosUserByPage',
