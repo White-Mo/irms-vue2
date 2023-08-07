@@ -1,4 +1,3 @@
-<!--
 <template>
   <div style="height: 100%; width: 100%;">
     <dv-border-box-12>
@@ -354,13 +353,12 @@ export default {
 </script>
 <style scoped>
 </style>
--->
 
 
 
 
 
-<template>
+<!--<template>
   <div style="height: 100%; width: 100%;">
     <dv-border-box-12>
       <div>
@@ -427,7 +425,7 @@ export default {
           equipmentCount: equipmentCount,
         };
       });
-
+      console.log("listData",this.listData)
     },
 
     mapInit() {
@@ -476,4 +474,4 @@ export default {
 };
 </script>
 <style scoped>
-</style>
+</style>-->
