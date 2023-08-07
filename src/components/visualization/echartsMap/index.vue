@@ -375,7 +375,7 @@ export default {
 <script>
 import * as echarts from "echarts";
 import chinaJson from "@/assets/china.json";
-import {getDepartmentAllCountData, getUnitWithExistData} from "@/api/dashboard";
+import {getUnitWithExistData} from "@/api/dashboard";
 import {getPost} from "@/api/select";
 
 export default {
@@ -384,6 +384,7 @@ export default {
     return{
       postAllName:[],
       unitEquipmentCountData:[],
+      listData:[],
     }
   },
   mounted() {
@@ -417,6 +418,15 @@ export default {
       // 获取所有单位名字
       this.postAllName = await this.handelPostCountData()
       this.unitEquipmentCountData = await this.handlePostEquipmentCountData()
+      // 根据已知数据构建listData数组
+      this.listData = this.postAllName.map(post => {
+        const equipmentCountObj = this.unitEquipmentCountData.find(item => item.name === post.postName)
+        const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
+        return {  // 返回组合的对象
+          postName: post.postName,
+          equipmentCount: equipmentCount,
+        };
+      });
 
     },
 
