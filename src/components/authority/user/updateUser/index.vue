@@ -133,7 +133,7 @@ export default {
         postId: this.row.roleid,
         departmentId: this.row.roleDepartmentId,
         telephone: this.row.telephone,
-        status: this.row.isdel,
+        status: this.row.isdel ==='激活' ? '0' : '1',
         action: 'update'
       },
       rules: {
