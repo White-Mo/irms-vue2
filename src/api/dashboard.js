@@ -97,11 +97,11 @@ export function getUnitWithExistData(){
   })
 }
 
-/*//获取所有单位的设备总数
-export function getAllPostEquipmentCount(){
+//统计常见设备数量
+export function getCommonEquipmentInformationAndCount(){
   return request({
-    url: '/home/inforesources/getAllPostEquipmentCount',
+    url: '/home/inforesources/getCommonEquipmentInformationAndCount',
     method: 'get',
     responseType: 'json',
   })
-}*/
+}

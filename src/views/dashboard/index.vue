@@ -1580,8 +1580,8 @@ export default {
         <el-row class="operationCountCarouselList">
           <operationCountCarouselList></operationCountCarouselList>
         </el-row>
-        <el-row class="departmentAndEquipmentType">
-          <departmentAndEquipmentType></departmentAndEquipmentType>
+        <el-row class="commonEquipmentInformation">
+          <commonEquipmentInformation></commonEquipmentInformation>
         </el-row>
       </el-col>
     </el-row>
@@ -1591,14 +1591,14 @@ export default {
 import anlageuebersicht from "@/components/visualization/anlageuebersicht";
 import carouselList from "@/components/visualization/carouselList";
 import echartsMap from "@/components/visualization/echartsMap";
-import departmentAndEquipmentType from "@/components/visualization/departmentAndEquipmentType";
+import commonEquipmentInformation from "@/components/visualization/commonEquipmentInformation";
 import equipmentStatus from "@/components/visualization/equipmentStatus";
 import operationCountCarouselList from "@/components/visualization/operationCountCarouselList";
 import equipmentAndMachineRoomProportion from "@/components/visualization/equipmentAndMachineRoomProportion";
 
 export default {
   components: {
-    anlageuebersicht, carouselList, departmentAndEquipmentType,
+    anlageuebersicht, carouselList, commonEquipmentInformation,
     echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList
   },
   data() {
@@ -1740,7 +1740,7 @@ export default {
   /*background-color: #91d524;*/
 }
 
-.departmentAndEquipmentType {
+.commonEquipmentInformation {
   height: 31vh;
   /*background-color: rgba(35, 20, 241, 0.5);*/
 }

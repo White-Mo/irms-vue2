@@ -68,6 +68,7 @@ export default {
         {name: '中国地震局地球物理研究所', value: [116.309863, 39.962051]},
       ]
 
+
       getUnitWithExistData().then(res => {
         this.existDataUnit = res.data.items
         console.log("有数据的单位", this.existDataUnit)
