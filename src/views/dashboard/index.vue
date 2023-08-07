@@ -1539,52 +1539,54 @@ export default {
 <!--没有自适应-->
 <template>
   <div class="bg-main">
-    <!--    头部开始-->
-    <el-row>
-      <div class="title_wrap">
-        <div class="left_line"></div>
-        <div class="right_line"></div>
-        <div class="shine"></div>
-        <div>
-          <div class="title">
-            <span class="title-text">设备概况可视化平台</span>
+    <div style="height: 100%; width: 100%;">
+      <!--    头部开始-->
+      <el-row>
+        <div class="title_wrap">
+          <div class="left_line"></div>
+          <div class="right_line"></div>
+          <div class="shine"></div>
+          <div>
+            <div class="title">
+              <span class="title-text">设备概况可视化平台</span>
+            </div>
           </div>
+          <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
+          <el-button round class="download_report" v-text="downloadReport"></el-button>
         </div>
-        <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
-        <el-button round class="download_report" v-text="downloadReport"></el-button>
-      </div>
-    </el-row>
-    <!--    头部结束-->
-    <!--    主体部分开始-->
-    <el-row>
-      <el-col :span="7" class="classLeftHeight">
-        <el-row class="anlageuebersicht">
-          <anlageuebersicht></anlageuebersicht>
-        </el-row>
-        <el-row class="carouselList">
-          <carouselList></carouselList>
-        </el-row>
-        <el-row class="equipmentAndMachineRoomProportion">
-          <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
-        </el-row>
-      </el-col>
-      <el-col :span="10" class="classCenterHeight">
-        <el-row class="map">
-          <echartsMap></echartsMap>
-        </el-row>
-      </el-col>
-      <el-col :span="7" class="classRightHeight">
-        <el-row class="equipmentStatus">
-          <equipmentStatus></equipmentStatus>
-        </el-row>
-        <el-row class="operationCountCarouselList">
-          <operationCountCarouselList></operationCountCarouselList>
-        </el-row>
-        <el-row class="commonEquipmentInformation">
-          <commonEquipmentInformation></commonEquipmentInformation>
-        </el-row>
-      </el-col>
-    </el-row>
+      </el-row>
+      <!--    头部结束-->
+      <!--    主体部分开始-->
+      <el-row>
+        <el-col :span="7" class="classLeftHeight">
+          <el-row class="anlageuebersicht">
+            <anlageuebersicht></anlageuebersicht>
+          </el-row>
+          <el-row class="carouselList">
+            <carouselList></carouselList>
+          </el-row>
+          <el-row class="equipmentAndMachineRoomProportion">
+            <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
+          </el-row>
+        </el-col>
+        <el-col :span="10" class="classCenterHeight">
+          <el-row class="map">
+            <echartsMap></echartsMap>
+          </el-row>
+        </el-col>
+        <el-col :span="7" class="classRightHeight">
+          <el-row class="equipmentStatus">
+            <equipmentStatus></equipmentStatus>
+          </el-row>
+          <el-row class="operationCountCarouselList">
+            <operationCountCarouselList></operationCountCarouselList>
+          </el-row>
+          <el-row class="commonEquipmentInformation">
+            <commonEquipmentInformation></commonEquipmentInformation>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 <script>
