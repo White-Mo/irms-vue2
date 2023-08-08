@@ -169,9 +169,12 @@ export default {
         let turnNum = outdata.length / turnSize
 
         for (let turnIndex = 0; turnIndex < turnNum; turnIndex++) {
-          let index=turnIndex*turnSize
+          let index = turnIndex * turnSize
           let equipments = []
-          for (index; index < turnSize*(turnIndex+1); index++) {
+          for (index; index < turnSize * (turnIndex + 1); index++) {
+            if (index >= outdata.length) {
+              break
+            }
             const replayInfoRow = {
               equipmentId: '',
               errorType: '',
@@ -189,35 +192,45 @@ export default {
               this.repalyInfo[index] = replayInfoRow
             }
           }
-          console.log(equipments[0].equipmentBaseInfo.basicInfoId)
-          await AddExcel({ equipments: equipments }).then((res) => {
-            this.loading = false
-            if (res.status === 200) {
-              this.uploadResult.success = this.uploadResult.success + turnSize
-            } else {
-              this.uploadResult.fail = this.uploadResult.fail + 1
-              replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-              replayInfoRow.errorType = res.message
-              console.log(res.data)
-              console.log(res.data.equipmentBaseInfo)
-              replayInfoRow.errorData = res.data.equipmentBasicInfo.message
 
-              this.repalyInfo[index] = replayInfoRow
+          await AddExcel({ equipments: equipments}).then((res) => {
+            this.loading = false
+            this.uploadResult.fail += res.data.fail
+            this.uploadResult.success += res.data.success
+            this.uploadResult.noReturn += res.data.noReturn
+            for (let i=0;i<(res.data.fail+res.data.noReturn);i++){
+              const replayInfoRow = {
+                equipmentId: '',
+                errorType: '',
+                errorData: ''
+              }
+              console.log(res.data.data[i].equipmentBasicInfo)
+              replayInfoRow.equipmentId = res.data.data[i].equipmentBasicInfo.basicInfoId
+              replayInfoRow.errorType = res.data.data[i].message
+              replayInfoRow.errorData = res.data.data[i].equipmentBasicInfo.message
+              this.repalyInfo[turnIndex * turnSize+i] = replayInfoRow
             }
           }).catch((error) => {
-            this.uploadResult.noReturn = this.uploadResult.noReturn + 1
-            replayInfoRow.equipmentId = equipment.equipmentBaseInfo.basicInfoId
-            replayInfoRow.errorType = '未知错误'
-            replayInfoRow.errorData = error
-            this.repalyInfo[index] = replayInfoRow
+            console.log(error)
+            this.uploadResult.noReturn = this.uploadResult.noReturn + equipments.length
+            for (let i=0;i<equipments.length;i++){
+              const replayInfoRow = {
+                equipmentId: '',
+                errorType: '',
+                errorData: ''
+              }
+              replayInfoRow.equipmentId = equipments[i].equipmentBaseInfo.basicInfoId
+              replayInfoRow.errorType = '数据未成功发送'
+              replayInfoRow.errorData = error
+              this.repalyInfo[turnIndex * turnSize+i] = replayInfoRow
+            }
           })
-          this.uploadResult.total = this.uploadResult.total + turnSize
+          this.uploadResult.total = this.uploadResult.total + equipments.length
           this.percent = parseFloat((this.uploadResult.total * 100 / (outdata.length - 1)).toFixed(2))
         }
-
-        console.log(this.uploadResult)
-        console.log('repaly', this.repalyInfo)
         let useTime = (new Date().getTime() - start) / 1000
+        console.log(this.repalyInfo)
+        console.log(useTime)
 
         this.$alert('总上传数据' + this.uploadResult.total + '条\n ' +
           '成功' + this.uploadResult.success + '条\n' +
