@@ -386,11 +386,8 @@ export default {
       roleId: this.roleId,
       roleName:this.roleName[0],
     }
-    console.log("params",params)
     getInfo(params).then(res=>{
       this.resultArray.push(res.data);
-      console.log("this.resultArray",this.resultArray)
-      console.log("res",res)
     })
   },
   mounted() {

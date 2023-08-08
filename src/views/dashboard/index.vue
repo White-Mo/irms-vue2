@@ -1538,55 +1538,54 @@ export default {
 
 <template>
   <div class="bg-main">
-    <!-- 头部开始 -->
-    <div class="title_wrap">
-      <div class="left_line"></div>
-      <div class="right_line"></div>
-      <div class="shine"></div>
-      <div>
-        <div class="title">
-          <span class="title-text">设备概况可视化平台</span>
+      <!-- 头部开始 -->
+      <div class="title_wrap">
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+        <div class="shine"></div>
+        <div>
+          <div class="title">
+            <span class="title-text">设备概况可视化平台</span>
+          </div>
         </div>
+        <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
       </div>
-      <el-button round class="is_full_screen" v-text="isFullScreenText" @click="isFullScreen"></el-button>
-      <el-button round class="download_report" v-text="downloadReport"></el-button>
-    </div>
-    <!-- 头部结束 -->
-    <!-- 主体部分开始 -->
-    <div class="main">
-      <!-- 左边板块 -->
-      <div class="left-sidebar">
-        <div class="anlageuebersicht">
-          <anlageuebersicht></anlageuebersicht>
+      <!-- 头部结束 -->
+      <!-- 主体部分开始 -->
+      <div class="main">
+        <!-- 左边板块 -->
+        <div class="left-sidebar">
+          <div class="anlageuebersicht">
+            <anlageuebersicht></anlageuebersicht>
+          </div>
+          <div class="carouselList">
+            <carouselList style="width: 100%;"></carouselList>
+          </div>
+          <div class="equipmentAndMachineRoomProportion">
+            <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
+          </div>
         </div>
-        <div class="carouselList">
-          <carouselList style="width: 100%;"></carouselList>
+        <!-- 中间板块 -->
+        <div class="middle-content">
+          <div class="map">
+            <echartsMap></echartsMap>
+          </div>
         </div>
-        <div class="equipmentAndMachineRoomProportion">
-          <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
-        </div>
-      </div>
-      <!-- 中间板块 -->
-      <div class="middle-content">
-        <div class="map">
-          <echartsMap></echartsMap>
-        </div>
-      </div>
-      <!-- 右边板块 -->
-      <div class="right-sidebar">
-        <div class="equipmentStatus">
+        <!-- 右边板块 -->
+        <div class="right-sidebar">
+          <div class="equipmentStatus">
             <equipmentStatus></equipmentStatus>
-        </div>
-        <div class="equipmentStatusCarouselList">
-          <operationCountCarouselList></operationCountCarouselList>
-        </div>
-        <div class="undetermined">
-          <commonEquipmentInformation></commonEquipmentInformation>
+          </div>
+          <div class="equipmentStatusCarouselList">
+            <operationCountCarouselList></operationCountCarouselList>
+          </div>
+          <div class="commonEquipmentInformation">
+            <commonEquipmentInformation></commonEquipmentInformation>
+          </div>
         </div>
       </div>
+      <!-- 主体部分结束 -->
     </div>
-    <!-- 主体部分结束 -->
-  </div>
 </template>
 
 <script>
@@ -1597,6 +1596,8 @@ import commonEquipmentInformation from "@/components/visualization/commonEquipme
 import equipmentStatus from "@/components/visualization/equipmentStatus";
 import operationCountCarouselList from "@/components/visualization/operationCountCarouselList";
 import equipmentAndMachineRoomProportion from "@/components/visualization/equipmentAndMachineRoomProportion";
+import {getInfo} from "@/api/dashboard";
+import {getExcelDemo4} from "@/api/get_excel";
 
 export default {
   components: {
@@ -1605,16 +1606,31 @@ export default {
   },
   data() {
     return {
-      isFullScreenText: "点击全屏显示",
+      roleId:this.$store.state.user.roleid,
+      userName:this.$store.state.user.post_name,
+      roleName:this.$store.state.user.roles,
+      resultArray:[],
       downloadReport: "生成统计报表",
+      isLoading:true,
+      closeLoad:false,
     }
+  },
+  created() {
+    let params={
+      postName:this.userName,
+      roleId: this.roleId,
+      roleName:this.roleName[0],
+    }
+    getInfo(params).then(res=>{
+      this.resultArray.push(res.data);
+    })
   },
   mounted() {
 
   },
   methods: {
-    isFullScreen() {
-      console.log("展开全屏")
+    async generateStatisticalReports() {
+      await getExcelDemo4(this.resultArray[0])
     }
   }
 }
@@ -1634,27 +1650,21 @@ export default {
   color: white;
   text-align: center;
   min-height: calc(100vh - 50px);
-  // display: flex;
   align-items: stretch;
-  /*flex-direction: column;*/
-  /*height: 100vh;*/
 }
 
 .main {
-  /* flex: 1; */
   width: 100%;
   height: 100%;
   display: flex;
   margin-top: 1%;
   justify-content: space-around;
-  /* align-items: stretch; */
 
   .left-sidebar {
     width: 27vw;
     .carouselList {
       width: 27vw;
       height: 40vh;
-      /*background-color: #91d524;*/
     }
   }
   .middle-content {
@@ -1667,17 +1677,9 @@ export default {
     .equipmentStatusCarouselList {
       width: 27vw;
       height: 40vh;
-      /*background-color: #91d524;*/
     }
   }
 }
-
-// .left-sidebar,
-// .middle-content,
-// .right-sidebar {
-//   /* flex: 1; */
-//   width: 33.3%;
-// }
 
 .left-sidebar,
 .right-sidebar {
@@ -1694,8 +1696,6 @@ export default {
 .left-sidebar>div,
 .middle-content>div,
 .right-sidebar>div {
-  // margin: 1%;
-  // top:2000px;
 }
 
 .title_wrap {
@@ -1755,17 +1755,6 @@ export default {
   -webkit-text-fill-color: transparent;
 }
 
-.is_full_screen {
-  background-color: rgba(22, 87, 185, 0.56);
-  width: 9vw;
-  border: rgba(255, 255, 255, 0.54);
-  position: absolute;
-  top: 16%;
-  left: 3%;
-  color: rgba(0, 216, 255, 0.83);
-  font-size: 1.3rem;
-}
-
 .download_report {
   background-color: rgba(22, 87, 185, 0.56);
   width: 11rem;
@@ -1780,51 +1769,42 @@ export default {
 .classLeftHeight {
   margin-top: 0.8rem;
   min-height: 86vh;
-  /*background-color: #00EAFF;*/
 }
 
 .classCenterHeight {
   margin-top: 0.9rem;
   min-height: 86vh;
-  /*background-color: #ea4b4b;*/
 }
 
 .classRightHeight {
   margin-top: 1vh;
   min-height: 86vh;
-  /*background-color: #91d524;*/
 }
 
 .anlageuebersicht {
   height: 15vh;
-  /*background-color: #B3C0D1;*/
 }
 
 
 .departmentAndEquipmentType {
   height: 31vh;
-  /*background-color: rgba(35, 20, 241, 0.5);*/
 }
 
 .map {
   height: 86vh;
-  /*background-color: #ea4bd5;*/
 }
 
 .equipmentAndMachineRoomProportion {
   height: 31vh;
-  /*background-color: rgba(0, 216, 255, 0.38);*/
 }
 
 .equipmentStatus {
   height: 15vh;
-  /*background-color: #B3C0D1;*/
 }
 
 
-.undetermined {
+.commonEquipmentInformation {
   height: 31vh;
-  /*background-color: rgba(0, 216, 255, 0.38);*/
 }
 </style>
 
