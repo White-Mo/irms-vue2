@@ -1,13 +1,14 @@
 <template>
-  <div style="height: 100%;width: 100%;">
+  <div style="height: 100%; width: 100%;">
     <dv-border-box-13>
       <div>
         <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7>
-        <div style="height: 50%; width: 90%;margin-left: 20px;">
+        <div style="height: 100%;width: 100%; display: flex; justify-content: center; align-items: center;">
           <dv-scroll-board
             :config="config"
-            style="height: 310px; color:rgba(0,216,255,0.98);"
+            style="height: 33vh;width: 90%;color:rgba(0,216,255,0.98);"
           />
+          <!--          width: 26vw;-->
         </div>
       </div>
     </dv-border-box-13>
