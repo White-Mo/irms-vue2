@@ -1537,7 +1537,7 @@ export default {
 
 
 <template>
-  <div class="bg-main">
+    <div v-else class="bg-main">
       <!-- 头部开始 -->
       <div class="title_wrap">
         <div class="left_line"></div>
@@ -1611,8 +1611,6 @@ export default {
       roleName:this.$store.state.user.roles,
       resultArray:[],
       downloadReport: "生成统计报表",
-      isLoading:true,
-      closeLoad:false,
     }
   },
   created() {
@@ -1625,7 +1623,7 @@ export default {
       this.resultArray.push(res.data);
     })
   },
-  mounted() {
+   mounted() {
 
   },
   methods: {
@@ -1643,7 +1641,6 @@ export default {
   text-decoration: none;
   list-style: none;
 }
-
 .bg-main {
   width: 100%;
   background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;

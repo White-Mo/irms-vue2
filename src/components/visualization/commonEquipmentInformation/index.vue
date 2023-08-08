@@ -31,11 +31,9 @@ export default {
       getCommonEquipmentInformationAndCount().then(res=>{
         this.count.push(res.data.homemadeCount[0])
         this.count.push(res.data.earlyWarningEquipmentCount[0])
-        this.count.push(res.data.cpuCount[0])
         this.count.push(res.data.businessSystemFirstLevelsCount[0])
-        this.count.push(res.data.businessSonSystemCount[0])
         this.count.push(res.data.commonSoftwareCount[0])
-        this.count.push(res.data.specialSoftwareCount[0])
+        this.count.push(res.data.secondProtectedBusinessSonSystemCount[0])
       }).then(this.initChart)
     },
     initChart() {
@@ -47,7 +45,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['国产化', '预警设备', 'CPU', '业务系统', '业务子系统', '通用软件','专用软件'],
+          data: ['国产设备', '预警设备', '业务系统', '通用软件','等保二级'],
           axisLine: {
             show: true,
           },
@@ -56,9 +54,9 @@ export default {
           },
           axisLabel: {
             color: '#fff',
-            rotate: -20, // 设置旋转角度为 -45 度
+            // rotate: -20, // 设置旋转角度为 -45 度
             textStyle: {
-              align: 'left', // 文字右对齐
+              align: 'center', // 文字右对齐
             },
           },
 
@@ -81,7 +79,7 @@ export default {
             data: this.count,
             type: 'bar',
             itemStyle: {
-              barBorderRadius: [20, 20, 0, 0], // 仅设置末端为圆角，其他角为直角
+              // barBorderRadius: [20, 20, 0, 0], // 仅设置末端为圆角，其他角为直角
               color: function () {
                 return (
                   "rgb(" +

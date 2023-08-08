@@ -15,7 +15,6 @@
   </div>
 </template>
 
-</template>
 
 <script>
 import {getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate} from "@/api/log_management";
