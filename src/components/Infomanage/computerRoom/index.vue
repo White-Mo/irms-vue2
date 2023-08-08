@@ -15,7 +15,7 @@
       </table>
       <el-table
         :data="tooltipText"
-        height="260"
+        height="250"
         border
         style="width: 100%;text-align: center;">
         <el-table-column
@@ -140,17 +140,14 @@ import {getList} from "@/api/table";
 import axios from 'axios'
 import { getEquipmentByCabinet } from '@/api/baseparameter'
 import async from 'async'
-import { eventBus } from '@/main'
-// import { eventBus } from '../main'; // 导入事件总线
 export default {
   name:'computerRoom',
   components: {
-    InfoTemplate,
+    InfoTemplate
   },
   // props: ['machineRoomId'],
   data() {
     return {
-      clickable: false, // 一开始禁用B组件的点击事件
       datavcolor:['#0e94eb','#0e94eb'],
       computerTitle: '',
       datacard:true,
@@ -262,14 +259,10 @@ export default {
   },
   created() {
     // this.full()
-    // 在A组件的created钩子中触发事件总线的事件，从而在B组件中禁用点击事件
-    eventBus.$emit('disableBClick', true);
-  },
-  beforeMount() {
-    // 在A组件挂载前将clickable设置为false，禁用B组件的点击事件
-    this.clickable = false;
   },
   mounted() {
+    //获取当前机房下的机柜
+    // this.fetchData()
 
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
@@ -334,7 +327,6 @@ export default {
     // 移除鼠标事件监听，避免内存泄漏
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseleave', this.onMouseLeave);
-    eventBus.$emit('disableBClick', false);
   },
   methods: {
     // fetchData(){
@@ -347,7 +339,7 @@ export default {
     //为解决threejs射线不准问题，设置全屏
     full () {
       //console.log(this.$store.state.machineRoom.department)
-      // screenfull.toggle()
+      screenfull.toggle()
     },
     //初始化
     init: function() {
@@ -532,29 +524,29 @@ export default {
     },
 
     //拉出设备
-    // moveEquipment(targetObject,index){
-    //   if(!this.isMoving){
-    //     this.isMoving = true
-    //     this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
-    //     // 根据点击次数的奇偶性来确定目标移动的正负
-    //     const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
-    //     const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
-    //     const duration = 1000; // 动画持续时间为1000毫秒（1秒）
-    //     const startTime = performance.now();
-    //     const animatePosition = (timestamp) => {
-    //       const progress = timestamp - startTime;
-    //       const positionProgress = Math.min(progress / duration, 1);
-    //       targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
-    //       if (positionProgress < 1) {
-    //         requestAnimationFrame(animatePosition);
-    //       } else {
-    //         this.isMoving = false;
-    //       }
-    //     };
-    //     // 启动动画循环
-    //     requestAnimationFrame(animatePosition);
-    //   }
-    // },
+    moveEquipment(targetObject,index){
+      if(!this.isMoving){
+        this.isMoving = true
+        this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
+        // 根据点击次数的奇偶性来确定目标移动的正负
+        const isPositionMovement = this.equipmentClickedCount[index][targetObject.name] % 2 === 1
+        const targetPositionZ = isPositionMovement ? targetObject.position.z - 1 : targetObject.position.z + 1;
+        const duration = 1000; // 动画持续时间为1000毫秒（1秒）
+        const startTime = performance.now();
+        const animatePosition = (timestamp) => {
+          const progress = timestamp - startTime;
+          const positionProgress = Math.min(progress / duration, 1);
+          targetObject.position.z = targetObject.position.z + (targetPositionZ - targetObject.position.z) * positionProgress;
+          if (positionProgress < 1) {
+            requestAnimationFrame(animatePosition);
+          } else {
+            this.isMoving = false;
+          }
+        };
+        // 启动动画循环
+        requestAnimationFrame(animatePosition);
+      }
+    },
 
     //鼠标悬停
     renderScene() {
@@ -615,7 +607,7 @@ export default {
 
     backPage(){
       this.$emit('changeDiv5', '0')
-      this.full()
+      // this.full()
     },
     handchangedatacardstate(){
       this.datacard = !this.datacard
@@ -743,6 +735,7 @@ export default {
     },
 
     cabinetDetail(index, row) {
+      console.log("8888888888888888888888",row)
       this.row = row
       console.log(row.cabinetId)
       this.showEquipment =true

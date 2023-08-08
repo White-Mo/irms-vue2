@@ -33,6 +33,14 @@ export function getLogDataByDateAndUser(data) {
     method: 'get',
   })
 }
+// 通过单位获取日志数据
+export function getRoleAndCountByCurrentDay(data) {
+  return request({
+    params: data,
+    url: '/home/log_management/getRoleAndCountByCurrentDay',
+    method: 'get',
+  })
+}
 //获取日志数据
 export function getLogData(data) {
   return request({
@@ -73,6 +81,15 @@ export function getUserAndCountByCurrentDay(currentDate) {
   return request({
     params: {currentDate: currentDate},
     url: '/home/log_management/getUserAndCountByCurrentDay',
+    method: 'get',
+  })
+}
+
+//获取当天单位角色或部门角色的操作的操作次数
+export function getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate(currenDayDate) {
+  return request({
+    params: {currenDayDate: currenDayDate},
+    url: '/home/log_management/getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate',
     method: 'get',
   })
 }

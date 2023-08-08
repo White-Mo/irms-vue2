@@ -92,6 +92,7 @@ export default {
       this.operationUnitAndCount = [];
       this.selectedDate = moment(date).format('YYYY-MM-DD')
       this.returnResult1 = await getUserAndCountByCurrentDay(this.selectedDate)
+      console.log("日期",this.selectedDate)
       console.log("该天数据",this.returnResult1)
       if (this.returnResult1.data !== "没有数据！") {
         this.operationCount = this.returnResult1.data.items;  //获取该天有操作的单位及其操作次数

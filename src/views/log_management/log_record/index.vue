@@ -28,34 +28,40 @@
                 </div>
               </template>
             </el-calendar>
-            <div id='myChart' style='height: 32vh; background-color: rgba(34,81,236,0.22); '>
+            <div id='roleChart' style='height: 32vh; background-color: rgba(34,81,236,0.22); '>
             </div>
           </el-row>
         </el-col>
         <el-col :span='4'>
           <el-table
-            height='77vh'
-            :row-style="{height:'6.26vh'}"
-            :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
-            :header-cell-style="{borderColor:'#C0C0C0'}"
+            v-if="refreshTable"
             v-loading="listLoading"
-            :disable='true'
-            :data='handlersData'
-            element-loading-text='Loading'
-            border
+            element-loading-text="Loading"
             highlight-current-row
             stripe
-            @row-click='searchLogByDateAndUser'
-          >
-            <el-table-column
-              v-for='(item,index) in handlers'
-              :key='index'
-              :label='item.label'
-              :prop='item.value'
-              :formatter='item.formatter'
-              align='center'
-            >
+            height="77vh"
+            :row-style="{height:'6.26vh',width:''}"
+            :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
+            :header-cell-style="{borderColor:'#C0C0C0'}"
+            @row-click="searchLogByDateAndRole"
+            :data="userData"
+            style="width:100%;margin-bottom:20px;"
+            border
+            show-header
+            :default-expand-all="isExpand">
+            <el-table-column align="center" type="index" />
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <el-table
+                  @row-click="searchLogByDateAndUser"
+                  :data="props.row.children" :cell-style="{background:'pink'}">
+                  <el-table-column  align="center" width="48"/>
+                  <el-table-column  align="center" type="index"/>
+                  <el-table-column  prop="realName" label="用户" ></el-table-column>
+                </el-table>
+              </template>
             </el-table-column>
+            <el-table-column prop="postName" label="部门所属单位"></el-table-column>
           </el-table>
         </el-col>
         <el-col span='1' style='height: 77vh; background-color: rgba(170,238,238,0.6)'></el-col>
@@ -105,32 +111,34 @@ import {
   getLogDataUserByTime,
   getLogData,
   getLogDataByTime,
-  getLogDataByDateAndUser, getLogDateAndCount, getCurrentDayLogData
+  getLogDataByDateAndUser, getLogDateAndCount, getCurrentDayLogData,getRoleAndCountByCurrentDay
 } from '@/api/log_management'
 import moment from 'moment'
 import {getPostByPage} from "@/api/baseparameter";
+import {getRealNameAllWithUser} from "@/api/select";
 
 export default {
   name: 'logRecord',
   data() {
     return {
+      userData:[],
+      refreshTable:true,
+      isExpand:false,
+      roleData:[],
       listLoading: true,
+      tempTableData:[],
+      postTotal:'',
+      departmentTotal:'',
       date: null,
       tableData: [],
       total: 0,
       currentPage:1,
-      limit:10,
+      limit:200,
       handlersData: [],
       timeParams: '',
       dateArr: [],
       year: '',
       month: '',
-      handlers: [
-        {
-          value: 'user',
-          label: '用户'
-        }
-      ],
       basicValue: [
         {
           value: 'message',
@@ -152,6 +160,7 @@ export default {
   created() {
   },
   mounted() {
+    this.fetchData()
     //获取从当天开始按日期降序的数据
     this.getLogData()
     //默认显示当天操作用户
@@ -164,10 +173,20 @@ export default {
       this.counts = response.data.items
       // console.log('用户操作的日期和该日期操作的次数', this.scheduleData)
     })
-
   },
 
   methods: {
+//传输单位及用户
+    fetchData() {
+      this.listLoading = true
+      getRealNameAllWithUser().then(res=>{
+        this.postTotal = res.data.items.length
+        this.roleData = res.data.items
+        this.tempTableData = this.roleData
+        this.listLoading = false
+        // console.log("+++",this.roleData)
+      })
+    },
     //分页连续展示   currentPage页码  limit每页数量
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1
@@ -177,11 +196,12 @@ export default {
       this.limit=val
       this.getLogData()
     },
+    //页数变化
     handleCurrentChange(val) {
       this.currentPage=val
       const params = {
         start: this.currentPage-1,
-        limit: this.limit
+        limit: this.limit,
       }
       getLogData(params).then((response) => {
         this.tableData = response.data.items
@@ -201,37 +221,137 @@ export default {
       })
       this.listLoading=false
     },
+    //当天默认操作用户
     getCurrentDayDate() {
       this.listLoading = true
       const currentDate = moment(new Date()).format('YYYY-MM-DD')
-      getCurrentDayLogData(currentDate).then(response => {
-        this.handlersData = response.data.items
+      //进行两个接口数据进行匹配//前端进行数据处理，用以展示树状表格
+      Promise.all([getCurrentDayLogData(currentDate), getRealNameAllWithUser()]).then(([logResponse, userResponse]) => {
+        this.handlersData = logResponse.data.items;
+        this.roleData = userResponse.data.items;
+        this.postTotal = this.roleData.length;
+        this.tempTableData = this.roleData;
+        //返回符合条件的数据
+        let matchedData = [];
+        for (let i = 0; i < this.roleData.length; i++) {
+          let child = this.roleData[i];
+          let childrenMatched = [];
+          for (let j = 0; j < child.children.length; j++) {
+            let grandchild = child.children[j];
+            for (let k = 0; k < this.handlersData.length; k++) {
+              let data = this.handlersData[k];
+              if (grandchild.realName === data.user) {
+                grandchild.time = data.time;
+                child.time = data.time
+                childrenMatched.push(grandchild);
+              }
+            }
+          }
+          if (childrenMatched.length > 0) {
+            let matchedChild = Object.assign({}, child);
+            matchedChild.children = childrenMatched;
+            matchedData.push(matchedChild);
+          }
+        }
+        // 将匹配的用户数据分配给 userData 变量，并设置标志变量为 true
+        this.userData = matchedData;
       })
       this.listLoading =  false
     },
+
+    //选择日志时间进行返回用户以及行为
     handleDateChange(date) {
+      // 重置相关变量，以避免显示旧数据
+      this.userData = [];
+      this.handlersData = [];
+      this.roleData = [];
+      this.postTotal = 0;
+      this.tempTableData = [];
+      this.listLoading = true;
+      // this.refreshTable = false;
       this.timeParams = moment(date).format('YYYY-MM-DD')
       const timeParams = this.timeParams
-      getLogDataUserByTime(timeParams).then(response => {
-        this.handlersData = response.data.items
-      })
-      getLogDataByTime(timeParams).then(response => {
-        this.tableData = response.data.items
-        this.total = response.data.total
-      })
+      // 标志变量，指示数据是否已准备好在模板中使用
+      let dataReady = false;
+      // 获取日志数据和用户数据//前端进行数据处理，用以展示树状表格
+      Promise.all([getLogDataUserByTime(timeParams), getRealNameAllWithUser()]).then(([logResponse, userResponse]) => {
+        this.handlersData = logResponse.data.items;
+        this.roleData = userResponse.data.items;
+        this.postTotal = this.roleData.length;
+        this.tempTableData = this.roleData;
+        // 处理数据，构建匹配的用户数据
+        let matchedData = [];
+        for (let i = 0; i < this.roleData.length; i++) {
+          let child = this.roleData[i];
+          let childrenMatched = [];
+          for (let j = 0; j < child.children.length; j++) {
+            let grandchild = child.children[j];
+            for (let k = 0; k < this.handlersData.length; k++) {
+              let data = this.handlersData[k];
+              if (grandchild.realName === data.user) {
+                grandchild.time = data.time;
+                child.time = data.time
+                childrenMatched.push(grandchild);
+              }
+            }
+          }
+          if (childrenMatched.length > 0) {
+            let matchedChild = Object.assign({}, child);
+            matchedChild.children = childrenMatched;
+            matchedData.push(matchedChild);
+          }
+        }
+        // 将匹配的用户数据分配给 userData 变量，并设置标志变量为 true
+        this.userData = matchedData;
+        console.log("222",this.userData)
+        dataReady = true;
+        // 获取日志数据
+        getLogDataByTime(timeParams).then(response => {
+          this.tableData = response.data.items
+          this.total = response.data.total
+          this.refreshTable = true; // 将表格刷新标志变量设置为 true
+        })
+      }).catch(error => {
+        console.log(error);
+      }).finally(() => {
+        this.listLoading = false;
+      });
+      // 等待数据准备就绪，并且标志变量设置为 true，才将表格中的数据设置为匹配的用户数据
+      const checkDataReady = setInterval(() => {
+        if (dataReady) {
+          clearInterval(checkDataReady);
+          this.roleData = this.userData;
+        }
+      }, 100);
     },
-    searchLogByDateAndUser(row) {
+    //绑定点击查找的单位下所有用户操作行为
+    searchLogByDateAndRole(row) {
       const params = {
-        userName: row.user,
+        userName: row.postName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
+      //接口获取前端传取时间参数和相应单位下所有用户操作行为
+      getRoleAndCountByCurrentDay(params).then(response => {
+        this.tableData = response.data.items
+        this.total = response.data.total
+        console.log("表单2",this.tableData)
+      })
+    },
+    //绑定点击查找的用户操作行为
+    searchLogByDateAndUser(row) {
+      const params = {
+        userName: row.realName,
+        time: moment(row.time).format('YYYY-MM-DD')
+      }
+      //接口获取前端传取时间参数和相应用户操作行为
       getLogDataByDateAndUser(params).then(response => {
         this.tableData = response.data.items
         this.total = response.data.total
+        console.log("表单",this.tableData)
       })
     },
     frequencyChart() {
-      const myChart = this.$echarts.init(document.getElementById('myChart'))//获取容器元素
+      const myChart = this.$echarts.init(document.getElementById('roleChart'))//获取容器元素
       getLogDateAndCount().then(response => {
         this.counts = response.data.items
         const xAxisData = [] // 处理横坐标日期

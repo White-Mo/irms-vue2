@@ -1,9 +1,7 @@
 <template>
-  <div class="navbar">
+  <div class="navbar" v-if="isHidden">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
     <breadcrumb class="breadcrumb-container" />
-
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -34,6 +32,11 @@ import Hamburger from '@/components/Hamburger'
 import { eventBus } from '@/main'
 
 export default {
+  data(){
+    return{
+      isHidden:true,
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
