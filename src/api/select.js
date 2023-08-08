@@ -40,6 +40,15 @@ export function getPostAllWithDepartment(data) {
     params:data
   })
 }
+//获取所由单位及单位下的用户
+export function getRealNameAllWithUser(data) {
+  return request({
+    url: '/home/log_management/getRealNameAllWithUser',
+    method: 'post',
+    responseType: 'json',
+    params:data
+  })
+}
 
 
 export function getDepartment(postId) {
@@ -76,3 +85,4 @@ export function getCabinet(machineId) {
     responseType: 'json'
   })
 }
+

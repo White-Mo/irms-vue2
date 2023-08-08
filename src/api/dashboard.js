@@ -13,6 +13,18 @@ export function getDepartmentAllCountData() {
   })
 }
 
+
+//---------田累积----------------
+export function getInfo(obj) {
+  let params = JSON.parse(JSON.stringify(obj))
+  return request({
+    params,
+    url: '/home/inforesources/getInfo',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+
 export function getEquipmentAllCountData(obj) {
   // 将有数组和字符串的对象转为符合JSON格式的对象
   let params = JSON.parse(JSON.stringify(obj))
@@ -80,6 +92,15 @@ export function getCabinetAllCountData(obj) {
 export function getUnitWithExistData(){
   return request({
     url: '/home/inforesources/getUnitWithExistData',
+    method: 'get',
+    responseType: 'json',
+  })
+}
+
+//统计常见设备数量
+export function getCommonEquipmentInformationAndCount(){
+  return request({
+    url: '/home/inforesources/getCommonEquipmentInformationAndCount',
     method: 'get',
     responseType: 'json',
   })
