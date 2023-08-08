@@ -112,7 +112,8 @@
         <el-table
           height='70vh'
           :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
           v-loading='listLoading'
           :disable='true'
           :data='list'
@@ -134,11 +135,13 @@
           <el-table-column align='center' label='操作' width='250px'>
             <template slot-scope='scope'>
               <el-button
+                type='success' plain
                 size='mini'
                 @click='handleDetail(scope.$index, scope.row)'
               >详情
               </el-button>
               <el-button
+                type='primary' plain
                 size='mini'
                 @click='handleEdit(scope.$index, scope.row)'
               >编辑
@@ -146,6 +149,7 @@
               <el-button
                 size='mini'
                 type='danger'
+                text
                 @click='handleDelete(scope.$index, scope.row)'
               >删除
               </el-button>
@@ -195,11 +199,13 @@
             <el-table-column align='center' label='操作' width='250px'>
               <template slot-scope='scope'>
                 <el-button
+                  type='success' plain
                   size='mini'
                   @click='cabinetDetail(scope.$index, scope.row)'
                 >详情
                 </el-button>
                 <el-button
+                  type='primary' plain
                   size='mini'
                   @click='cabinetEdit(scope.$index, scope.row)'
                 >编辑
@@ -207,6 +213,7 @@
                 <el-button
                   size='mini'
                   type='danger'
+                  text
                   @click='cabinetDelete(scope.$index, scope.row)'
                 >删除
                 </el-button>

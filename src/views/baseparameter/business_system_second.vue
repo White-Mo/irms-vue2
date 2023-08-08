@@ -94,7 +94,8 @@
         <el-table
           height="68vh"
           :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
           v-loading="listLoading"
           :disable="true"
           :data="list"
@@ -116,18 +117,19 @@
           <el-table-column align="center" label="操作" width="350px">
             <template slot-scope="scope">
                 <el-button
-                  type="primary"
-                  size="mini"
+                  type='primary' plain
+                  size='mini'
                   @click="handleEdit(scope.$index, scope.row)"
                 >编辑</el-button>
               <el-button
-                type="danger"
-                size="mini"
+                size='mini'
+                type='danger'
+                text
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
               <el-button
-                type="info"
-                size="mini"
+                type='success' plain
+                size='mini'
                 @click="getEquipmentByBusinessSystemId(scope.$index, scope.row)"
               >查看设备</el-button>
             </template>

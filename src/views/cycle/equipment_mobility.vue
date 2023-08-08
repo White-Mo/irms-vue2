@@ -50,15 +50,15 @@
           </el-col>
         </el-row>
         <el-table
-          height="70vh"
-          :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
-          v-loading="listLoading"
-          :data="list"
-          element-loading-text="Loading"
+          v-loading='listLoading'
+          :data='list'
           border
+          element-loading-text='Loading'
           highlight-current-row
           stripe
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
         >
           <el-table-column type="index"  :index="typeIndex" align="center" />
           <af-table-column
@@ -87,7 +87,7 @@
                 <span v-else>{{ scope.row[key] }}</span>
             </template>
           </af-table-column>
-          <el-table-column align="center" label="操作" width="200px">
+          <el-table-column align="center" label="操作" width="200px" fixed='right'>
             <template slot-scope="scope">
               <el-button v-if="scope.row.isEdit"
                 size="mini"

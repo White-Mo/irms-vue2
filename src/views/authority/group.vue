@@ -7,7 +7,9 @@
         <div class="show">
           <el-row>
             <el-col :span="24">
-              <div class="grid-content bg-purple-dark">角色权限组列表</div>
+              <div class="grid-content bg-purple-dark">
+                <span style="color: #ffffff">角色权限组列表</span>
+              </div>
             </el-col>
           </el-row>
           <div v-show="mainStatus">
@@ -55,9 +57,11 @@
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button
+                    type='primary' plain
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   <el-button
-                    type="danger"
+                    type='danger'
+                    text
                     @click="handleDelete(scope.$index, scope.row)" v-if='scope.row.name !== "超级管理员"'>删除</el-button>
                 </template>
               </el-table-column>
@@ -402,7 +406,7 @@ export default {
   border-radius: 4px;
 }
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 .bg-purple {
   background: #d3dce6;

@@ -94,16 +94,15 @@
 
         </el-row>
         <el-table
-          height="70vh"
-          :row-style="{height:'6.26vh'}"
-          :cell-style="{padding:'0px'}"
-          v-loading="listLoading"
-          :disable="true"
-          :data="list"
-          element-loading-text="Loading"
+          v-loading='listLoading'
+          :data='list'
           border
+          element-loading-text='Loading'
           highlight-current-row
           stripe
+          :row-style="{height:'6.26vh'}"
+          :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+          :header-cell-style="{borderColor:'#C0C0C0'}"
         >
           <el-table-column align="center" type="index" :index="typeIndex"/>
           <el-table-column
@@ -118,16 +117,19 @@
           <el-table-column align="center" label="操作" width="250px">
             <template slot-scope="scope">
               <el-button
-                size="mini"
+                type='success' plain
+                size='mini'
                 @click="handleDetail(scope.$index, scope.row)"
               >详情</el-button>
               <el-button
-                size="mini"
+                type='primary' plain
+                size='mini'
                 @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button
-                size="mini"
-                type="danger"
+                size='mini'
+                type='danger'
+                text
                 @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
             </template>

@@ -3,7 +3,7 @@
     <div class='show'>
       <el-row>
         <el-col :span='24'>
-          <div class='grid-content bg-purple-dark'>信息数据导入</div>
+          <div class='grid-content bg-purple-dark'><span style="color: #ffffff">信息数据导入</span></div>
         </el-col>
       </el-row>
       <el-row
@@ -267,7 +267,7 @@ export default {
 }
 
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 
 .bg-purple {
