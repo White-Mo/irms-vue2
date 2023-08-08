@@ -86,15 +86,15 @@
           <el-tab-pane label="正常机房" name="0">
             <el-table
               height="70vh"
-              :row-style="{height:'6.26vh'}"
-              :cell-style="{padding:'0px'}"
-              v-loading="listLoading"
-              :disable="true"
-              :data="list"
-              element-loading-text="Loading"
+              v-loading='listLoading'
+              :data='list'
               border
+              element-loading-text='Loading'
               highlight-current-row
               stripe
+              :row-style="{height:'6.26vh'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
             >
               <el-table-column align="center" type="index" :index="typeIndex"/>
               <el-table-column
@@ -133,7 +133,8 @@
             <el-table
               height="70vh"
               :row-style="{height:'6.26vh'}"
-              :cell-style="{padding:'0px'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
               v-loading="listLoading"
               :disable="true"
               :data="list"

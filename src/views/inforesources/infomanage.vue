@@ -8,7 +8,7 @@
       >
         <el-row>
           <el-col :span='24'>
-            <div class='grid-content bg-purple-dark'>综合信息管理</div>
+            <div class='grid-content bg-purple-dark'><span style="color: #ffffff">综合信息管理</span></div>
           </el-col>
         </el-row>
         <el-row
@@ -1324,7 +1324,7 @@ el-label {
 }
 
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 
 .bg-purple {

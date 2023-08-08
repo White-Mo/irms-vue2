@@ -4,9 +4,10 @@
       <i class='el-icon-s-order' /><span>日志管理</span>
     </div>
     <div class='app-container' style='height: 100%'>
-      <el-row :gutter='20'>
+      <el-row :gutter='24'>
         <el-col>
-          <div class='grid-content bg-purple-dark'>日志记录
+          <div class='grid-content bg-purple-dark'>
+            <span style="color: #ffffff">日志管理</span>
           </div>
         </el-col>
       </el-row>
@@ -64,8 +65,8 @@
             <el-table-column prop="postName" label="部门所属单位"></el-table-column>
           </el-table>
         </el-col>
-        <el-col span='1' style='height: 77vh; background-color: rgba(170,238,238,0.6)'></el-col>
-        <el-col span='11'>
+        <el-col :span='1' style='height: 77vh; background-color: rgba(170,238,238,0.6)'></el-col>
+        <el-col :span='11'>
           <el-table
             height='77vh'
             :row-style="{height:'7vh'}"
@@ -417,7 +418,7 @@ export default {
 }
 
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 
 .bg-condition {

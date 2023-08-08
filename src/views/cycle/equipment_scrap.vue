@@ -106,12 +106,16 @@
         <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
           <el-tab-pane label="正常设备" name="0">
             <el-table
-              v-loading="listLoading"
-              :data="list"
-              element-loading-text="Loading"
+              height="70vh"
+              v-loading='listLoading'
+              :data='list'
               border
+              element-loading-text='Loading'
               highlight-current-row
               stripe
+              :row-style="{height:'6.26vh'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
               :row-key="rowKey"
               @selection-change="handleSelectionNormalChange"
             >
@@ -142,12 +146,16 @@
           </el-tab-pane>
           <el-tab-pane label="报废设备" name="2">
             <el-table
-              v-loading="listLoading"
-              :data="list"
-              element-loading-text="Loading"
+              height="70vh"
+              v-loading='listLoading'
+              :data='list'
               border
+              element-loading-text='Loading'
               highlight-current-row
               stripe
+              :row-style="{height:'6.26vh'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
               @selection-change="handleSelectionNormalChange"
             >
               <el-table-column align="center" type="selection" />

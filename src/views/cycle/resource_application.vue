@@ -62,7 +62,6 @@
           :header-cell-style="{borderColor:'#C0C0C0'}"
         >
           <el-table-column :index='(index) => {return index + (this.currentPage - 1) * this.limit + 1}' align='center'
-                           label='序号' width='80px'
                            fixed='left'
 
                            show-overflow-tooltip type='index' />

@@ -1,88 +1,102 @@
 <template>
-  <div class="infoBody">
-    <div class="grid-content bg-purple">
-      <i class="el-icon-s-order" /><span>全生命周期管理</span>
+  <div class='infoBody'>
+    <div class='grid-content bg-purple'>
+      <i class='el-icon-s-order' /><span>全生命周期管理</span>
     </div>
-    <div class="app-container">
-      <div class="table_start">
+    <div class='app-container'>
+      <div class='table_start'>
         <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">设备调拨</div>
+          <el-col :span='24'>
+            <div class='grid-content bg-purple-dark'>设备调拨</div>
           </el-col>
         </el-row>
-        <el-row :gutter="10" class="bg-condition">
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+        <el-row :gutter='10' class='bg-condition'>
+          <el-col :xs='2' :sm='2' :md='2' :lg='2' :xl='2'>
             <span>查询条件：</span>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-            <el-select v-model="DataName" placeholder="详细字段查询" multiple size="medium">
-              <el-option v-for="(item, index) in dataname" :key="index" :label="item.label" :value="item.value"
-                         class="searchInput" />
+          <el-col :xs='3' :sm='3' :md='3' :lg='3' :xl='3'>
+            <el-select v-model='DataName' placeholder='详细字段查询' multiple size='medium'>
+              <el-option v-for='(item, index) in dataname' :key='index' :label='item.label' :value='item.value'
+                         class='searchInput' />
             </el-select>
           </el-col>
-          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-            <el-input size="medium" v-model="inputValue" placeholder="输入查询内容" clearable />
+          <el-col :xs='4' :sm='4' :md='4' :lg='4' :xl='4'>
+            <el-input size='medium' v-model='inputValue' placeholder='输入查询内容' clearable />
           </el-col>
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" icon="el-icon-search" size="medium" clearable="true"
-                       @click="get_data2()">搜索</el-button>
+          <el-col :xs='2' :sm='2' :md='2' :lg='2' :xl='2'>
+            <el-button type='primary' icon='el-icon-search' size='medium' clearable='true'
+                       @click='get_data2()'>搜索
+            </el-button>
           </el-col>
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
-            <el-button type="primary" size="medium" clearable="true" @click="batchAllocation()">批量调拨</el-button>
+          <el-col :xs='2' :sm='2' :md='2' :lg='2' :xl='2'>
+            <el-button type='primary' size='medium' clearable='true' @click='batchAllocation()'>批量调拨</el-button>
           </el-col>
-          <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1">
-            <el-button size="medium" type="primary" style="margin-left: 100px" @click="search()">筛选</el-button>
+          <el-col :xs='1' :sm='1' :md='1' :lg='1' :xl='1'>
+            <el-button size='medium' type='primary' style='margin-left: 100px' @click='search()'>筛选</el-button>
           </el-col>
         </el-row>
         <!--        多条件搜索对话框，当dialogVisible==true时才弹出显示-->
-        <el-dialog title="多条件搜索" :visible.sync="dialogVisible" width="55%" style="margin-top: -80px;"
-                   custom-class="transparent-dialog">
+        <el-dialog title='多条件搜索' :visible.sync='dialogVisible' width='55%' style='margin-top: -80px;'
+                   custom-class='transparent-dialog'>
           <!--  调用多条件搜索组件-->
-          <equipmentAllocationSearchTemplate @changList="receiveAllSearchData"></equipmentAllocationSearchTemplate>
+          <equipmentAllocationSearchTemplate @changList='receiveAllSearchData'></equipmentAllocationSearchTemplate>
         </el-dialog>
         <!--        批量调拨对话框，当batchAllocationDialogVisible == true时才弹出显示-->
-        <el-dialog title="批量调拨" :visible.sync="batchAllocationDialogVisible" width="30%" style="margin-top: 70px;"
-                   custom-class="transparent-dialog">
-          <div style="height: 60px">
+        <el-dialog title='批量调拨' :visible.sync='batchAllocationDialogVisible' width='30%' style='margin-top: 70px;'
+                   custom-class='transparent-dialog'>
+          <div style='height: 60px'>
             <el-span> 所属部门：</el-span>
-            <el-select v-model="departmentValue" placeholder="请选择要调拨的目标部门">
-              <el-option v-for="(item, index) of departmentAll" :value="item.departmentName" :key="index"></el-option>
+            <el-select v-model='departmentValue' placeholder='请选择要调拨的目标部门'>
+              <el-option v-for='(item, index) of departmentAll' :value='item.departmentName' :key='index'></el-option>
             </el-select>
-            <el-button style="margin-left: 20px; " type="primary" @click="handleAllots">一键调拨</el-button>
+            <el-button style='margin-left: 20px; ' type='primary' @click='handleAllots'>一键调拨</el-button>
           </div>
         </el-dialog>
         <!--        表格数据渲染 -->
-        <div class="grid-content form_table_class">
-          <el-table ref='table' :data="tableData" stripe height="70vh" :row-style="{ height: '6.26vh' }"
-                    :cell-style="{ padding: '0px' }" border :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
-                    v-loading="listLoading" :row-key="rowKey" @selection-change="handleSelectionChange">
+        <div class='grid-content form_table_class'>
+          <el-table ref='table'
+                    v-loading='listLoading'
+                    :data='tableData'
+                    border
+                    element-loading-text='Loading'
+                    highlight-current-row
+                    height="70vh"
+                    stripe
+                    :row-style="{height:'6.26vh'}"
+                    :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+                    :header-cell-style="{borderColor:'#C0C0C0'}"
+                    :row-key='rowKey' @selection-change='handleSelectionChange'>
             <!--            rxr-->
-            <el-table-column :reserve-selection="true" align="center" label="" width="40" type="selection" />
+            <el-table-column :reserve-selection='true' align='center' label='' width='40' type='selection' />
 
 
-            <el-table-column align="center" label="" width="50" type="index" />
-            <el-table-column v-for="(value, key, index) in labels" :key="index" align="center" :label="value">
-              <template slot-scope="scope">
-                <el-select v-if="scope.row.isEdit && key === 'departmentName'" v-model="scope.row[key]" placeholder="请选择">
-                  <el-option v-for="item in departmentAll" :key="item.value" :value="item.departmentName" />
+            <el-table-column align='center' label='' width='50' type='index' />
+            <el-table-column v-for='(value, key, index) in labels' :key='index' align='center' :label='value'>
+              <template slot-scope='scope'>
+                <el-select v-if="scope.row.isEdit && key === 'departmentName'" v-model='scope.row[key]'
+                           placeholder='请选择'>
+                  <el-option v-for='item in departmentAll' :key='item.value' :value='item.departmentName' />
                 </el-select>
                 <span v-else>{{ scope.row[key] }}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="200px">
-              <template slot-scope="scope">
-                <el-button v-if="scope.row.isEdit" size="mini"
-                           @click="handleDetail(scope.$index, scope.row)">{{ scope.row.isEdit ? '取消' : '详情' }}</el-button>
-                <el-button size="mini" @click="handleMove(scope.$index, scope.row)">{{ scope.row.isEdit ? '提交' :
-                  '调拨' }}</el-button>
+            <el-table-column align='center' label='操作' width='200px'>
+              <template slot-scope='scope'>
+                <el-button v-if='scope.row.isEdit' size='mini'
+                           @click='handleDetail(scope.$index, scope.row)'>{{ scope.row.isEdit ? '取消' : '详情' }}
+                </el-button>
+                <el-button size='mini' @click='handleMove(scope.$index, scope.row)'>{{ scope.row.isEdit ? '提交' :
+                  '调拨' }}
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
-          <el-alert v-if="isflag" title="正在努力加载中..." type="success" center :closable="false" show-icon></el-alert>
-          <el-alert v-if="isMore" title="没有更多数据" type="warning" center show-icon></el-alert>
+          <el-alert v-if='isflag' title='正在努力加载中...' type='success' center :closable='false'
+                    show-icon></el-alert>
+          <el-alert v-if='isMore' title='没有更多数据' type='warning' center show-icon></el-alert>
         </div>
         <!--        统计总数据条数-->
-        <div class="tabListPage" style="text-align: center">
+        <div class='tabListPage' style='text-align: center'>
           <h3>
             共{{ totalCount }}条数据
           </h3>
@@ -95,15 +109,15 @@
 <script>
 
 //导入多条件搜索接口，用于下拉加载时更新多条件查询返回的数据
-import { searchComprehensiveInfoByMultipleConditions } from '@/api/table'
 //获取总数据，总数据条数
-import { getList, getdataCount } from '@/api/table'
+import { getdataCount, getList, searchComprehensiveInfoByMultipleConditions } from '@/api/table'
 //导入多条件查询搜索组件
-import equipmentAllocationSearchTemplate from "@/components/cycle/equipmentAllocationSearchTemplate";
+import equipmentAllocationSearchTemplate from '@/components/cycle/equipmentAllocationSearchTemplate'
 //导入批量调拨接口，单条数据调拨接口
-import { batchUpdateDepartment, updateDepartment } from "@/api/cycleInfo";
+import { batchUpdateDepartment, updateDepartment } from '@/api/cycleInfo'
 //导入获取部门数据接口，用于调拨时下拉框选择部门
-import { getDepartment } from "@/api/select";
+import { getDepartment } from '@/api/select'
+
 export default {
   data() {
     return {
@@ -140,20 +154,20 @@ export default {
         {
           value: 'hostName',
           label: '主机名称'
-        },
+        }
       ],
       labels: {
         basicInfoId: '设备编号',
         postName: '所属单位',
         departmentName: '所属部门',
-        equipmentName: "设备名称",
-        hostName: "主机名称"
+        equipmentName: '设备名称',
+        hostName: '主机名称'
       },
       isflag: false,  //决定是否正加载数据
       isMore: false,  //数据到底了
       DataName: 'all',
       ClientHeight: 0,
-      isMultiline: false,//是否多条件筛选
+      isMultiline: false//是否多条件筛选
     }
   },
   components: {
@@ -173,14 +187,14 @@ export default {
   watch: {
     //   watch是一个对象，它有一个属性ClientHeight，它的值是一个函数.  这个函数会在ClientHeight这个数据变化时执行
     //这个函数的作用是根据isMultiline的值，执行不同的逻辑
-    'ClientHeight': function (curVal, oldVal) {
+    'ClientHeight': function(curVal, oldVal) {
       this.isflag = true
       //如果isMultiline为true，则调用searchComprehensiveInfoByMultipleConditions方法，获取更多的表格数据，并更新tableData数组
       if (this.isMultiline) {
         //把多条件查询组件中传过来的属性字段解析成JSON形式
-        const params = JSON.parse(JSON.stringify(this.infoInput));
-        params.start = this.tableData.length ? this.tableData.length : 0;
-        params.limit = this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15;
+        const params = JSON.parse(JSON.stringify(this.infoInput))
+        params.start = this.tableData.length ? this.tableData.length : 0
+        params.limit = this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15
         if (this.tableData.length < this.totalCount) {
           this.isMore = false
           searchComprehensiveInfoByMultipleConditions(params).then(response => {
@@ -188,11 +202,11 @@ export default {
             if (this.tableData.length < this.totalCount) {
               let num = this.tableData.length + 1
               for (let i of response.data.items) {
-                i["num"] = num
+                i['num'] = num
                 num++
               }
               this.tableData = this.tableData.concat(response.data.items)
-              this.listLoading = false;
+              this.listLoading = false
             }
           })
         } else {
@@ -214,8 +228,8 @@ export default {
           start: this.tableData.length ? this.tableData.length : 0,
           limit: this.totalCount < this.tableData.length + 15 ? this.totalCount - this.tableData.length : 15,
           status: '0',
-          prop:this.prop,
-          order:this.order,
+          prop: this.prop,
+          order: this.order
         }
         if (this.tableData.length < this.totalCount) {
           this.isMore = false
@@ -224,7 +238,7 @@ export default {
             if (this.tableData.length < this.totalCount) {
               let num = this.tableData.length + 1
               for (let i of response.data.items) {
-                i["num"] = num
+                i['num'] = num
                 num++
               }
               this.tableData = this.tableData.concat(response.data.items)
@@ -240,19 +254,19 @@ export default {
   methods: {
     //接收多条件搜索的数据重新渲染
     receiveAllSearchData(searchAllData, infoInput, postNameReturn) {
-      this.dialogVisible = false;
-      this.isMultiline = true;
-      this.infoInput = infoInput;
-      this.infoInput.postName = postNameReturn;
-      this.listLoading = true;
-      this.tableData = [];
+      this.dialogVisible = false
+      this.isMultiline = true
+      this.infoInput = infoInput
+      this.infoInput.postName = postNameReturn
+      this.listLoading = true
+      this.tableData = []
       let num = 1
       for (let i of searchAllData.items) {
-        i["num"] = num
+        i['num'] = num
         num++
       }
       this.tableData = this.tableData.concat(searchAllData.items)
-      this.totalCount = searchAllData.total;
+      this.totalCount = searchAllData.total
       this.listLoading = false
     },
     //弹出多条件搜索框
@@ -261,30 +275,30 @@ export default {
     },
     rowKey(row) {
       // console.log(row);
-      return row.num;
+      return row.num
     },
     //记录勾选了哪些（条）数据
     handleSelectionChange(val) {
       //用selectedData接收所有勾选中的数据
       this.selectedData = val
-      console.log(this.selectedData);
+      console.log(this.selectedData)
     },
     //点击取消后，隐藏取消按钮
     handleDetail(index, row) {
       console.log(row)
       if (row.isEdit) {
-        row.isEdit = !row.isEdit;
+        row.isEdit = !row.isEdit
       }
     },
     //单挑数据调拨
     handleMove(index, row) {
-      row.isEdit = !row.isEdit;
+      row.isEdit = !row.isEdit
       if (!row.isEdit) {
         let departmentId = ''
         //这里存在两个部门值一样的情况，以下写法就无法规避这种情况，后期再考虑
         this.departmentAll.forEach(element => {
           if (element.departmentName === row.departmentName) {
-            departmentId = element.departmentId;
+            departmentId = element.departmentId
           }
         })
         const params = {
@@ -329,13 +343,13 @@ export default {
 
       getList(params).then((response) => {
         response.data.items.forEach(element => {
-          element.isEdit = false;
-        });
+          element.isEdit = false
+        })
 
         //console.log(response)
         let num = this.tableData.length + 1
         for (let i of response.data.items) {
-          i["num"] = num
+          i['num'] = num
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
@@ -368,19 +382,19 @@ export default {
         status: '0'
       }
 
-      this.totalCount = 0;
+      this.totalCount = 0
       getList(params).then((response) => {
         response.data.items.forEach(element => {
-          element.isEdit = false;
-        });
+          element.isEdit = false
+        })
         //console.log(response)
         let num = this.tableData.length + 1
         for (let i of response.data.items) {
-          i["num"] = num
+          i['num'] = num
           num++
         }
         this.tableData = this.tableData.concat(response.data.items)
-        console.log("nml", this.tableData.length)
+        console.log('nml', this.tableData.length)
         this.listLoading = false
         getdataCount(numparams).then((response) => {
           this.totalCount = response.data.total
@@ -413,7 +427,7 @@ export default {
     //弹出批量调拨框，并进行批量调拨逻辑处理
     batchAllocation() {
       if (this.selectedData.length > 1) {
-        let flag = true;
+        let flag = true
         let FirstPostId = this.selectedData[0].postId
         this.selectedData.forEach(element => {
           this.tempEquipmentId.push(element.equipmentId)
@@ -421,7 +435,7 @@ export default {
             FirstPostId = element.postId
           } else {
             flag = false
-            this.$message.error('要调拨的设备不在同一个单位');
+            this.$message.error('要调拨的设备不在同一个单位')
           }
         })
         if (flag === true) {
@@ -433,11 +447,9 @@ export default {
           this.departmentValue = ''
 
         }
-      }
-      else if (this.selectedData.length === 1) {
+      } else if (this.selectedData.length === 1) {
         this.$message.error('请至少选择两条设备信息')
-      }
-      else {
+      } else {
         this.$message.error('请选择要调拨的信息')
       }
 
@@ -446,7 +458,7 @@ export default {
     handleAllots() {
       this.departmentAll.forEach(element => {
         if (element.departmentName === this.departmentValue) {
-          this.tempDepartmentId = element.departmentId;
+          this.tempDepartmentId = element.departmentId
         }
       })
       const params = {
@@ -456,10 +468,10 @@ export default {
       batchUpdateDepartment(params).then(res => {
         this.$message.success(res.message)
       })
-      this.batchAllocationDialogVisible = false;
+      this.batchAllocationDialogVisible = false
       //更新成功，等待2秒后重新刷新数据，重新渲染批量调拨成功后的数据
       setTimeout(() => {
-        location.reload();
+        location.reload()
         this.listLoading = false
       }, 2000)
     }
@@ -467,7 +479,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 .el-select-dropdown .el-scrollbar {
   color: #c50d0d;
   position: relative;
@@ -537,7 +549,7 @@ export default {
   width: 130px;
 }
 
-.el-pagination>* {
+.el-pagination > * {
   font-size: 18px;
 }
 
@@ -545,7 +557,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style lang='less'>
 .el-select-dropdown__item {
   height: 30px;
   flex: 1 0 25%;
@@ -583,7 +595,7 @@ export default {
   background-color: #d2d2d2;
 }
 
-.el-scrollbar__bar.is-vertical>div {
+.el-scrollbar__bar.is-vertical > div {
   width: 0;
 }
 

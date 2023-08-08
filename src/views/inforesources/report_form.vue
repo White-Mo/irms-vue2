@@ -7,7 +7,7 @@
       <div class="table_start">
         <el-row>
           <el-col :span="24">
-            <div class="grid-content bg-purple-dark">数据报表制作</div>
+            <div class='grid-content bg-purple-dark'><span style="color: #ffffff">数据报表制作</span></div>
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
@@ -81,12 +81,12 @@
           <el-table
             ref="multipleTable"
             :data="tableData"
-            stripe
             height="70vh"
-            :row-style="{height:'6.26vh'}"
-            :cell-style="{padding:'0px'}"
+            stripe
             border
-            :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
+            :row-style="{height:'6.26vh'}"
+            :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+            :header-cell-style="{borderColor:'#C0C0C0'}"
             @select-all="selectAllFun"
             @selection-change="handleSelectionChange"
             v-loading="listLoading"
@@ -94,7 +94,7 @@
             :row-key="rowKey"
           >
             <el-table-column label="" width="40" type="selection" :reserve-selection="true" />
-            <el-table-column label="序号" width="50" type="index" show-overflow-tooltip/>
+            <el-table-column label="序号" align='center' width="50" type="index" show-overflow-tooltip/>
             <el-table-column
               v-for="(item, index) in dataname"
               :key="index"
@@ -177,7 +177,7 @@ export default {
     return {
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
-      roleName:this.$store.state.user.roles,
+      roleName:this.$store.state.user.roles[0],
       resultArray:[],
       prop:'',
       order:'',
@@ -384,7 +384,7 @@ export default {
     let params={
       postName:this.userName,
       roleId: this.roleId,
-      roleName:this.roleName[0],
+      roleName: this.roleName
     }
     getInfo(params).then(res=>{
       this.resultArray.push(res.data);
@@ -964,7 +964,7 @@ export default {
   border-radius: 4px;
 }
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 .bg-purple {
   background: #d3dce6;

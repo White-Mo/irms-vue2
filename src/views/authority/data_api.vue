@@ -98,7 +98,7 @@ export default {
   background: #d3dce6;
 }
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 .bg-condition {
   line-height: 50px;

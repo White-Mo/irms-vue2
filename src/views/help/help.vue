@@ -6,7 +6,7 @@
     <div class="app-container" style="height: 47rem">
         <el-row>
           <el-col>
-            <div class="grid-content bg-purple-dark">帮助信息</div>
+            <div class="grid-content bg-purple-dark"><span style="color: #ffffff">帮助信息</span></div>
           </el-col>
         </el-row>
         <el-row class="bg-condition">
@@ -70,7 +70,7 @@ export default {
   background: #d3dce6;
 }
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #304156;
 }
 .bg-condition {
   line-height: 50px;

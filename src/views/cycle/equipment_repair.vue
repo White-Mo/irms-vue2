@@ -78,12 +78,16 @@
         <el-tabs v-model="tab_name" type="border-card" @tab-click="changeTab">
           <el-tab-pane label="正常设备" name="0">
             <el-table
-              v-loading="listLoading"
-              :data="list"
-              element-loading-text="Loading"
+              height="70vh"
+              v-loading='listLoading'
+              :data='list'
               border
+              element-loading-text='Loading'
               highlight-current-row
               stripe
+              :row-style="{height:'6.26vh'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
             >
               <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
@@ -106,12 +110,16 @@
           </el-tab-pane>
           <el-tab-pane label="维修中设备" name="1">
             <el-table
-              v-loading="listLoading"
-              :data="list"
-              element-loading-text="Loading"
+              height="70vh"
+              v-loading='listLoading'
+              :data='list'
               border
+              element-loading-text='Loading'
               highlight-current-row
               stripe
+              :row-style="{height:'6.26vh'}"
+              :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
+              :header-cell-style="{borderColor:'#C0C0C0'}"
             >
               <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
