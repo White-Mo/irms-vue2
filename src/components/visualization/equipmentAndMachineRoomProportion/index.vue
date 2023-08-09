@@ -222,19 +222,19 @@ export default {
         this.myChart.resize();
       }
     },
-  },
-  changeShow(){
-    if(this.roles[0] ==='超级管理员'){
-      if(this.isShowMachineRoom === '机房'){
-        this.isShowMachineRoom = '设备'
-        this.showEquipmentOrMachineRoomProportion='机房占比'
-        this.initDataByCurrentRole()
-      }else {
-        this.isShowMachineRoom = '机房'
-        this.showEquipmentOrMachineRoomProportion='设备占比'
-        this.initDataByCurrentRole()
+    changeShow(){
+      if(this.roles[0] ==='超级管理员'){
+        if(this.isShowMachineRoom === '机房'){
+          this.isShowMachineRoom = '设备'
+          this.showEquipmentOrMachineRoomProportion='机房占比'
+          this.initDataByCurrentRole()
+        }else {
+          this.isShowMachineRoom = '机房'
+          this.showEquipmentOrMachineRoomProportion='设备占比'
+          this.initDataByCurrentRole()
+        }
       }
-    }
+    },
   },
   beforeDestroy() {
     // 在组件销毁前解绑resize事件
