@@ -1,8 +1,20 @@
 <template>
   <div style="height: 100%; width: 100%;">
     <dv-border-box-12>
-      <div>
-        <dv-decoration-7 style="width:100%;height:45px; font-size: 24px;color:rgba(0,234,255,0.96);">设备填表情况</dv-decoration-7>
+      <div class="mapContainer">
+        <dv-decoration-7 style="width:100%;height:45px; font-size: 24px;color:rgba(0,234,255,0.96);">设备填表情况
+        </dv-decoration-7>
+        <div class="legendContainer">
+          <el-row style="height: 3vh; width: 10vw;">
+            <el-col :span="10" style="background-color: rgba(255,196,0,0.64);height: 100%;"></el-col>
+            <el-col :span="14" style="margin-top: 0.8vh; color:rgba(255,196,0,0.64);;">已填报</el-col>
+          </el-row>
+          <el-row style="height: 3vh; width: 10vw; margin-top:  20px;">
+            <el-col :span="10" style="background-color: rgba(0,255,255,0.24);height: 100%;"></el-col>
+            <el-col :span="14" style="margin-top: 0.8vh; color:rgba(0,255,255,0.56);">未填报</el-col>
+          </el-row>
+        </div>
+        <div class="compassContainer"></div>
         <div style="height: 100%; width: 100%;margin-left: 5px;">
           <div id="myChart" style="height: 81.5vh; width: 34.5vw;"></div>
         </div>
@@ -66,23 +78,22 @@ export default {
         {name: '防灾科技学院', value: [116.808554, 39.969103]},
         {name: '中国地震局地球物理研究所', value: [116.309863, 39.962051]},
       ]
-
       getUnitWithExistData().then(res => {
         this.existDataUnit = res.data.items
         console.log("有数据的单位", this.existDataUnit)
         let unitEquipmentCountList = [];
-        this.existDataUnit.forEach( element => {
+        this.existDataUnit.forEach(element => {
           unitEquipmentCountList.push({
             name: element[0],
             value: `${element[1]}`,
           });
         });
-        console.log("unitEquipmentCountList666",unitEquipmentCountList)
+        console.log("unitEquipmentCountList666", unitEquipmentCountList)
         let unit = []
-        unitEquipmentCountList.forEach(element =>  {
+        unitEquipmentCountList.forEach(element => {
           unit.push(element.name)
         })
-        console.log("unit:",unit)
+        console.log("unit:", unit)
 
         // 初始化 echarts 实例
         let myChart = echarts.init(document.getElementById("myChart"));
@@ -92,14 +103,14 @@ export default {
         const options = {
           tooltip: {
             trigger: 'item',
-            textStyle:{
+            textStyle: {
               fontSize: 18,
               color: 'red'
             },
-            formatter:function(params){
+            formatter: function (params) {
               let item = unitEquipmentCountList.find(unitEquipmentCountList => unitEquipmentCountList.name === params.name);
-              if (item){
-                return  item.name +'<br/>总设备数量：'+ item.value;
+              if (item) {
+                return item.name + '<br/>总设备数量：' + item.value;
               } else {
                 return params.name + '<br/>总设备数量：0';
               }
@@ -107,9 +118,9 @@ export default {
           },
           geo: {
             map: 'china',
-            roam: true,
+            roam: true, //开启缩放和平移漫游
             zoom: 1.2,
-            center: [104.113478, 26.578343], // 设置地图的中心点为贵州的经纬度
+            center: [104.113478, 30.578343],
             itemStyle: {
               normal: {
                 areaColor: 'rgba(0,255,255,0.16)',
@@ -121,7 +132,7 @@ export default {
             },
             label: {
               show: true, // 是否显示标签
-              color:'rgba(255,255,255,0.65)', // 标签文本颜色
+              color: 'rgba(255,255,255,0.65)', // 标签文本颜色
               fontSize: 11, // 标签文本大小
               formatter: function (params) { // 标签文本格式化函数
                 return params.name;
@@ -327,24 +338,6 @@ export default {
               }
             ]
           },
-          /*visualMap: {
-            left: 20,
-            bottom: 20,
-            pieces: [
-              { gte: 1, label: "已填报" }, // 不指定 max，表示 max 为无限大（Infinity）。
-              { lte: 0, label: "未填报" }, // 不指定 min，表示 min 为无限大（-Infinity）。
-            ],
-            inRange: {
-              // 渐变颜色，从小到大
-              color: [
-                "rgba(255,196,0,0.64)",
-                "rgba(0,255,255,0.16)",
-              ],
-            },
-            textStyle: {
-              color: "#fff",
-            },
-          },*/
           series: [{
             type: 'scatter',
             coordinateSystem: 'geo',
@@ -357,6 +350,7 @@ export default {
             },
             data: data
           }],
+
         };
 
         // 将选项设置给 echarts 实例以渲染地图
@@ -366,10 +360,30 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="less">
+.mapContainer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.legendContainer {
+  position: absolute;
+  margin-left: 20px;
+  bottom: 50px;
+  width: 10vw;
+  height: 10vh;
+  //background-color: #00EAFF;
+}
+.compassContainer{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 140px;
+  width: 180px;
+  background: url(../../../assets/img/compass.png) no-repeat 0 0 / cover;
+}
 </style>
-
-
 
 
 
