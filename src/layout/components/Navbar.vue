@@ -29,7 +29,6 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { eventBus } from '@/main'
 
 export default {
   data(){
@@ -41,19 +40,6 @@ export default {
     Breadcrumb,
     Hamburger
   },
-  data() {
-    return {
-      clickable: true, // 初始状态可点击
-    }
-  },
-  created() {
-    // 在B组件的created钩子中监听事件总线的事件
-    eventBus.$on('disableBClick', this.disableClickHandler);
-  },
-  beforeDestroy() {
-    // 在B组件销毁前解绑事件
-    eventBus.$off('disableBClick', this.disableClickHandler);
-  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -64,14 +50,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      if(this.clickable){
-        this.$store.dispatch('app/toggleSideBar')
-      }
-      // 触发自定义事件clickEvent，将点击事件传递给事件总线
-      eventBus.$emit('clickEvent');
-    },
-    disableClickHandler(disable) {
-      this.clickable = !disable; // 设置clickable变量来控制是否禁用点击事件
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
       await this.$store.dispatch('user/logout')

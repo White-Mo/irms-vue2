@@ -42,7 +42,13 @@ export const constantRoutes = [
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
-  }
+  },
+  // {
+  //   path: '/computerRoom',
+  //   component: () => import('@/components/Infomanage/computerRoom/index'),
+  //   hidden: true,
+  //   meta: { fullScreen: true }
+  // }
 ]
 
 /**

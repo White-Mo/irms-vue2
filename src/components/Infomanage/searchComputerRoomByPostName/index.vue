@@ -136,9 +136,14 @@
     </div>
   </div>
 </div>
-    <div v-if="isShow==='2'">
-      <computer-room v-bind:machineRoomId="this.machineRoomId"    @changeDiv5="changeDiv5"></computer-room>
-    </div>
+<!--    <div v-if="isShow==='2'" :is-active="isFullScreen">-->
+<!--      <computer-room v-bind:machineRoomId="this.machineRoomId" v-if="isFullScreen" @exit-full-screen="exitFullScreen"-->
+<!--                     @changeDiv5="changeDiv5"></computer-room>-->
+<!--    </div>-->
+    <view-full-screen :is-active="isFullScreen" v-if="isShow==='2'">
+      <computer-room v-bind:machineRoomId="this.machineRoomId" v-if="isFullScreen" @exit-full-screen="exitFullScreen"
+                     @changeDiv5="changeDiv5"></computer-room>
+    </view-full-screen>
   </div>
 </template>
 
@@ -146,13 +151,16 @@
 import {getAllmachineroom} from "@/api/machineRoom";
 import {getPostMachineRoom} from "@/api/dashboard";
 import computerRoom from "@/components/Infomanage/computerRoom/index.vue";
+import ViewFullScreen from '@/components/Infomanage/computerRoom/ViewFullScreen'
 
 export default {
   name: 'search-computer-room-by-post-name',
   props: ['postName', 'postId'],
-  components: {computerRoom},
+  components: {computerRoom,ViewFullScreen},
   data() {
     return {
+      isFullScreen: true,
+
       isShow: '0',
       postName: this.postName,
       postId: this.postId,
@@ -190,6 +198,10 @@ export default {
   methods: {
     changeDiv5(value) {
       this.isShow = value;
+      this.isFullScreen = true
+    },
+    exitFullScreen(){
+      this.exitFullScreen = false
     },
     //--------------返回功能开始---------------------
     Back() {
