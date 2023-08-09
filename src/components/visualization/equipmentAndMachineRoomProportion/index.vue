@@ -48,7 +48,7 @@ export default {
     // 在组件mounted时绑定resize事件，当窗口大小发生变化时自动调整图表大小
     window.addEventListener('resize', this.handleResize);
     // 创建Echarts实例并绘制饼状图
-    this.myChart();
+    this.handleResize();
   },
   methods: {
     //处理单位名字

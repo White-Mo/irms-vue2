@@ -92,7 +92,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="main" style='overflow: auto;position:relative;padding-bottom: 20px'>
+    <div class="computerRoomContainer" style='overflow: auto;position:relative;padding-bottom: 20px'>
       <dv-loading v-show='loading'>Loading...</dv-loading>
       <div class="card">
         <div class="roomCard" v-for="(item,index) in ComputerRoomCard">
@@ -295,7 +295,7 @@ export default {
   margin: 0;
   padding: 0;
 }
-.main{
+.computerRoomContainer{
   width: 100%;
   height: 76.5vh;
   background: #041135;

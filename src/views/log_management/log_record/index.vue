@@ -7,7 +7,7 @@
       <el-row :gutter='24'>
         <el-col>
           <div class='grid-content bg-purple-dark'>
-            <span style="color: #ffffff">日志管理</span>
+            <span style="color: #ffffff">日志记录</span>
           </div>
         </el-col>
       </el-row>
