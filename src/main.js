@@ -21,8 +21,10 @@ Vue.use(AFTableColumn)
 import dataV from '@jiaminghi/data-view'
 Vue.use(dataV)
 
+import viewFullScreen from "view-full-screen"
+Vue.use(viewFullScreen)
 
-
+// export const eventBus = new Vue();
 
 /*
 import { detectZoom } from '@/utils/detectZoom.js';

@@ -17,13 +17,15 @@
         :data="tooltipText"
         height="250"
         border
-        style="width: 100%;text-align: center;">
+        :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
+        :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',fontSize: '16px',}"
+        style="position:relative;background: rgba(0,0,0,0);"
+      >
         <el-table-column
           v-for="columns in equipmentTableColumns"
           :prop="columns.prop"
           :label="columns.label"
-          width="180"
-        >
+          width="183">
         </el-table-column>
       </el-table>
     </div>
@@ -137,17 +139,18 @@ import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom} from "@/api/dashboard";
 import {getList} from "@/api/table";
-import axios from 'axios'
 import { getEquipmentByCabinet } from '@/api/baseparameter'
+import axios from 'axios'
 import async from 'async'
+
 export default {
   name:'computerRoom',
   components: {
     InfoTemplate
   },
-  // props: ['machineRoomId'],
   data() {
     return {
+      isFullScreen: false,
       datavcolor:['#0e94eb','#0e94eb'],
       computerTitle: '',
       datacard:true,
@@ -259,6 +262,7 @@ export default {
   },
   created() {
     // this.full()
+    this.isFullScreen = true
   },
   mounted() {
     //获取当前机房下的机柜
@@ -329,12 +333,6 @@ export default {
     document.removeEventListener('mouseleave', this.onMouseLeave);
   },
   methods: {
-    // fetchData(){
-    //   getCabinet(this.machineRoomId).then(res =>{
-    //     // console.log('res',res.data.items)
-    //   })
-    // },
-
 
     //为解决threejs射线不准问题，设置全屏
     full () {
@@ -606,6 +604,7 @@ export default {
     },
 
     backPage(){
+      this.$emit('exit-full-screen');
       this.$emit('changeDiv5', '0')
       // this.full()
     },
