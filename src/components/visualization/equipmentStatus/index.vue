@@ -4,8 +4,8 @@
       <div>
         <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">各状态设备数
         </dv-decoration-7>
-        <div style="height: 70%;width: 96%;">
-          <el-row>
+        <div style="height: 100%;width: 100%;display: flex; justify-content: center; align-items: center;">
+          <el-row style="height: 100%;width: 90%;display: flex; justify-content: center; align-items: center;">
             <el-col :span="8" style="color:#bf00ff;">
               <div style="font-size: 40px;margin-bottom: 10px;">{{ useEquipmentNumber }}</div>
               <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>在用设备</span>

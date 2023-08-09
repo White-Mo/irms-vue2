@@ -9,7 +9,7 @@
           </el-row>
         </div>
         <div style="height: 100%; width: 90%;margin-left: 20px;">
-          <div id="equipmentOrMachineRoomProportion" style="height: 220px; width: 100%;">
+          <div id="equipmentOrMachineRoomProportion" style="height: 25vh; width: 100%;">
 
           </div>
         </div>
@@ -45,6 +45,10 @@ export default {
   },
   mounted() {
     this.initDataByCurrentRole()
+    // 在组件mounted时绑定resize事件，当窗口大小发生变化时自动调整图表大小
+    window.addEventListener('resize', this.handleResize);
+    // 创建Echarts实例并绘制饼状图
+    this.myChart();
   },
   methods: {
     //处理单位名字
@@ -204,22 +208,34 @@ export default {
           }
         ]
       };
+      // 保存Echarts实例，以便在resize事件处理函数中调用
+      this.myChart = myChart;
       option && myChart.setOption(option);
     },
-    changeShow(){
-      if(this.roles[0] ==='超级管理员'){
-        if(this.isShowMachineRoom === '机房'){
-          this.isShowMachineRoom = '设备'
-          this.showEquipmentOrMachineRoomProportion='机房占比'
-          this.initDataByCurrentRole()
-        }else {
-          this.isShowMachineRoom = '机房'
-          this.showEquipmentOrMachineRoomProportion='设备占比'
-          this.initDataByCurrentRole()
-        }
+    handleResize() {
+      if (this.myChart) {
+        // 调用Echarts实例的resize方法，重新绘制图表
+        this.myChart.resize();
+      }
+    },
+  },
+  changeShow(){
+    if(this.roles[0] ==='超级管理员'){
+      if(this.isShowMachineRoom === '机房'){
+        this.isShowMachineRoom = '设备'
+        this.showEquipmentOrMachineRoomProportion='机房占比'
+        this.initDataByCurrentRole()
+      }else {
+        this.isShowMachineRoom = '机房'
+        this.showEquipmentOrMachineRoomProportion='设备占比'
+        this.initDataByCurrentRole()
       }
     }
-  }
+  },
+  beforeDestroy() {
+    // 在组件销毁前解绑resize事件
+    window.removeEventListener('resize', this.handleResize);
+  },
 }
 </script>
 <style lang="less">
