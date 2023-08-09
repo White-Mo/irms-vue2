@@ -177,8 +177,12 @@ export default {
                 ")"
               );
             }
+          },
+          pageIconColor:'#ffffff',
+          pageIconInactiveColor:'rgba(255,255,255,0.9)',
+          pageTextStyle:{
+            color:'#FFFFFF'
           }
-
         },
         series: [
           {
