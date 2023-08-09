@@ -115,6 +115,8 @@ export default {
             machineRoomCount: machineRoomCount
           };
         });
+        //按equipmentCount降序排序
+        this.listData.sort((a, b) => {return b.equipmentCount - a.equipmentCount;});
         this.config = {data:this.listData.map(item => [item.postName, item.equipmentCount, item.machineRoomCount]),
           header: ['单位名称', '设备总数', '机房总数'],
           align: 'center',

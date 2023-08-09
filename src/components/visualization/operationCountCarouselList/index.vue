@@ -90,16 +90,17 @@ export default {
         this.listData = this.postAllName.map(post => {
           // 查找对应单位系统操作次数
           const unitRoleOperationCountObj = this.unitRoleOrDepartmentRoleOperationCount.find(item => item.name === post.postName)
-
           // 获取系统操作次数，如果找不到对应项，默认为0
           const unitRoleOperationCount = unitRoleOperationCountObj ? unitRoleOperationCountObj.value : 0
-
           // 返回组合的对象
           return {
             postName: post.postName,
             unitRoleOperationCount: unitRoleOperationCount,
           };
         });
+        // 对listData 按unitRoleOperationCount的值降序排序
+        this.listData.sort((a, b) => b.unitRoleOperationCount - a.unitRoleOperationCount);
+
         this.config = {data:this.listData.map(item => [item.postName, item.unitRoleOperationCount]),
           header: ['单位名称', '系统使用频度', ],
           align: 'center',
