@@ -91,7 +91,7 @@
             >
             </el-table-column>
           </el-table>
-          <div style="margin-left: 50px">
+<!--          <div style="margin-left: 50px">
             <el-pagination
               :page-size="10"
               :current-page="currentPage"
@@ -100,7 +100,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
             />
-          </div>
+          </div>-->
         </el-col>
       </el-row>
     </div>
@@ -134,7 +134,7 @@ export default {
       tableData: [],
       total: 0,
       currentPage:1,
-      limit:200,
+      limit:2000,
       handlersData: [],
       timeParams: '',
       dateArr: [],
@@ -155,7 +155,9 @@ export default {
         }
       ],
       scheduleData: {},
-      counts: []
+      counts: [],
+      isGetDataBySpecifiedDate:false,
+
     }
   },
   created() {
@@ -192,7 +194,7 @@ export default {
     typeIndex(index){
       return index+(this.currentPage-1)*this.limit + 1
     },
-    handleSizeChange(val) {
+/*    handleSizeChange(val) {
       //console.log(`每页 ${val} 条`)
       this.limit=val
       this.getLogData()
@@ -208,7 +210,7 @@ export default {
         this.tableData = response.data.items
         this.total = response.data.total
       })
-    },
+    },*/
     //获取从当天开始按日期降序的数据
     getLogData(){
       this.listLoading = true
