@@ -977,7 +977,7 @@ export default {
       console.log(`每页 ${val} 条`)
       this.limit = val
       if (this.isMultiline) {
-        this.infoInput.start = this.start * this.limit
+        this.infoInput.start = (this.currentPage - 1) * this.limit,
         this.infoInput.limit = this.limit
         this.listLoading = true
         const params = this.infoInput
@@ -993,13 +993,13 @@ export default {
         })
       } else if (this.isGuaranteePeriodSearch) {
         const params = {
-          start: this.start * this.limit,
+          start: (this.currentPage - 1) * this.limit,
           limit: this.limit,
           searchCondition: this.tempGuaranteePeriodSearchCondition
         }
         guaranteePeriodSearchByTime(params).then(res => {
           this.list = res.data.items
-          let counter = this.start * this.limit
+          let counter = params.start + 1
           this.list.forEach(item => {
             item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
             counter++ // 计数器自增
@@ -1007,7 +1007,31 @@ export default {
           this.total = res.data.total
           this.listLoading = false
         })
-      } else {
+      } else if(this.backToPage==="a"){
+          this.prop = "insertDate"
+          this.order = "descending"
+          const params = {
+            dataName: this.initname,
+            dataValue: this.inputValue,
+            status: '0',
+            start: (this.currentPage - 1) * this.limit,
+            limit: this.limit,
+            prop: this.prop,
+            order: this.order
+          }
+          getList(params).then((response) => {
+            this.list = response.data.items
+            let counter = params.start + 1
+            this.list.forEach(item => {
+              item.sequenceNumber = counter // 添加一个序号属性，值为计数器变量
+              counter++ // 计数器自增
+            })
+            this.total = response.data.total
+            this.listLoading = false
+          })
+          this.prop = "basicInfoId"
+          this.order = "ASC"
+        } else {
         this.fetchData()
       }
     },
