@@ -74,6 +74,8 @@
             icon="el-icon-search"
             clearable="true"
             @click="searchData()"
+            class="check"
+            style="max-height: 500px"
           >搜索
           </el-button>
         </el-col>
@@ -87,6 +89,8 @@
             size="medium"
             type="primary"
             @click="Back()"
+            class="return"
+            style="max-height: 500px"
           >返回数字机房首页
           </el-button>
         </el-col>
@@ -104,10 +108,10 @@
                        style="width:4rem;border-radius: 4rem;position: relative;bottom: 0">
                 </el-col>
                 <el-col :span="17" :offset="2">
-                  <div class="roomData">
+                  <div class="roomData"  style="margin-left: 25px">
                     <span>{{ item.postName }}</span>
                   </div>
-                  <div class="roomData">
+                  <div class="roomData"  style="margin-left: 25px">
                     <span class="roomName">{{ item.machineRoomName }}</span>
                   </div>
                 </el-col>
@@ -122,11 +126,17 @@
                   <el-tag
                     size="small"
                     :type="item.status === '0' ? 'success' : 'danger'"
+                    class="logo"
+                    style="max-height: 500px"
                     disable-transitions>{{ item.status === "0" ? "正常" : "维修中" }}
                   </el-tag>
                 </el-col>
                 <el-col :span="8">
-                  <el-button type="primary" size="mini" @click="CheckComputerRoom(index)">进入机房</el-button>
+                  <el-button type="primary"
+                             size="mini"
+                             @click="CheckComputerRoom(index)"
+                             class="enter"
+                             style="max-height: 500px">进入机房</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -290,14 +300,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 * {
   margin: 0;
   padding: 0;
 }
 .main{
   width: 100%;
-  height: 76.5vh;
+  height: 82vh;
   background: #041135;
   position: absolute;
   top: 0;
@@ -312,6 +322,22 @@ export default {
   justify-content: left;
 }
 
+.check {
+  min-height: 35px;
+  min-width: 80px;
+}
+.return {
+  min-height: 35px;
+  min-width: 170px;
+}
+.enter {
+  min-height: 30px;
+  min-width: 95px;
+}
+.logo {
+  text-align: center;
+  min-width: 50px;
+}
 .roomCard {
   width: 18rem;
   height: 10rem;
@@ -393,10 +419,6 @@ export default {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
-
-</style>
-
-<style lang="less" scoped>
 * {
   font-size: 18px;
 }
