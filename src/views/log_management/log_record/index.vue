@@ -12,11 +12,11 @@
         </el-col>
       </el-row>
       <el-row :gutter='20'>
-        <el-col :span='8'>
+        <el-col :span='8' style="margin-left: 5px">
           <el-row :gutter='10'>
             <el-calendar v-model='date'
                          @input='handleDateChange'
-                         style='background-color: rgba(34,116,236,0.22);  '>
+                         style='background-color: rgba(34,116,236,0.22);height: 39vh;  '>
               <template slot='dateCell' slot-scope='{ data }'>
                 <div :class="data.isSelected ? 'is-selected' : ''">
                   {{ data.day.split('-').slice(2).join('-') }}
@@ -29,24 +29,25 @@
                 </div>
               </template>
             </el-calendar>
-            <div id='roleChart' style='height: 32vh; background-color: rgba(34,81,236,0.22); '>
+            <div id='roleChart' style='height: 44vh; background-color: rgba(34,81,236,0.22); '>
             </div>
           </el-row>
         </el-col>
         <el-col :span='4'>
+          <div style="width: 15vw">
           <el-table
             v-if="refreshTable"
             v-loading="listLoading"
             element-loading-text="Loading"
             highlight-current-row
             stripe
-            height="77vh"
+            height="83vh"
             :row-style="{height:'6.26vh',width:''}"
             :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
             :header-cell-style="{borderColor:'#C0C0C0'}"
             @row-click="searchLogByDateAndRole"
             :data="userData"
-            style="width:100%;margin-bottom:20px;"
+            style="width:300px!important;:20px;"
             border
             show-header
             :default-expand-all="isExpand">
@@ -64,11 +65,13 @@
             </el-table-column>
             <el-table-column prop="postName" label="部门所属单位"></el-table-column>
           </el-table>
+          </div>
         </el-col>
-        <el-col :span='1' style='height: 77vh; background-color: rgba(170,238,238,0.6)'></el-col>
+        <el-col :span='1' style='height: 83vh;width: 2vw;margin-left: 26px; background-color: rgba(170,238,238,0.6)'></el-col>
         <el-col :span='11'>
           <el-table
-            height='77vh'
+            margin-left="0px"
+            height='83vh'
             :row-style="{height:'7vh'}"
             :cell-style="{padding:'0px' ,borderColor:'#C0C0C0'}"
             :header-cell-style="{borderColor:'#C0C0C0'}"
@@ -80,7 +83,7 @@
             highlight-current-row
             stripe
           >
-            <el-table-column align="center" type="index" :index="typeIndex"/>
+            <el-table-column align="center" type="index"width="60" :index="typeIndex"/>
             <el-table-column
               v-for='(item,index) in basicValue'
               :key='index'
