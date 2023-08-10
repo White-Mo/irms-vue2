@@ -249,19 +249,19 @@ export default {
   methods: {
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
-
-      if(this.dataName.length === 0){
-        console.log("this.dataName",this.dataName.length)
-      }
-
-
-
-
       this.listLoading = true;
-     this.tableData =  this.tempTableData ;
-      setTimeout(() => {
-        let searchResults = [];
-        if (this.inputValue !== '') {
+      this.tableData =  this.tempTableData ;
+      let searchResults = [];
+      if(this.inputValue !== ''){
+        if(this.dataName.length === 0){
+          searchResults = this.tableData.filter(data => {
+            let resultData1 = (data.children.some(child => child.departmentName.includes(this.inputValue)))
+            let resultData2 = (data.children.some(child => child.departmentCode.includes(this.inputValue)))
+            let resultData3 = (data.postName.includes(this.inputValue))
+            return resultData1 + resultData2 + resultData3
+          });
+          this.isExpand=true;
+        }else{
           searchResults = this.tableData.filter(data => {
             if(this.dataName[0]===this.basicValue[0].value){
               return(data.children.some(child => child.departmentName.includes(this.inputValue)))
@@ -276,18 +276,41 @@ export default {
             }
           });
           this.isExpand=true;
-        } else {
-          searchResults = this.tableData;
-          this.isExpand=false;
         }
-        //console.log(searchResults)
-        this.refreshTable = false;
-        this.tableData = searchResults;
-        this.$nextTick(() => {
-          this.refreshTable = true;
-        });
-        this.listLoading = false;
-      }, 200);
+      }else{
+        searchResults = this.tableData;
+        this.isExpand=false;
+      }
+      this.refreshTable = false;
+      this.tableData = searchResults;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+      this.listLoading = false;
+      // setTimeout(() => {
+      //   let searchResults = [];
+      //   if (this.inputValue !== '') {
+      //     searchResults = this.tableData.filter(data => {
+      //       if(this.dataName[0]===this.basicValue[0].value){
+      //         return(data.children.some(child => child.departmentName.includes(this.inputValue)))
+      //       }
+      //       if(this.dataName[0]===this.basicValue[1].value){
+      //         return (data.children.some(child => child.departmentCode.includes(this.inputValue)))
+      //       }
+      //       if(this.dataName[0]===this.basicValue[2].value){
+      //         return (data.postName.includes(this.inputValue))
+      //       }else {
+      //         return null;
+      //       }
+      //     });
+      //     this.isExpand=true;
+      //   } else {
+      //     searchResults = this.tableData;
+      //     this.isExpand=false;
+      //   }
+      //   //console.log(searchResults)
+      //
+      // }, 200);
     },
     //----------------------搜索功能searchData()实现结束-------------------------------------------------------------
 
