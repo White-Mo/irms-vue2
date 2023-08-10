@@ -253,9 +253,9 @@
                       </el-col>
                       <el-col :span='6'>
                         <div class='label-style'>
-                          <el-radio-group v-model='form.migratable'>
-                            <el-radio label='0'>可 迁 移</el-radio>
-                            <el-radio label='1'>不可迁移</el-radio>
+                          <el-radio-group v-model='form.shelfOff'>
+                            <el-radio label='0'>可 下 架</el-radio>
+                            <el-radio label='1'>不 可 下 架</el-radio>
                           </el-radio-group>
                         </div>
                       </el-col>
@@ -492,9 +492,9 @@
                       </el-col>
                       <el-col :span='6'>
                         <div class='label-style'>
-                          <el-radio-group v-model='form.migratable'>
-                            <el-radio label='0'>可 迁 移</el-radio>
-                            <el-radio label='1'>不可迁移</el-radio>
+                          <el-radio-group v-model='form.shelfOff'>
+                            <el-radio label='0'>可 下 架</el-radio>
+                            <el-radio label='1'>不 可 下 架</el-radio>
                           </el-radio-group>
                         </div>
                       </el-col>

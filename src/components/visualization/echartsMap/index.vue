@@ -28,7 +28,7 @@ import chinaJson from "@/assets/china.json";
 import {getUnitWithExistData} from "@/api/dashboard";
 
 export default {
-  name: "map",
+  name: "echartsMap",
   mounted() {
     this.mapInit();
   },
@@ -80,7 +80,6 @@ export default {
       ]
       getUnitWithExistData().then(res => {
         this.existDataUnit = res.data.items
-        console.log("有数据的单位", this.existDataUnit)
         let unitEquipmentCountList = [];
         this.existDataUnit.forEach(element => {
           unitEquipmentCountList.push({
@@ -88,12 +87,10 @@ export default {
             value: `${element[1]}`,
           });
         });
-        console.log("unitEquipmentCountList666", unitEquipmentCountList)
         let unit = []
         unitEquipmentCountList.forEach(element => {
           unit.push(element.name)
         })
-        console.log("unit:", unit)
 
         // 初始化 echarts 实例
         let myChart = echarts.init(document.getElementById("myChart"));

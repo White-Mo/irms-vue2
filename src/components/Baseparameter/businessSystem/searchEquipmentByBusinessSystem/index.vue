@@ -84,11 +84,11 @@ export default {
     const tempBusinessSystemNameId = this.tempBusinessSystemNameId
     this.listLoading = true
     getEquipmentByBusinessSystemId(tempBusinessSystemNameId).then(res=>{
-      console.log("**********",res)
-      if(res.data.items[0].message === "该业务系统下没有设备"){
+      console.log("**********1111",res)
+      if(res.data === "该业务系统下没有设备"){
         this.list = []
         this.listLoading = false
-        alert(res.data.items[0].message)
+        alert(res.data)
       }else {
         this.list = res.data.items
         this.listLoading = false
