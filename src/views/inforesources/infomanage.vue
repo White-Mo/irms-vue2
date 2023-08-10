@@ -478,6 +478,7 @@ export default {
         { value: 'cname', label: 'CNAME记录（别名）' },
         { value: 'useCDN', label: '是否使用CDN' },
         { value: 'networkArea', label: '网络区域' },
+        { value: 'allowVulnerabilityScanning', label: '是否允许漏洞扫描' },
         { value: 'accessLocation', label: '接入位置' }
 
 
@@ -874,6 +875,7 @@ export default {
       const flog = false;
       if (flog === false) {
         getList(params).then((response) => {
+          console.log("++++++++++++++++++++++++++++++++++++",response)
           this.list = response.data.items
           //由于用组件列自动序号会导致拖动是数据错乱，故自定义一个序号属性
           let counter = params.start + 1

@@ -872,7 +872,7 @@ export default {
           { project: '数据库', projectName: '', edition: '', type: '' },
           { project: '中间件', projectName: '', edition: '', type: '' }],
         // network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
-        network: [{ networkCardName: '网卡1', ipAddress: '', networkCardPort: '', macAddress: '' }],
+        network: [{ networkCardName: '网卡1', ipAddress: '', macAddress: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
         appSystemUser: [{
           userName: '',

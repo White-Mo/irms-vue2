@@ -1269,8 +1269,8 @@ export default {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
         macAddress: 'MAC地址',
-        networkCardPort: '交换机',
-        switchInfo: '端口'
+        // networkCardPort: '交换机',
+        // switchInfo: '端口'
       },
       protocolPortLable: { protocolName: '协议', appName: '应用名称', networkCardPort: '端口' },
       appSoftwareLable: {
@@ -1308,7 +1308,7 @@ export default {
       KeySet: {
         config: ['projectName', 'type', 'frequency', 'corenessOrCapacity'],
         software: ['project', 'projectName', 'edition', 'type'],
-        network: ['networkCardName', 'ipAddress', 'switchInfo', 'networkCardPort', 'macAddress'],
+        network: ['networkCardName', 'ipAddress',  'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
         appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
         appSystemUser: ['userName', 'realName', 'userLevel', 'localAccessMode', 'remoteAccessMode', 'createDate', 'other'],
