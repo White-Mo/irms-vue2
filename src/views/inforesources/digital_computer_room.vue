@@ -652,9 +652,10 @@ export default {
               :xl="2"
             >
               <el-button
-                size="medium"
                 type="primary"
                 icon="el-icon-search"
+                class="check"
+                style="max-height: 500px"
                 clearable="true"
                 @click="searchData()"
               >查询</el-button>
@@ -675,7 +676,10 @@ export default {
                       {{item.postName}}
                     </el-row>
                     <el-row style="width: 100%;height: 50%;text-align: center;padding-top: 10px;">
-                      <el-button type="primary" size="mini" @click="enterComputerRooms(item.postName,item.postId)">进入机房群</el-button>
+                      <el-button type="primary"
+                                 class="enter"
+                                 style="max-height: 500px"
+                                 @click="enterComputerRooms(item.postName,item.postId)">进入机房群</el-button>
                     </el-row>
                   </el-col>
                 </div>
@@ -776,14 +780,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 * {
   margin: 0;
   padding: 0;
 }
 .main{
   width: 100%;
-  height: 76.5vh;
+  height: 82vh;
   background: #041135;
   position: absolute;
   top: 0;
@@ -802,7 +806,14 @@ export default {
   height: 10rem;
   margin: 1rem;
 }
-
+.enter {
+  min-height: 30px;
+  min-width: 110px;
+}
+.check {
+  min-height: 35px;
+  min-width: 80px;
+}
 
 ::-webkit-scrollbar {
   width: 6px; /* 竖向滚动条宽度 */
@@ -858,9 +869,6 @@ export default {
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
 
-</style>
-
-<style lang="less" scoped>
 *{
   font-size: 18px;
 }

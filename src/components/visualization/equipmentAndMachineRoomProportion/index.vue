@@ -242,7 +242,7 @@ export default {
   },
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .changeShow{
   background-color: rgba(22, 87, 185, 0.56);
   color: rgba(0, 216, 255, 0.83);
