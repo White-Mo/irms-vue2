@@ -81,9 +81,15 @@ export default {
     const checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('业务系统不能为空'))
-      }  else {
+      } else {
+        await this.getNameRules()
+        if (!this.nameRules) {
+          callback(new Error('该业务系统已存在，请重新输入'))
+        } else {
           callback()
         }
+      }
+      callback()
     };
     return{
       roleid: user.state.roleid,
@@ -169,6 +175,18 @@ export default {
       });
     },
 
+    // 验证添加的业务系统是否存在
+    async getNameRules() {
+      const addInformation = { ...this.editInBusinessSystemFormation }
+      await checkBusinessSystemName(addInformation).then((res) => {
+        if (res.data.valid === true) {
+          this.nameRules = true
+        } else {
+          this.nameRules = false
+        }
+      })
+    },
+
     changePost(val) {
       this.editInBusinessSystemFormation.businessSystemFirstName = ''
       this.postAll.forEach(element => {
@@ -192,14 +210,19 @@ export default {
 .edit-business-system{
   padding: 24px;
 }
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 18%;
+  margin: 10px;
+}
 /deep/.el-select-dropdown__list{
-  width: 900px;
+  width: 1200px;
 }
 /deep/.el-select-dropdown__item{
   height: 27px;
 }
 /deep/ .el-popper{
-  top: -120px !important;
+  top: -150px !important;
 }
 
 </style>

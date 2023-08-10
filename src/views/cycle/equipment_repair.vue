@@ -89,7 +89,7 @@
               :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
               :header-cell-style="{borderColor:'#C0C0C0'}"
             >
-              <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
+              <el-table-column align="center" fixed="left" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}
@@ -121,7 +121,7 @@
               :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
               :header-cell-style="{borderColor:'#C0C0C0'}"
             >
-              <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
+              <el-table-column align="center" fixed="left" type="index" :index="typeIndex" show-overflow-tooltip/>
               <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
                 <template slot-scope="scope">
                   {{ scope.row[key] }}

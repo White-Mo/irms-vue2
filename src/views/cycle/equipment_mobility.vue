@@ -50,6 +50,7 @@
           </el-col>
         </el-row>
         <el-table
+          height="70vh"
           v-loading='listLoading'
           :data='list'
           border
