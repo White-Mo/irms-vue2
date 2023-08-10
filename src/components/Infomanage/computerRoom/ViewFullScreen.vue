@@ -21,6 +21,6 @@ export default {
   width: 100%;
   height: 100%;
   background-color: white; /* 设置全屏时的背景色 */
-  z-index: 9999;
+  z-index: 1200;
 }
 </style>

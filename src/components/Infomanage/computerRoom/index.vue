@@ -36,9 +36,9 @@
           <el-col :span="3"><dv-decoration-8 :color=datavcolor style="width:300px;height:50px;position: absolute;left: 0" /></el-col>
           <el-col :span="8" :offset="5"><h1 style="text-align: center;position:relative;color:#20dbfd;;text-shadow:0 0 25px #00d8ff;font-weight: 900">{{computerTitle}}</h1></el-col>
           <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true" style="width:300px;height:50px;position: absolute;right: 0" /></el-col>
-          <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
+          <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -15px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
-          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 20px;" @click="backPage">返回</el-button>
+          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -15px;right: 20px;" @click="backPage">返回</el-button>
         </el-row >
         <el-row :gutter="20" style="height: 2rem">
           <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" style=" width:100%;height:40px;position: relative;bottom:2rem" /></el-col>
@@ -51,7 +51,7 @@
     <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
       <table style="opacity: 1;width: 70%;color: #FFFFFF;text-align: left;position: relative;left: 26%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
         <tr style="height: 45px">
-          <th style="color: #FFFFFF;width: 110px">管理员：</th>
+          <th style="color: #FFFFFF;width: 110px;">管理员：</th>
           <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
         </tr>
         <tr style="height: 45px">
@@ -87,7 +87,7 @@
       </div>
     </dv-border-box-11>
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
-      <el-row style="position: relative;top:5%">
+      <el-row style="position: relative;top:2%">
         <el-col :span="12" :offset="8">
           <h2 style="position: relative;left:15px;color: #FFFFFF">机房机柜</h2>
         </el-col>
@@ -99,7 +99,7 @@
         :data="tableData"
         :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
         :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
-        style="position:relative;left:5%;width:90%;top: 5%;background: rgba(20,36,55,0.3);">
+        style="position:relative;left:5%;width:90%;top: 0%;background: rgba(20,36,55,0.3);">
         <el-table-column  type="index" label="#" width="50" show-overflow-tooltip></el-table-column>
         <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
         <el-table-column
@@ -674,7 +674,7 @@ export default {
         },
         grid: {
           left: '3%',
-          right: '4%',
+          right: '7%',
           bottom: '3%',
           containLabel: true
         },
