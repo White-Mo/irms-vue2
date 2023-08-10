@@ -163,7 +163,7 @@ import Progress from "@/components/progress"
 import dataStatementMakeSearchTemplate from "@/components/Infomanage/dataStatementMakeSearchTemplate";
 import {
   getApplicationUserCount,
-  getBusinessSystemCount,
+  getBusinessSystemCount, getDomesticEquipmentCount,
   getEquipmentCount,
   getEquipmentTypeCount, getEquipmentUserCount, getGuaranteePeriodCount,
   getOverGuaranteePeriodCount, getStatusCount, getTrueOrVirtualCount
@@ -628,6 +628,7 @@ export default {
       }
     },
     async getStatisticsExcel() {
+      this.listLoading = true
       if (this.selectData.length > 0) {
         this.StatisticsData1=[]
         // 设备数量
@@ -662,7 +663,13 @@ export default {
         }
         this.StatisticsData1.push(a1)
         //国产化设备数量(台)
-        this.StatisticsData1.push(0)
+        let a3=0
+        for (const i in this.selectData) {
+          if ( this.selectData[i].isChinaLocalization === '是'){
+            a3 += 1
+          }
+        }
+        this.StatisticsData1.push(a3)
         //单位数量(个）
         let arr5 = []
         for (const i in this.selectData) {
@@ -698,6 +705,7 @@ export default {
         this.StatisticsData1.push(Array.from(new Set(arr4)).length)
         // 导入 excel
         await getExcelDemo3(this.StatisticsData1)
+        this.listLoading = false
 
       } else {
         this.StatisticsData=[]
@@ -718,7 +726,9 @@ export default {
           this.StatisticsData.push(res)
         })
         //国产化设备数量(台)
-        this.StatisticsData.push(0)
+        await getDomesticEquipmentCount().then(res => {
+          this.StatisticsData.push(res)
+        })
         //总单位数量(个）
         await getPost().then(res => {
           this.StatisticsData.push(res.data.total)
@@ -741,6 +751,7 @@ export default {
         })
         // 导入 excel
         await getExcelDemo3(this.StatisticsData,1)
+        this.listLoading = false
       }
     },
     // rxr
