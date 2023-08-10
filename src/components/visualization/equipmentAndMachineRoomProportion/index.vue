@@ -247,7 +247,7 @@ export default {
   background-color: rgba(22, 87, 185, 0.56);
   color: rgba(0, 216, 255, 0.83);
   border: none;
-  margin-top: 20px;
-  margin-left: 50px;
+  margin-top: 2vh;
+  margin-left: 7vw;
 }
 </style>
