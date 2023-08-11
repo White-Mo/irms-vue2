@@ -454,10 +454,38 @@ export default {
         { value: 'softwareOperatingSystemEdition', label: '操作系统版本' },
         { value: 'edition', label: '中间件品牌规格' },
         { value: 'softwareDatabaseEdition', label: '数据库版本' },
-        { value: 'businessOrExperimental', label: '业务机/实验机' },
-        { value: 'mainOrBackup', label: '主机/备机' },
-        { value: 'migratable', label: '是否可迁移' },
-        { value: 'shelfOff', label: '是否可下架' },
+        {
+          value: 'businessOrExperimental',
+          label: '业务机/实验机',
+          formatter: function(row) {
+            let businessOrExperimental = row.businessOrExperimental === '1' ? '实验机' : (row.businessOrExperimental==='0' ? '业务机': '')
+            return businessOrExperimental
+          }
+        },
+        {
+          value: 'mainOrBackup',
+          label: '主机/备机',
+          formatter: function(row) {
+            let mainOrBackup = row.mainOrBackup === '0' ? '主机' : (row.mainOrBackup ==='' ? '':'备机')
+            return mainOrBackup
+          }
+        },
+        {
+          value: 'migratable',
+          label: '是否可迁移',
+          formatter: function(row) {
+            let migratable = row.migratable === '0' ? '是' : (row.migratable ==='' ? '':'否')
+            return migratable
+          }
+        },
+        {
+          value: 'shelfOff',
+          label: '是否可下架',
+          formatter: function(row) {
+            let shelfOff = row.shelfOff === '0' ? '是' : (row.shelfOff ==='' ? '':'否')
+            return shelfOff
+          }
+        },
         { value: 'brandName', label: '品牌' },
         { value: 'brandModelName', label: '型号' },
         { value: 'serialNumber', label: '序列号' },
@@ -643,11 +671,6 @@ export default {
     this.fetchData()
     // 初始化新列顺序
     this.newList=this.dataname
-    // this.newList = JSON.parse(JSON.stringify(this.dataname))
-    // this.newList[12].formatter = this.dataname[12].formatter
-    // this.newList[13].formatter = this.dataname[13].formatter
-    // this.newList[14].formatter = this.dataname[14].formatter
-    // this.newList[5].formatter = this.dataname[5].formatter
   },
   mounted() {
     this.restaurants = this.loadAll()
