@@ -30,15 +30,16 @@
       </el-table>
     </div>
 
+
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
         <el-row :gutter="20" style="height: 5rem;display: flex">
           <el-col :span="3"><dv-decoration-8 :color=datavcolor style="width:300px;height:50px;position: absolute;left: 0" /></el-col>
           <el-col :span="8" :offset="5"><h1 style="text-align: center;position:relative;color:#20dbfd;;text-shadow:0 0 25px #00d8ff;font-weight: 900">{{computerTitle}}</h1></el-col>
           <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true" style="width:300px;height:50px;position: absolute;right: 0" /></el-col>
-          <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -15px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
+          <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
-          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -15px;right: 20px;" @click="backPage">返回</el-button>
+          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 20px;" @click="backPage">返回</el-button>
         </el-row >
         <el-row :gutter="20" style="height: 2rem">
           <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" style=" width:100%;height:40px;position: relative;bottom:2rem" /></el-col>
@@ -47,11 +48,12 @@
       </el-header>
     </div>
 
-    <div id="container"></div>
+    <div id="container" ref="canvasContainer"></div>
+
     <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
       <table style="opacity: 1;width: 70%;color: #FFFFFF;text-align: left;position: relative;left: 26%;top:30%;font-size:20px" border="1" cellspacing="0" cellpadding="0">
         <tr style="height: 45px">
-          <th style="color: #FFFFFF;width: 110px;">管理员：</th>
+          <th style="color: #FFFFFF;width: 110px">管理员：</th>
           <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
         </tr>
         <tr style="height: 45px">
@@ -63,11 +65,13 @@
           <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
         </tr>
       </table>
-      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:80px;border-radius: 60px;position: absolute;left: 25px;top:100px;z-index: 99">
+      <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="width:17%;border-radius: 50%;position: absolute;left: 6%;top:45%;z-index: 99">
     </dv-border-box-11>
+
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
-      <div id="myechart" style="height:40vh;width:25vw;padding-top:30px;color: #ffffff;" ></div>
+      <div id="myechart" style="position:absolute;height:85%;width:95%;padding-top:5%;color: #ffffff;" ></div>
     </dv-border-box-12>
+
     <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
       <div style="opacity: 0.8;height:35%;width:100%;position: absolute;left:10px;top: 35%;">
         <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px" border="1" cellspacing="0" cellpadding="0">
@@ -86,27 +90,28 @@
         </table>
       </div>
     </dv-border-box-11>
+
     <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
-      <el-row style="position: relative;top:2%">
+      <el-row style="position: relative;top:0%">
         <el-col :span="12" :offset="8">
           <h2 style="position: relative;left:15px;color: #FFFFFF">机房机柜</h2>
         </el-col>
       </el-row>
       <el-table
         border
-        height="320"
+        height="75%"
         class="show_table"
         :data="tableData"
         :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
         :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
         style="position:relative;left:5%;width:90%;top: 0%;background: rgba(20,36,55,0.3);">
-        <el-table-column  type="index" label="#" width="50" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
+        <el-table-column  type="index" label="#"  show-overflow-tooltip></el-table-column>
+        <el-table-column prop="cabinetName" label="机柜名称"></el-table-column>
         <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="250px"
+          width="120%"
         >
           <template v-slot:="scope">
             <el-button
@@ -118,6 +123,7 @@
         </el-table-column>
       </el-table>
     </dv-border-box-12>
+
     <el-dialog
       :visible.sync="showEquipment"
       v-if="showEquipment"
@@ -150,6 +156,7 @@ export default {
   },
   data() {
     return {
+      myChart: null,
       isFullScreen: false,
       datavcolor:['#0e94eb','#0e94eb'],
       computerTitle: '',
@@ -317,6 +324,9 @@ export default {
     document.addEventListener('mousemove', this.onMouseMove);
     // 添加鼠标离开事件监听
     document.addEventListener('mouseleave', this.onMouseLeave);
+    // 窗口大小调整事件监听器
+    window.addEventListener('resize', this.handleResize);
+
 
     let that = this
     setTimeout(function () {
@@ -331,6 +341,11 @@ export default {
     // 移除鼠标事件监听，避免内存泄漏
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseleave', this.onMouseLeave);
+    // 移除窗口大小调整事件监听器
+    window.removeEventListener('resize', this.handleResize);
+    if (this.myChart) {
+      this.myChart.dispose();
+    }
   },
   methods: {
 
@@ -407,6 +422,21 @@ export default {
         self.scene.add(self.mesh); // 将模型引入three、
         self.animate();
       })
+    },
+
+    handleResize() {
+      // 更新相机纵横比和渲染器大小
+      const newWidth = this.$refs.canvasContainer.clientWidth;
+      const newHeight = this.$refs.canvasContainer.clientHeight;
+
+      this.camera.aspect = newWidth / newHeight;
+      this.camera.updateProjectionMatrix();
+
+      this.renderer.setSize(newWidth, newHeight);
+
+      if (this.myChart) {
+        this.myChart.resize();
+      }
     },
 
     //修改模型的名称
@@ -651,6 +681,7 @@ export default {
       })
     },
 
+
     //Echarts
     echartsDraw() {
       let myChart = this.$echarts.init(document.getElementById('myechart'));
@@ -674,7 +705,7 @@ export default {
         },
         grid: {
           left: '3%',
-          right: '7%',
+          right: '4%',
           bottom: '3%',
           containLabel: true
         },
@@ -729,6 +760,7 @@ export default {
       myChart.setOption(option);
     },
 
+
     changeDiv(value) {
       this.showEquipment =false
     },
@@ -758,13 +790,14 @@ export default {
   left:0;
   width: 100%;
   height:10vh;
+  z-index: 100
 }
 #container {
   position: absolute;
   bottom: 0;
-  z-index:98;
+  /*z-index:98;*/
   width:100%;
-  height:90vh;
+  height:100%;
 }
 .msgTable{
   z-index:99
@@ -785,4 +818,13 @@ export default {
   /* 添加 z-index 确保气泡在画布上方显示 */
   z-index: 100;
 }
+#canvas-container {
+  width: 100%;
+  height: 100%;
+}
+/*::-webkit-scrollbar {*/
+/*  width: 17px;*/
+/*  height: 3px;*/
+/*  background-color:#A9A9A9;*/
+/*}*/
 </style>
