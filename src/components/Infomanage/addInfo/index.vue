@@ -161,7 +161,7 @@
                   </el-col>
                   <el-col :span='6'>
                     <div class='label-style'>
-                      <el-radio-group v-model='form.trueOrVirtual'>
+                      <el-radio-group v-model='form.trueOrVirtual' :disabled='true'>
                         <el-radio label='1'>实 体 机</el-radio>
                         <el-radio label='0'>虚 拟 机</el-radio>
                       </el-radio-group>
