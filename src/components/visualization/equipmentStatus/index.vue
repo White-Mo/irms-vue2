@@ -28,8 +28,9 @@
 
 <script>
 import {
+  getBusinessSystemCount,
   getEndEquipmentCount,
-  getEquipmentCount,
+  getEquipmentCount, getOverGuaranteePeriodCount,
   getPauseEquipmentCount
 } from "@/api/cockpit_data";
 
@@ -46,17 +47,16 @@ export default {
     this.initData()
   },
   methods: {
-    initData() {
-      getEquipmentCount().then(res => {
-        this.useEquipmentNumber = res.data.total
-      })
-      getPauseEquipmentCount().then(res => {
-        this.pauseEquipmentNumber = res.data.total
-      })
-      getEndEquipmentCount().then(res => {
-        this.endEquipmentNumber = res.data.total
-      })
-    }
+    async initData(){
+      const [res1, res2, res3] = await Promise.all([
+        getEquipmentCount(),
+        getPauseEquipmentCount(),
+        getEndEquipmentCount(),
+      ])
+      this.useEquipmentNumber = res1.data.total
+      this.pauseEquipmentNumber = res2.data.total
+      this.endEquipmentNumber = res3.data.total
+    },
   }
 
 }

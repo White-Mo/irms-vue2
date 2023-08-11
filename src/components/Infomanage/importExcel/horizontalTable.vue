@@ -32,11 +32,11 @@
               <div slot='tip' class='el-upload__tip'>只能上传Excel文件</div>
             </el-upload>
           </el-col>
-          <el-col :span='12'>
+<!--          <el-col :span='12'>
             <el-button style='float: right' size='larger' type='info' @click='switchPage' icon='el-icon-s-release'>
               详情表导入
             </el-button>
-          </el-col>
+          </el-col>-->
         </el-row>
         <el-row>
           <el-row>
@@ -105,9 +105,9 @@ export default {
     }
   },
   methods: {
-    switchPage() {
+/*    switchPage() {
       this.$parent.switchPage()
-    },
+    },*/
     handleChange(file) {
       this.fileList = []
       this.repalyInfo = []

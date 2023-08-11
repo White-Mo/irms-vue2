@@ -29,7 +29,6 @@
 import {
   getBusinessSystemCount, getEndEquipmentCount,
   getEquipmentCount,
-  getEquipmentTypeCount,
   getOverGuaranteePeriodCount, getPauseEquipmentCount
 } from "@/api/cockpit_data";
 
@@ -37,7 +36,6 @@ export default {
   name: "anlageuebersicht",
   data(){
     return{
-      equipmentTypeCount:0,
       businessSystemCount:0,
       overGuaranteePeriodEquipmentCount:0,
       useEquipmentNumber: '',
@@ -51,25 +49,20 @@ export default {
   },
   methods: {
      async initData(){
-       await getBusinessSystemCount().then(res=>{
-        this.businessSystemCount = res.data
-      })
-       await getOverGuaranteePeriodCount().then(res=>{
-        this.overGuaranteePeriodEquipmentCount = res
-      })
-
-       await getEquipmentCount().then(res => {
-        this.useEquipmentNumber = res.data.total
-      })
-       await getPauseEquipmentCount().then(res => {
-        this.pauseEquipmentNumber = res.data.total
-      })
-       await getEndEquipmentCount().then(res => {
-        this.endEquipmentNumber = res.data.total
-      })
-      this.allEquipmentNumber=this.useEquipmentNumber+this.pauseEquipmentNumber+this.endEquipmentNumber
-      console.log("this.allEquipmentNumber",this.allEquipmentNumber)
-    }
+       const [res1, res2, res3,res4,res5] = await Promise.all([
+         getEquipmentCount(),
+         getPauseEquipmentCount(),
+         getEndEquipmentCount(),
+         getBusinessSystemCount(),
+         getOverGuaranteePeriodCount()
+       ])
+       this.useEquipmentNumber = res1.data.total
+       this.pauseEquipmentNumber = res2.data.total
+       this.endEquipmentNumber = res3.data.total
+       this.businessSystemCount = res4.data
+       this.overGuaranteePeriodEquipmentCount = res5
+       this.allEquipmentNumber = this.useEquipmentNumber + this.pauseEquipmentNumber + this.endEquipmentNumber
+    },
   }
 
 }
