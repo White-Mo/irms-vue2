@@ -6,9 +6,9 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <div class="user-text">
-            <span v-for="role in roles" :key="role">{{"["+role_name+"/"+role+"]"+realname}}</span>
+            <span v-for="role in roles" :key="role">{{"[ "+role_name+" / "+role+" ] "+realname}}</span>
           </div>
-          <i class="el-icon-caret-bottom" />
+          <i class="el-icon-s-custom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
@@ -114,7 +114,7 @@ export default {
     }
 
     .avatar-container {
-      margin-right: 30px;
+      margin-right: 50px;
 
       .avatar-wrapper {
         position: relative;
@@ -125,12 +125,13 @@ export default {
           font-weight:bold;
         }
 
-        .el-icon-caret-bottom {
+        .el-icon-s-custom {
           cursor: pointer;
           position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+          right: -40px;
+          top: -5px;
+          font-size: 25px;
+          color: rgb(19, 23, 18);
         }
       }
     }
