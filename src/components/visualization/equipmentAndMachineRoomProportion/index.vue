@@ -4,7 +4,7 @@
       <div>
         <div>
           <el-row>
-            <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:50px; margin-top: 5px; font-size: 15px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
+            <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:110px; margin-top: 5px; font-size: 15px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
             <el-col :span="12"><el-button round class="changeShow" v-text="isShowMachineRoom" v-if="this.roles[0]==='超级管理员'" @click="changeShow"></el-button></el-col>
           </el-row>
         </div>
@@ -166,6 +166,7 @@ export default {
           top: 5,
           bottom: 20,
           textStyle:{
+            fontSize: 15,
             color: function() {
               return (
                 "rgb(" +
@@ -181,12 +182,12 @@ export default {
           pageIconColor:'#ffffff',
           pageIconInactiveColor:'rgba(255,255,255,0.9)',
           pageTextStyle:{
-            color:'#FFFFFF'
+            color:'#FFFFFF',
           }
         },
         series: [
           {
-            left:150,
+            left:190,
             type: 'pie',
             radius: ['40%', '80%'],
             avoidLabelOverlap: false,

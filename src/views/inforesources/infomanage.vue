@@ -147,14 +147,14 @@
           </el-col>
         </el-row>
 
-        <div class='draggable' style='padding: 20px' v-if='showTable'>
+        <div class='draggable' style='padding: 16px' v-if='showTable'>
           <el-table
             ref='table'
             v-loading='listLoading'
             :diisable='true'
             :data='list'
             element-loading-text='Loading'
-            height='72vh'
+            height='70vh'
             border
             :row-style="{height:'6.26vh'}"
             :cell-style="{padding:'0px',borderColor:'#C0C0C0' }"
@@ -1352,20 +1352,6 @@ el-label {
   line-height: 40px;
   width: 150px;
   text-align: right;
-}
-
-
-// .searchSelect {
-//   height: 40px;
-//   text-align: center;
-//   color: #0b0c10;
-//   background-color: #deecff;
-// }
-.el-row {
-  //margin-bottom: 20px;
-  /* &:last-child {
-      margin-bottom: 0;
-    } */
 }
 
 .el-col {

@@ -8,7 +8,7 @@
         <el-form ref="addInformation" :model="addInformation" label-width="140px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="addInformation.postName" @change="changePost":popper-append-to-body ="false">
+              <el-select v-model="addInformation.postName" @change="changePost" :popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"

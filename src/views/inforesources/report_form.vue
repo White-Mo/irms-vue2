@@ -20,6 +20,7 @@
               placeholder="详细字段查询"
               multiple
               size="medium"
+              :popper-append-to-body='false'
             >
               <el-option
                 v-for="(item, index) in dataname"
@@ -1027,7 +1028,7 @@ export default {
   text-align: center;
 }
 </style>
-<style  lang="less">
+<style scoped lang="less">
 /* //需要覆盖的组件样式 */
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
@@ -1037,12 +1038,12 @@ export default {
 }
 
 // 必须给子元素一个上层class名才不会影响到其他页面同名组件
-.el-select-dropdown__list {
+/deep/.el-select-dropdown__list {
   margin-right: 20px;
   margin-left: 5px;
   margin-top: 5px;
   height: auto;
-  width: 600px;
+  width: 700px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -1050,14 +1051,14 @@ export default {
   align-content: flex-start;
   align-items: stretch;
 }
-.el-scrollbar {
-  // height: 380px;
+/deep/.el-scrollbar {
+   height: 695px;
   overflow: hidden;
-  position: relative;
+  //position: relative;
 }
-.el-scrollbar .el-scrollbar__wrap {
+/deep/.el-scrollbar .el-scrollbar__wrap {
   overflow: auto;
-  height: 100%;
+  height: 680px;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
