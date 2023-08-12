@@ -15,7 +15,6 @@
       </table>
       <el-table
         :data="tooltipText"
-        height="250"
         border
         :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
         :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',fontSize: '16px',}"
@@ -838,7 +837,6 @@ export default {
 .tooltip {
   position: absolute;
   width: 560px;
-  height: 340px;
   margin-left: 5px;
   margin-right: 5px;
   background-color: rgba(0, 0, 0, 0.6);
