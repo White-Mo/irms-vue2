@@ -11,12 +11,13 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter='20'>
-        <el-col :span='8' style="margin-left: 5px">
-          <el-row :gutter='10'>
+      <el-row :gutter='10'>
+        <el-col :span='8'  style='height: 83vh;'>
+          <div >
+          <el-row style="flex-direction: column;" >
             <el-calendar v-model='date'
                          @input='handleDateChange'
-                         style='background-color: rgba(34,116,236,0.22);height: 39vh;  '>
+                         style='background-color: rgba(34,116,236,0.22);height: 40vh;  '>
               <template slot='dateCell' slot-scope='{ data }'>
                 <div :class="data.isSelected ? 'is-selected' : ''">
                   {{ data.day.split('-').slice(2).join('-') }}
@@ -29,12 +30,13 @@
                 </div>
               </template>
             </el-calendar>
-            <div id='roleChart' style='height: 44vh; background-color: rgba(34,81,236,0.22); '>
+            <div id='roleChart' style='height: 43vh; background-color: rgba(34,81,236,0.22); '>
             </div>
-          </el-row>
+            </el-row>
+          </div>
         </el-col>
-        <el-col :span='4'>
-          <div style="width: 15vw">
+        <el-col :span='5'>
+          <div >
           <el-table
             v-if="refreshTable"
             v-loading="listLoading"
@@ -47,7 +49,6 @@
             :header-cell-style="{borderColor:'#C0C0C0'}"
             @row-click="searchLogByDateAndRole"
             :data="userData"
-            style="width:300px!important;:20px;"
             border
             show-header
             :default-expand-all="isExpand">
@@ -67,8 +68,11 @@
           </el-table>
           </div>
         </el-col>
-        <el-col :span='1' style='height: 83vh;width: 2vw;margin-left: 26px; background-color: rgba(170,238,238,0.6)'></el-col>
-        <el-col :span='11'>
+        <el-col :span='1'>
+          <div style='height: 83vh; background-color: rgba(170,238,238,0.6)'></div>
+        </el-col>
+        <el-col :span='10' style='height: 83vh;'>
+          <div>
           <el-table
             margin-left="0px"
             height='83vh'
@@ -83,7 +87,7 @@
             highlight-current-row
             stripe
           >
-            <el-table-column align="center" type="index"width="60" :index="typeIndex"/>
+            <el-table-column align="center" type="index" :index="typeIndex" width="60"/>
             <el-table-column
               v-for='(item,index) in basicValue'
               :key='index'
@@ -94,16 +98,7 @@
             >
             </el-table-column>
           </el-table>
-<!--          <div style="margin-left: 50px">
-            <el-pagination
-              :page-size="10"
-              :current-page="currentPage"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-            />
-          </div>-->
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -179,6 +174,11 @@ export default {
       this.counts = response.data.items
       // console.log('用户操作的日期和该日期操作的次数', this.scheduleData)
     })
+    // rxr
+    // 在组件mounted时绑定resize事件，当窗口大小发生变化时自动调整图表大小
+    window.addEventListener('resize', this.handleResize);
+    // 创建Echarts实例并绘制饼状图
+    this.handleResize();
   },
 
   methods: {
@@ -403,10 +403,21 @@ export default {
             }
           ]
         }//设置初始化配置项
-        myChart.setOption(option)//设置option
+        this.myChart = myChart;
+        myChart.setOption(option);//设置option
       })
-    }
-  }
+    },
+    handleResize() {
+      if (this.myChart) {
+        // 调用Echarts实例的resize方法，重新绘制图表
+        this.myChart.resize();
+      }
+    },
+  },
+  beforeDestroy() {
+    // 在组件销毁前解绑resize事件
+    window.removeEventListener('resize', this.handleResize);
+  },
 }
 </script>
 
