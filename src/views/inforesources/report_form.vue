@@ -1083,7 +1083,7 @@ export default {
 // .el-scrollbar /deep/
 .el-select-dropdown__item {
   height: 30px;
-  flex: 1 0 25%;
+  flex: 1 0 18%;
   margin: 10px;
 }
 
@@ -1093,7 +1093,7 @@ export default {
   margin-left: 5px;
   margin-top: 5px;
   height: auto;
-  width: 700px;
+  width: 1200px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -1102,12 +1102,11 @@ export default {
   align-items: stretch;
 }
 /deep/.el-scrollbar {
-   height: 695px;
+  overflow: hidden;
   //position: relative;
 }
 /deep/.el-scrollbar .el-scrollbar__wrap {
   overflow: auto;
-  height: 680px;
 }
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #1d1e1f;
