@@ -348,7 +348,7 @@ export default {
           value: 'trueOrVirtual',
           label: '实体机/虚拟机',
           formatter: function(row) {
-            let trueOrVirtual = row.trueOrVirtual === '1' ? '实体机' : '虚拟机'
+            let trueOrVirtual = row.trueOrVirtual === '1' ? '实体机' : row.trueOrVirtual === '' ? '' : '虚拟机'
             return trueOrVirtual
           }
         },
@@ -1305,6 +1305,9 @@ export default {
   text-align: left !important;
 }
 
+/deep/.el-table--scrollable-x .el-table__body-wrapper {
+  overflow-x: scroll;
+}
 .tile-content {
   padding: 9px;
   margin-bottom: 20px;

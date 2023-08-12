@@ -145,7 +145,7 @@ export default {
           value: "trueOrVirtual",
           label:"实体机/虚拟机",
           formatter:function(row){
-            let trueOrVirtual =row.trueOrVirtual === '1' ? "实体机" : "虚拟机"
+            let trueOrVirtual = row.trueOrVirtual === '1' ? '实体机' : row.trueOrVirtual === '' ? '' : '虚拟机'
             return trueOrVirtual
           }
         },
@@ -202,7 +202,30 @@ export default {
             }
           }
         },
-        {value: "status", label:"设备状态"},
+        {
+          value: 'status',
+          label: '设备状态',
+          formatter: function (row) {//还需要修改上方newList
+            let status = row.status
+            console.log(status)
+            switch (status) {
+              case '0':
+                status = '在用'
+                break
+              case '1':
+                status = '停用'
+                break
+              case '2':
+                status = '报废'
+                break
+              default:
+                status = '状态异常'
+                break
+            }
+            return status
+          }
+
+        },
         {value: "isTransfer", label:"是否存在调拨"},
         {value: "transferRecord", label:"设备调拨记录"},
         {value: "transferRecordTime", label:"设备调拨时间"},
@@ -228,10 +251,38 @@ export default {
         {value: "softwareOperatingSystemEdition", label:"操作系统版本"},
         {value: "edition", label:"中间件品牌规格"},
         {value: "softwareDatabaseEdition", label:"数据库版本"},
-        {value: "businessOrExperimental", label:"业务机/实验机"},
-        {value: "mainOrBackup", label:"主机/备机"},
-        {value: "migratable", label:"是否可迁移"},
-        {value: "shelfOff", label:"是否可下架"},
+        {
+          value: 'businessOrExperimental',
+          label: '业务机/实验机',
+          formatter: function(row) {
+            let businessOrExperimental = row.businessOrExperimental === '1' ? '实验机' : (row.businessOrExperimental==='0' ? '业务机': '')
+            return businessOrExperimental
+          }
+        },
+        {
+          value: 'mainOrBackup',
+          label: '主机/备机',
+          formatter: function(row) {
+            let mainOrBackup = row.mainOrBackup === '0' ? '主机' : (row.mainOrBackup ==='' ? '':'备机')
+            return mainOrBackup
+          }
+        },
+        {
+          value: 'migratable',
+          label: '是否可迁移',
+          formatter: function(row) {
+            let migratable = row.migratable === '0' ? '是' : (row.migratable ==='' ? '':'否')
+            return migratable
+          }
+        },
+        {
+          value: 'shelfOff',
+          label: '是否可下架',
+          formatter: function(row) {
+            let shelfOff = row.shelfOff === '0' ? '是' : (row.shelfOff ==='' ? '':'否')
+            return shelfOff
+          }
+        },
         {value: "brandName", label:"品牌"},
         {value: "brandModelName", label:"型号"},
         {value: "serialNumber", label:"序列号"},

@@ -124,7 +124,8 @@
           >
             <template v-slot:="scope">
               <el-button
-                type="success" plain
+                type="success"
+                plain
                 size="mini"
                 @click="cabinetDetail(scope.$index, scope.row)"
               >详情</el-button>
