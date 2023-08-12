@@ -74,6 +74,7 @@
                     v-for="item in machineRoomAll"
                     :key="item.value"
                     :value="item.machineRoomName"
+                    :title='item.machineRoomName'
                   />
                 </el-select>
                 <el-select v-else-if="scope.row.isEdit && key ==='cabinetName'" v-model="scope.row[key]" placeholder="请选择">
