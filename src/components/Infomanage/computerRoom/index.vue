@@ -15,7 +15,6 @@
       </table>
       <el-table
         :data="tooltipText"
-        height="250"
         border
         :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
         :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',fontSize: '16px',}"
@@ -839,7 +838,6 @@ export default {
 .tooltip {
   position: absolute;
   width: 560px;
-  height: 340px;
   margin-left: 5px;
   margin-right: 5px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -874,6 +872,10 @@ export default {
   background: #ffffff; /* 滚动条背景颜色 */
 }
 
+/*↓↓↓ 点击“详情”按钮的黑色罩子（不知道咋来的），透明度设为0不让它出现，不能删除！！！*/
+.v-modal {
+  opacity: 0;
+}
 .msgTable-echarts{
   z-index:99;
   height: 45vh;

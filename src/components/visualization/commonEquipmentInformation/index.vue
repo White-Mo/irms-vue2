@@ -84,18 +84,19 @@ export default {
             type: 'bar',
             itemStyle: {
               // barBorderRadius: [20, 20, 0, 0], // 仅设置末端为圆角，其他角为直角
-              color: function () {
-                return (
-                  "rgb(" +
-                  Math.round(Math.random() * 255) +
-                  ", " +
-                  Math.round(Math.random() * 255) +
-                  ", " +
-                  Math.round(Math.random() * 255) +
-                  ")"
-                );
-              }
+              // color: function () {
+              //   return (
+              //     "rgb(" +
+              //     Math.round(Math.random() * 255) +
+              //     ", " +
+              //     Math.round(Math.random() * 255) +
+              //     ", " +
+              //     Math.round(Math.random() * 255) +
+              //     ")"
+              //   );
+              // }
             },
+              colorBy:"data",
             label: {
               show: true,
               position: 'top', // 设置标签显示在柱状图顶部
