@@ -871,6 +871,10 @@ export default {
   background: #ffffff; /* 滚动条背景颜色 */
 }
 
+/*↓↓↓ 点击“详情”按钮的黑色罩子（不知道咋来的），透明度设为0不让它出现，不能删除！！！*/
+.v-modal {
+  opacity: 0;
+}
 .msgTable-echarts{
   z-index:99;
   height: 45vh;
