@@ -764,9 +764,9 @@ export default {
       }
     },
     async exportExcel(model) {
-      this.loadingText="数据导出中，请稍等..."
-      this.listLoading=true;
       if (model === 0) {
+        this.loadingText="数据导出中，请稍等..."
+        this.listLoading=true;
         if (this.DataName === 'all' || this.DataName.length === 0) {
           this.initname = ['111']
         } else {
@@ -795,10 +795,15 @@ export default {
               data.push(response.data.items)
             })
           }
-          await getExcelDemo1(data).then(response=>{})
+          await getExcelDemo1(data).then(response=>{
+            this.listLoading=false
+            this.loadingText="数据加载中..."
+          })
         } else {
           getBasicInfoAll(params).then((response) => {
             getExcelDemo1(response.data.items).then(response=>{
+              this.listLoading=false
+              this.loadingText="数据加载中..."
             })
           })
         }
@@ -816,10 +821,12 @@ export default {
           this.$message.error('请选择需要导出的信息')
         }
       } else if (model === 2) {
+        this.loadingText="数据导出中，请稍等..."
+        this.listLoading=true;
         await this.getStatisticsExcel()
+        this.listLoading=false
+        this.loadingText="数据加载中..."
       }
-      this.listLoading=false
-      this.loadingText="数据加载中..."
     },
     async getExcel2() {
       let data_num = 0
