@@ -221,7 +221,7 @@ export default {
   height: 27px;
 }
 /deep/ .el-popper{
-  top: -120px !important;
+  top: 40px !important;
 }
 
 </style>
