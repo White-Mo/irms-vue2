@@ -1762,7 +1762,9 @@ export default {
   color: rgba(0, 216, 255, 0.83);
   font-size: 1.3rem;
 }
-
+.download_report:hover {
+  background-color: #ffffff;
+}
 .classLeftHeight {
   margin-top: 0.8rem;
   min-height: 86vh;
