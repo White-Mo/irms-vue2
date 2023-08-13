@@ -858,7 +858,7 @@ export default {
           leasedStorageResources: '',//租用存储资源情况（TB）
           leasedNetworkBandwidth: '',//租用网络带宽（兆）
           termOfLease: '',//租用期限（年）
-          domainName: '',//域名
+          // domainName: '',//域名
           domainNameRegistrationService: '',//域名注册服务商
           ns: '',//NS记录
           cname: '',//CNAME记录（别名）

@@ -1000,21 +1000,21 @@ function getRowConfig(outdata) {
   const configs = []
   const softwares = []
   let index = 0
-  var configCPU = {
+  const configCPU = {
     frequency: '', // 频率
     projectName: '', // 项目
     corenessOrCapacity: '', // 核数
     type: '', // 类型
     quantity: '' // 数量
-  }
+  };
 
-  var configMemory = {
+  const configMemory = {
     frequency: '', // 频率
     projectName: '', // 项目
     corenessOrCapacity: '', // 核数
     type: '', // 类型
     quantity: '' // 数量
-  }
+  };
   configCPU.projectName = 'CPU' // 项目(CPU)
   configCPU.type = outdata[index]['CPU类型'] // 类型
   configCPU.frequency = outdata[index]['CPU频率'] // 性能指标
@@ -1027,27 +1027,27 @@ function getRowConfig(outdata) {
   configMemory.corenessOrCapacity = outdata[index]['内存容量(GB)'] //数量指标
   configMemory.quantity = ''
   configs.push(configMemory)
-  var softwareOperatingSystem = {
+  const softwareOperatingSystem = {
     type: '', // 类型
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
     buildDate: '' //建设时间
-  }
-  var softwareDatabase = {
+  };
+  const softwareDatabase = {
     type: '', // 类型
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
     buildDate: '' //建设时间
-  }
-  var softwareMiddleware = {
+  };
+  const softwareMiddleware = {
     type: '', // 类型
     edition: '', // 版本
     project: '', // 项目
     projectName: '', // 名称
     buildDate: '' //建设时间
-  }
+  };
   softwareOperatingSystem.project = '操作系统'
   softwareOperatingSystem.projectName = notNull('操作系统',2,'名称',outdata)
   softwareOperatingSystem.edition = notNull('操作系统',2,'版本',outdata)

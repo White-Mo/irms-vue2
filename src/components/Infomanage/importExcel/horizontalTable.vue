@@ -193,6 +193,7 @@ export default {
             }
           }
 
+
           await AddExcel({ equipments: equipments}).then((res) => {
             this.loading = false
             this.uploadResult.fail += res.data.fail
