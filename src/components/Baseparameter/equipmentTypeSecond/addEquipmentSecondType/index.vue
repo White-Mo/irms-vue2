@@ -66,13 +66,16 @@ export default {
 
       rules: {
         equipmentSecondTypeName: [
-          {required:true,message: '请输入二级设备类型',trigger:'blur'},
+          {required:true,message: '请输入二级设备类型名称',trigger:'blur'},
           {
             validator: checkName, trigger: 'blur'
           }
         ],
         equipmentSecondTypeCode: [
-          { required: true, message: '请输入二级设备类型代码', trigger: 'blur' }
+          { required: true, message: '请输入二级设备类型代码', trigger: 'blur' },
+        ],
+        equipmentFirstTypeId: [
+          { required: true, message: '请选择所属一级设备类型', trigger: 'blur' }
         ]
       }
     }

@@ -71,6 +71,9 @@ export default {
         ],
         equipmentSecondTypeCode: [
           { required: true, message: '请输入二级设备类型代码', trigger: 'blur' }
+        ],
+        equipmentFirstTypeId: [
+          {required: true, message: '请选择所属一级设备类型',trigger: 'blur'}
         ]
       }
     }
