@@ -59,9 +59,12 @@ export default {
         postName:this.row.postName,
       },
       rules: {
-        businessSystemFirstName:[
+        postName: [
+          { required: true, message: '请选择所属单位', trigger: 'blur' }
+        ],
+        businessSystemFirstName: [
           { required: true, message: '请输入业务系统名称', trigger: 'blur' },
-          {validator: checkName, trigger: 'blur'}
+          { validator: checkName, trigger: 'blur' }
         ]
       }
 

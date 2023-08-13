@@ -1,29 +1,30 @@
 <template>
-  <div class="addFirstLevelBusinessSystem-panel">
-    <div class="add-business-system">
-      <el-page-header content="添加业务系统" @back="back" />
+  <div class='addFirstLevelBusinessSystem-panel'>
+    <div class='add-business-system'>
+      <el-page-header content='添加业务系统' @back='back' />
     </div>
-    <div class="add-business-system">
+    <div class='add-business-system'>
       <el-row>
-        <el-form ref="addInformation" :model="addInformation" label-width="140px" :inline="false" :rules="rules">
-          <el-form-item label="所属单位" prop="postName">
-            <el-col :span="10">
-              <el-select v-model="addInformation.postName" :popper-append-to-body ="false"><!--:popper-append-to-body ="false"使此元素可以跳出全局样式另外设置-->
+        <el-form ref='addInformation' :model='addInformation' label-width='140px' :inline='false' :rules='rules'>
+          <el-form-item label='所属单位' prop='postName'>
+            <el-col :span='10'>
+              <el-select v-model='addInformation.postName' :popper-append-to-body='false'>
+                <!--:popper-append-to-body ="false"使此元素可以跳出全局样式另外设置-->
                 <el-option
-                  v-for="item in postAll"
-                  :key="item.value"
-                  :value="item.postName"
+                  v-for='item in postAll'
+                  :key='item.value'
+                  :value='item.postName'
                 />
               </el-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="业务系统名称" prop="businessSystemFirstName">
-            <el-col :span="10">
-              <el-input v-model="addInformation.businessSystemFirstName" />
+          <el-form-item label='业务系统名称' prop='businessSystemFirstName'>
+            <el-col :span='10'>
+              <el-input v-model='addInformation.businessSystemFirstName' />
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('addInformation')">添加业务系统</el-button>
+            <el-button type='primary' @click="onSubmit('addInformation')">添加业务系统</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -32,11 +33,12 @@
 </template>
 
 <script>
-import {checkFirstLevelBusinessSystemName, createFirstLevelBusinessSystem} from '@/api/baseparameter'
-import {getPost} from "@/api/select";
+import { checkFirstLevelBusinessSystemName, createFirstLevelBusinessSystem } from '@/api/baseparameter'
+import { getPost } from '@/api/select'
+
 export default {
-  name:'addFirstLevelBusinessSystem',
-  data(){
+  name: 'addFirstLevelBusinessSystem',
+  data() {
     const checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('业务系统不能为空'))
@@ -49,19 +51,22 @@ export default {
         }
       }
       callback()
-    };
-    return{
-      roleId:this.$store.state.user.roleid,
-      roleName:this.$store.state.user.role_name,
+    }
+    return {
+      roleId: this.$store.state.user.roleid,
+      roleName: this.$store.state.user.role_name,
       postAll: [],
-      addInformation:{
-        businessSystemFirstName:'',
-        postName:'',
+      addInformation: {
+        businessSystemFirstName: '',
+        postName: ''
       },
       rules: {
-        businessSystemFirstName:[
+        postName: [
+          { required: true, message: '请选择所属单位', trigger: 'blur' }
+        ],
+        businessSystemFirstName: [
           { required: true, message: '请输入业务系统名称', trigger: 'blur' },
-          {validator: checkName, trigger: 'blur'}
+          { validator: checkName, trigger: 'blur' }
         ]
       }
     }
@@ -76,7 +81,7 @@ export default {
       })
     })
   },
-  methods:{
+  methods: {
     back() {
       this.$emit('changeDiv', '0')
     },
@@ -85,10 +90,10 @@ export default {
         if (valid) {
           this.addInformation.postId = this.roleId
           const params = this.addInformation
-          console.log("-----",params)
+          console.log('-----', params)
           createFirstLevelBusinessSystem(params).then(res => {
-            console.log("--------------------",res)
-            this.$alert("提交成功", '提示', {
+            console.log('--------------------', res)
+            this.$alert('提交成功', '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false
@@ -99,9 +104,9 @@ export default {
             console.log(err)
           })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
 
     // 验证添加的业务系统是否存在
@@ -115,20 +120,22 @@ export default {
           this.nameRules = false
         }
       })
-    },
+    }
   }
 }
 </script>
 
-<style lang="less" scoped>
-.add-business-system{
+<style lang='less' scoped>
+.add-business-system {
   padding: 24px;
 }
+
 //覆盖全局样式代码
-/deep/.el-select-dropdown__list{
+/deep/ .el-select-dropdown__list {
   width: 750px;
 }
-/deep/.el-select-dropdown__item{
+
+/deep/ .el-select-dropdown__item {
   height: 26px;
 }
 </style>
