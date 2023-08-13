@@ -355,8 +355,9 @@ export default {
 
     changeDiv(value) {
       this.ifUpdate = value
-      this.fetchData()
-      this.Refresh()
+      this.searchData()
+      // this.fetchData()
+      // this.Refresh()
     },
   }
 
