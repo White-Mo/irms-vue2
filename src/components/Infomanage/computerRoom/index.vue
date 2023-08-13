@@ -103,7 +103,7 @@
           <h2 style="display:flex;text-align: center;color: #FFFFFF">机房机柜</h2>
         </div>
       </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:80%;left: 5%;top: 0%;">
+      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;top: -4%;">
         <el-table
           border
           height="95%"
@@ -113,13 +113,12 @@
           :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           style="top: 0%;background: rgba(20,36,55,0.3);">
-          <el-table-column  type="index" label="#"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="cabinetName" label="机柜名称"></el-table-column>
+          <el-table-column  type="index" label="#"  show-overflow-tooltip ></el-table-column>
+          <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
           <el-table-column
             align="center"
             fixed="right"
             label="操作"
-            width="120%"
           >
             <template v-slot:="scope">
               <el-button
@@ -224,10 +223,10 @@ export default {
       equipmentClickedCount:[
         //机柜1中设备(从右向左)
         {'服务器022':0,
-        '服务器023':0,
-        '服务器024':0,
-        '服务器025':0,
-        '服务器026':0
+          '服务器023':0,
+          '服务器024':0,
+          '服务器025':0,
+          '服务器026':0
         },
         //机柜2中设备
         {
