@@ -103,7 +103,7 @@
           <h2 style="display:flex;text-align: center;color: #FFFFFF">机房机柜</h2>
         </div>
       </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:80%;left: 5%;top: 0%;">
+      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;top: -4%;">
         <el-table
           border
           height="95%"
@@ -113,13 +113,12 @@
           :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           style="top: 0%;background: rgba(20,36,55,0.3);">
-          <el-table-column  type="index" label="#"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="cabinetName" label="机柜名称"></el-table-column>
+          <el-table-column  type="index" label="#"  show-overflow-tooltip ></el-table-column>
+          <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
           <el-table-column
             align="center"
             fixed="right"
             label="操作"
-            width="120%"
           >
             <template v-slot:="scope">
               <el-button
@@ -224,10 +223,10 @@ export default {
       equipmentClickedCount:[
         //机柜1中设备(从右向左)
         {'服务器022':0,
-        '服务器023':0,
-        '服务器024':0,
-        '服务器025':0,
-        '服务器026':0
+          '服务器023':0,
+          '服务器024':0,
+          '服务器025':0,
+          '服务器026':0
         },
         //机柜2中设备
         {
@@ -284,9 +283,12 @@ export default {
     this.isFullScreen = true
   },
   mounted() {
+    window.addEventListener('resize', this.handleResize2);
+    // 创建Echarts实例并绘制饼状图
+    this.handleResize2();
+
     //获取当前机房下的机柜
     // this.fetchData()
-
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
     } else {
@@ -363,6 +365,8 @@ export default {
     // if (this.myChart) {
     //   this.myChart.dispose();
     // }
+    // 在组件销毁前解绑resize事件
+    window.removeEventListener('resize', this.handleResize2);
   },
   methods: {
 
@@ -776,7 +780,15 @@ export default {
           },
         ]
       };
+      // 保存Echarts实例，以便在resize事件处理函数中调用
+      this.myChart = myChart;
       myChart.setOption(option);
+    },
+    handleResize2() {
+      if (this.myChart) {
+        // 调用Echarts实例的resize方法，重新绘制图表
+        this.myChart.resize();
+      }
     },
 
     // adjustChartPosition() {
