@@ -334,7 +334,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.onlineTime' readonly='true' :editable='false' size='medium'
+                          <el-date-picker v-model='form.onlineTime' readonly='readonly' :editable='false' size='medium'
                                           :clearable='false' style='width:auto' value-format='yyyy-MM-dd'
                                           format='yyyy-MM-dd'></el-date-picker>
                         </div>
@@ -344,7 +344,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.offlineTime' readonly='true' size='medium' :clearable='false'
+                          <el-date-picker v-model='form.offlineTime' readonly='readonly' size='medium' :clearable='false'
                                           format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto' />
                         </div>
                       </el-col>
@@ -542,7 +542,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUEnd' size='medium' />
+                          <el-input v-model='form.cabinetUEnd'  size='medium' />
                         </div>
                       </el-col>
                     </el-row>
@@ -1238,7 +1238,7 @@ export default {
           businessApplicationName: ''//业务应用名称、
         },
         config: [{ projectName: '', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
-        software: [{ project: '', projectName: '', edition: '', type: '' }],
+        software: [{ project: '', projectName: '', edition: '', type: '' , softwareIsChinaLocalization:''}],
         network: [{ networkCardName: '', ipAddress: '', macAddress: '', networkCardPort: '', switchInfo: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
         appSystemUser: [{
@@ -1264,7 +1264,7 @@ export default {
         corenessOrCapacity: '核数/容量'
         // quantity: '数量'
       },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
+      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型', softwareIsChinaLocalization: '软件是否国产' },
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
@@ -1307,7 +1307,7 @@ export default {
       },
       KeySet: {
         config: ['projectName', 'type', 'frequency', 'corenessOrCapacity'],
-        software: ['project', 'projectName', 'edition', 'type'],
+        software: ['project', 'projectName', 'edition', 'type', 'softwareIsChinaLocalization'],
         network: ['networkCardName', 'ipAddress',  'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
         appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
@@ -1330,6 +1330,14 @@ export default {
   },
   computed: {
     connectedA() {
+      //判断是虚拟机还是实体机，并做绑定
+      if (this.connectedEquipmentTypeCode[1] === 'X' || this.connectedEquipmentTypeCode[1] === 'x') {
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '0'
+        this.isBanned = false //如果是虚拟机就禁选
+      } else {
+        this.equipment.equipmentBaseInfo.trueOrVirtual = '1'
+        this.isBanned = true
+      }
       if (this.equipment.equipmentBaseInfo.postName === this.row.postName
         && this.equipment.equipmentBaseInfo.departmentName === this.row.departmentName
         && this.equipment.equipmentBaseInfo.equipmentTypeName === this.row.equipmentTypeName) {

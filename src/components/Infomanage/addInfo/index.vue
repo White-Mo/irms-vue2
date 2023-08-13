@@ -868,7 +868,7 @@ export default {
         },
         config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '' },
           { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '' }],
-        software: [{ project: '操作系统', projectName: '', edition: '', type: '' },
+        software: [{ project: '操作系统', projectName: '', edition: '', type: '', softwareIsChinaLocalization:'' },
           { project: '数据库', projectName: '', edition: '', type: '' },
           { project: '中间件', projectName: '', edition: '', type: '' }],
         // network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
@@ -896,7 +896,7 @@ export default {
         corenessOrCapacity: '核数/容量'
         // quantity: '数量'
       },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' },
+      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' , softwareIsChinaLocalization: '软件是否国产'},
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
