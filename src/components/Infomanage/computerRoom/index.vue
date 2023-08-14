@@ -97,29 +97,30 @@
       </div>
     </dv-border-box-11>
 
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
-      <el-row style="display:flex;text-align: center;top:0%;height:20%;">
-        <div style="width: 25vw;display:flex;justify-content: center;text-align: center;">
-          <h2 style="display:flex;text-align: center;color: #FFFFFF">机房机柜</h2>
+    <dv-border-box-12 class="msgTable"
+                      :style="{height:boxHeight}" style="width:25vw; position: absolute; right: 0vw; top:25rem; marginRight:10px" v-show="datacard">
+      <el-row style="display:flex;text-align: center;top:0%;">
+        <div style="width: 25vw; display:flex;justify-content: center;text-align: center;">
+          <h2 style="display:flex; text-align: center;color: #FFFFFF">机房机柜</h2>
         </div>
       </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:80%;left: 5%;top: 0%;">
+      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;position: absolute;top: 4rem">
         <el-table
+        :style="{height:computedHeight}"
           border
-          height="95%"
           class="show_table"
           flex="right"
+          height="85%"
           :data="tableData"
           :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           style="top: 0%;background: rgba(20,36,55,0.3);">
-          <el-table-column  type="index" label="#"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="cabinetName" label="机柜名称"></el-table-column>
+          <el-table-column  type="index" label="#"  show-overflow-tooltip ></el-table-column>
+          <el-table-column prop="cabinetName" label="机柜名称" ></el-table-column>
           <el-table-column
             align="center"
             fixed="right"
             label="操作"
-            width="120%"
           >
             <template v-slot:="scope">
               <el-button
@@ -224,10 +225,10 @@ export default {
       equipmentClickedCount:[
         //机柜1中设备(从右向左)
         {'服务器022':0,
-        '服务器023':0,
-        '服务器024':0,
-        '服务器025':0,
-        '服务器026':0
+          '服务器023':0,
+          '服务器024':0,
+          '服务器025':0,
+          '服务器026':0
         },
         //机柜2中设备
         {
@@ -283,10 +284,51 @@ export default {
     // this.full()
     this.isFullScreen = true
   },
+  computed: {
+    boxHeight() {
+      if (this.equipmentBaseInfo.cabinetCount === 0) {
+        return '18vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 1) {
+        return '19vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 2) {
+        return '25vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 3) {
+        return '30vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 4) {
+        return '35vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 5) {
+        return '40vh';
+      } else {
+        // 在这里你可以根据其他情况返回不同的高度
+        return '45vh';
+      }
+    },
+    computedHeight() {
+      if (this.equipmentBaseInfo.cabinetCount === 0) {
+        return '9.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 1) {
+        return '10.1vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 2) {
+        return '15.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 3) {
+        return '20.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 4) {
+        return '26vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 5) {
+        return '31.1vh';
+      } else {
+        // 在这里你可以根据其他情况返回不同的高度
+        return '36vh';
+      }
+    },
+  },
   mounted() {
+    window.addEventListener('resize', this.handleResize2);
+    // 创建Echarts实例并绘制饼状图
+    this.handleResize2();
+
     //获取当前机房下的机柜
     // this.fetchData()
-
     if (this.$store.state.machineRoom.department === '') {
       this.$router.push({ path:'/inforesources/digital_computer_room'})
     } else {
@@ -363,6 +405,8 @@ export default {
     // if (this.myChart) {
     //   this.myChart.dispose();
     // }
+    // 在组件销毁前解绑resize事件
+    window.removeEventListener('resize', this.handleResize2);
   },
   methods: {
 
@@ -776,7 +820,15 @@ export default {
           },
         ]
       };
+      // 保存Echarts实例，以便在resize事件处理函数中调用
+      this.myChart = myChart;
       myChart.setOption(option);
+    },
+    handleResize2() {
+      if (this.myChart) {
+        // 调用Echarts实例的resize方法，重新绘制图表
+        this.myChart.resize();
+      }
     },
 
     // adjustChartPosition() {
