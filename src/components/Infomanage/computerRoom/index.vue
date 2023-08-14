@@ -97,18 +97,20 @@
       </div>
     </dv-border-box-11>
 
-    <dv-border-box-12 class="msgTable" style="height: 45vh;width:25vw;position: absolute;right: 0vw;top: 25rem;margin-right: 10px" v-show="datacard">
-      <el-row style="display:flex;text-align: center;top:0%;height:20%;">
-        <div style="width: 25vw;display:flex;justify-content: center;text-align: center;">
-          <h2 style="display:flex;text-align: center;color: #FFFFFF">机房机柜</h2>
+    <dv-border-box-12 class="msgTable"
+                      :style="{height:boxHeight}" style="width:25vw; position: absolute; right: 0vw; top:25rem; marginRight:10px" v-show="datacard">
+      <el-row style="display:flex;text-align: center;top:0%;">
+        <div style="width: 25vw; display:flex;justify-content: center;text-align: center;">
+          <h2 style="display:flex; text-align: center;color: #FFFFFF">机房机柜</h2>
         </div>
       </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;top: -4%;">
+      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;position: absolute;top: 4rem">
         <el-table
+        :style="{height:computedHeight}"
           border
-          height="95%"
           class="show_table"
           flex="right"
+          height="85%"
           :data="tableData"
           :header-cell-style="{textAlign: 'center',color:'#20dbfd',background:'#142437',}"
           :cell-style="{ textAlign: 'center',color:'#20dbfd',background:'#142437',}"
@@ -281,6 +283,44 @@ export default {
   created() {
     // this.full()
     this.isFullScreen = true
+  },
+  computed: {
+    boxHeight() {
+      if (this.equipmentBaseInfo.cabinetCount === 0) {
+        return '18vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 1) {
+        return '19vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 2) {
+        return '25vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 3) {
+        return '30vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 4) {
+        return '35vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 5) {
+        return '40vh';
+      } else {
+        // 在这里你可以根据其他情况返回不同的高度
+        return '45vh';
+      }
+    },
+    computedHeight() {
+      if (this.equipmentBaseInfo.cabinetCount === 0) {
+        return '9.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 1) {
+        return '10.1vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 2) {
+        return '15.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 3) {
+        return '20.5vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 4) {
+        return '26vh';
+      } else if (this.equipmentBaseInfo.cabinetCount === 5) {
+        return '31.1vh';
+      } else {
+        // 在这里你可以根据其他情况返回不同的高度
+        return '36vh';
+      }
+    },
   },
   mounted() {
     window.addEventListener('resize', this.handleResize2);
