@@ -23,6 +23,7 @@
         >
           <el-table-column
             type="index"
+            :index='(index) => {return index + (this.currentPage - 1) * this.limit + 1}'
             align="center"
             label='序号'
             width='60'
@@ -113,6 +114,7 @@ export default {
       editionID: '中间件版本:',
       typeID: 'CPU类型:',
       type: 0,
+      currentPage:1,
       edition: 0,
       guaranteePeriod: 0,
       restaurants: [],
@@ -403,6 +405,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(this.preRow)
+      this.currentPage = val
       const params = {
         dataName: this.initname,
         dataValue: this.preRow.cabinetId,
