@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="所属部门" prop="departmentName">
             <el-col :span="10">
-              <el-select v-model="addInformation.departmentName" placeholder="请选择">
+              <el-select v-model="addInformation.departmentName" placeholder="请选择" :popper-append-to-body ="false">
                 <el-option
                   v-for="item in departmentAll"
                   :key="item.value"
@@ -214,8 +214,22 @@ export default {
 .add-business-system{
   padding: 24px;
 }
-/deep/.el-select-dropdown__list{
-  width: 900px;
+.el-select-dropdown__item {
+  height: 30px;
+  flex: 1 0 15%;
+  margin: 10px;
+}
+/deep/.el-select-dropdown__list {
+  margin: 5px 20px 20px 5px!important;
+  height: auto!important;
+  width: 1400px!important;
+  display: flex!important;
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important;
+  align-content: flex-start!important;
+  align-items: stretch!important;
+  max-height: 100vh!important;
 }
 /deep/.el-select-dropdown__item{
   height: 27px;

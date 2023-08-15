@@ -694,7 +694,9 @@
               </el-row>
               <el-row :gutter='20'>
                 <el-col :span='12'>
-                  <othertable :form='equipment.network' :lable='networkLable'>网络信息</othertable>
+                  <othertable :form='equipment.network' :lable='networkLable' @IpOrMacWrong='handleIpOrMacValidation'>
+                    网络信息
+                  </othertable>
                 </el-col>
                 <el-col :span='12'>
                   <othertable :form='equipment.protocolPort' :lable='protocolPortLable'>协议端口信息</othertable>
@@ -767,6 +769,7 @@ export default {
   },
   data() {
     return {
+      IpOrMacIsWrong: '',
       isBanned: true,
       determineLevel: '',//确定的等保等级
       successbusinessSubsystem: [],//筛选之后的业务子系统
@@ -868,7 +871,7 @@ export default {
         },
         config: [{ projectName: 'CPU', type: '', frequency: '', corenessOrCapacity: '' },
           { projectName: '内存（GB）', type: '', frequency: '', corenessOrCapacity: '' }],
-        software: [{ project: '操作系统', projectName: '', edition: '', type: '', softwareIsChinaLocalization:'' },
+        software: [{ project: '操作系统', projectName: '', edition: '', type: '', softwareIsChinaLocalization: '' },
           { project: '数据库', projectName: '', edition: '', type: '' },
           { project: '中间件', projectName: '', edition: '', type: '' }],
         // network: [{ networkCardName: '', ipAddress: '', switchInfo: '', networkCardPort: '', macAddress: '' }],
@@ -896,7 +899,13 @@ export default {
         corenessOrCapacity: '核数/容量'
         // quantity: '数量'
       },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型' , softwareIsChinaLocalization: '软件是否国产'},
+      softwareLable: {
+        project: '项目',
+        projectName: '名称',
+        edition: '版本',
+        type: '类型',
+        softwareIsChinaLocalization: '软件是否国产'
+      },
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
@@ -1125,12 +1134,15 @@ export default {
         this.active = 0
       }
     },
+    handleIpOrMacValidation(result) {
+      this.IpOrMacIsWrong = result
+    },
 
     next() {
-      this.active++
-      const equipments = []
-
+      if (this.active === 0 || this.IpOrMacIsWrong === 'success') this.active++
+      else if(this.active === 1 && this.IpOrMacIsWrong === 'wrong') this.$message({ message: 'IP或者MAC地址填写错误', type: 'error' })
       if (this.active === 2) {
+        const equipments = []
         let formatOnlineTime = JSON.parse(JSON.stringify(this.form.onlineTime)).replace(/-/g, '')//深拷贝不改变原有值
         let formatOfflineTime = JSON.parse(JSON.stringify(this.form.offlineTime)).replace(/-/g, '')//深拷贝不改变原有值
         const equip = { ...this.equipment }
