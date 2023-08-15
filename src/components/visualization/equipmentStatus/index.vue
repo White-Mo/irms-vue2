@@ -6,17 +6,17 @@
         </dv-decoration-7>
         <div style="height: 100%;width: 100%;display: flex; justify-content: center; align-items: center;">
           <el-row style="height: 100%;width: 90%;display: flex; justify-content: center; align-items: center;">
-            <el-col :span="8" style="color:#bf00ff;">
+            <el-col :span="8" style="color:#ffffff;">
               <div style="font-size: 40px;margin-bottom: 10px;">{{ useEquipmentNumber }}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>在用设备</span>
+              <span style="font-size: 20px"><i class="el-icon-tickets" style="margin-right: 5px;"></i>在用设备</span>
             </el-col>
-            <el-col :span="8" style="color:#e77272;">
+            <el-col :span="8" style="color:rgb(0,216,255);">
               <div style="font-size: 40px;margin-bottom: 10px;">{{ pauseEquipmentNumber }}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>停用设备</span>
+              <span style="font-size: 20px"><i class="el-icon-tickets" style="margin-right: 5px;"></i>停用设备</span>
             </el-col>
             <el-col :span="8" style="color:rgba(239,41,41,0.92);">
               <div style="font-size: 40px;margin-bottom: 10px;">{{ endEquipmentNumber }}</div>
-              <span><i class="el-icon-tickets" style="margin-right: 5px;"></i>报废设备</span>
+              <span style="font-size: 20px"><i class="el-icon-tickets" style="margin-right: 5px;"></i>报废设备</span>
             </el-col>
           </el-row>
         </div>

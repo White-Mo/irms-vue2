@@ -5,13 +5,14 @@
         <dv-decoration-7 style="width:100%;height:45px; font-size: 24px;color:rgba(0,234,255,0.96);">设备填表情况
         </dv-decoration-7>
         <div class="legendContainer">
+          <el-row style="height: 4vh; width: 10vw; font-size: 20px; margin-top: 5px; color: rgba(0,216,255,0.9)">图例</el-row>
           <el-row style="height: 3vh; width: 10vw;">
-            <el-col :span="10" style="background-color: rgba(255,196,0,0.64);height: 100%;"></el-col>
-            <el-col :span="14" style="margin-top: 0.8vh; color:rgba(255,196,0,0.64);;">已填报</el-col>
+            <el-col :span="10" style="background-color: rgba(255,196,0,0.93);height: 100%;margin-left: 10px"></el-col>
+            <el-col :span="12" style="margin-top: 0.8vh; color:rgb(255,196,0);;">已填报</el-col>
           </el-row>
           <el-row style="height: 3vh; width: 10vw; margin-top:  20px;">
-            <el-col :span="10" style="background-color: rgba(0,255,255,0.24);height: 100%;"></el-col>
-            <el-col :span="14" style="margin-top: 0.8vh; color:rgba(0,255,255,0.56);">未填报</el-col>
+            <el-col :span="10" style="background-color: rgba(158,161,161,0.82);height: 100%; margin-left: 10px"></el-col>
+            <el-col :span="12" style="margin-top: 0.8vh; color:rgba(158,161,161,0.98);">未填报</el-col>
           </el-row>
         </div>
         <div class="compassContainer"></div>
@@ -120,8 +121,8 @@ export default {
             center: [104.113478, 30.578343],
             itemStyle: {
               normal: {
-                areaColor: 'rgba(0,255,255,0.16)',
-                borderColor: 'rgb(242,246,250)',
+                areaColor: 'rgba(158,161,161,0.82)',
+                borderColor:  'rgb(255,255,255)',
               },
               emphasis: {
                 areaColor: '#ffffff',// 省份鼠标悬停时颜色
@@ -129,8 +130,8 @@ export default {
             },
             label: {
               show: true, // 是否显示标签
-              color: 'rgba(255,255,255,0.65)', // 标签文本颜色
-              fontSize: 11, // 标签文本大小
+              color: 'rgb(19,23,18)', // 标签文本颜色
+              fontSize: 13, // 标签文本大小
               formatter: function (params) { // 标签文本格式化函数
                 return params.name;
               }
@@ -144,193 +145,193 @@ export default {
                   unit.includes("中国地震局工程力学研究所") || unit.includes("中国地震台网中心") ||
                   unit.includes("中国地震灾害防御中心") || unit.includes("中国地震局发展研究中心") ||
                   unit.includes("中国地震局地球物理勘探中心") || unit.includes("中国地震局第一监测中心") ||
-                  unit.includes("中国地震局第二监测中心") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  unit.includes("中国地震局第二监测中心") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '安徽省',
                 itemStyle: {
-                  areaColor: unit.includes("安徽地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("安徽地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '江苏省',
                 itemStyle: {
-                  areaColor: unit.includes("江苏地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("江苏地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '江西省',
                 itemStyle: {
-                  areaColor: unit.includes("江西地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("江西地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '辽宁省',
                 itemStyle: {
-                  areaColor: unit.includes("辽宁地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("辽宁地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '内蒙古自治区',
                 itemStyle: {
-                  areaColor: unit.includes("内蒙古地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("内蒙古地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '宁夏回族自治区',
                 itemStyle: {
-                  areaColor: unit.includes("宁夏地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("宁夏地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '青海省',
                 itemStyle: {
-                  areaColor: unit.includes("青海地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("青海地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '山西省',
                 itemStyle: {
-                  areaColor: unit.includes("山西地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("山西地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '陕西省',
                 itemStyle: {
-                  areaColor: unit.includes("陕西地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("陕西地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '上海省',
                 itemStyle: {
-                  areaColor: unit.includes("上海地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("上海地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '四川省',
                 itemStyle: {
-                  areaColor: unit.includes("四川地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("四川地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '西藏自治区',
                 itemStyle: {
-                  areaColor: unit.includes("西藏地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("西藏地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '新疆维吾尔自治区',
                 itemStyle: {
-                  areaColor: unit.includes("新疆地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("新疆地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '云南省',
                 itemStyle: {
-                  areaColor: unit.includes("云南地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("云南地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '浙江省',
                 itemStyle: {
-                  areaColor: unit.includes("浙江地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("浙江地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '重庆市',
                 itemStyle: {
-                  areaColor: unit.includes("重庆地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("重庆地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '天津市',
                 itemStyle: {
-                  areaColor: unit.includes("天津地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("天津地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '河北省',
                 itemStyle: {
-                  areaColor: unit.includes("河北地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("河北地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '贵州省',
                 itemStyle: {
-                  areaColor: unit.includes("贵州地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("贵州地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '台湾省',
                 itemStyle: {
-                  areaColor: unit.includes("台湾地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("台湾地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '福建省',
                 itemStyle: {
-                  areaColor: unit.includes("福建地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("福建地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '山东省',
                 itemStyle: {
-                  areaColor: unit.includes("山东地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("山东地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '广东省',
                 itemStyle: {
-                  areaColor: unit.includes("广东地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("广东地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '海南省',
                 itemStyle: {
-                  areaColor: unit.includes("海南地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("海南地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '湖北省',
                 itemStyle: {
-                  areaColor: unit.includes("湖北地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("湖北地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '甘肃省',
                 itemStyle: {
-                  areaColor: unit.includes("甘肃地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)'
+                  areaColor: unit.includes("甘肃地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)'
                 }
               },
               {
                 name: '广西壮族自治区',
                 itemStyle: {
-                  areaColor: unit.includes("广西壮族自治区地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("广西壮族自治区地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '河南省',
                 itemStyle: {
-                  areaColor: unit.includes("河南地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("河南地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '黑龙江省',
                 itemStyle: {
-                  areaColor: unit.includes("黑龙江地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("黑龙江地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '湖南省',
                 itemStyle: {
-                  areaColor: unit.includes("湖南地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("湖南地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {
                 name: '吉林省',
                 itemStyle: {
-                  areaColor: unit.includes("吉林地震局") ? 'rgba(255,196,0,0.64)' : 'rgba(0,255,255,0.16)' // 背景颜色
+                  areaColor: unit.includes("吉林地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               }
             ]
@@ -369,135 +370,16 @@ export default {
   margin-left: 20px;
   bottom: 50px;
   width: 10vw;
-  height: 10vh;
-  //background-color: #00EAFF;
+  height: 14vh;
+  background-color: rgba(231, 114, 114, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.3); /* 添加白色虚线边框 */
 }
 .compassContainer{
   position: absolute;
   top: 10px;
   right: 10px;
-  height: 140px;
-  width: 180px;
+  height: 110px;
+  width: 150px;
   background: url(../../../assets/img/compass.png) no-repeat 0 0 / cover;
 }
 </style>
-
-
-
-<!--<template>
-  <div style="height: 100%; width: 100%;">
-    <dv-border-box-12>
-      <div>
-        <dv-decoration-7 style="width:100%;height:40px; font-size: 15px;color:rgba(0,234,255,0.96);">设备分布</dv-decoration-7>
-        <div style="height: 100%; width: 90%;margin-left: 20px;">
-          <div id="myChart" style="height: 750px; width: 620px;"></div>
-        </div>
-      </div>
-    </dv-border-box-12>
-  </div>
-</template>
-<script>
-import * as echarts from "echarts";
-import chinaJson from "@/assets/china.json";
-import {getUnitWithExistData} from "@/api/dashboard";
-import {getPost} from "@/api/select";
-
-export default {
-  name: "map",
-  data(){
-    return{
-      postAllName:[],
-      unitEquipmentCountData:[],
-      listData:[],
-    }
-  },
-  mounted() {
-    this.mapInit();
-    this.handlePostEquipmentCountData()
-  },
-  methods: {
-    async handelPostCountData(){
-      let list = []
-      let result = []
-      await getPost().then(response => {
-        list = response.data.items
-      })
-      for (let i = 0; i < list.length; i++) {
-        result.push({postName: list[i].postName})
-      }
-      return result
-    },
-    async handlePostEquipmentCountData() {
-      let list = []
-      let result = []
-      await getUnitWithExistData().then((response) => {
-        list = response.data.items
-      })
-      for (let i = 0; i < list.length; i++) {
-        result.push({name: list[i][0], value: list[i][1]})
-      }
-      return result
-    },
-    async initData(){
-      // 获取所有单位名字
-      this.postAllName = await this.handelPostCountData()
-      this.unitEquipmentCountData = await this.handlePostEquipmentCountData()
-      // 根据已知数据构建listData数组
-      this.listData = this.postAllName.map(post => {
-        const equipmentCountObj = this.unitEquipmentCountData.find(item => item.name === post.postName)
-        const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
-        return {  // 返回组合的对象
-          postName: post.postName,
-          equipmentCount: equipmentCount,
-        };
-      });
-      console.log("listData",this.listData)
-    },
-
-    mapInit() {
-        // 初始化 echarts 实例
-        let myChart = echarts.init(document.getElementById("myChart"));
-        // 注册中国地图
-        echarts.registerMap("china", chinaJson);
-        // 设置地图图表的选项
-        const options = {
-          tooltip: {
-            trigger: 'item',
-            textStyle:{
-              fontSize: 18,
-              color: 'red'
-            },
-          },
-          geo: {
-            map: 'china',
-            roam: true,
-            zoom: 1.2,
-            center: [104.113478, 26.578343], // 设置地图的中心点为贵州的经纬度
-            itemStyle: {
-              normal: {
-                areaColor: 'rgba(0,255,255,0.16)',
-                borderColor: 'rgb(242,246,250)',
-              },
-              emphasis: {
-                areaColor: '#ffffff',// 省份鼠标悬停时颜色
-              }
-            },
-            label: {
-              show: true, // 是否显示标签
-              color:'rgba(255,255,255,0.65)', // 标签文本颜色
-              fontSize: 11, // 标签文本大小
-              formatter: function (params) { // 标签文本格式化函数
-                return params.name;
-              }
-            },
-          },
-        };
-        // 将选项设置给 echarts 实例以渲染地图
-        myChart.setOption(options);
-
-    },
-  },
-};
-</script>
-<style scoped>
-</style>-->

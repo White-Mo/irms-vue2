@@ -2,7 +2,7 @@
   <div style="height: 100%; width: 100%;">
     <dv-border-box-13>
       <div>
-        <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7>
+        <dv-decoration-7 style="width:100%;height:50px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7>
         <div style="height: 100%;width: 100%; display: flex; justify-content: center; align-items: center;">
           <dv-scroll-board
             :config="config"
@@ -80,7 +80,7 @@ export default {
     },
     async initDataByCurrentRole(){
       if (this.roles[0] === '超级管理员') {
-        this.title = '当天各单位系统使用频度'
+        this.title = '当天各单位系统使用次数'
         // 获取所有单位名字
         this.postAllName = await this.handelPostCountData()
         // 获取各单位系统使用频度
@@ -113,7 +113,7 @@ export default {
           evenRowBGC: 'rgba(0,216,255,0.22)',
           scrollable: true}
       }else {
-        this.title = '当天各部门系统使用频度'
+        this.title = '当天各部门系统使用次数'
         // 获取所有部门名字
         this.departmentAllName = await this.handleDepartmentCountData()
         // 获取各部门当天系统使用频度

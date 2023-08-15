@@ -2,7 +2,7 @@
   <div style="height: 100%;width: 100%;">
     <dv-border-box-13>
       <div>
-        <dv-decoration-7 style="width:100%;height:60px; font-size: 15px;color:rgba(0,234,255,0.96);">常见设备信息统计</dv-decoration-7>
+        <dv-decoration-7 style="width:100%;height:60px; font-size: 18px;color:rgba(0,234,255,0.96);">常见设备信息统计</dv-decoration-7>
         <div style="height: 31vh; margin-top: -4vh; margin-left: 10px;" id="commonEquipmentInformation">
 
         </div>
@@ -54,11 +54,11 @@ export default {
             show: true,
           },
           axisTick: {
-            show: true
+            show: true,
           },
           axisLabel: {
             color: '#fff',
-            // rotate: -20, // 设置旋转角度为 -45 度
+            fontSize:15,
             textStyle: {
               align: 'center', // 文字右对齐
             },
@@ -82,21 +82,7 @@ export default {
           {
             data: this.count,
             type: 'bar',
-            itemStyle: {
-              // barBorderRadius: [20, 20, 0, 0], // 仅设置末端为圆角，其他角为直角
-              // color: function () {
-              //   return (
-              //     "rgb(" +
-              //     Math.round(Math.random() * 255) +
-              //     ", " +
-              //     Math.round(Math.random() * 255) +
-              //     ", " +
-              //     Math.round(Math.random() * 255) +
-              //     ")"
-              //   );
-              // }
-            },
-              colorBy:"data",
+            colorBy:"data",
             label: {
               show: true,
               position: 'top', // 设置标签显示在柱状图顶部
