@@ -1,21 +1,23 @@
 <template>
-  <div class="shadows">
-    <div class="shadows paddingLeft"><slot /></div>
-    <div class="content">
+  <div class='shadows'>
+    <div class='shadows paddingLeft'>
+      <slot />
+    </div>
+    <div class='content'>
       <div v-if="hh !== '2'">
-        <el-button @click="addLine">新增行</el-button>
-        <el-button v-show="form.length !== 1 && form.length !== ch" @click="delLine">删除行</el-button>
+        <el-button @click='addLine'>新增行</el-button>
+        <el-button v-show='form.length !== 1 && form.length !== ch' @click='delLine'>删除行</el-button>
       </div>
-      <div class="table">
+      <div class='table'>
         <el-table
-          :data="form"
+          :data='form'
           border
           highlight-current-row
           stripe
         >
-          <af-table-column v-for="(value,key,index) in lable" :key="index" align="center" :label="value">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row[key]" :disabled="hh==='2'" @blur="checkData(scope.row)" />
+          <af-table-column v-for='(value,key,index) in lable' :key='index' align='center' :label='value'>
+            <template slot-scope='scope'>
+              <el-input v-model='scope.row[key]' :disabled="hh==='2'" @input='checkData(scope.row)' />
             </template>
           </af-table-column>
         </el-table>
@@ -25,7 +27,7 @@
 </template>
 
 <script>
-import {validateIP, validateMAC} from '@/api/validate'
+import { validateIP, validateMAC } from '@/api/validate'
 
 export default {
   props: {
@@ -50,19 +52,38 @@ export default {
     lable: {
       type: Object,
       required: true
-    },
+    }
   },
   data() {
-    return {  }
+    return {
+      validationTimeout: 0,
+    }
   },
   methods: {
+
     async checkData(row) {
-      const checkSwitch = validateMAC(row.macAddress)
-      const checkIp = validateIP(row.ipAddress)
-      if(!checkIp){await this.$message({message:"IP地址填写错误",type:"error"})}
-      else{}
-      if(!checkSwitch){await this.$message({message:"MAC地址填写错误",type:"error"})}
-      else{}
+
+      clearTimeout(this.timerId)
+
+      this.timerId = setTimeout(async () => {
+        const checkSwitch = validateMAC(row.macAddress)
+        const checkIp = validateIP(row.ipAddress)
+        if (!checkIp) {
+          await this.$message({ message: 'IP地址填写错误', type: 'error' })
+        }
+        if (!checkSwitch) {
+          await this.$message({ message: 'MAC地址填写错误', type: 'error' })
+        }
+        if (!checkIp || !checkSwitch) {
+          this.$emit('IpOrMacWrong', 'wrong')
+        } else {
+          this.$emit('IpOrMacWrong', 'success')
+        }
+
+        this.timerId = 0
+      }, 1000)
+
+
     },
     addLine() {
       console.log(this.ch)
@@ -81,26 +102,31 @@ export default {
 </script>
 
 <style scoped>
-.shadows{
+.shadows {
   box-shadow: 0 0 4px #0000004d !important;
   margin-top: 35px;
 }
-.paddingLeft{
-    padding-left: 10px;
+
+.paddingLeft {
+  padding-left: 10px;
 }
-.label-style{
-    text-align: center;
-    border-right: 1px solid #c7c3c3b8;
-    border-top: 1px solid #c7c3c3b8;
+
+.label-style {
+  text-align: center;
+  border-right: 1px solid #c7c3c3b8;
+  border-top: 1px solid #c7c3c3b8;
 }
-.content{
+
+.content {
   padding: 10px;
 }
-.table{
+
+.table {
   border: 1px solid #c7c3c3b8;
   margin-top: 10px;
 }
-.active{
+
+.active {
   border-color: red;
 }
 </style>

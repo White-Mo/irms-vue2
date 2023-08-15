@@ -320,6 +320,10 @@ export default {
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
+.el-select-dropdown__item {
+  padding: 0 35px;
+  overflow: hidden;
+}
 .searchInput {
   height: 40px;
   text-align: center;
