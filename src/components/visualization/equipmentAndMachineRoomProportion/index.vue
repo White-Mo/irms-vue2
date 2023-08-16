@@ -5,11 +5,11 @@
         <div>
           <el-row>
             <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:110px; margin-top: 5px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
-            <el-col :span="12"><el-button round class="changeShow" v-text="isShowMachineRoom" v-if="this.roles[0]==='超级管理员'" @click="changeShow"></el-button></el-col>
+            <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" @click="changeShow"></el-button></el-col>
           </el-row>
         </div>
         <div style="height: 100%; width: 90%;margin-left: 20px;">
-          <div id="equipmentOrMachineRoomProportion" style="height: 25vh; width: 100%;">
+          <div id="equipmentOrChinaLocalizationProportion" style="height: 25vh; width: 100%;">
 
           </div>
         </div>
@@ -20,20 +20,20 @@
 
 <script>
 import {getDepartment, getPost} from "@/api/select";
-import {getDepartmentAllCountData, getMachineRoomAllCountData} from "@/api/dashboard";
+import { getChinaLocalization, getDepartmentAllCountData, getChinaLocalizationAllCountData } from '@/api/dashboard'
 import {mapGetters} from "vuex";
 import * as echarts from "echarts";
 
 export default {
   data() {
     return {
-      isShowMachineRoom:'机房',
-      showEquipmentOrMachineRoomProportion: '设备占比',
+      isShowChinaLocalization:'国产设备',
+      showEquipmentOrChinaLocalizationProportion: '设备占比',
       departmentAllName: [],
       listData: [],
       postAllName: [],
       equipmentAllName: [],
-      machineRoomAllName: [],
+      ChinaLocalizationAllName: [],
       title:'',
     }
   },
@@ -85,10 +85,10 @@ export default {
       }
       return result
     },
-    async handleMachineRoomAllCountData() {
+    async handleChinaLocalizationAllCountData() {
       let list = []
       let result = []
-      await getMachineRoomAllCountData().then((response) => {
+      await getChinaLocalization().then((response) => {
         list = response.data.items
       })
       for (let i = 0; i < list.length; i++) {
@@ -98,62 +98,62 @@ export default {
     },
     async initDataByCurrentRole() {
       if (this.roles[0] === '超级管理员') {
-        this.title = '各单位设备 / 机房占比'
+        this.title = '各单位设备 / 国产设备占比'
         // 获取所有单位名字
         this.postAllName = await this.handelPostCountData()
         // 获取各单位设备总数
         this.equipmentAllName = await this.handlePostOrDepartmentAllCountData()
-        // 获取各单位机房总数
-        this.machineRoomAllName = await this.handleMachineRoomAllCountData()
+        // 获取各单位国产设备总数
+        this.ChinaLocalizationAll = await this.handleChinaLocalizationAllCountData()
         // 根据已知数据构建listData数组
         this.listData = this.postAllName.map(post => {
           // 查找对应单位设备总数
           const equipmentCountObj = this.equipmentAllName.find(item => item.name === post.postName)
-          // 查找对应单位机房总数
-          const machineRoomCountObj = this.machineRoomAllName.find(item => item.name === post.postName)
+          // 查找对应单位国产设备总数
+          const ChinaLocalizationCountObj = this.ChinaLocalizationAll.find(item => item.name === post.postName)
 
-          // 获取设备总数和机房总数，如果找不到对应项，默认为0
+          // 获取设备总数和国产设备总数，如果找不到对应项，默认为0
           const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
-          const machineRoomCount = machineRoomCountObj ? machineRoomCountObj.value : 0
+          const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
           // 返回组合的对象
           return {
             name: post.postName,
-            value: this.showEquipmentOrMachineRoomProportion === '设备占比' ? equipmentCount : machineRoomCount,
+            value: this.showEquipmentOrChinaLocalizationProportion === '设备占比' ? equipmentCount : ChinaLocalizationCount,
           };
         });
 
       } else {
-        this.title = '各部门设备占比'
+        this.title = '各部门设备 / 国产设备占比'
         // 获取所有部门名字
         this.departmentAllName = await this.handleDepartmentCountData()
         // 获取各部门设备总数
         this.equipmentAllName = await this.handlePostOrDepartmentAllCountData()
-        // 获取各部门机房总数
-        // this.machineRoomAllName = await this.handleMachineRoomAllCountData()
+        // 获取各单位国产设备总数
+        this.ChinaLocalizationAll = await this.handleChinaLocalizationAllCountData()
         // 根据已知数据构建listData数组
         this.listData = this.departmentAllName.map(department => {
           // 查找对应单位设备总数
           const equipmentCountObj = this.equipmentAllName.find(item => item.name === department.departmentName)
-          // 查找对应单位机房总数
-          // const machineRoomCountObj = this.machineRoomAllName.find(item => item.name === department.departmentName)
+          // 查找对应单位国产设备总数
+          const ChinaLocalizationCountObj = this.ChinaLocalizationAll.find(item => item.name === department.departmentName)
 
-          // 获取设备总数和机房总数，如果找不到对应项，默认为0
+          // 获取设备总数和国产设备总数，如果找不到对应项，默认为0
           const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
-          // const machineRoomCount = machineRoomCountObj ? machineRoomCountObj.value : 0
+          const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
           // 返回组合的对象
           return {
             name: department.departmentName,
-            value: equipmentCount
+            value: this.showEquipmentOrChinaLocalizationProportion === '设备占比' ? equipmentCount : ChinaLocalizationCount,
           };
         });
-        console.log("nb", this.listData)
       }
+      this.listData = this.listData.filter(item => item.value !== 0);
       this.initEcharts()
     },
 
     initEcharts() {
       let pieData = this.listData.map(item => ({ value: item.value, name: item.name }));
-      const chartDom = document.getElementById('equipmentOrMachineRoomProportion');
+      const chartDom = document.getElementById('equipmentOrChinaLocalizationProportion');
       const myChart = echarts.init(chartDom);
       let option = {
         tooltip: {
@@ -224,17 +224,15 @@ export default {
       }
     },
     changeShow(){
-      if(this.roles[0] ==='超级管理员'){
-        if(this.isShowMachineRoom === '机房'){
-          this.isShowMachineRoom = '设备'
-          this.showEquipmentOrMachineRoomProportion='机房占比'
+        if(this.isShowChinaLocalization === '国产设备'){
+          this.isShowChinaLocalization = '设备'
+          this.showEquipmentOrChinaLocalizationProportion='国产设备占比'
           this.initDataByCurrentRole()
         }else {
-          this.isShowMachineRoom = '机房'
-          this.showEquipmentOrMachineRoomProportion='设备占比'
+          this.isShowChinaLocalization = '国产设备'
+          this.showEquipmentOrChinaLocalizationProportion='设备占比'
           this.initDataByCurrentRole()
         }
-      }
     },
   },
   beforeDestroy() {

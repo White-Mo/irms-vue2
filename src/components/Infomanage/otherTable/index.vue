@@ -79,9 +79,8 @@ export default {
         } else {
           this.$emit('IpOrMacWrong', 'success')
         }
-
         this.timerId = 0
-      }, 1000)
+      }, 800)
 
 
     },

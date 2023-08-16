@@ -105,3 +105,13 @@ export function getCommonEquipmentInformationAndCount(){
     responseType: 'json',
   })
 }
+
+// 获取各单位部门下的国产化设备
+
+export function getChinaLocalization(){
+  return request({
+    url: '/home/inforesources/getChinaLocalization',
+    method: 'get',
+    responseType: 'json'
+  })
+}
