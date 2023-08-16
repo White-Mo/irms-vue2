@@ -147,6 +147,7 @@ export default {
           };
         });
       }
+      this.listData = this.listData.filter(item => item.value !== 0);
       this.initEcharts()
     },
 
