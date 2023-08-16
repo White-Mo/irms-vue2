@@ -1551,15 +1551,14 @@ export default {
         <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
       </div>
       <el-dialog
-        title="提示"
         :visible.sync="dialogVisible"
-        width="80%"
+        width="90%"
         >
-        <span>这是一段信息</span>
+        <statisticalTable></statisticalTable>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
+          <el-button class="download" type="primary" @click="downloadStatisticalTable">下 载</el-button>
+          <el-button class="download" type="primary" @click="dialogVisible = false">取 消</el-button>
+        </span>
       </el-dialog>
       <!-- 头部结束 -->
       <!-- 主体部分开始 -->
@@ -1609,40 +1608,40 @@ import operationCountCarouselList from "@/components/visualization/operationCoun
 import equipmentAndMachineRoomProportion from "@/components/visualization/equipmentAndMachineRoomProportion";
 import {getInfo} from "@/api/dashboard";
 import {getExcelDemo4} from "@/api/get_excel";
+import statisticalTable from "@/components/visualization/statisticalTable";
 
 export default {
   components: {
     anlageuebersicht, carouselList, commonEquipmentInformation,
-    echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList
+    echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList,statisticalTable
   },
   data() {
     return {
       dialogVisible: false,
+      downloadReport: "生成统计报表",
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
       roleName:this.$store.state.user.roles,
       resultArray:[],
-      downloadReport: "生成统计报表",
     }
-  },
-  created() {
-    let params={
-      postName:this.userName,
-      roleId: this.roleId,
-      roleName:this.roleName[0],
-    }
-    getInfo(params).then(res=>{
-      console.log("************+++++++++++++",res)
-      this.resultArray.push(res.data);
-    })
   },
    mounted() {
-
+     let params={
+       postName:this.userName,
+       roleId: this.roleId,
+       roleName:this.roleName[0],
+     }
+     getInfo(params).then(res=>{
+       this.resultArray.push(res.data);
+     })
   },
   methods: {
     async generateStatisticalReports() {
       this.dialogVisible = true
-      // await getExcelDemo4(this.resultArray[0])
+    },
+    downloadStatisticalTable(){
+      this.dialogVisible = false
+      getExcelDemo4(this.resultArray[0])
     }
   }
 }
@@ -1818,6 +1817,11 @@ export default {
 
 .commonEquipmentInformation {
   height: 31vh;
+}
+.download{
+  height: 30px;
+  width: 80px;
+  font-size: 20px;
 }
 </style>
 

@@ -2170,7 +2170,6 @@ export async function getExcelDemo3(StatisticsData, state) {
 
 //-----------------田累积-------------------
 export async function getExcelDemo4(data) {
-  console.log('6666666666', data)
   let arr_name1 =[];
   for (let i = 0; i < 6; i++) {
     if (i === 0) {
