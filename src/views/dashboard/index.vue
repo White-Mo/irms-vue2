@@ -1550,6 +1550,17 @@ export default {
         </div>
         <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
       </div>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="80%"
+        >
+        <span>这是一段信息</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+      </el-dialog>
       <!-- 头部结束 -->
       <!-- 主体部分开始 -->
       <div class="main">
@@ -1606,6 +1617,7 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
       roleName:this.$store.state.user.roles,
@@ -1629,6 +1641,7 @@ export default {
   },
   methods: {
     async generateStatisticalReports() {
+      this.dialogVisible = true
       // await getExcelDemo4(this.resultArray[0])
     }
   }
