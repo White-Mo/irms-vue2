@@ -335,6 +335,10 @@ export default {
       this.computerTitle = this.$store.state.machineRoom.department + this.$store.state.machineRoom.installation_position
       this.unitid = this.$store.state.machineRoom.unitid
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
+      // this.fetchData().then((res) =>{
+      //   console.log("res.data.items",res.data.items)
+      // })
+
       getCabinet(machineRoomId).then((res) =>{
         this.tableData = res.data.items
         // console.log('this.tableData',this.tableData)
@@ -346,7 +350,7 @@ export default {
           let equipmentArray = []
           getEquipmentByCabinet(element.cabinetId).then((res) =>{
 
-            // console.log("res.data",res.data)
+            console.log("getEquipmentByCabinet.res.data",res.data)
             res.data.forEach((element) =>{
               let equipmentObject = {
                 equipmentName:'',
@@ -409,6 +413,25 @@ export default {
     window.removeEventListener('resize', this.handleResize2);
   },
   methods: {
+    fetchData(cabinetId) {
+      const params = {
+        dataName: ['cabinetId'],
+        dataValue: cabinetId,
+        status: "0",
+        start: 0,
+        limit: 99999
+      }
+      // console.log(this.initdata)
+      getList(params).then((response) => {
+        this.list = response.data.items
+        this.total = response.data.total
+        console.log("this.list",this.list)
+        //console.log("List---------");
+        //console.log(this.list)
+        this.listLoading = false
+      })
+
+    },
 
     //为解决threejs射线不准问题，设置全屏
     full () {
