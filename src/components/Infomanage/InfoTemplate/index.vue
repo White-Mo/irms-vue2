@@ -346,7 +346,6 @@ export default {
     },
     // 综合数据管理展示与查询--lry
     fetchData() {
-
       this.listLoading = true
       console.log(this.preRow)
       // 判断处理---解决空值与后台逻辑不符合问题----时间紧待优化
@@ -368,10 +367,11 @@ export default {
         start: this.start,
         limit: this.limit
       }
-      // console.log(this.initdata)
+      console.log("this.start,this.limit",this.start,this.limit)
       getList(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
+        console.log("this.list",this.list)
         //console.log("List---------");
         //console.log(this.list)
         this.listLoading = false

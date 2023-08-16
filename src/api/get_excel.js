@@ -394,7 +394,7 @@ export async function getExcelDemo1(data) {
   document.body.removeChild(link)
 }
 
-export async function getExcelDemo2(data_list, data_num = 1) {
+export async function getExcelDemo2(data_list, data_num) {
   let progress_item_num = 0
   let data_len = data_list.length
   let file_list = []
@@ -1964,6 +1964,8 @@ export async function getExcelDemo2(data_list, data_num = 1) {
       progress_list[progress_item_num]++
       // //console.log(progress_list)
       window.localStorage.setItem('report_form_info', file_list.toString() + ';' + progress_list.toString())
+      console.log("file_list",file_list)
+      console.log("progress_list",progress_list)
     }
     //导出下载
     let buffer = await workbook.xlsx.writeBuffer()
