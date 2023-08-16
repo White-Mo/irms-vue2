@@ -1620,6 +1620,7 @@ export default {
       roleName:this.roleName[0],
     }
     getInfo(params).then(res=>{
+      console.log("************+++++++++++++",res)
       this.resultArray.push(res.data);
     })
   },
@@ -1628,7 +1629,7 @@ export default {
   },
   methods: {
     async generateStatisticalReports() {
-      await getExcelDemo4(this.resultArray[0])
+      // await getExcelDemo4(this.resultArray[0])
     }
   }
 }
