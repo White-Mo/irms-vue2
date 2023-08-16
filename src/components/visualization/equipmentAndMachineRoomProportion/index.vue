@@ -224,7 +224,7 @@ export default {
     },
     changeShow(){
         if(this.isShowChinaLocalization === '国产设备'){
-          this.isShowChinaLocalization = '各部门设备'
+          this.isShowChinaLocalization = '设备'
           this.showEquipmentOrChinaLocalizationProportion='国产设备占比'
           this.initDataByCurrentRole()
         }else {
