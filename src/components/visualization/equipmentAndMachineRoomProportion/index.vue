@@ -5,7 +5,7 @@
         <div>
           <el-row>
             <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:110px; margin-top: 5px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
-            <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" v-if="this.roles[0]==='超级管理员'" @click="changeShow"></el-button></el-col>
+            <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" @click="changeShow"></el-button></el-col>
           </el-row>
         </div>
         <div style="height: 100%; width: 90%;margin-left: 20px;">
