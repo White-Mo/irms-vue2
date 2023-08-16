@@ -424,7 +424,7 @@
                       </el-col>
                       <el-col :span='6'>
                         <div class='label-style'>
-                          <el-radio-group v-model='form.trueOrVirtual'>
+                          <el-radio-group v-model='form.trueOrVirtual':disabled="true">
                             <el-radio label='1'>实 体 机</el-radio>
                             <el-radio label='0'>虚 拟 机</el-radio>
                           </el-radio-group>
@@ -505,8 +505,8 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' placeholder='请选择'
-                                     clearable>
+                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' :disabled='isBanned === false'
+                                     placeholder='请选择' clearable>
                             <el-option
                               v-for='item in machineRoomNames'
                               :key='item.value'
@@ -520,7 +520,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.cabinetName' placeholder='请选择' clearable>
+                          <el-select v-model='form.cabinetName' placeholder='请选择' :disabled='isBanned === false' clearable>
                             <el-option
                               v-for='item in cabinetAll'
                               :key='item.value'
@@ -534,7 +534,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUStart' size='medium' />
+                          <el-input v-model='form.cabinetUStart' :disabled='isBanned === false' size='medium' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -542,7 +542,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUEnd'  size='medium' />
+                          <el-input v-model='form.cabinetUEnd':disabled='isBanned === false'size='medium' />
                         </div>
                       </el-col>
                     </el-row>
@@ -1124,6 +1124,7 @@ export default {
   },
   data() {
     return {
+      isBanned: true,
       determineLevel: '',//确定的等保等级
       successbusinessSubsystem: [],//筛选之后的业务子系统
       businessSubsystem: [],//获取的业务子系统
