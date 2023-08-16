@@ -2260,7 +2260,6 @@ export async function getExcelDemo4(data) {
     return self.indexOf(value) === index;
   });
   arr_name[arr_name.length] = '总计';
-  console.log('arr_name1',arr_name);
   //创建工作簿↓
   const workbook = new ExcelJS.Workbook()
   //设置工作簿属性↓

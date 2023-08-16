@@ -24,43 +24,19 @@ export default {
       tableData:[]
     }
   },
-  created() {
+  mounted() {
     let params={
       postName:this.userName,
       roleId: this.roleId,
       roleName:this.roleName[0],
     }
     getInfo(params).then(res=>{
-      this.businessSystemNumber = res.data.business
-      this.businessSonSystemNumber = res.data.businessSon
-      this.fixEquipmentNumber = res.data.fixCount
-      this.normalEquipmentNumber = res.data.normalCount
-      this.scrapEquipmentNumber = res.data.scrapCount
-      this.totalEquipmentNumber = res.data.subCount
+      console.log("99999999999999",res.data)
     })
   },
-  mounted() {
-    this.handleStatisticalTable()
-  },
   methods:{
-    async handelPostCountData() {
-      let list = []
-      let result = []
-      await getPost().then(response => {
-        list = response.data.items
-      })
-      for (let i = 0; i < list.length; i++) {
-        result.push({ postName: list[i].postName })
-      }
-      return result
-    },
-    async handleStatisticalTable(){
-      const allUnitName = await this.handelPostCountData()
-      this.tableData = allUnitName.map(unit=>{
-        const businessSystemNumber = this.businessSystemNumber.find(item => item[0] === unit.postName)
-        console.log("+++++++++",businessSystemNumber)
-      })
-    }
+
+
   }
 }
 </script>
