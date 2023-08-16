@@ -139,34 +139,39 @@ export default {
           carousel:'single',
         }
       } else {
-        this.title = '各部门设备数'
+        this.title = '各部门设备 / 国产设备数'
         // 获取所有部门名字
         this.departmentAllName = await this.handleDepartmentCountData()
         // 获取各部门设备总数
         this.equipmentAllName = await this.handlePostOrDepartmentAllCountData()
-        // 获取各部门国产设备总数
-        // this.ChinaLocalizationAllName = await this.handleChinaLocalizationAllCountData()
+        // 获取各单位国产化设备总数
+        this.ChinaLocalizationAll = await this.handleChinaLocalizationAllCountData()
+
         // 根据已知数据构建listData数组
         this.listData = this.departmentAllName.map(department => {
           // 查找对应单位设备总数
           const equipmentCountObj = this.equipmentAllName.find(item => item.name === department.departmentName)
           // 查找对应单位国产设备总数
-          // const ChinaLocalizationCountObj = this.ChinaLocalizationAllName.find(item => item.name === department.departmentName)
+          const ChinaLocalizationCountObj = this.ChinaLocalizationAll.find(item => item.name === department.departmentName)
 
           // 获取设备总数和国产设备总数，如果找不到对应项，默认为0
           const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
-          // const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
+          const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
           // 返回组合的对象
           return {
             departmentName: department.departmentName,
-            equipmentCount: equipmentCount
-            // ChinaLocalizationCount: ChinaLocalizationCount
+            equipmentCount: equipmentCount,
+            ChinaLocalizationCount: ChinaLocalizationCount
           }
         })
-        console.log('9999999999999999999', this.listData)
+        //按equipmentCount降序排序
+        this.listData.sort((a, b) => {
+          return b.equipmentCount - a.equipmentCount
+        })
+        this.listData = this.listData.filter(item => item.equipmentCount !== 0);
         this.config = {
-          data: this.listData.map(item => [item.departmentName, item.equipmentCount]),
-          header: ['部门名称', '设备总数'],
+          data: this.listData.map(item => [item.departmentName, item.equipmentCount, item.ChinaLocalizationCount]),
+          header: ['部门名称', '设备总数', '国产设备总数'],
           align: 'center',
           headerHeight: 35,
           rowNum: 8,

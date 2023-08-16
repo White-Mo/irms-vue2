@@ -5,7 +5,7 @@
         <div>
           <el-row>
             <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:110px; margin-top: 5px; font-size: 15px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
-            <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" v-if="this.roles[0]==='超级管理员'" @click="changeShow"></el-button></el-col>
+            <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" @click="changeShow"></el-button></el-col>
           </el-row>
         </div>
         <div style="height: 100%; width: 90%;margin-left: 20px;">
@@ -123,30 +123,29 @@ export default {
         });
 
       } else {
-        this.title = '各部门设备占比'
+        this.title = '各部门设备 / 国产设备占比'
         // 获取所有部门名字
         this.departmentAllName = await this.handleDepartmentCountData()
         // 获取各部门设备总数
         this.equipmentAllName = await this.handlePostOrDepartmentAllCountData()
-        // 获取各部门国产设备总数
-        // this.ChinaLocalizationAllName = await this.handleChinaLocalizationAllCountData()
+        // 获取各单位国产设备总数
+        this.ChinaLocalizationAll = await this.handleChinaLocalizationAllCountData()
         // 根据已知数据构建listData数组
         this.listData = this.departmentAllName.map(department => {
           // 查找对应单位设备总数
           const equipmentCountObj = this.equipmentAllName.find(item => item.name === department.departmentName)
           // 查找对应单位国产设备总数
-          // const ChinaLocalizationCountObj = this.ChinaLocalizationAllName.find(item => item.name === department.departmentName)
+          const ChinaLocalizationCountObj = this.ChinaLocalizationAll.find(item => item.name === department.departmentName)
 
           // 获取设备总数和国产设备总数，如果找不到对应项，默认为0
           const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
-          // const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
+          const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
           // 返回组合的对象
           return {
             name: department.departmentName,
-            value: equipmentCount
+            value: this.showEquipmentOrChinaLocalizationProportion === '设备占比' ? equipmentCount : ChinaLocalizationCount,
           };
         });
-        console.log("nb", this.listData)
       }
       this.initEcharts()
     },
@@ -224,9 +223,8 @@ export default {
       }
     },
     changeShow(){
-      if(this.roles[0] ==='超级管理员'){
         if(this.isShowChinaLocalization === '国产设备'){
-          this.isShowChinaLocalization = '设备'
+          this.isShowChinaLocalization = '各部门设备'
           this.showEquipmentOrChinaLocalizationProportion='国产设备占比'
           this.initDataByCurrentRole()
         }else {
@@ -234,7 +232,6 @@ export default {
           this.showEquipmentOrChinaLocalizationProportion='设备占比'
           this.initDataByCurrentRole()
         }
-      }
     },
   },
   beforeDestroy() {
