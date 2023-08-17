@@ -1,8 +1,9 @@
 <template>
-  <div style='height: 100%; width: 100%;'>
+  <div style="height: 100%; width: 100%;">
     <dv-border-box-13>
       <div>
-        <dv-decoration-7 style="width:100%;height:50px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7>
+        <dv-decoration-7 style="width:100%;height:50px; font-size: 18px;color:rgba(0,234,255,0.96);">{{ title }}
+        </dv-decoration-7>
         <div style="height: 100%;width: 100%; display: flex; justify-content: center; align-items: center;">
           <dv-scroll-board
             :config="config"
@@ -108,7 +109,6 @@ export default {
           const equipmentCount = equipmentCountObj ? equipmentCountObj.value : 0
           const ChinaLocalizationCount = ChinaLocalizationCountObj ? ChinaLocalizationCountObj.value : 0
 
-
           // 返回组合的对象
           return {
             postName: post.postName,
@@ -120,7 +120,7 @@ export default {
         this.listData.sort((a, b) => {
           return b.equipmentCount - a.equipmentCount
         })
-        this.listData = this.listData.filter(item => item.equipmentCount !== 0);
+        this.listData = this.listData.filter(item => item.equipmentCount !== 0)
         console.log(this.listData)
         this.config = {
           data: this.listData.map(item => [item.postName, item.equipmentCount, item.ChinaLocalizationCount]),
@@ -134,7 +134,7 @@ export default {
           oddRowBGC: 'rgba(0,216,255,0.3)',
           evenRowBGC: 'rgba(0,216,255,0.22)',
           hoverPause: false,
-          carousel:'single',
+          carousel: 'single'
         }
       } else {
         this.title = '各部门设备 / 国产设备数'
@@ -166,7 +166,7 @@ export default {
         this.listData.sort((a, b) => {
           return b.equipmentCount - a.equipmentCount
         })
-        this.listData = this.listData.filter(item => item.equipmentCount !== 0);
+        this.listData = this.listData.filter(item => item.equipmentCount !== 0)
         this.config = {
           data: this.listData.map(item => [item.departmentName, item.equipmentCount, item.ChinaLocalizationCount]),
           header: ['部门名称', '设备总数', '国产设备总数'],
@@ -178,7 +178,7 @@ export default {
           headerBGC: 'rgba(25,255,220,0.15)',
           oddRowBGC: 'rgba(0,216,255,0.3)',
           evenRowBGC: 'rgba(0,216,255,0.22)',
-          carousel:'single',
+          carousel: 'single'
         }
       }
     }

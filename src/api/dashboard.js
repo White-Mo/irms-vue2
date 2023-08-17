@@ -13,6 +13,18 @@ export function getDepartmentAllCountData() {
   })
 }
 
+export function getDepartmentBusinessSonSystemAllCount() {
+  // 将有数组和字符串的对象转为符合JSON格式的对象
+  // var params = JSON.parse(JSON.stringify(obj))
+  let params = ''
+
+  return request({
+    params,
+    url: '/home/baseparameter/getDepartmentBusinessSonSystemAllCount',
+    method: 'get',
+    responseType: 'json'
+  })
+}
 
 //---------田累积----------------
 export function getInfo(obj) {
@@ -111,6 +123,15 @@ export function getCommonEquipmentInformationAndCount(){
 export function getChinaLocalization(){
   return request({
     url: '/home/inforesources/getChinaLocalization',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+
+// 获取各单位部门下的等保等级数量
+export function getSecondProtectedBusinessSonSystem(){
+  return request({
+    url: '/home/inforesources/getSecondProtectedBusinessSonSystem',
     method: 'get',
     responseType: 'json'
   })
