@@ -506,7 +506,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' :disabled='isBanned === false'
-                                     placeholder='请选择' clearable>
+                                     placeholder='请选择' filterable  :popper-append-to-body='false'>
                             <el-option
                               v-for='item in machineRoomNames'
                               :key='item.value'
@@ -1808,5 +1808,15 @@ export default {
   align-content: flex-start !important;
   align-items: stretch !important;
   max-height: 100vh !important;
+  overflow-y: auto!important; /* 启用垂直滚动 */
+}
+
+/deep/ .el-select-dropdown__list::-webkit-scrollbar {
+  width: 0; /* 隐藏滚动条宽度 */
+  height: 0; /* 隐藏滚动条高度 */
+}
+
+/deep/ .el-select-dropdown__list::-webkit-scrollbar-thumb {
+  background: transparent; /* 隐藏滚动条拖动按钮 */
 }
 </style>
