@@ -123,8 +123,8 @@
             <div style="width:100%;text-align: center;">
               <span>
                 <span class="radio_class">
-                  <el-radio v-model="select_table_radio" label="1">单独导出每条数据</el-radio>
-                  <el-radio v-model="select_table_radio" label="2">多条数据存放在一个文件中导出</el-radio>
+                  <el-radio v-model="select_table_radio" :label="1">单独导出每条数据</el-radio>
+                  <el-radio v-model="select_table_radio" :label="2">多条数据存放在一个文件中导出</el-radio>
                 </span>
                 <span v-if="select_table_radio===2">
                   <el-radio-group v-model="select_table_type">
@@ -882,12 +882,13 @@ export default {
     },
     async getExcel2() {
       let data_num = 0
+      //选了多条数据存放在一个文件夹下||确定选了几条一个文件夹||自选情况下输入框不为空
       if (this.select_table_radio !== -1 || this.select_table_type !== -1 || this.select_table_type2 !== '') {
-        if (this.select_table_radio === 1) {
+        if (this.select_table_radio === 1) {  //单独导出
           data_num = 1
         } else if (this.select_table_type !== -3) {
           data_num = this.select_table_type
-        } else {
+        } else {  //自选条数
           const item_num = parseInt(this.select_table_type2)
           if (item_num > 0 && item_num < this.selectData.length) {
             data_num = item_num
@@ -944,6 +945,7 @@ export default {
           this.select_table_type2 = ''
           // 取消表格选择
           this.$refs.multipleTable.clearSelection();
+          //-2：全部
           getExcelDemo2(item, data_num === -2 ? item.length : data_num > item.length ? item.length : data_num ).then((res=>{
             setTimeout(()=>{
               notify.close()
