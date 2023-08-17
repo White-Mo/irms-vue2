@@ -235,6 +235,8 @@ export default {
       Promise.all([getCurrentDayLogData(currentDate), getRealNameAllWithUser()]).then(([logResponse, userResponse]) => {
         this.handlersData = logResponse.data.items;
         this.roleData = userResponse.data.items;
+        console.log("this.handlersData",this.handlersData)
+        console.log("this.roleData",this.roleData)
         this.postTotal = this.roleData.length;
         this.tempTableData = this.roleData;
         //返回符合条件的数据
@@ -294,7 +296,20 @@ export default {
             let grandchild = child.children[j];
             for (let k = 0; k < this.handlersData.length; k++) {
               let data = this.handlersData[k];
-              if (grandchild.realName === data.user) {
+              let result
+              //8月15日后data的数据形式-"中国地震台网中心 — 数据管理员 — 台网中心超级管理员"
+              // 将字符串分割成数组，以 " — " 为分隔符
+              const partsArray = data.user.split(" — ");
+
+              if (partsArray.length >= 3) {
+                // 获取数组中第三个元素（索引为2），即第二个 "-" 后的字符串
+                result = partsArray[2];
+              }else{
+                //8月15日前的数据形式-“台网中心超级管理员”
+                result = data.user
+              }
+              // console.log(result);
+              if (grandchild.realName === result) {
                 grandchild.time = data.time;
                 child.time = data.time
                 childrenMatched.push(grandchild);
@@ -309,7 +324,7 @@ export default {
         }
         // 将匹配的用户数据分配给 userData 变量，并设置标志变量为 true
         this.userData = matchedData;
-        console.log("222",this.userData)
+        // console.log("222",this.userData)
         dataReady = true;
         // 获取日志数据
         getLogDataByTime(timeParams).then(response => {
@@ -336,6 +351,7 @@ export default {
         userName: row.postName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
+      console.log("params",params)
       //接口获取前端传取时间参数和相应单位下所有用户操作行为
       getRoleAndCountByCurrentDay(params).then(response => {
         this.tableData = response.data.items
