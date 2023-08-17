@@ -75,7 +75,8 @@
     </dv-border-box-11>
 
     <dv-border-box-12 class="msgTable-echarts" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
-      <div id="myechart" ref="echartsContainer" style="position:relative;height:85%;width:95%;padding-top:5%;color: #ffffff;" ></div>
+      <h2 style="text-align: center;color: #FFFFFF;height: 1px;">机柜设备数量</h2>
+      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
     </dv-border-box-12>
 
     <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
@@ -147,6 +148,7 @@
 
 <script>
 import screenfull from 'screenfull'
+import * as echarts from 'echarts';
 import * as THREE from "three";
 import * as TWEEN from 'tween.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
@@ -154,12 +156,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getCabinet } from '@/api/select'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentCount} from "@/api/cockpit_data";
-import {getPostMachineRoom} from "@/api/dashboard";
+import {getPostMachineRoom,getEquipmentNum} from "@/api/dashboard";
 import {getList} from "@/api/table";
 import { getEquipmentByCabinet } from '@/api/baseparameter'
 import axios from 'axios'
 import async from 'async'
-import * as echarts from 'echarts'
 
 export default {
   name:'computerRoom',
@@ -168,6 +169,10 @@ export default {
   },
   data() {
     return {
+      machineRoomName:this.$store.state.machineRoom.installation_position,
+      postName:this.$store.state.machineRoom.department,
+      resultArray:[],
+      config:{},
       echartsInstance: null,
       myChart: null,
       isFullScreen: false,
@@ -277,12 +282,15 @@ export default {
 
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
-      logoImgetype:'.png'
+      logoImgetype:'.png',
+
+      echartsData:[]
     };
   },
   created() {
     // this.full()
     this.isFullScreen = true
+
   },
   computed: {
     boxHeight() {
@@ -322,36 +330,48 @@ export default {
       }
     },
   },
-  mounted() {
-    window.addEventListener('resize', this.handleResize2);
-    // 创建Echarts实例并绘制饼状图
-    this.handleResize2();
+  async mounted() {
+    let params = {
+      machineRoomName: this.machineRoomName,
+      postName: this.postName,
+    }
+    await getEquipmentNum(params).then(res => {
+      this.resultArray.push(res.data.localizationNum);
+      console.log('+++++++++++++',this.resultArray)
+      for (let i = 0; i <this.resultArray[0].length; i++) {
+          this.echartsData.push({
+            name: this.resultArray[0][i][0],
+            value: this.resultArray[0][i][1]
+          })
+      }
+      console.log('echData',this.echartsData)
+    })
 
     //获取当前机房下的机柜
     // this.fetchData()
     if (this.$store.state.machineRoom.department === '') {
-      this.$router.push({ path:'/inforesources/digital_computer_room'})
+      this.$router.push({path: '/inforesources/digital_computer_room'})
     } else {
       this.computerTitle = this.$store.state.machineRoom.department + this.$store.state.machineRoom.installation_position
       this.unitid = this.$store.state.machineRoom.unitid
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
-      getCabinet(machineRoomId).then((res) =>{
+      getCabinet(machineRoomId).then((res) => {
         this.tableData = res.data.items
         // console.log('this.tableData',this.tableData)
-        for(let i=0; i < Math.min(this.tableData.length, 4);i++){
+        for (let i = 0; i < Math.min(this.tableData.length, 4); i++) {
           this.tableData[i].clickedCount = 0
           this.clickedCabinet.push(this.tableData[i])
         }
-        this.clickedCabinet.forEach((element) =>{
+        this.clickedCabinet.forEach((element) => {
           let equipmentArray = []
-          getEquipmentByCabinet(element.cabinetId).then((res) =>{
+          getEquipmentByCabinet(element.cabinetId).then((res) => {
 
             // console.log("res.data",res.data)
-            res.data.forEach((element) =>{
+            res.data.forEach((element) => {
               let equipmentObject = {
-                equipmentName:'',
-                cabinetUStart:'',
-                cabinetUEnd:''
+                equipmentName: '',
+                cabinetUStart: '',
+                cabinetUEnd: ''
               }
               // console.log("element",element)
               equipmentObject.equipmentName = element[0]
@@ -360,7 +380,7 @@ export default {
               equipmentArray.push(equipmentObject)
               // console.log('equipmentObject',equipmentObject)
             })
-            console.log("equipmentArray",equipmentArray)
+            console.log("equipmentArray", equipmentArray)
           }).catch((error) => {
             console.log("Promise rejected:", error);
           });
@@ -376,7 +396,6 @@ export default {
 
     // 监听鼠标按下事件
     document.addEventListener('mousedown', this.onMouseDown);
-
     // 添加鼠标移动事件监听
     document.addEventListener('mousemove', this.onMouseMove);
     // 添加鼠标离开事件监听
@@ -411,12 +430,12 @@ export default {
   methods: {
 
     //为解决threejs射线不准问题，设置全屏
-    full () {
+    full() {
       //console.log(this.$store.state.machineRoom.department)
       screenfull.toggle()
     },
     //初始化
-    init: function() {
+    init: function () {
       //  创建场景对象Scene
       this.scene = new THREE.Scene();
       let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -448,7 +467,7 @@ export default {
       let s = 200;//设置相机渲染范围大小
       this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 3000);
       this.camera.position.set(-537, 76, -615); //设置相机位置
-      this.camera.lookAt(0,0,0);
+      this.camera.lookAt(0, 0, 0);
       // let container = document.getElementById("container");
       // this.camera = new THREE.PerspectiveCamera(
       //   70,
@@ -460,7 +479,7 @@ export default {
       /**
        * 创建渲染器对象
        */
-      this.renderer = new THREE.WebGLRenderer({ antialias: true });
+      this.renderer = new THREE.WebGLRenderer({antialias: true});
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
       //创建控件对象
@@ -474,7 +493,7 @@ export default {
       let self = this;
       let loader = new GLTFLoader();
       //本地模型路径：public/static/mod/Xbot.glb
-      loader.load("static/c.glb",  (gltf) => {
+      loader.load("static/c.glb", (gltf) => {
         //console.log(gltf)
         self.isLoading = false;//关闭载入中效果
         self.mesh = gltf.scene;
@@ -544,19 +563,19 @@ export default {
         //   console.log('被点击的所有',intersects[i].object.name)
         // }
         //机柜门开关
-        for(let i=0;i<4;i++){
-          if(clickObject.name === this.cabinetArray[i]){
+        for (let i = 0; i < 4; i++) {
+          if (clickObject.name === this.cabinetArray[i]) {
             // console.log('clickObject.name',clickObject.name)
             let flag = 0
             let equipmentClickedCountArray = Object.values(this.equipmentClickedCount[i])
-            equipmentClickedCountArray.forEach((element) =>{
-              if(element % 2 !== 0){
+            equipmentClickedCountArray.forEach((element) => {
+              if (element % 2 !== 0) {
                 flag = 1
               }
             })
             // console.log('flag',flag)
             //设备推入的情况下才能关闭机柜门
-            if(flag === 0){
+            if (flag === 0) {
               // 点击后执行旋转动画
               this.rotateCabinetDoor(clickObject);
               break
@@ -565,12 +584,12 @@ export default {
         }
         //设备移动
         let shouldStop = true;
-        this.equipmentClickedCount.forEach((elements,index) =>{
-          for(const element of Object.keys(elements)){
-            if(clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)){
+        this.equipmentClickedCount.forEach((elements, index) => {
+          for (const element of Object.keys(elements)) {
+            if (clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)) {
               //点击后执行移动动画
               //clickObject为要旋转的模型，index是该模型所处的机柜索引
-              this.moveEquipment(clickObject,index)
+              this.moveEquipment(clickObject, index)
               shouldStop = true;
               break //结束内层遍历
             }
@@ -601,7 +620,7 @@ export default {
           const progress = timestamp - startTime;
           const rotationProgress = Math.min(progress / duration, 1);
           targetObject.rotation.y = initialRotation + (targetRotation - initialRotation) * rotationProgress;
-          if (rotationProgress < 1 ) {
+          if (rotationProgress < 1) {
             requestAnimationFrame(animateRotation);
           } else {
             this.isRotating = false;
@@ -613,8 +632,8 @@ export default {
     },
 
     //拉出设备
-    moveEquipment(targetObject,index){
-      if(!this.isMoving){
+    moveEquipment(targetObject, index) {
+      if (!this.isMoving) {
         this.isMoving = true
         this.equipmentClickedCount[index][targetObject.name] = this.equipmentClickedCount[index][targetObject.name] + 1
         // 根据点击次数的奇偶性来确定目标移动的正负
@@ -645,14 +664,14 @@ export default {
         // 鼠标悬停在模型上
         const object = intersects[0].object;
         let cabinetArray = Object.keys(this.cabinetClickCount)
-        if(cabinetArray.includes(object.name)){
+        if (cabinetArray.includes(object.name)) {
           // console.log('this.tooltipText',this.tooltipText)
           this.showCabinetData(object.name)
-        }else {
+        } else {
           // 不再悬停在模型上，隐藏气泡
           this.showTooltip = false;
         }
-      }else {
+      } else {
         // 不再悬停在模型上，隐藏气泡
         this.showTooltip = false;
       }
@@ -670,15 +689,15 @@ export default {
     onMouseLeave() {
       // 鼠标离开时，隐藏气泡
       this.tooltipText = '';
-      this.tooltipPosition = { x: 0, y: 0 }
+      this.tooltipPosition = {x: 0, y: 0}
       this.showTooltip = false;
     },
 
     //机柜数据交互
-    showCabinetData(modelName){
+    showCabinetData(modelName) {
       //modelName是机柜模型的原名字
       //this.cabinetArray内含机房内不大于四个机柜
-      this.cabinetArray.forEach((element,index) =>{
+      this.cabinetArray.forEach((element, index) => {
         if (this.clickedCabinet.length >= index && element === modelName) {
           //使用可选链运算符（?）来进行安全访问-存在才进行后续操作
           if (this.clickedCabinet[index]?.cabinetName) {
@@ -694,22 +713,23 @@ export default {
       })
     },
 
-    backPage(){
+    backPage() {
       this.$emit('exit-full-screen');
       this.$emit('changeDiv5', '0')
       // this.full()
     },
-    handchangedatacardstate(){
+    handchangedatacardstate() {
       this.datacard = !this.datacard
       this.showButton = !this.showButton
+      console.log('++++++', this.resultArray)
     },
-    handleCurrentChange(val){
+    handleCurrentChange(val) {
       this.dialogVisible = true
       // this.dialog_description = val
     },
 
     //右上角数据
-    initCount(){
+    initCount() {
 
       // equipmentBaseInfo:{
       //   total:0,
@@ -722,13 +742,13 @@ export default {
       this.roomBasicInfo.machineAdministrator = this.$store.state.machineRoom.machineAdministrator
       this.roomBasicInfo.machineLocation = this.$store.state.machineRoom.machineLocation
       console.log(this.roomBasicInfo.machineArea)
-      getEquipmentCount().then((response)=> {
+      getEquipmentCount().then((response) => {
         this.equipmentBaseInfo.total = response.data.total
       })
-      getPostMachineRoom(this.$store.state.machineRoom.unitid).then((response)=> {
+      getPostMachineRoom(this.$store.state.machineRoom.unitid).then((response) => {
         this.equipmentBaseInfo.machineRoomCount = response.data.total
       })
-      getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) =>{
+      getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) => {
         this.equipmentBaseInfo.cabinetCount = response.data.total
       })
       const params = {
@@ -738,124 +758,24 @@ export default {
         start: 0,
         limit: 99999
       }
-      getList(params).then((response)=> {
+      getList(params).then((response) => {
         this.equipmentBaseInfo.equipmentCount = response.data.total
       })
     },
 
-
-    //Echarts
     echartsDraw() {
-      // this.echartsInstance = echarts.init(this.$refs.echartsContainer);
-      let myChart = this.$echarts.init(document.getElementById('myechart'));
-      const option = { title: {
-          text: '设备故障年趋势（示例图）',
-          left:"center",
-          textStyle:{
-            fontSize:20,
-            color:"#fdfdfd"
-          }
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['监控系统(次)', '通信系统(次)', '供配电系统(次)'],
-          textStyle:{
-            color:"#8DB6DB"
-          },
-          padding:[40,0,0,0],
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['2021/10', '2021/11', '2021/12', '2022/1', '2022/3', '2022/4', '2022/5'],
-          axisLabel:{//修改坐标系字体颜色
-            show:true,
-            textStyle:{
-              color:"#8DB6DB"
-            },
-            left: 20
-          },
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel:{//修改坐标系字体颜色
-            show:true,
-            textStyle:{
-              color:"#8DB6DB"
-            },
-            left: 20
-          },
-        },
-        series: [
-          {
-            name: '监控系统(次)',
-            type: 'line',
-            stack: 'Total',
-            data: [1, 1, 2, 3, 2, 2, 3]
-          },
-          {
-            name: '通信系统(次)',
-            type: 'line',
-            stack: 'Total',
-            data: [2, 1, 1, 2, 2, 3, 3]
-          },
-          {
-            name: '供配电系统(次)',
-            type: 'line',
-            stack: 'Total',
-            data: [1, 2, 2, 1, 1, 3, 4]
-          },
-        ]
-      };
-      // 保存Echarts实例，以便在resize事件处理函数中调用
-      this.myChart = myChart;
-      myChart.setOption(option);
-    },
-    handleResize2() {
-      if (this.myChart) {
-        // 调用Echarts实例的resize方法，重新绘制图表
-        this.myChart.resize();
+      this.config = {
+        data: this.echartsData.map(echartsData => [echartsData.name, echartsData.value]),
+        header: ['机柜名称', '设备数量'],
+        align: 'center',
+        hoverPause:true,
+        rowNum:8,
+        headerBGC:'#032146',
+        headerHeight:40,
+        oddRowBGC:'#426b9d',
+        evenRowBGC:'#182b42',
       }
-    },
-
-    // adjustChartPosition() {
-    //   const chartContainer = this.$el.querySelector('.msgTable-echarts');
-    //   if (chartContainer) {
-    //     const echartsContainer = this.$refs.echartsContainer;
-    //
-    //     const containerWidth = chartContainer.offsetWidth;
-    //     const containerHeight = chartContainer.offsetHeight;
-    //
-    //     echartsContainer.style.width = containerWidth + 'px';
-    //     echartsContainer.style.height = containerHeight + 'px';
-    //
-    //     this.echartsInstance.resize();
-    //   }
-    // },
-
-    changeDiv(value) {
-      this.showEquipment =false
-    },
-
-    cabinetDetail(index, row) {
-      // console.log("8888888888888888888888",row)
-      this.row = row
-      console.log(row.cabinetId)
-      this.showEquipment =true
-    },
+    }
   }
 };
 
