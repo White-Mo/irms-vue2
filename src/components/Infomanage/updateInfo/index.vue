@@ -206,7 +206,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                          <el-input v-model='form.equipmentAdminPhone' size='medium'class='phone' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -222,7 +222,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.appAdminPhone' size='medium' />
+                          <el-input v-model='form.appAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                     </el-row>
@@ -335,7 +335,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.onlineTime' readonly='readonly' :editable='false' size='medium'
-                                          :clearable='false' style='width:auto' value-format='yyyy-MM-dd'
+                                          :clearable='false' style='width:100%' value-format='yyyy-MM-dd'
                                           format='yyyy-MM-dd'></el-date-picker>
                         </div>
                       </el-col>
@@ -345,7 +345,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.offlineTime' readonly='readonly' size='medium' :clearable='false'
-                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto' />
+                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:100%' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -424,7 +424,7 @@
                       </el-col>
                       <el-col :span='6'>
                         <div class='label-style'>
-                          <el-radio-group v-model='form.trueOrVirtual'>
+                          <el-radio-group v-model='form.trueOrVirtual':disabled="true">
                             <el-radio label='1'>实 体 机</el-radio>
                             <el-radio label='0'>虚 拟 机</el-radio>
                           </el-radio-group>
@@ -445,7 +445,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                          <el-input v-model='form.equipmentAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -461,7 +461,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.appAdminPhone' size='medium' />
+                          <el-input v-model='form.appAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                     </el-row>
@@ -505,8 +505,8 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' placeholder='请选择'
-                                     clearable>
+                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' :disabled='isBanned === false'
+                                     placeholder='请选择' filterable  :popper-append-to-body='false'>
                             <el-option
                               v-for='item in machineRoomNames'
                               :key='item.value'
@@ -520,7 +520,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.cabinetName' placeholder='请选择' clearable>
+                          <el-select v-model='form.cabinetName' placeholder='请选择' :disabled='isBanned === false' clearable>
                             <el-option
                               v-for='item in cabinetAll'
                               :key='item.value'
@@ -534,7 +534,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUStart' size='medium' />
+                          <el-input v-model='form.cabinetUStart' :disabled='isBanned === false' size='medium' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -542,7 +542,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUEnd'  size='medium' />
+                          <el-input v-model='form.cabinetUEnd':disabled='isBanned === false'size='medium' />
                         </div>
                       </el-col>
                     </el-row>
@@ -586,7 +586,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' style='width:auto'
+                          <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' style='width:100%'
                                           value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
                         </div>
                       </el-col>
@@ -596,7 +596,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.offlineTime' size='medium' :clearable='false'
-                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto' />
+                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:100%' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -1124,6 +1124,7 @@ export default {
   },
   data() {
     return {
+      isBanned: true,
       determineLevel: '',//确定的等保等级
       successbusinessSubsystem: [],//筛选之后的业务子系统
       businessSubsystem: [],//获取的业务子系统
@@ -1776,6 +1777,15 @@ export default {
 /deep/ .el-input.is-disabled .el-input__inner {
   color: #898585;
 }
+//选择框输入框保持一致
+.el-select {
+  display: inline-block;
+  position: relative;
+  width: 100%; /* 设置 el-select 宽度为100% */
+}
+/deep/.el-form--inline .el-form-item__content {
+  width: 100%;
+}
 
 //覆盖全局样式代码
 .el-select-dropdown__item {
@@ -1783,7 +1793,10 @@ export default {
   flex: 1 0 20%;
   margin: 10px;
 }
-
+.phone {
+  height: 1px !important;
+  width: 100%;
+}
 /deep/ .el-select-dropdown__list {
   margin: 5px 20px 20px 5px !important;
   height: auto !important;
@@ -1795,5 +1808,15 @@ export default {
   align-content: flex-start !important;
   align-items: stretch !important;
   max-height: 100vh !important;
+  overflow-y: auto!important; /* 启用垂直滚动 */
+}
+
+/deep/ .el-select-dropdown__list::-webkit-scrollbar {
+  width: 0; /* 隐藏滚动条宽度 */
+  height: 0; /* 隐藏滚动条高度 */
+}
+
+/deep/ .el-select-dropdown__list::-webkit-scrollbar-thumb {
+  background: transparent; /* 隐藏滚动条拖动按钮 */
 }
 </style>

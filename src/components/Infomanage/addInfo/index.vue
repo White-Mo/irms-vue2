@@ -330,7 +330,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.onlineTime' size='medium' style='width:auto'
+                      <el-date-picker v-model='form.onlineTime' size='medium' style='width:100%'
                                       value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
@@ -339,7 +339,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto'
+                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:100%'
                                       value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
@@ -1358,7 +1358,6 @@ export default {
 .el-radio:nth-of-type(1) {
   margin-right: 35px;
 }
-
 //覆盖全局样式代码
 .el-select-dropdown__item {
   height: 30px;
@@ -1377,6 +1376,15 @@ export default {
   align-content: flex-start !important;
   align-items: stretch !important;
   max-height: 100vh !important;
+  overflow-y: auto!important; /* 启用垂直滚动 */
+}
+/deep/ .el-select-dropdown__list::-webkit-scrollbar {
+  width: 0; /* 隐藏滚动条宽度 */
+  height: 0; /* 隐藏滚动条高度 */
+}
+
+/deep/ .el-select-dropdown__list::-webkit-scrollbar-thumb {
+  background: transparent; /* 隐藏滚动条拖动按钮 */
 }
 
 .searchInput {
@@ -1385,9 +1393,18 @@ export default {
 
 .dianhua {
   height: 1px !important;
+  width: 100%;
+}
+.el-select {
+  display: inline-block;
+  position: relative;
+  width: 100%; /* 设置 el-select 宽度为100% */
 }
 
 .deploymentEnvironmentOption {
   width: 100px !important;
+}
+/deep/.el-form--inline .el-form-item__content {
+  width: 100%;
 }
 </style>
