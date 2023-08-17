@@ -18,8 +18,6 @@
 
 
 <script>
-import {getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate} from "@/api/log_management";
-import moment from "moment";
 import {getDepartment, getPost} from "@/api/select";
 import {mapGetters} from "vuex";
 import {
@@ -51,16 +49,6 @@ export default {
   },
   methods: {
     async handelPostCountData() {
-      // let list = []
-      // let result = []
-      // await getPost().then(response => {
-      //   list = response.data.items
-      // })
-      // for (let i = 0; i < list.length; i++) {
-      //   result.push({postName: list[i].postName})
-      // }
-      // return result
-      // RxR以下为上方代码的精简版↓：
       const response = await getPost();
       return response.data.items.map(item => ({ postName: item.postName }));
     },
