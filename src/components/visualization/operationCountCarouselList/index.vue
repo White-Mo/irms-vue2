@@ -8,7 +8,6 @@
             :config="config"
             style="height: 33vh;width: 90%;color:rgba(0,216,255,0.98);"
           />
-          <!--          width: 26vw;-->
         </div>
       </div>
     </dv-border-box-13>
@@ -100,6 +99,7 @@ export default {
         });
         // 对listData 按unitRoleOperationCount的值降序排序
         this.listData.sort((a, b) => b.unitRoleOperationCount - a.unitRoleOperationCount);
+
 
         this.config = {data:this.listData.map(item => [item.postName, item.unitRoleOperationCount]),
           header: ['单位名称', '系统使用频度', ],

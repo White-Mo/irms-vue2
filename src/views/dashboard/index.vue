@@ -1551,6 +1551,7 @@ export default {
         <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
       </div>
       <el-dialog
+        title="设备填报情况统计表"
         :visible.sync="dialogVisible"
         width="90%"
         >
@@ -1823,8 +1824,17 @@ export default {
   width: 80px;
   font-size: 20px;
 }
-</style>
+/deep/.el-dialog__title {
+  line-height: 24px;
+  font-size: 30px;
+  color: #131712;
+}
+/deep/.el-dialog__body {
 
+  padding: 3px 20px; //上下3px 左右20px
+}
+
+</style>
 
 
 
