@@ -206,7 +206,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                          <el-input v-model='form.equipmentAdminPhone' size='medium'class='phone' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -222,7 +222,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.appAdminPhone' size='medium' />
+                          <el-input v-model='form.appAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                     </el-row>
@@ -335,7 +335,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.onlineTime' readonly='readonly' :editable='false' size='medium'
-                                          :clearable='false' style='width:auto' value-format='yyyy-MM-dd'
+                                          :clearable='false' style='width:100%' value-format='yyyy-MM-dd'
                                           format='yyyy-MM-dd'></el-date-picker>
                         </div>
                       </el-col>
@@ -345,7 +345,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.offlineTime' readonly='readonly' size='medium' :clearable='false'
-                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto' />
+                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:100%' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -445,7 +445,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.equipmentAdminPhone' size='medium' />
+                          <el-input v-model='form.equipmentAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -461,7 +461,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.appAdminPhone' size='medium' />
+                          <el-input v-model='form.appAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                     </el-row>
@@ -586,7 +586,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' style='width:auto'
+                          <el-date-picker v-model='form.onlineTime' size='medium' :clearable='false' style='width:100%'
                                           value-format='yyyy-MM-dd' format='yyyy-MM-dd'></el-date-picker>
                         </div>
                       </el-col>
@@ -596,7 +596,7 @@
                       <el-col :span='4'>
                         <div class='label-style'>
                           <el-date-picker v-model='form.offlineTime' size='medium' :clearable='false'
-                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:auto' />
+                                          format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:100%' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -1777,6 +1777,15 @@ export default {
 /deep/ .el-input.is-disabled .el-input__inner {
   color: #898585;
 }
+//选择框输入框保持一致
+.el-select {
+  display: inline-block;
+  position: relative;
+  width: 100%; /* 设置 el-select 宽度为100% */
+}
+/deep/.el-form--inline .el-form-item__content {
+  width: 100%;
+}
 
 //覆盖全局样式代码
 .el-select-dropdown__item {
@@ -1784,7 +1793,10 @@ export default {
   flex: 1 0 20%;
   margin: 10px;
 }
-
+.phone {
+  height: 1px !important;
+  width: 100%;
+}
 /deep/ .el-select-dropdown__list {
   margin: 5px 20px 20px 5px !important;
   height: auto !important;

@@ -330,7 +330,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.onlineTime' size='medium' style='width:auto'
+                      <el-date-picker v-model='form.onlineTime' size='medium' style='width:100%'
                                       value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
@@ -339,7 +339,7 @@
                   </el-col>
                   <el-col :span='4'>
                     <div class='label-style'>
-                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:auto'
+                      <el-date-picker v-model='form.offlineTime' size='medium' style='width:100%'
                                       value-format='yyyy-MM-dd'></el-date-picker>
                     </div>
                   </el-col>
@@ -1373,9 +1373,18 @@ export default {
 
 .dianhua {
   height: 1px !important;
+  width: 100%;
+}
+.el-select {
+  display: inline-block;
+  position: relative;
+  width: 100%; /* 设置 el-select 宽度为100% */
 }
 
 .deploymentEnvironmentOption {
   width: 100px !important;
+}
+/deep/.el-form--inline .el-form-item__content {
+  width: 100%;
 }
 </style>
