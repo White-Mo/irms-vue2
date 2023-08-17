@@ -331,6 +331,9 @@ export default {
     },
   },
   async mounted() {
+    window.addEventListener('resize', this.handleResize2);
+    // 创建Echarts实例并绘制饼状图
+    this.handleResize2();
     let params = {
       machineRoomName: this.machineRoomName,
       postName: this.postName,
@@ -778,7 +781,24 @@ export default {
         oddRowBGC:'#426b9d',
         evenRowBGC:'#182b42',
       }
-    }
+
+    },
+    handleResize2() {
+      if (this.myChart) {
+        // 调用Echarts实例的resize方法，重新绘制图表
+        this.myChart.resize();
+      }
+    },
+    changeDiv(value) {
+        this.showEquipment =false
+      },
+
+    cabinetDetail(index, row) {
+        // console.log("8888888888888888888888",row)
+        this.row = row
+        console.log(row.cabinetId)
+        this.showEquipment =true
+      },
   }
 };
 
