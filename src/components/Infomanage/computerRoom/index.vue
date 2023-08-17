@@ -336,15 +336,18 @@ export default {
       postName: this.postName,
     }
     await getEquipmentNum(params).then(res => {
-      this.resultArray.push(res.data.localizationNum);
-      console.log('+++++++++++++',this.resultArray)
-      for (let i = 0; i <this.resultArray[0].length; i++) {
+      if(res.data.localizationNum == null){
+        console.log('没有设备信息')
+      }else {
+        this.resultArray.push(res.data.localizationNum);
+        console.log('+++++++++++++', this.resultArray)
+        for (let i = 0; i < this.resultArray[0].length; i++) {
           this.echartsData.push({
             name: this.resultArray[0][i][0],
             value: this.resultArray[0][i][1]
           })
+        }
       }
-      console.log('echData',this.echartsData)
     })
 
     //获取当前机房下的机柜
