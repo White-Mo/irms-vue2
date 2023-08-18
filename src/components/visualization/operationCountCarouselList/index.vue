@@ -66,6 +66,7 @@ export default {
       let result = []
       await getDepartmentBusinessSonSystemAllCount().then((response) => {
         list = response.data.items
+        console.log("response",response)
       })
       for (let i = 0; i < list.length; i++) {
         result.push({ name: list[i].name, value: list[i].total })

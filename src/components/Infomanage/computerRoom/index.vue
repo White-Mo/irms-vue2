@@ -283,14 +283,12 @@ export default {
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
       logoImgetype:'.png',
-
       echartsData:[]
     };
   },
   created() {
     // this.full()
     this.isFullScreen = true
-
   },
   computed: {
     boxHeight() {
@@ -386,9 +384,9 @@ export default {
               equipmentArray.push(equipmentObject)
               // console.log('equipmentObject',equipmentObject)
             })
-            console.log("equipmentArray", equipmentArray)
+            // console.log("equipmentArray",equipmentArray)
           }).catch((error) => {
-            console.log("Promise rejected:", error);
+            // console.log("Promise rejected:", error);
           });
           this.equipmentTableData.push(equipmentArray)
           // console.log("this.equipmentTableData",this.equipmentTableData)
@@ -446,7 +444,7 @@ export default {
       getList(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
-        console.log("this.list",this.list)
+        // console.log("this.list",this.list)
         //console.log("List---------");
         //console.log(this.list)
         this.listLoading = false
@@ -524,7 +522,7 @@ export default {
         self.mesh = gltf.scene;
         // self.mesh.scale.set(5,5,5);//设置大小比例
         self.mesh.position.set(0, 0, 0);//设置位置
-        self.scene.add(self.mesh); // 将模型引入three、
+        self.scene.add(self.mesh); // 将模型引入three
         self.animate();
       })
     },
@@ -543,25 +541,6 @@ export default {
         this.myChart.resize();
       }
     },
-
-    //修改模型的名称
-    // findModelByName(model, oleName) {
-    //   if (model !== null && typeof model === 'object' && model.isMesh && model.object.name === oleName) {
-    //     // 找到了匹配的小模型
-    //     return model;
-    //   }
-    //   if (model !== null && typeof model === 'object' && model.isGroup) {
-    //     for (let i = 0; i < model.children.length; i++) {
-    //       const foundModel = this.findModelByName(model.children[i], oleName);
-    //       if (foundModel) {
-    //         // 如果在子元素中找到了匹配的小模型，返回它
-    //         return foundModel;
-    //       }
-    //     }
-    //   }
-    //   // 没有找到匹配的小模型，返回 null
-    //   return null;
-    // },
 
     // 动画-循环渲染每一帧
     animate() {
@@ -746,7 +725,6 @@ export default {
     handchangedatacardstate() {
       this.datacard = !this.datacard
       this.showButton = !this.showButton
-      console.log('++++++', this.resultArray)
     },
     handleCurrentChange(val) {
       this.dialogVisible = true
@@ -766,7 +744,7 @@ export default {
       this.roomBasicInfo.machineArea = this.$store.state.machineRoom.machineArea
       this.roomBasicInfo.machineAdministrator = this.$store.state.machineRoom.machineAdministrator
       this.roomBasicInfo.machineLocation = this.$store.state.machineRoom.machineLocation
-      console.log(this.roomBasicInfo.machineArea)
+      // console.log(this.roomBasicInfo.machineArea)
       getEquipmentCount().then((response) => {
         this.equipmentBaseInfo.total = response.data.total
       })
@@ -815,7 +793,7 @@ export default {
     cabinetDetail(index, row) {
         // console.log("8888888888888888888888",row)
         this.row = row
-        console.log(row.cabinetId)
+      // console.log(row.cabinetId)
         this.showEquipment =true
       },
   }
