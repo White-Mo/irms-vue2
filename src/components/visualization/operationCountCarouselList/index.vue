@@ -1,4 +1,3 @@
-
 <template>
   <div style="height: 100%; width: 100%;">
     <dv-border-box-13>
@@ -9,7 +8,6 @@
             :config="config"
             style="height: 33vh;width: 90%;color:rgba(0,216,255,0.98);"
           />
-          <!--          width: 26vw;-->
         </div>
       </div>
     </dv-border-box-13>

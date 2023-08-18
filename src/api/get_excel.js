@@ -2172,7 +2172,6 @@ export async function getExcelDemo3(StatisticsData, state) {
 
 //-----------------田累积-------------------
 export async function getExcelDemo4(data) {
-  console.log('6666666666', data)
   let arr_name1 =[];
   for (let i = 0; i < 6; i++) {
     if (i === 0) {
@@ -2263,7 +2262,6 @@ export async function getExcelDemo4(data) {
     return self.indexOf(value) === index;
   });
   arr_name[arr_name.length] = '总计';
-  console.log('arr_name1',arr_name);
   //创建工作簿↓
   const workbook = new ExcelJS.Workbook()
   //设置工作簿属性↓
