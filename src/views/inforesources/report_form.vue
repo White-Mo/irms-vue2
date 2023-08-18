@@ -865,7 +865,7 @@ export default {
         if (this.selectData.length > 1) {
           this.centerDialogVisible = true
         } else if (this.selectData.length === 1) {
-          await getExcelDemo2(this.selectData)
+          await getExcelDemo2(this.selectData,1)
           // 取消表格选择
           this.$refs.multipleTable.clearSelection();
           // //console.log('this')
