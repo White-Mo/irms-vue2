@@ -12,7 +12,7 @@
       <el-step title='综合表' />
       <el-step title='详情表' />
     </el-steps>
-    <div v-show='active==0'>
+    <div v-show='active===0'>
       <div>
         <div style='background: rgba(94,135,217,0.4)'>
           <el-form ref='form' :model='form = equipment.equipmentBaseInfo' label-width='120px' :inline='true'

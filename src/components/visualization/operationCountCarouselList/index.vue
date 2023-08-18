@@ -90,14 +90,12 @@ export default {
         this.postAllName = await this.handelPostCountData()
         // 获取各单位业务子系统数量
         this.BusinessSonSystemAllCount = await this.handlePostOrDepartmentBusinessSonSystemAllCount()
-        console.log(this.BusinessSystemAllCount)
         // 获取各单位等保二级数量
         this.SecondProtectedBusinessSystemAllCount = await this.handleSecondProtectedBusinessSystemCount()
         // 根据已知数据构建listData数组
         this.listData = this.postAllName.map(post => {
           // 查找对应单位业务子系统数量
           const BusinessSonSystemCountObj = this.BusinessSonSystemAllCount.find(item => item.name === post.postName)
-          console.log(BusinessSonSystemCountObj)
           // 查找对应单位等保二级数量
           const SecondProtectedBusinessSystemObj = this.SecondProtectedBusinessSystemAllCount.find(item => item.name === post.postName)
 
@@ -184,7 +182,4 @@ export default {
 </script>
 
 <style scoped>
-.dv-border-box-13 {
-  overflow: hidden;
-}
 </style>

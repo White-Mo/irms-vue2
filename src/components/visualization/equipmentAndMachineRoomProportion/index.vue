@@ -20,7 +20,7 @@
 
 <script>
 import {getDepartment, getPost} from "@/api/select";
-import { getChinaLocalization, getDepartmentAllCountData, getChinaLocalizationAllCountData } from '@/api/dashboard'
+import { getChinaLocalization, getDepartmentAllCountData} from '@/api/dashboard'
 import {mapGetters} from "vuex";
 import * as echarts from "echarts";
 
@@ -39,7 +39,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roleid',
       'roles'
     ])
   },
