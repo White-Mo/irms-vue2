@@ -72,6 +72,7 @@ export default {
       let currenDayDate = moment(new Date()).format('YYYY-MM-DD')
       await getUnitRoleOrDepartmentRoleOperationCountByCurrenDayDate(currenDayDate).then((response) => {
         list = response.data.items
+        console.log("response",response)
       })
       for (let i = 0; i < list.length; i++) {
         result.push({name: list[i][0], value: list[i][1]})
