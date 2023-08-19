@@ -2,8 +2,12 @@
   <div style="width: 100%; height: auto; background-color: rgba(158,161,161,0.23)">
     <div>
       <el-table
-        height="66vh"
+        v-loading="loading"
+        element-loading-text="正在生成统计报表，请稍等..."
+        element-loading-spinner="el-icon-loading"
+        height="68vh"
         :data='tableData'
+        show-summary
         border
         highlight-current-row
         :row-style="{height:'6vh'}"
@@ -32,6 +36,7 @@ export default {
   name: "statisticalTable",
   data(){
     return{
+      loading: true,
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
       roleName:this.$store.state.user.roles,
@@ -144,6 +149,7 @@ export default {
         }
       })
       this.tableData.sort((a, b) => b.totalEquipmentNumber - a.totalEquipmentNumber);
+      this.loading = false
     },
 
   }
@@ -155,4 +161,13 @@ export default {
   background-color: rgba(0, 216, 255, 0.23);
 }
 
+/deep/.el-icon-loading:before {
+  content: "\e6cf";
+  font-size: 50px;
+}
+/deep/.el-loading-spinner .el-loading-text {
+  color: #409EFF;
+  margin: 3px 0;
+  font-size: 20px;
+}
 </style>
