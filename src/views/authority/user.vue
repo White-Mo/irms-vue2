@@ -111,12 +111,14 @@
           />
           <el-table-column align='center' label='操作' width='300px'>
             <template slot-scope='scope'>
-              <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit' :class="scope.row.name == '超级管理员' ? 'a' : 'b'">修改
+              <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit'
+                         :class="scope.row.name == '超级管理员' ? 'a' : 'b'">修改
               </el-button>
               <el-button @click='deleteUser(scope.row)' type='danger' size='small' icon='el-icon-delete'
                          v-if='scope.row.name !== "超级管理员"'>删除
               </el-button>
-              <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play' :class="scope.row.name == '超级管理员' ? 'a' : 'b'"
+              <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play'
+                         :class="scope.row.name == '超级管理员' ? 'a' : 'b'"
               >{{ scope.row.isdel === '冻结' ? '激活' : '冻结' }}
               </el-button>
             </template>
@@ -148,6 +150,7 @@
 import { deleteFosUser, getFosUserByPage, isdeleteFosUser } from '@/api/user'
 import UpdateUser from '@/components/authority/user/updateUser/index.vue'
 import AddUser from '@/components/authority/user/addUser/index.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Dashboard',
@@ -237,17 +240,18 @@ export default {
       }
 
       getFosUserByPage(params).then(res => {
-        let data = []
-        res.data.items.forEach(element => {
-          data.push(Object.assign(element[1], element[0]))
-        })
-        for (let i of data) {
-          i.isdel = i.isdel == '0' ? '激活' : '冻结'
+          let data = []
+          res.data.items.forEach(element => {
+            data.push(Object.assign(element[1], element[0]))
+          })
+          for (let i of data) {
+            i.isdel = i.isdel == '0' ? '激活' : '冻结'
+          }
+          this.tableData = data
+          this.totalCount = res.data.total - 1   //  减去自身账号
+          this.listLoading = false
         }
-        this.tableData = data
-        this.totalCount = res.data.total
-        this.listLoading = false
-      })
+      )
     },
     handleSizeChange(val) {
       this.limit = val
@@ -320,25 +324,31 @@ export default {
 .el-select-dropdown .el-scrollbar {
   position: relative;
 }
+
 .el-select-dropdown__item {
   padding: 0 35px;
   overflow: hidden;
 }
+
 .searchInput {
   height: 40px;
   text-align: center;
   color: #0b0c10;
   background-color: #deecff;
 }
+
 .el-col {
   border-radius: 4px;
 }
+
 .bg-purple-dark {
   background: #304156;
 }
+
 .bg-purple {
   background: #d3dce6;
 }
+
 .bg-condition {
   line-height: 50px;
   text-align: center;
@@ -346,40 +356,51 @@ export default {
   margin: 0px !important;
   background: #d3dce6;
 }
+
 .bg-purple-light {
   background: #e5e9f2;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+
 .app-container {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
+
 .grid-content {
   padding: 9px;
   box-shadow: 0 0 4px rgb(0 0 0 / 30%);
 }
+
 .font {
   font-size: 18px;
 }
+
 .el-cascader .el-input {
   width: 130px;
 }
-.el-pagination > *{
+
+.el-pagination > * {
   font-size: 18px;
 }
-.block{
+
+.block {
   text-align: center;
 }
-.a{
+
+.a {
   width: 110px;
 }
-.b{
+
+.b {
 
 }
 </style>
