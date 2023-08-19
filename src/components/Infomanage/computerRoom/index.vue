@@ -284,7 +284,8 @@ export default {
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
       logoImgetype:'.png',
 
-      echartsData:[]
+      echartsData:[],
+      AllechartsData:[],
     };
   },
   created() {
@@ -361,7 +362,7 @@ export default {
       this.computerTitle = this.$store.state.machineRoom.department + this.$store.state.machineRoom.installation_position
       this.unitid = this.$store.state.machineRoom.unitid
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
-      getCabinet(machineRoomId).then((res) => {
+      await getCabinet(machineRoomId).then((res) => {
         this.tableData = res.data.items
         // console.log('this.tableData',this.tableData)
         for (let i = 0; i < Math.min(this.tableData.length, 4); i++) {
@@ -393,7 +394,6 @@ export default {
           this.equipmentTableData.push(equipmentArray)
           // console.log("this.equipmentTableData",this.equipmentTableData)
         })
-        // console.log('this.equipmentTableData',this.equipmentTableData)
       })
     }
 
@@ -770,8 +770,24 @@ export default {
     },
 
     echartsDraw() {
+      for(let i=0;i<this.tableData.length;i++){
+        this.AllechartsData.push({
+          name: this.tableData[i].cabinetName,
+          value: 0
+        })
+      }
+      for(let i=0;i<this.tableData.length;i++){
+        for(let j=0;j<this.echartsData.length;j++){
+          if(this.tableData[i].cabinetName === this.echartsData[j].name){
+            this.AllechartsData[i].value =this.echartsData[j].value
+          }
+        }
+      }
+      console.log('++++',this.tableData);
+      console.log('888888888',this.AllechartsData);
+      console.log('777777777',this.echartsData)
       this.config = {
-        data: this.echartsData.map(echartsData => [echartsData.name, echartsData.value]),
+        data: this.AllechartsData.map(AllechartsData => [AllechartsData.name, AllechartsData.value]),
         header: ['机柜名称', '设备数量'],
         align: 'center',
         hoverPause:true,
@@ -850,8 +866,8 @@ export default {
   height: 100%;
 }
 ::-webkit-scrollbar {
-  width: 6px; /* 竖向滚动条宽度 */
-  height: 6px; /* 横向滚动条高度 */
+  width: 10px; /* 竖向滚动条宽度 */
+  height: 10px; /* 横向滚动条高度 */
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 10px; /* 滚动条样式 */
