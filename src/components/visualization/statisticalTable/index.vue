@@ -6,6 +6,7 @@
         element-loading-text="正在生成统计报表，请稍等..."
         element-loading-spinner="el-icon-loading"
         height="68vh"
+        :fit="true"
         :data='tableData'
         show-summary
         border
@@ -20,7 +21,6 @@
           :label="item.label"
           :prop="item.value"
           align="center"
-
         >
         </el-table-column>
       </el-table>
@@ -169,5 +169,11 @@ export default {
   color: #409EFF;
   margin: 3px 0;
   font-size: 20px;
+}
+
+/deep/.el-table__footer-wrapper tbody td.el-table__cell {
+  background-color: rgba(231, 114, 114, 0.53);
+  color: #fa0000;
+  font-size: 25px;
 }
 </style>
