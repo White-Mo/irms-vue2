@@ -11,10 +11,10 @@
           </el-col>
         </el-row>
         <el-row :gutter="10" class="bg-condition">
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :span="2">
             <span>查询条件：</span>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <el-col :span="3">
             <el-select
               v-model="DataName"
               placeholder="详细字段查询"
@@ -32,10 +32,10 @@
               />
             </el-select>
           </el-col>
-          <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+          <el-col :span="4">
             <el-input size="medium" v-model="inputValue" placeholder="输入查询内容" clearable />
           </el-col>
-          <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
+          <el-col :span="2">
             <el-button
               type="primary"
               icon="el-icon-search"
@@ -44,29 +44,23 @@
               @click="get_data2()"
             >搜索</el-button>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <el-col :span="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportExcel(0)">综合表导出</el-button>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <el-col :span="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportExcel(1)">详情表导出</el-button>
           </el-col>
-          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+<!--          <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportExcel(2)">统计表导出</el-button>
-          </el-col>
-          <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1">
+          </el-col>-->
+          <el-col :span="3">
             <el-button type="primary" size="medium" icon="el-icon-download" @click="ExportTable">填报表导出</el-button>
           </el-col>
-          <el-col
-            :xs="1"
-            :sm="1"
-            :md="1"
-            :lg="1"
-            :xl="1"
-          >
+          <el-col :span="2">
             <el-button
               size="medium"
               type="primary"
-              style="margin-left: 100px"
+              style="margin-left: 150px"
               @click="search()"
             >筛选</el-button>
           </el-col>
