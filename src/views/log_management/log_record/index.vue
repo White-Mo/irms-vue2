@@ -282,7 +282,6 @@ export default {
         }
         // 将匹配的用户数据分配给 userData 变量，并设置标志变量为 true
         this.userData = matchedData;
-        console.log("222222222222222222222222",this.handlersData)
       })
       this.listLoading =  false
     },
@@ -291,6 +290,7 @@ export default {
     handleDateChange(date) {
       // 重置相关变量，以避免显示旧数据
       this.userData = [];
+      this.tableData = []
       this.handlersData = [];
       this.roleData = [];
       this.postTotal = 0;
