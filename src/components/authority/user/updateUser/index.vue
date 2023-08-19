@@ -71,7 +71,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type='primary' @click="onSubmit('user')">提交添加</el-button>
+            <el-button type='primary' @click="onSubmit('user')">提交修改</el-button>
           </el-form-item>
         </el-form>
       </el-row>
