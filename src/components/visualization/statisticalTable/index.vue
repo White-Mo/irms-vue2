@@ -109,12 +109,24 @@ export default {
 
       let repetitivePostName = []
       if (this.roles[0] === '超级管理员') {
-        this.businessSystemNumber.forEach(item=>{repetitivePostName.push(item[0])})
-        this.totalEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
-        this.businessSonSystemNumber.forEach(item=>{repetitivePostName.push(item[0])})
-        this.fixEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
-        this.normalEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
-        this.scrapEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        if(this.businessSystemNumber !== null){
+          this.businessSystemNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
+        if(this.totalEquipmentNumber !== null){
+          this.totalEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
+        if(this.businessSonSystemNumber !== null){
+          this.businessSonSystemNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
+        if(this.fixEquipmentNumber !== null){
+          this.fixEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
+        if(this.scrapEquipmentNumber !== null){
+          this.normalEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
+        if(this.scrapEquipmentNumber !== null){
+          this.scrapEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
+        }
       }else {
         if(this.totalEquipmentNumber !== null){
           this.totalEquipmentNumber.forEach(item=>{repetitivePostName.push(item[0])})
