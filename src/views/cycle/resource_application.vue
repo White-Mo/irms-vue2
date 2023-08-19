@@ -234,7 +234,7 @@ export default {
         let data = []
         res.data.items.forEach(element => {
           element[0].isEdit = false
-          data.push(Object.assign(element[0], element[1]))
+          data.push(Object.assign(element[1], element[0]))
         })
         this.list = data
         this.listLoading = false
