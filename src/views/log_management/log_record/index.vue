@@ -334,6 +334,7 @@ export default {
         dataReady = true;
         // 获取日志数据
         getLogDataByTime(timeParams).then(response => {
+          this.tableData = []
           for(let i=0;i<response.data.items.length;i++){
             if(response.data.items[i].user !== "null — null — null"){
               this.tableData.push(response.data.items[i])
