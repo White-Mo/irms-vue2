@@ -111,12 +111,12 @@
           />
           <el-table-column align='center' label='操作' width='300px'>
             <template slot-scope='scope'>
-              <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit'>修改
+              <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit' :class="scope.row.name == '超级管理员' ? 'a' : 'b'">修改
               </el-button>
               <el-button @click='deleteUser(scope.row)' type='danger' size='small' icon='el-icon-delete'
                          v-if='scope.row.name !== "超级管理员"'>删除
               </el-button>
-              <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play'
+              <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play' :class="scope.row.name == '超级管理员' ? 'a' : 'b'"
               >{{ scope.row.isdel === '冻结' ? '激活' : '冻结' }}
               </el-button>
             </template>
@@ -375,5 +375,11 @@ export default {
 }
 .block{
   text-align: center;
+}
+.a{
+  width: 110px;
+}
+.b{
+
 }
 </style>

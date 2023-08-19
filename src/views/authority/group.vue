@@ -58,6 +58,7 @@
                 <template slot-scope="scope">
                   <el-button
                     type='primary' plain
+                    :class="scope.row.name !== '超级管理员' ? 'b' : 'a'"
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   <el-button
                     type='danger'
@@ -465,5 +466,11 @@ export default {
   display:inline-block;
   height:2rem;
   width:100%;
+}
+.a{
+  width: 144px;
+}
+.b{
+
 }
 </style>
