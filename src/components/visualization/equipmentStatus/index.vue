@@ -2,7 +2,7 @@
   <div style="height: 100%;width: 100%;">
     <dv-border-box-13>
       <div>
-        <dv-decoration-7 style="width:100%;height:50px; font-size: 15px;color:rgba(0,234,255,0.96);">各状态设备数
+        <dv-decoration-7 style="width:100%;height:50px; font-size: 18px;color:rgba(0,234,255,0.96);">各状态设备数
         </dv-decoration-7>
         <div style="height: 100%;width: 100%;display: flex; justify-content: center; align-items: center;">
           <el-row style="height: 100%;width: 90%;display: flex; justify-content: center; align-items: center;">

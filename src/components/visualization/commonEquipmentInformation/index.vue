@@ -33,11 +33,18 @@ export default {
   methods: {
     initData(){
       getCommonEquipmentInformationAndCount().then(res=>{
-        this.count.push(res.data.homemadeCount[0])
-        this.count.push(res.data.earlyWarningEquipmentCount[0])
-        this.count.push(res.data.businessSystemFirstLevelsCount[0])
-        this.count.push(res.data.commonSoftwareCount[0])
-        this.count.push(res.data.secondProtectedBusinessSonSystemCount[0])
+        const {
+          commonSoftwareCount,
+          businessSystemFirstLevelsCount,
+          secondProtectedBusinessSonSystemCount,
+          homemadeCount,
+          earlyWarningEquipmentCount
+        } = res.data;
+        this.count.push(homemadeCount[0])
+        this.count.push(earlyWarningEquipmentCount[0])
+        this.count.push(businessSystemFirstLevelsCount[0])
+        this.count.push(commonSoftwareCount[0])
+        this.count.push(secondProtectedBusinessSonSystemCount[0])
       }).then(this.initChart)
     },
     initChart() {
@@ -85,6 +92,7 @@ export default {
             colorBy:"data",
             label: {
               show: true,
+              fontSize:20,
               position: 'top', // 设置标签显示在柱状图顶部
               color: 'rgb(0,216,255)', // 标签文字颜色
             },

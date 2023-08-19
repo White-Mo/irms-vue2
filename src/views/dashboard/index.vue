@@ -304,7 +304,6 @@ export default {
 }
 
 /deep/ .el-dialog__body {
-
   padding: 3px 20px; //上下3px 左右20px
 }
 
