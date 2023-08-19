@@ -1,11 +1,11 @@
 <template>
-  <div style="width: 100%; height: auto; background-color: rgba(158,161,161,0.23)">
+  <div style="width: 100%; height: 100%; background-color: rgba(158,161,161,0.23)">
     <div>
       <el-table
         v-loading="loading"
         element-loading-text="正在生成统计报表，请稍等..."
         element-loading-spinner="el-icon-loading"
-        height="68vh"
+        height="66vh"
         :fit="true"
         :data='tableData'
         show-summary
@@ -89,6 +89,7 @@ export default {
     await this.getDataAndHandlePostName()
     this.handleMakeTableData()
   },
+
   methods:{
     async getDataAndHandlePostName(){
       let params={
@@ -152,7 +153,8 @@ export default {
       this.loading = false
     },
 
-  }
+  },
+
 }
 </script>
 
@@ -175,5 +177,13 @@ export default {
   background-color: rgba(231, 114, 114, 0.53);
   color: #fa0000;
   font-size: 25px;
+}
+/deep/.el-table .cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/deep/.el-table{
+  overflow:visible !important;
 }
 </style>

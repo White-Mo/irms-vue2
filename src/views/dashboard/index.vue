@@ -1,64 +1,66 @@
 <template>
-    <div v-else class="bg-main">
-      <!-- 头部开始 -->
-      <div class="title_wrap">
-        <div class="left_line"></div>
-        <div class="right_line"></div>
-        <div class="shine"></div>
-        <div>
-          <div class="title">
-            <span class="title-text">设备概况可视化平台</span>
-          </div>
+  <div v-else class="bg-main">
+    <!-- 头部开始 -->
+    <div class="title_wrap">
+      <div class="left_line"></div>
+      <div class="right_line"></div>
+      <div class="shine"></div>
+      <div>
+        <div class="title">
+          <span class="title-text">设备概况可视化平台</span>
         </div>
-        <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
       </div>
-      <el-dialog
-        title="设备填报情况统计表"
-        :visible.sync="dialogVisible"
-        width="90%"
-        >
-        <statisticalTable></statisticalTable>
+      <el-button round class="download_report" v-text="downloadReport" @click="generateStatisticalReports"></el-button>
+    </div>
+    <el-dialog
+      title="设备填报情况统计表"
+      :visible.sync="dialogVisible"
+      width="90%"
+    >
+      <statisticalTable></statisticalTable>
+      <div style="margin: 60px 50px 20px;">
         <span slot="footer" class="dialog-footer">
           <el-button class="download" type="primary" @click="downloadStatisticalTable">下 载</el-button>
           <el-button class="download" type="primary" @click="dialogVisible = false">取 消</el-button>
         </span>
-      </el-dialog>
-      <!-- 头部结束 -->
-      <!-- 主体部分开始 -->
-      <div class="main">
-        <!-- 左边板块 -->
-        <div class="left-sidebar">
-          <div class="anlageuebersicht">
-            <anlageuebersicht></anlageuebersicht>
-          </div>
-          <div class="carouselList">
-            <carouselList style="width: 100%;"></carouselList>
-          </div>
-          <div class="equipmentAndMachineRoomProportion">
-            <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
-          </div>
+      </div>
+    </el-dialog>
+    <!-- 头部结束 -->
+    <!-- 主体部分开始 -->
+    <div class="main">
+      <!-- 左边板块 -->
+      <div class="left-sidebar">
+        <div class="anlageuebersicht">
+          <anlageuebersicht></anlageuebersicht>
         </div>
-        <!-- 中间板块 -->
-        <div class="middle-content">
-          <div class="map">
-            <echartsMap></echartsMap>
-          </div>
+        <div class="carouselList">
+          <carouselList style="width: 100%;"></carouselList>
         </div>
-        <!-- 右边板块 -->
-        <div class="right-sidebar">
-          <div class="equipmentStatus">
-            <equipmentStatus></equipmentStatus>
-          </div>
-          <div class="equipmentStatusCarouselList">
-            <operationCountCarouselList></operationCountCarouselList>
-          </div>
-          <div class="commonEquipmentInformation">
-            <commonEquipmentInformation></commonEquipmentInformation>
-          </div>
+        <div class="equipmentAndMachineRoomProportion">
+          <equipmentAndMachineRoomProportion></equipmentAndMachineRoomProportion>
         </div>
       </div>
-      <!-- 主体部分结束 -->
+      <!-- 中间板块 -->
+      <div class="middle-content">
+        <div class="map">
+          <echartsMap></echartsMap>
+        </div>
+      </div>
+      <!-- 右边板块 -->
+      <div class="right-sidebar">
+        <div class="equipmentStatus">
+          <equipmentStatus></equipmentStatus>
+        </div>
+        <div class="equipmentStatusCarouselList">
+          <operationCountCarouselList></operationCountCarouselList>
+        </div>
+        <div class="commonEquipmentInformation">
+          <commonEquipmentInformation></commonEquipmentInformation>
+        </div>
+      </div>
     </div>
+    <!-- 主体部分结束 -->
+  </div>
 </template>
 <script>
 import anlageuebersicht from "@/components/visualization/anlageuebersicht";
@@ -75,33 +77,33 @@ import statisticalTable from "@/components/visualization/statisticalTable";
 export default {
   components: {
     anlageuebersicht, carouselList, commonEquipmentInformation,
-    echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList,statisticalTable
+    echartsMap, equipmentAndMachineRoomProportion, equipmentStatus, operationCountCarouselList, statisticalTable
   },
   data() {
     return {
       dialogVisible: false,
       downloadReport: "生成统计报表",
-      roleId:this.$store.state.user.roleid,
-      userName:this.$store.state.user.post_name,
-      roleName:this.$store.state.user.roles,
-      resultArray:[],
+      roleId: this.$store.state.user.roleid,
+      userName: this.$store.state.user.post_name,
+      roleName: this.$store.state.user.roles,
+      resultArray: [],
     }
   },
-   mounted() {
-     let params={
-       postName:this.userName,
-       roleId: this.roleId,
-       roleName:this.roleName[0],
-     }
-     getInfo(params).then(res=>{
-       this.resultArray.push(res.data);
-     })
+  mounted() {
+    let params = {
+      postName: this.userName,
+      roleId: this.roleId,
+      roleName: this.roleName[0],
+    }
+    getInfo(params).then(res => {
+      this.resultArray.push(res.data);
+    })
   },
   methods: {
     async generateStatisticalReports() {
       this.dialogVisible = true
     },
-    downloadStatisticalTable(){
+    downloadStatisticalTable() {
       this.dialogVisible = false
       getExcelDemo4(this.resultArray[0])
     }
@@ -116,6 +118,7 @@ export default {
   text-decoration: none;
   list-style: none;
 }
+
 .bg-main {
   width: 100%;
   background: url(../../assets/dashboard_imgs/bg.png) no-repeat 0 0 / cover;
@@ -134,18 +137,22 @@ export default {
 
   .left-sidebar {
     width: 27vw;
+
     .carouselList {
       width: 27vw;
       height: 40vh;
     }
   }
+
   .middle-content {
-    .map{
+    .map {
       width: 35vw;
     }
   }
+
   .right-sidebar {
     width: 27vw;
+
     .equipmentStatusCarouselList {
       width: 27vw;
       height: 40vh;
@@ -165,9 +172,9 @@ export default {
   justify-content: center;
 }
 
-.left-sidebar>div,
-.middle-content>div,
-.right-sidebar>div {
+.left-sidebar > div,
+.middle-content > div,
+.right-sidebar > div {
 }
 
 .title_wrap {
@@ -237,9 +244,11 @@ export default {
   color: rgba(0, 216, 255, 0.83);
   font-size: 1.3rem;
 }
+
 .download_report:hover {
   background-color: #ffffff;
 }
+
 .classLeftHeight {
   margin-top: 0.8rem;
   min-height: 86vh;
@@ -280,17 +289,21 @@ export default {
 .commonEquipmentInformation {
   height: 31vh;
 }
-.download{
-  height: 30px;
-  width: 80px;
+
+.download {
+  height: 40px;
+  width: 100px;
   font-size: 20px;
+  margin: 0 30px;
 }
-/deep/.el-dialog__title {
+
+/deep/ .el-dialog__title {
   line-height: 24px;
   font-size: 30px;
   color: #131712;
 }
-/deep/.el-dialog__body {
+
+/deep/ .el-dialog__body {
 
   padding: 3px 20px; //上下3px 左右20px
 }
