@@ -190,7 +190,7 @@ export default {
         this.roleData = res.data.items
         this.tempTableData = this.roleData
         this.listLoading = false
-        // console.log("+++",this.roleData)
+        console.log("+++",this.roleData)
       })
     },
     //分页连续展示   currentPage页码  limit每页数量
@@ -254,7 +254,20 @@ export default {
             let grandchild = child.children[j];
             for (let k = 0; k < this.handlersData.length; k++) {
               let data = this.handlersData[k];
-              if (grandchild.realName === data.user) {
+              console.log("data.user111111111111111111",data.user)
+              let result
+              //8月15日后data的数据形式-"中国地震台网中心 — 数据管理员 — 台网中心超级管理员"
+              // 将字符串分割成数组，以 " — " 为分隔符
+              const partsArray = data.user.split(" — ");
+
+              if (partsArray.length >= 3) {
+                // 获取数组中第三个元素（索引为2），即第二个 "-" 后的字符串
+                result = partsArray[2];
+              }else{
+                //8月15日前的数据形式-“台网中心超级管理员”
+                result = data.user
+              }
+              if (grandchild.realName === result) {
                 grandchild.time = data.time;
                 child.time = data.time
                 childrenMatched.push(grandchild);
@@ -269,6 +282,7 @@ export default {
         }
         // 将匹配的用户数据分配给 userData 变量，并设置标志变量为 true
         this.userData = matchedData;
+        console.log("222222222222222222222222",this.handlersData)
       })
       this.listLoading =  false
     },
@@ -285,11 +299,13 @@ export default {
       // this.refreshTable = false;
       this.timeParams = moment(date).format('YYYY-MM-DD')
       const timeParams = this.timeParams
+      console.log("timeParams",timeParams)
       // 标志变量，指示数据是否已准备好在模板中使用
       let dataReady = false;
       // 获取日志数据和用户数据//前端进行数据处理，用以展示树状表格
       Promise.all([getLogDataUserByTime(timeParams), getRealNameAllWithUser()]).then(([logResponse, userResponse]) => {
         this.handlersData = logResponse.data.items;
+        console.log("this.handlersData",this.handlersData)
         this.roleData = userResponse.data.items;
         this.postTotal = this.roleData.length;
         this.tempTableData = this.roleData;
@@ -338,9 +354,11 @@ export default {
           for(let i=0;i<response.data.items.length;i++){
             if(response.data.items[i].user !== "null — null — null"){
               this.tableData.push(response.data.items[i])
+              console.log(11111)
             }
           }
-          // console.log("this.tableData",this.tableData)
+          // this.tableData = response.data.items
+          console.log("this.tableData",this.tableData)
           this.total = response.data.total
           this.refreshTable = true; // 将表格刷新标志变量设置为 true
         })
