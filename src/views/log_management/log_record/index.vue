@@ -222,7 +222,13 @@ export default {
         limit: this.limit
       }
       getLogData(params).then(response => {
-        this.tableData = response.data.items
+        for(let i=0;i<response.data.items.length;i++){
+          if(response.data.items[i].user !== "null — null — null"){
+            this.tableData.push(response.data.items[i])
+          }
+        }
+        // this.tableData = response.data.items
+        // console.log("this.tableData",this.tableData)
         this.total = response.data.total
       })
       this.listLoading=false
@@ -328,7 +334,12 @@ export default {
         dataReady = true;
         // 获取日志数据
         getLogDataByTime(timeParams).then(response => {
-          this.tableData = response.data.items
+          for(let i=0;i<response.data.items.length;i++){
+            if(response.data.items[i].user !== "null — null — null"){
+              this.tableData.push(response.data.items[i])
+            }
+          }
+          // console.log("this.tableData",this.tableData)
           this.total = response.data.total
           this.refreshTable = true; // 将表格刷新标志变量设置为 true
         })
