@@ -39,6 +39,9 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'roleid',
+      'role_department_id',
+      'role_name',
       'roles'
     ])
   },
