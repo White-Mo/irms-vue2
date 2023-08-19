@@ -254,7 +254,6 @@ export default {
             let grandchild = child.children[j];
             for (let k = 0; k < this.handlersData.length; k++) {
               let data = this.handlersData[k];
-              console.log("data.user111111111111111111",data.user)
               let result
               //8月15日后data的数据形式-"中国地震台网中心 — 数据管理员 — 台网中心超级管理员"
               // 将字符串分割成数组，以 " — " 为分隔符
@@ -381,7 +380,7 @@ export default {
         userName: row.postName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
-      console.log("params",params)
+      console.log("params11",params)
       //接口获取前端传取时间参数和相应单位下所有用户操作行为
       getRoleAndCountByCurrentDay(params).then(response => {
         this.tableData = response.data.items
@@ -395,6 +394,7 @@ export default {
         userName: row.realName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
+      console.log("999999999999999",params)
       //接口获取前端传取时间参数和相应用户操作行为
       getLogDataByDateAndUser(params).then(response => {
         this.tableData = response.data.items
