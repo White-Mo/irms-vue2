@@ -249,6 +249,7 @@ export default {
   methods: {
     //----------------------搜索功能searchData()实现开始-------------------------------------------------------------
     searchData() {
+
       this.listLoading = true;
       this.tableData =  this.tempTableData ;
       let searchResults = [];
@@ -355,9 +356,10 @@ export default {
 
     changeDiv(value) {
       this.ifUpdate = value
-      this.searchData()
-      // this.fetchData()
+      this.fetchData()
       // this.Refresh()
+      this.searchData()
+
     },
   }
 
