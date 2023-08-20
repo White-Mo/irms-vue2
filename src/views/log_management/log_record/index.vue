@@ -64,7 +64,7 @@
                 </el-table>
               </template>
             </el-table-column>
-            <el-table-column prop="postName" label="部门所属单位"></el-table-column>
+            <el-table-column prop="postName" label="单位"></el-table-column>
           </el-table>
           </div>
         </el-col>
@@ -145,7 +145,7 @@ export default {
         },
         {
           value: 'user',
-          label: '操作用户'
+          label: '操作用户：单位-部门-用户名'
         },
         {
           value: 'time',
