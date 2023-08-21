@@ -1136,10 +1136,11 @@ export default {
     },
     handleIpOrMacValidation(result) {
       this.IpOrMacIsWrong = result
+      console.log(this.IpOrMacIsWrong)
     },
 
     next() {
-      if (this.active === 0 || this.IpOrMacIsWrong === 'success') this.active++
+      if (this.active === 0 || this.IpOrMacIsWrong !== 'wrong') this.active++
       else if(this.active === 1 && this.IpOrMacIsWrong === 'wrong') this.$message({ message: 'IP或者MAC地址填写错误', type: 'error' })
       if (this.active === 2) {
         const equipments = []
