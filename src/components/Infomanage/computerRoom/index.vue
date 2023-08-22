@@ -889,4 +889,10 @@ export default {
   top: 25rem;
   margin-left: 10px
 }
+.el-table__fixed-right-patch {
+  position: absolute;
+  top: -1px;
+  right: 0;
+  background-color: BLACK;
+}
 </style>
