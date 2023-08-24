@@ -230,6 +230,7 @@ export default {
     searchData() {
       this.listLoading = true;
       this.ComputerRoomCard = this.tempTotalData;
+      console.log("this.ComputerRoomCard",this.ComputerRoomCard)
       setTimeout(() => {
         let searchResults = [];
         if (this.inputValue !== '') {
