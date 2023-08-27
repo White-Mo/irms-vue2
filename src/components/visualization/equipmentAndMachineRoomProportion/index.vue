@@ -4,7 +4,7 @@
       <div>
         <div>
           <el-row>
-            <el-col :span="12"><dv-decoration-7 style="width:100%;height:50px; margin-left:110px; margin-top: 5px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
+            <el-col :span="12"><dv-decoration-7 style="position: absolute;width:100%;height:50px; margin-left:0.7rem; margin-top: 5px; font-size: 18px;color:rgba(0,234,255,0.96);">{{title}}</dv-decoration-7></el-col>
             <el-col :span="12"><el-button round class="changeShow" v-text="isShowChinaLocalization" @click="changeShow"></el-button></el-col>
           </el-row>
         </div>
@@ -249,6 +249,11 @@ export default {
   color: rgba(0, 216, 255, 0.83);
   border: none;
   margin-top: 2vh;
-  margin-left: 7vw;
+  margin-left: 21vw;
+  width: 5.5rem; /* 调整按钮的宽度 */
+  height: 2.2rem; /* 调整按钮的高度 */
+  text-align: center; /* 文本居中对齐 */
+  line-height: 0.5rem; /* 设置行高与按钮高度相同，以垂直居中文本 */
+  padding-left: 1rem; /* 向左移动文本，可以根据需要调整数值 */
 }
 </style>
