@@ -112,7 +112,9 @@
                     <span>{{ item.postName }}</span>
                   </div>
                   <div class="roomData"  style="margin-left: 25px">
-                    <span class="roomName">{{ item.machineRoomName }}</span>
+                    <span class="roomName">{{ item.machineRoomName}}</span>
+                    <br>
+                    <span class="roomName">(机柜数量：{{item.CabinetinNum}})</span>
                   </div>
                 </el-col>
               </el-row>
@@ -160,6 +162,7 @@
 <script>
 import {getAllmachineroom} from "@/api/machineRoom";
 import {getPostMachineRoom} from "@/api/dashboard";
+import { getCabinetinMachineRoom } from '@/api/select'
 import computerRoom from "@/components/Infomanage/computerRoom/index.vue";
 import ViewFullScreen from '@/components/Infomanage/computerRoom/ViewFullScreen'
 
@@ -169,6 +172,8 @@ export default {
   components: {computerRoom,ViewFullScreen},
   data() {
     return {
+      CabinetinMachineRoomNum:[],
+      CabinetinNum: '',
       isFullScreen: true,
 
       isShow: '0',
@@ -194,7 +199,7 @@ export default {
       machineRoomId:''
     };
   },
-  mounted() {
+   mounted() {
     this.fetchData();
   },
   watch: {
@@ -263,6 +268,7 @@ export default {
       var machineArea = this.ComputerRoomCard[index].machineArea
       var machineAdministrator = this.ComputerRoomCard[index].machineAdministrator
       var machineLocation = this.ComputerRoomCard[index].machineLocation
+      var CabinetinNum =this.ComputerRoomCard[index].CabinetinNum
 
       console.log( 'unit,department',unit,department)
       console.log('this.ComputerRoomCard[index]',this.ComputerRoomCard[index])
@@ -277,18 +283,29 @@ export default {
       this.$store.commit('machineRoom/SET_MachineAdministrator', machineAdministrator)
       this.$store.commit('machineRoom/SET_MachineArea', machineArea)
       this.$store.commit('machineRoom/SET_MachineLocation', machineLocation)
+      this.$store.commit('machineRoom/SET_CabinetinNum', CabinetinNum)
       // this.$router.push({name: 'computerRoom'})
       this.isShow = '2'
     },
 
     fetchData() {
       this.loading = true;
+      getCabinetinMachineRoom().then((res) =>{
+        this.CabinetinMachineRoomNum = res.data.CabinetinMachineRoom;
+      })
       getPostMachineRoom(this.postId).then((res) => {
         console.log("getPostMachineRoom",res)
         setTimeout(() => {
           let searchResults = [];
           searchResults = res.data.items;
           this.ComputerRoomCard = searchResults;
+          for(let j=0;j<this.CabinetinMachineRoomNum.length;j++) {
+            for (let i = 0; i < this.ComputerRoomCard.length; i++) {
+              if (this.ComputerRoomCard[i].machineRoomId === this.CabinetinMachineRoomNum[j][0]) {
+                this.ComputerRoomCard[i].CabinetinNum = this.CabinetinMachineRoomNum[j][1];
+              }
+            }
+          }
           console.log('this.ComputerRoomCard',this.ComputerRoomCard)
           this.tempTotalData = this.ComputerRoomCard;
           this.listLoading = false;

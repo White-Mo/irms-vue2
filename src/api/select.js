@@ -86,3 +86,11 @@ export function getCabinet(machineId) {
   })
 }
 
+export function getCabinetinMachineRoom(){
+  return request({
+    url: '/home/cycle/getCabinetinMachineRoom',
+    method: 'get',
+    responseType: 'json'
+  })
+}
+
