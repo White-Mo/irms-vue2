@@ -33,79 +33,75 @@
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
         <el-row :gutter="20" style="height: 5rem;display: flex">
-          <el-col :span="3"><dv-decoration-8 :color=datavcolor style="width:300px;height:50px;position: absolute;left: 0" /></el-col>
-          <el-col :span="8" :offset="5"><h1 style="text-align: center;position:relative;color:#20dbfd;;text-shadow:0 0 25px #00d8ff;font-weight: 900">{{computerTitle}}</h1></el-col>
-          <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true" style="width:300px;height:50px;position: absolute;right: 0" /></el-col>
-          <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
-          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
-          <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 20px;" @click="backPage">返回</el-button>
+          <el-col :span="3"><dv-decoration-8 :color=datavcolor class="dv-decoration-8-1" /></el-col>
+          <el-col :span="8" :offset="5"><h1 class="h1-top">{{computerTitle}}</h1></el-col>
+          <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true"class="dv-decoration-8-2" /></el-col>
+          <el-button id="getcomputerroom" type="danger"  class="el-button-1"  v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
+          <el-button id="getcomputerroom" type="primary"  class="el-button-1" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
+          <el-button id="getcomputerroom" type="primary" class="el-button-2"  @click="backPage">返回</el-button>
         </el-row >
         <el-row :gutter="20" style="height: 2rem">
-          <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" style=" width:100%;height:40px;position: relative;bottom:2rem" /></el-col>
+          <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" class="dv-decoration-5"  /></el-col>
         </el-row >
-        <dv-decoration-10 style="width:100%;height:5px; position: relative;bottom:1rem" />
+        <dv-decoration-10 class="dv-decoration-10"  />
       </el-header>
     </div>
 
     <div id="container" ref="canvasContainer"></div>
-
-    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
-      <div style="display: flex;  height: 70%; width: 90%; position: absolute; left: 1rem; top: 22%;">
-        <el-col style="width: 35%;height: 100%;display: flex;text-align: center;align-items: center;justify-content: center;">
-          <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="height:4rem;border-radius: 4rem;position: relative;z-index: 99;bottom: 0">
+<!--    左上角数据表格-->
+      <dv-border-box-8  class="msgTable-8-top" v-show="datacard"><dv-border-box-1>
+<!--        标题-->
+        <dv-decoration-7 class="decoration-7-top" >机房信息概况</dv-decoration-7>
+<!--        图标-->
+        <el-col class="top-img">
+          <img  class="img" :src=logoSrc+this.unitid+this.logoImgetype  alt="" >
         </el-col>
-        <el-col style="width: 65%;height: 100%;display: flex;align-items: center;">
-          <table style="opacity: 1;width: 100%;color: #FFFFFF;text-align: left;position: relative;font-size:20px" border="1" cellspacing="0" cellpadding="0">
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 110px">管理员：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
-            </tr>
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 80px">机房面积：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
-            </tr>
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 80px">机房位置：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
-            </tr>
-          </table>
-
-        </el-col>
-      </div>
-    </dv-border-box-11>
-
-    <dv-border-box-12 class="msgTable-echarts" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
-      <h2 style="text-align: center;color: #FFFFFF;height: 1px;">机柜设备数量</h2>
-      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
-    </dv-border-box-12>
-
-    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
-      <div style="opacity: 0.8;height:35%;width:100%;position: absolute;left:10px;top: 35%;">
-        <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px;" border="1" cellspacing="0" cellpadding="0">
+<!--        注释1：管理员、机房面积、机房位置-->
+        <table class="top-table" border="1" cellspacing="0" cellpadding="0">
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 110px;text-align: center;">管理员：</th>
+            <th><span class="top-span-1">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
+          </tr>
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 80px;text-align: center;">机房面积：</th>
+            <th><span class="top-span-2" >{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
+          </tr>
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 80px;text-align: center;">机房位置：</th>
+            <th><span class="top-span-3" >{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
+          </tr>
+        </table>
+<!--        注释1结束-->
+<!--        注释2：设备总数、单位机房数、机房机柜数、机房设备数-->
+        <table style="width: 92%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px;" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 60px;width: 55%">
-            <th>设备总数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px">{{this.equipmentBaseInfo.total}}</th>
-            <th>单位机房数:</th>
-            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px;width: 15%">{{this.equipmentBaseInfo.machineRoomCount}}</th>
+            <th style="width: 34.9%;">设备总数:</th>
+            <th class="th-1">{{this.equipmentBaseInfo.total}}</th>
+            <th style="width: 34.9%;">单位机房数:</th>
+            <th class="th-2" >{{this.equipmentBaseInfo.machineRoomCount}}</th>
           </tr>
           <tr style="height: 60px;width: 45%" >
             <th>机房机柜数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px ">{{this.equipmentBaseInfo.cabinetCount}}</th>
+            <th class="th-3">{{this.equipmentBaseInfo.cabinetCount}}</th>
             <th>机房设备数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px">{{this.equipmentBaseInfo.equipmentCount}}</th>
+            <th class="th-4">{{this.equipmentBaseInfo.equipmentCount}}</th>
           </tr>
         </table>
-      </div>
-    </dv-border-box-11>
+<!--        注释2结束-->
+      </dv-border-box-1></dv-border-box-8>
+<!--    左上角数据表格结束-->
 
-    <dv-border-box-12 class="msgTable"
-                      :style="{height:boxHeight}" style="width:25vw; position: absolute; right: 0vw; top:25rem; marginRight:10px" v-show="datacard">
-      <el-row style="display:flex;text-align: center;top:0%;">
-        <div style="width: 25vw; display:flex;justify-content: center;text-align: center;">
-          <h2 style="display:flex; text-align: center;color: #FFFFFF">机房机柜</h2>
-        </div>
-      </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;position: absolute;top: 4rem">
+    <dv-border-box-8 class="msgTable-echarts" style="height: 45vh;width:24.4vw;position: absolute;top: 7rem;  right: 0.5vw;" v-show="datacard">
+      <dv-border-box-1>
+      <dv-decoration-7 class="decoration-7-bottom-1" >机柜设备数量</dv-decoration-7>
+      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
+      </dv-border-box-1>
+    </dv-border-box-8>
+
+    <dv-border-box-8 class="msgTable-8-bottom" :style="{height:boxHeight}"  v-show="datacard">
+      <dv-border-box-1>
+        <dv-decoration-7 class="decoration-7-bottom" >机房机柜</dv-decoration-7>
+      <el-row class="el-row-bottom">
         <el-table
         :style="{height:computedHeight}"
           border
@@ -134,7 +130,8 @@
           </el-table-column>
         </el-table>
       </el-row>
-    </dv-border-box-12>
+      </dv-border-box-1>
+    </dv-border-box-8>
 
     <el-dialog
       :visible.sync="showEquipment"
@@ -814,7 +811,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .mains{
   cursor: pointer;
   position:absolute;
@@ -837,8 +834,183 @@ export default {
   width:100%;
   height:100%;
 }
-.msgTable{
-  z-index:99
+.msgTable-8-top{
+  z-index:99;
+  height: 20rem;
+  width:30rem;
+  position: absolute;
+  top: 7rem;
+  margin-left: 10px
+}
+.msgTable-8-bottom{
+  z-index:99;
+  width:30rem;
+  position: absolute;
+  right: 0vw;
+  margin-right: 10px;
+  top:37.5rem;
+
+}
+.decoration-7-top{
+  width:150px;
+  height:30px;
+  margin-left: 10rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.decoration-7-bottom{
+  width:150px;
+  height:30px;
+  margin-left: 10rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.decoration-7-bottom-1{
+  width:150px;
+  height:30px;
+  margin-left: 10.5rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.el-row-bottom{
+  display:flex;
+  justify-content: center;
+  width:90%;
+  height:86%;
+  left: 5%;
+  position: absolute;
+  top: 3rem
+}
+.top-img{
+  width: 35%;
+  height: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.img{
+  width:7rem;
+  height:7rem;
+  border-radius: 4rem;
+  position: relative;
+  z-index: 99;
+  bottom: 0;
+  margin-left: 1rem;
+}
+.top-table{
+  margin-top: 0.9rem;
+  opacity: 1;
+  width: 60%;
+  color: #FFFFFF;
+  text-align: left;
+  position: relative;
+  font-size:20px
+}
+.top-span-1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-weight: 800;
+}
+.top-span-2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-family:yjsz;
+  font-weight: 900
+}
+.top-span-3{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-family:yjsz;
+  font-weight: 900
+}
+.th-1{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.th-2{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px;
+  width: 15%
+}
+.th-3{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.th-4{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.dv-decoration-8-1{
+  width:300px;
+  height:50px;
+  position: absolute;
+  left: 0
+}
+.dv-decoration-8-2{
+  width:300px;
+  height:50px;
+  position: absolute;
+  right: 0
+}
+.el-button-1{
+  z-index:99;
+  position: absolute;
+  bottom: -20px;
+  right: 100px;
+}
+.el-button-2{
+  z-index:99;
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+}
+.dv-decoration-5{
+  width:100%;
+  height:40px;
+  position: relative;
+  bottom:2rem
+}
+.dv-decoration-10{
+  width:100%;
+  height:5px;
+  position: relative;
+  bottom:1rem
+}
+.h1-top{
+  text-align: center;
+  position:relative;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-weight: 900
 }
 .tooltip {
   position: absolute;
