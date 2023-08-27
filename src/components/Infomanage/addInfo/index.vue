@@ -1106,6 +1106,7 @@ export default {
         }
       })
       getEquipmentType().then(response => {
+        console.log("000000000000",response)
         this.equipmentTypeAll = response.data.items
         this.equipment.equipmentBaseInfo.equipmentTypeName = this.equipmentTypeAll[0].equipmentName
       })

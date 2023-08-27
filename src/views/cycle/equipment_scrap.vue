@@ -266,10 +266,10 @@ export default {
           value: 'cabinetName',
           label: '机柜编号'
         },
-        {
-          value: 'onlineTime',
-          label: '上线时间'
-        }
+        // {
+        //   value: 'onlineTime',
+        //   label: '上线时间'
+        // }
       ],
       value: '',
       labels: {
@@ -283,7 +283,7 @@ export default {
         ipAddress: 'IP地址',
         macAddress: 'MAC地址',
         cabinetName: '机柜编号',
-        onlineTime: '上线时间',
+        // onlineTime: '上线时间',
         guaranteePeriod: '保修期',
       },
       selectedData:[],
