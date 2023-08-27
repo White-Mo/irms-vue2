@@ -35,6 +35,7 @@ export default {
       equipmentAllName: [],
       ChinaLocalizationAllName: [],
       title:'',
+
     }
   },
   computed: {
