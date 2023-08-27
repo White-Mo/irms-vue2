@@ -961,8 +961,16 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children, true);
       if (intersects.length > 0) {
         // 鼠标悬停在模型上
-        const object = intersects[0].object;
+        let object = null;
+        for (let i=0 ; i<intersects.length;i++){
+          if (intersects[i].object.type != "Sprite"){
+            object= intersects[i].object;
+            break;
+          }
+        }
         let cabinetArray = Object.keys(this.cabinetClickCount)
+        console.log(intersects[0].object)
+        console.log(object)
         if (cabinetArray.includes(object.name)) {
           // console.log('this.tooltipText',this.tooltipText)
           this.showCabinetData(object.name)
