@@ -100,7 +100,7 @@
       <dv-loading v-show='loading'>Loading...</dv-loading>
       <div class="card">
         <div class="roomCard" v-for="(item,index) in ComputerRoomCard">
-          <dv-border-box-13>
+          <dv-border-box-13 style="height: 11rem">
             <div style="height:90%; width:90%; position:absolute;left:1rem; top:2rem">
               <el-row style="margin-bottom: 10px">
                 <el-col :span="5">
@@ -338,6 +338,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: left;
+  height: 10rem;
 }
 
 .check {
