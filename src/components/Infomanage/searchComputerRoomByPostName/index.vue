@@ -348,7 +348,7 @@ export default {
   min-width: 170px;
 }
 .enter {
-  min-height: 25px;
+  min-height: 26px;
   min-width: 95px;
 }
 .logo {
