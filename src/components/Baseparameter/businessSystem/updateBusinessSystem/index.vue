@@ -1,14 +1,14 @@
 <template>
   <div class="editBusinessSystem-panel">
     <div class="edit-business-system">
-      <el-page-header content="编辑业务系统" @back="back" />
+      <el-page-header content="编辑业务子系统" @back="back" />
     </div>
     <div class="edit-business-system">
       <el-row>
         <el-form ref="editInBusinessSystemFormation" :model="editInBusinessSystemFormation" label-width="150px" :inline="false" :rules="rules">
           <el-form-item label="所属单位" prop="postName">
             <el-col :span="10">
-              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost":popper-append-to-body ="false">
+              <el-select v-model="editInBusinessSystemFormation.postName" @change="changePost" :disabled="true" :popper-append-to-body ="false">
                 <el-option
                   v-for="item in postAll"
                   :key="item.value"
