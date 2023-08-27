@@ -1,3 +1,4 @@
+/*
 import request from '@/utils/request'
 
 export function getMapJson(data) {
@@ -20,3 +21,4 @@ export function getMapJson(data) {
     params: params
   })
 }
+*/

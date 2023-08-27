@@ -114,7 +114,7 @@
                   <div class="roomData"  style="margin-left: 25px">
                     <span class="roomName">{{ item.machineRoomName}}</span>
                     <br>
-                    <span class="roomName">(机柜数量：{{item.CabinetinNum}})</span>
+                    <span class="roomName">机柜数量：{{item.CabinetinNum}}</span>
                   </div>
                 </el-col>
               </el-row>
@@ -348,7 +348,7 @@ export default {
   min-width: 170px;
 }
 .enter {
-  min-height: 30px;
+  min-height: 25px;
   min-width: 95px;
 }
 .logo {

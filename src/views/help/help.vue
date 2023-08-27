@@ -23,7 +23,7 @@
 
 <script>
 
-import { getSecret } from '@/api/select'
+
 
 import { helpInfoLogRecord } from '@/api/Sys_info_manage'
 

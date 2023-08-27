@@ -1,4 +1,3 @@
-import machineRoom from "@/store/modules/machineRoom";
 
 const getters = {
   sidebar: state => state.app.sidebar,
