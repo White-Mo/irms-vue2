@@ -248,7 +248,7 @@ export default {
             i.isdel = i.isdel == '0' ? '激活' : '冻结'
           }
           this.tableData = data
-          this.totalCount = res.data.total - 1   //  减去自身账号
+          this.totalCount = res.data.total  //  减去自身账号
           this.listLoading = false
         }
       )
