@@ -1,7 +1,3 @@
-import {getInfo, login, logout} from "@/api/user";
-import {removeToken, setToken} from "@/utils/auth";
-import {resetRouter} from "@/router";
-
 const MachineData = () => {
   return {
     unit: '',

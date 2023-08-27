@@ -1,7 +1,7 @@
 import { asyncRoutes, constantRoutes, getAsyncRoutes } from '@/router'
 
 /**
- * Use meta.role to determine if the current user has permission
+ * Use meta. Role to determine if the current user has permission
  * @param roles
  * @param route
  */
@@ -14,13 +14,12 @@ function hasPermission(roles, route) {
 }
 
 /**
- * Filter asynchronous routing tables by recursion
+ * 通过递归过滤异步路由表
  * @param routes asyncRoutes
  * @param roles
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
-
   routes.forEach(route => {
     const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
@@ -30,7 +29,7 @@ export function filterAsyncRoutes(routes, roles) {
       res.push(tmp)
     }
   })
-
+  console.log("3333333333333333333333333",res)
   return res
 }
 
@@ -53,7 +52,7 @@ const actions = {
       getAsyncRoutes().then(() => {
         if (roles.includes('超级管理员')) {
           accessedRoutes = asyncRoutes || []
-        } else if(asyncRoutes.length == 0){
+        } else if(asyncRoutes.length === 0){
           accessedRoutes =asyncRoutes
         }
         else {

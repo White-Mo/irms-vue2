@@ -82,7 +82,7 @@ const actions = {
         const { data } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录。')
         }
 
         const { roles, realname, roleid , post_name , role_department_id, role_department_name , username, userid ,role_name } = data

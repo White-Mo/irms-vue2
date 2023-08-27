@@ -8,14 +8,14 @@ import Layout from '@/layout'
 import { getMoveRoute } from '@/api/user'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
+ * Note: sub-menu only appear when route children. Length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
+ *                                it will become nested mode, otherwise not show the root menu
+ * redirect: noRedirect           if set noRedirect will not redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
@@ -43,20 +43,14 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  // {
-  //   path: '/computerRoom',
-  //   component: () => import('@/components/Infomanage/computerRoom/index'),
-  //   hidden: true,
-  //   meta: { fullScreen: true }
-  // }
 ]
 
 /**
  * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
+ * 需要根据用户角色动态加载的路由
  */
 export let asyncRoutes = [
-  // 404 page must be placed at the end !!!
+  // 404页一定要放在最后!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
@@ -77,11 +71,11 @@ export function resetRouter() {
 export function getAsyncRoutes() {
   return new Promise((resolve, reject) => {
     getMoveRoute().then(response => {
-      if (response.data.length == 0){
+      if (response.data.length === 0){
         asyncRoutes = []
       }else {
-        console.log(response.data)
         const { data } = response
+        console.log("000000000000000000000000000000",data)
         asyncRoutes = filterAsyncRoutes(data) // 全部的路由数据
       }
       resolve()
@@ -92,7 +86,6 @@ export function getAsyncRoutes() {
 }
 
 export function getRouter(permission) {
-  // //console.log('permission.component' + [`@/views/${permission.component}`])
   if (permission.children && permission.children.length > 0) { // 一级菜单Layout
     return {
       path: permission.path,
@@ -145,7 +138,6 @@ export function initRoute(permission) { // 封装路由
 export function filterAsyncRoutes(routes) {
   const accessedRoutes = []
   routes.forEach(permission => {
-    // //console.log(permission)
     const routeNode = initRoute(permission)
     accessedRoutes.push(routeNode) // push一个个封装好的路由数据
   })
@@ -157,6 +149,7 @@ export function filterAsyncRoutes(routes) {
       hidden: true
     }
   accessedRoutes.push(firstRouteNode)
+  console.log("2222222222222222222222222222222",accessedRoutes)
   return accessedRoutes // 返回全部的路由数据
 }
 
