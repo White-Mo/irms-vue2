@@ -288,8 +288,8 @@ export default {
     //选择日志时间进行返回用户以及行为
     handleDateChange(date) {
       // 重置相关变量，以避免显示旧数据
-      this.userData = [];
       this.tableData = []
+      this.userData = [];
       this.handlersData = [];
       this.roleData = [];
       this.postTotal = 0;
@@ -380,7 +380,7 @@ export default {
         userName: row.postName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
-      console.log("params11",params)
+      console.log("params",params)
       //接口获取前端传取时间参数和相应单位下所有用户操作行为
       getRoleAndCountByCurrentDay(params).then(response => {
         this.tableData = response.data.items
@@ -394,7 +394,6 @@ export default {
         userName: row.realName,
         time: moment(row.time).format('YYYY-MM-DD')
       }
-      console.log("999999999999999",params)
       //接口获取前端传取时间参数和相应用户操作行为
       getLogDataByDateAndUser(params).then(response => {
         this.tableData = response.data.items

@@ -3,7 +3,8 @@
     <dv-loading>Loading...</dv-loading>
 
     <!-- 模型悬浮时显示的气泡 -->
-    <div v-if="showTooltip" style="position: fixed" class="tooltip" :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
+    <div v-if="showTooltip" style="position: fixed" class="tooltip"
+         :style="{ top: `${tooltipPosition.y}px`, left: `${tooltipPosition.x}px` }">
       <table
         border
         height="40"
@@ -28,7 +29,6 @@
         </el-table-column>
       </el-table>
     </div>
-
 
     <div class="app">
       <el-header style="background:#142437;height: 7rem;">
@@ -158,6 +158,7 @@ import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom,getEquipmentNum} from "@/api/dashboard";
 import {getList} from "@/api/table";
 import { getEquipmentByCabinet } from '@/api/baseparameter'
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import axios from 'axios'
 import async from 'async'
 import * as echarts from 'echarts'
@@ -214,19 +215,7 @@ export default {
         }
       ],
 
-      camera: null,
-      scene: null,
-      renderer: null,
-      mesh: null,
-      model:null,
-      controls:null,
       isRotating:false,
-      cabinetClickCount: {
-        '机柜门001':0,
-        '机柜门005':0,
-        '机柜门006':0,
-        '机柜门007':0
-      },
       equipmentClickedCount:[
         //机柜1中设备(从右向左)
         {'服务器022':0,
@@ -266,8 +255,6 @@ export default {
       equipmentClickedSum:0,
       isMoving:false,
 
-      cabinetArray:['机柜门001','机柜门007','机柜门006','机柜门005'],
-      // equipmentArray:['服务器022','服务器023'],
       cabinetNum:0,
 
       showTooltip: false,
@@ -276,15 +263,16 @@ export default {
 
       machineRoomId:this.machineRoomId,
 
-      raycaster: new THREE.Raycaster(),
-      mouse: new THREE.Vector2(),
-      rotationSpeed: 0.02,
+
 
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
       logoImgetype:'.png',
       echartsData:[],
       AllechartsData:[],
+      machineModel:null,
+      cabinetModel:null,
+      cabinetModelArray:[],
     };
   },
   created() {
@@ -330,6 +318,125 @@ export default {
     },
   },
   async mounted() {
+    this.spritePosition = [
+      //1-5机柜
+      [-1,20,32],
+      [-1,20,22],
+      [-1,20,12],
+      [-1,20, 2],
+      [-1,20,-8],
+      //6-10机柜
+      [-16,20,32],
+      [-16,20,22],
+      [-16,20,12],
+      [-16,20, 2],
+      [-16,20,-8],
+      //11-15机柜
+      [14,20,32],
+      [14,20,22],
+      [14,20,12],
+      [14,20, 2],
+      [14,20,-8],
+      //16-20机柜
+      [-31,20,32],
+      [-31,20,22],
+      [-31,20,12],
+      [-31,20, 2],
+      [-31,20,-8],
+      //21-25机柜
+      [-46,20,32],
+      [-46,20,22],
+      [-46,20,12],
+      [-46,20, 2],
+      [-46,20,-8],
+      //26-30机柜
+      [29,20,32],
+      [29,20,22],
+      [29,20,12],
+      [29,20, 2],
+      [29,20,-8],
+      //31-35机柜
+      [-61,20,32],
+      [-61,20,22],
+      [-61,20,12],
+      [-61,20, 2],
+      [-61,20,-8],
+      //36-40机柜
+      [44,20,32],
+      [44,20,22],
+      [44,20,12],
+      [44,20, 2],
+      [44,20,-8],
+    ]
+    this.cabinetArray = ['机柜门011', '机柜门012', '机柜门013', '机柜门014', '机柜门015',
+      '机柜门021', '机柜门022', '机柜门023', '机柜门024', '机柜门025',
+      '机柜门031', '机柜门032', '机柜门033', '机柜门034', '机柜门035',
+      '机柜门041', '机柜门042', '机柜门043', '机柜门044', '机柜门045',
+      '机柜门051', '机柜门052', '机柜门053', '机柜门054', '机柜门055',
+      '机柜门061', '机柜门062', '机柜门063', '机柜门064', '机柜门065',
+      '机柜门071', '机柜门072', '机柜门073', '机柜门074', '机柜门075',
+      '机柜门081', '机柜门082', '机柜门083', '机柜门084', '机柜门085',
+    ],
+    this.cabinetClickCount = {
+      '机柜门011':0,
+      '机柜门012':0,
+      '机柜门013':0,
+      '机柜门014':0,
+      '机柜门015':0,
+
+      '机柜门021':0,
+      '机柜门022':0,
+      '机柜门023':0,
+      '机柜门024':0,
+      '机柜门025':0,
+
+      '机柜门031':0,
+      '机柜门032':0,
+      '机柜门033':0,
+      '机柜门034':0,
+      '机柜门035':0,
+
+      '机柜门041':0,
+      '机柜门042':0,
+      '机柜门043':0,
+      '机柜门044':0,
+      '机柜门045':0,
+
+      '机柜门051':0,
+      '机柜门052':0,
+      '机柜门053':0,
+      '机柜门054':0,
+      '机柜门055':0,
+
+      '机柜门061':0,
+      '机柜门062':0,
+      '机柜门063':0,
+      '机柜门064':0,
+      '机柜门065':0,
+
+      '机柜门071':0,
+      '机柜门072':0,
+      '机柜门073':0,
+      '机柜门074':0,
+      '机柜门075':0,
+
+      '机柜门081':0,
+      '机柜门082':0,
+      '机柜门083':0,
+      '机柜门084':0,
+      '机柜门085':0,
+    },
+    this.camera =  null,
+    this.scene =  null,
+    this.renderer =  null,
+    this.mesh =  null,
+    this.mode = null,
+    this.raycaster = new THREE.Raycaster(),
+    this.mouse = new THREE.Vector2(),
+    this.rotationSpeed = 0.02,
+
+    this.initCount()
+
     window.addEventListener('resize', this.handleResize2);
     // 创建Echarts实例并绘制饼状图
     this.handleResize2();
@@ -339,10 +446,10 @@ export default {
     }
     await getEquipmentNum(params).then(res => {
       if(res.data.localizationNum == null){
-        console.log('没有设备信息')
+        // console.log('没有设备信息')
       }else {
         this.resultArray.push(res.data.localizationNum);
-        console.log('+++++++++++++', this.resultArray)
+        // console.log('+++++++++++++', this.resultArray)
         for (let i = 0; i < this.resultArray[0].length; i++) {
           this.echartsData.push({
             name: this.resultArray[0][i][0],
@@ -362,8 +469,8 @@ export default {
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
       await getCabinet(machineRoomId).then((res) => {
         this.tableData = res.data.items
-        // console.log('this.tableData',this.tableData)
-        for (let i = 0; i < Math.min(this.tableData.length, 4); i++) {
+        console.log('this.tableData',this.tableData)
+        for (let i = 0; i < this.tableData.length; i++) {
           this.tableData[i].clickedCount = 0
           this.clickedCabinet.push(this.tableData[i])
         }
@@ -395,8 +502,6 @@ export default {
       })
     }
 
-    // this.adjustChartPosition();
-    // window.addEventListener('resize', this.adjustChartPosition);
 
     // 监听鼠标按下事件
     document.addEventListener('mousedown', this.onMouseDown);
@@ -410,11 +515,12 @@ export default {
 
     let that = this
     setTimeout(function () {
-      that.echartsDraw()
       that.initCount()
+      that.echartsDraw()
       that.init();
+      that.loadGltf();
+      that.createSprite();
       that.animate();
-      that.loadGltf()
     }, 200);
   },
   beforeDestroy() {
@@ -425,11 +531,22 @@ export default {
     document.removeEventListener('mouseleave', this.onMouseLeave);
     // 移除窗口大小调整事件监听器
     window.removeEventListener('resize', this.handleResize);
-    // if (this.myChart) {
-    //   this.myChart.dispose();
-    // }
     // 在组件销毁前解绑resize事件
     window.removeEventListener('resize', this.handleResize2);
+
+
+    this.spritePosition = null
+    this.cabinetArray = null
+    this.cabinetClickCount = null
+    this.camera =  null
+    this.scene =  null
+    this.renderer =  null
+    this.mesh =  null
+    this.mode = null
+    this.raycaster = null
+    this.mouse = null
+    this.rotationSpeed = null
+
   },
   methods: {
     fetchData(cabinetId) {
@@ -465,11 +582,11 @@ export default {
       directionalLight.position.set(10, 10, 10);
       this.scene.add(directionalLight);
       // 平行光2
-      let directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-      directionalLight2.position.set(-400, -200, -300);
-      this.scene.add(directionalLight2);
+      // let directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+      // directionalLight2.position.set(-400, -200, -300);
+      // this.scene.add(directionalLight2);
       //环境光
-      let ambient = new THREE.AmbientLight(0xffffff, 0.5);
+      let ambient = new THREE.AmbientLight(0xffffff, 0.7);
       this.scene.add(ambient);
       //网格模型添加到场景中
       // let geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
@@ -484,21 +601,20 @@ export default {
       /**
        * 相机设置
        */
-      let width = window.outerWidth; //窗口宽度
-      let height = window.outerHeight; //窗口高度
-      let k = width / height; //Three.js输出的Cnavas画布宽高比
-      let s = 200;//设置相机渲染范围大小
-      this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 3000);
-      this.camera.position.set(-537, 76, -615); //设置相机位置
-      this.camera.lookAt(0, 0, 0);
-      // let container = document.getElementById("container");
-      // this.camera = new THREE.PerspectiveCamera(
-      //   70,
-      //   container.clientWidth / container.clientHeight,
-      //   0.01,
-      //   10
-      // );
-      // this.camera.position.z = 1;
+      //透视相机
+      let width = window.outerWidth; // 窗口宽度
+      let height = window.outerHeight; // 窗口高度
+      let k = width / height; // Three.js输出的Canvas画布宽高比
+      let fov = 60; // 视场角度
+      let near = 1; // 近平面
+      let far = 3000; // 远平面
+
+      this.camera = new THREE.PerspectiveCamera(fov, k, near, far);
+      this.scene.background = new THREE.Color(0x000000);
+      this.camera.position.set(100, 100, 105); // 设置相机位置
+      this.camera.lookAt(100, 100, 100); // 设置相机的焦点位置
+
+
       /**
        * 创建渲染器对象
        */
@@ -516,16 +632,191 @@ export default {
       let self = this;
       let loader = new GLTFLoader();
       //本地模型路径：public/static/mod/Xbot.glb
-      loader.load("static/c.glb", (gltf) => {
-        //console.log(gltf)
+      loader.load("static/machineRoom.gltf", (gltf) => {  //导入机房模型
+        console.log("gltf",gltf)
         self.isLoading = false;//关闭载入中效果
-        self.mesh = gltf.scene;
-        // self.mesh.scale.set(5,5,5);//设置大小比例
-        self.mesh.position.set(0, 0, 0);//设置位置
-        self.scene.add(self.mesh); // 将模型引入three
+        self.machineModel = gltf.scene;
+        // self.machineModel.scale.set(5,5,5);//设置大小比例
+        self.machineModel.position.set(0, 0, 0);
+        if(this.equipmentBaseInfo.cabinetCount > 20){
+          self.machineModel.traverse((child) => {
+            if (child.isMesh) {
+              // self.machineModel.children[4].position.set(-37,0,0)
+              // let floor = gltf.scene.children[4].clone()
+              // floor.position.set(37, 0, 0)
+              // self.scene.add(floor)
+              // gltf.scenes.push(floor)
+              if(child.name === '门A'){
+                child.position.x += 33
+              }
+              if(child.name === '地面001'){
+                child.scale.x *= 2.1
+              }
+              if(child.name === '墙A1' || child.name === '空调1'){
+                child.position.x += 37
+              }
+              if(child.name === '墙A2' || child.name === '空调2'){
+                child.position.x -= 37
+              }
+              if(child.name === '墙B1' || child.name === '墙B2'){
+                child.scale.x *= 2
+              }
+            }
+          });
+        }
+        self.scene.add(self.machineModel); // 将模型引入three
         self.animate();
+
+        loader.load('static/cabinet.gltf', (gltf1) => {  //导入机柜模型
+          this.cabinetModel = gltf1.scene;
+          this.equipmentBaseInfo.cabinetCount = this.tableData.length
+          // this.equipmentBaseInfo.cabinetCount = 40
+          //小于等于5个机柜
+          let param = this.equipmentBaseInfo.cabinetCount < 5 ? this.equipmentBaseInfo.cabinetCount : 5
+          for(let j=0;j<param;j++){
+            let instance = this.cabinetModel.clone();
+            instance.position.set(-1, 2, 32-j*10);
+            self.scene.add(instance);
+            instance.children[1].name = '机柜门01' + (j+1).toString()
+            gltf.scenes.push(instance)
+            this.cabinetModelArray.push(instance)
+          }
+          //小于等于10个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 1){
+            let num = this.equipmentBaseInfo.cabinetCount < 10 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++){
+              let instance = this.cabinetModel.clone();
+              instance.position.set(-16, 2, 32-j*10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门02' + (j+1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+              // console.log("instance",instance)
+            }
+          }
+          //小于等于15个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 2){
+            let num = this.equipmentBaseInfo.cabinetCount < 15 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++){
+              let instance = this.cabinetModel.clone();
+              instance.position.set(14, 2, 32-j*10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门03' + (j+1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+              // console.log("instance",instance)
+            }
+          }
+          //小于等于20个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 3){
+            let num = this.equipmentBaseInfo.cabinetCount < 20 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++){
+              let instance = this.cabinetModel.clone();
+              instance.position.set(-31, 2, 32-j*10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门04' + (j+1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+              // console.log("instance",instance)
+            }
+          }
+          //小于等于25个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 4){
+            let num = this.equipmentBaseInfo.cabinetCount < 25 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++) {
+              let instance = this.cabinetModel.clone();
+              instance.position.set(-46, 2, 32 - j * 10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门05' + (j + 1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+            }
+          }
+          //小于等于30个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 5){
+            let num = this.equipmentBaseInfo.cabinetCount < 30 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++) {
+              let instance = this.cabinetModel.clone();
+              instance.position.set(29, 2, 32 - j * 10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门06' + (j + 1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+            }
+          }
+          //小于等于35个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 6){
+            let num = this.equipmentBaseInfo.cabinetCount < 35 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++) {
+              let instance = this.cabinetModel.clone();
+              instance.position.set(-61, 2, 32 - j * 10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门07' + (j + 1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+            }
+          }
+          //小于等于40个机柜
+          if(this.equipmentBaseInfo.cabinetCount / 5 >= 7){
+            let num = this.equipmentBaseInfo.cabinetCount < 40 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+            for(let j=0;j<num;j++) {
+              let instance = this.cabinetModel.clone();
+              instance.position.set(44, 2, 32 - j * 10);
+              self.scene.add(instance);
+              instance.children[1].name = '机柜门08' + (j + 1).toString()
+              gltf.scenes.push(instance)
+              this.cabinetModelArray.push(instance)
+            }
+          }
+        });
       })
     },
+
+    //精灵标签
+    createSprite() {
+      for (let i = 0; i < this.tableData.length; i++) {
+        const spriteCanvas = document.createElement('canvas');
+        const spriteContext = spriteCanvas.getContext('2d');
+        spriteCanvas.width = 70; // 根据需要设置宽度
+        spriteCanvas.height = 20; // 根据需要设置高度
+
+        // 设置黑色背景，半透明度
+        spriteContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        spriteContext.fillRect(0, 0, spriteCanvas.width, spriteCanvas.height);
+
+        // 设置荧光橙色边框
+        spriteContext.strokeStyle = '#ffa500';
+        spriteContext.lineWidth = 2;
+        spriteContext.strokeRect(0, 0, spriteCanvas.width, spriteCanvas.height);
+
+        // 调整文本字体大小
+        const fontSize = 14; // 设置字体大小
+        spriteContext.font = `Bold ${fontSize}px Arial`;
+
+        const text = this.tableData[i].cabinetName;
+        const textWidth = spriteContext.measureText(text).width;
+
+        const centerX = (spriteCanvas.width - textWidth) / 2;
+        const centerY = spriteCanvas.height / 2 + fontSize / 2
+
+        // 设置荧光蓝色文本颜色
+        spriteContext.fillStyle = '#00ffff';
+        spriteContext.fillText(text, centerX, centerY);
+
+
+        const spriteTexture = new THREE.Texture(spriteCanvas);
+        spriteTexture.needsUpdate = true;
+        const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture });
+        this.sprite = new THREE.Sprite(spriteMaterial);
+        this.sprite.scale.set(10, 5, 1);
+        this.sprite.position.set(this.spritePosition[i][0], this.spritePosition[i][1], this.spritePosition[i][2]);
+        this.sprite.center.set(0.5, 0);
+        this.scene.add(this.sprite);
+      }
+    },
+
+
+
 
     handleResize() {
       // 更新相机纵横比和渲染器大小
@@ -544,8 +835,9 @@ export default {
 
     // 动画-循环渲染每一帧
     animate() {
-      if (this.mesh) {
+      if (this.machineModel) {
         requestAnimationFrame(this.animate);
+        this.controls.update();
         TWEEN.update();
         this.renderScene()
         this.renderer.render(this.scene, this.camera);
@@ -562,28 +854,31 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       if (intersects.length > 0) {
         let clickObject = intersects[0].object;
-        // console.log('intersects[0].object',intersects[0].object.name)
+        // console.log("clickObject",clickObject.name)
+        // console.log('intersects[0].objeccct',intersects[0].object.name)
         // for(let i=0;i<intersects.length;i++){
         //   console.log('被点击的所有',intersects[i].object.name)
         // }
         //机柜门开关
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 40; i++) {
+          // console.log("this.cabinetArray",this.cabinetArray)
           if (clickObject.name === this.cabinetArray[i]) {
-            // console.log('clickObject.name',clickObject.name)
-            let flag = 0
-            let equipmentClickedCountArray = Object.values(this.equipmentClickedCount[i])
-            equipmentClickedCountArray.forEach((element) => {
-              if (element % 2 !== 0) {
-                flag = 1
-              }
-            })
-            // console.log('flag',flag)
-            //设备推入的情况下才能关闭机柜门
-            if (flag === 0) {
-              // 点击后执行旋转动画
-              this.rotateCabinetDoor(clickObject);
-              break
-            }
+            // console.log('点中了')
+            this.rotateCabinetDoor(clickObject);
+            // let flag = 0
+            // let equipmentClickedCountArray = Object.values(this.equipmentClickedCount[i])
+            // equipmentClickedCountArray.forEach((element) => {
+            //   if (element % 2 !== 0) {
+            //     flag = 1
+            //   }
+            // })
+            // // console.log('flag',flag)
+            // //设备推入的情况下才能关闭机柜门
+            // if (flag === 0) {
+            //   // 点击后执行旋转动画
+            //   this.rotateCabinetDoor(clickObject);
+            //   break
+            // }
           }
         }
         //设备移动
@@ -615,8 +910,8 @@ export default {
         // 根据点击次数的奇偶性来确定目标旋转角度的正负
         const isPositiveRotation = this.cabinetClickCount[targetObject.name] % 2 === 1;
         const targetRotation = isPositiveRotation
-          ? targetObject.rotation.y - Math.PI / 2 // 旋转九十度
-          : targetObject.rotation.y + Math.PI / 2; // 旋转负九十度
+          ? targetObject.rotation.y + Math.PI*2 / 3 // 旋转九十度
+          : targetObject.rotation.y - Math.PI*2 / 3; // 旋转负九十度
         const initialRotation = targetObject.rotation.y;
         const duration = 1000; // 旋转动画的持续时间为1000毫秒（1秒）
         const startTime = performance.now();
@@ -733,14 +1028,6 @@ export default {
 
     //右上角数据
     initCount() {
-
-      // equipmentBaseInfo:{
-      //   total:0,
-      //     typeCount:0,
-      //     serverCount:0,
-      //     switchCount:0
-      // },
-      // this.equipmentBaseInfo.
       this.roomBasicInfo.machineArea = this.$store.state.machineRoom.machineArea
       this.roomBasicInfo.machineAdministrator = this.$store.state.machineRoom.machineAdministrator
       this.roomBasicInfo.machineLocation = this.$store.state.machineRoom.machineLocation
@@ -855,6 +1142,11 @@ export default {
   /* 添加 z-index 确保气泡在画布上方显示 */
   z-index: 100;
 }
+.bubble {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  z-index: 99;
+}
 #canvas-container {
   width: 100%;
   height: 100%;
@@ -894,5 +1186,14 @@ export default {
   top: -1px;
   right: 0;
   background-color: BLACK;
+}
+/*精灵标签样式*/
+.spriteLabel{
+  font-family: Arial, sans-serif;
+  background-color: rgba(255, 0, 0, 0.8); /* 背景颜色和透明度 */
+  padding: 5px;
+  border: 2px solid #000; /* 背景边框 */
+  color: rgb(63, 63, 64);
+  white-space: nowrap; /* 防止换行 */
 }
 </style>
