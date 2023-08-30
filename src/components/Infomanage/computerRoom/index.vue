@@ -1009,6 +1009,7 @@ export default {
       })
     },
 
+    //田累积
     echartsDraw() {
       for(let i=0;i<this.tableData.length;i++){
         this.AllechartsData.push({
