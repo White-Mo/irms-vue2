@@ -504,12 +504,37 @@ export function updateCabinetAction(data) {
 //     responseType: 'json'
 //   });
 // }
-export function getEquipmentByCabinet(cabinetId){
+export function getEquipmentByCabinet(cabinetId,postName){
   return request({
     params:{
-      cabinetId:cabinetId
+      cabinetId:cabinetId,
+      postName:postName
     },
     url:'/home/baseparameter/getEquipmentByCabinet',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function getVisitTotalOfCurrentPost(postName){
+  return request({
+    params:{
+      postName:postName
+    },
+    url:'/home/baseparameter/getVisitTotalOfCurrentPost',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function getCabinetByEquipmentType(data){
+  return request({
+    params:{
+      postName:data.postName,
+      machineRoomName:data.machineRoomName,
+      equipmentType:data.equipmentType
+    },
+    url:'/home/baseparameter/getCabinetByEquipmentType',
     method: 'post',
     responseType: 'json'
   })

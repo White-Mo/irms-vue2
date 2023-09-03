@@ -36,6 +36,10 @@
           <el-col :span="3"><dv-decoration-8 :color=datavcolor style="width:300px;height:50px;position: absolute;left: 0" /></el-col>
           <el-col :span="8" :offset="5"><h1 style="text-align: center;position:relative;color:#20dbfd;;text-shadow:0 0 25px #00d8ff;font-weight: 900">{{computerTitle}}</h1></el-col>
           <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true" style="width:300px;height:50px;position: absolute;right: 0" /></el-col>
+
+          <el-input v-model="inputEquipmentType" clearable style="z-index:99;position: absolute;bottom: -20px;right: 320px;width: 220px" placeholder="请输入设备类型"></el-input>
+          <el-button  type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 240px;" @click="searchEquipmentType">搜索</el-button>
+
           <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 20px;" @click="backPage">返回</el-button>
@@ -157,7 +161,7 @@ import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom,getEquipmentNum} from "@/api/dashboard";
 import {getList} from "@/api/table";
-import { getEquipmentByCabinet } from '@/api/baseparameter'
+import { getCabinetByEquipmentType, getEquipmentByCabinet, getVisitTotalOfCurrentPost } from '@/api/baseparameter'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import axios from 'axios'
 import async from 'async'
@@ -199,6 +203,8 @@ export default {
       clickedCabinet:[],
       clickedCabinetName:'',
 
+      inputEquipmentType:'',
+
       equipmentTableData:[],
       equipmentTableColumns:[
         {
@@ -216,42 +222,42 @@ export default {
       ],
 
       isRotating:false,
-      equipmentClickedCount:[
-        //机柜1中设备(从右向左)
-        {'服务器022':0,
-          '服务器023':0,
-          '服务器024':0,
-          '服务器025':0,
-          '服务器026':0
-        },
-        //机柜2中设备
-        {
-          '服务器016':0,
-          '服务器017':0,
-          '服务器018':0,
-          '服务器019':0,
-          '服务器020':0,
-          '服务器021':0
-        },
-        //机柜3中设备
-        {
-          '服务器009':0,
-          '服务器010':0,
-          '服务器011':0,
-          '服务器012':0,
-          '服务器013':0,
-          '服务器014':0
-        },
-        //机柜4中设备
-        {
-          '服务器002':0,
-          '服务器003':0,
-          '服务器004':0,
-          '服务器005':0,
-          '服务器006':0,
-          '服务器007':0
-        }
-      ],
+      // equipmentClickedCount:[
+      //   //机柜1中设备(从右向左)
+      //   {'服务器022':0,
+      //     '服务器023':0,
+      //     '服务器024':0,
+      //     '服务器025':0,
+      //     '服务器026':0
+      //   },
+      //   //机柜2中设备
+      //   {
+      //     '服务器016':0,
+      //     '服务器017':0,
+      //     '服务器018':0,
+      //     '服务器019':0,
+      //     '服务器020':0,
+      //     '服务器021':0
+      //   },
+      //   //机柜3中设备
+      //   {
+      //     '服务器009':0,
+      //     '服务器010':0,
+      //     '服务器011':0,
+      //     '服务器012':0,
+      //     '服务器013':0,
+      //     '服务器014':0
+      //   },
+      //   //机柜4中设备
+      //   {
+      //     '服务器002':0,
+      //     '服务器003':0,
+      //     '服务器004':0,
+      //     '服务器005':0,
+      //     '服务器006':0,
+      //     '服务器007':0
+      //   }
+      // ],
       equipmentClickedSum:0,
       isMoving:false,
 
@@ -263,7 +269,7 @@ export default {
 
       machineRoomId:this.machineRoomId,
 
-
+      cabinetArrayByEquipmentType:[],
 
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
@@ -279,6 +285,14 @@ export default {
     // this.full()
     this.isFullScreen = true
   },
+  // watch: {
+  //   '$data.inputEquipmentType':{
+  //     handler(oldData,newData){
+  //       console.log("this.inputEquipmentType",this.inputEquipmentType)
+  //     },
+  //     deep: true
+  //   },
+  // },
   computed: {
     boxHeight() {
       if (this.equipmentBaseInfo.cabinetCount === 0) {
@@ -469,16 +483,18 @@ export default {
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
       await getCabinet(machineRoomId).then((res) => {
         this.tableData = res.data.items
-        console.log('this.tableData',this.tableData)
+        console.log('res',res)
         for (let i = 0; i < this.tableData.length; i++) {
           this.tableData[i].clickedCount = 0
           this.clickedCabinet.push(this.tableData[i])
         }
         this.clickedCabinet.forEach((element) => {
           let equipmentArray = []
-          getEquipmentByCabinet(element.cabinetId).then((res) => {
+          console.log("element.cabinetId",element.cabinetId)
+          console.log("this.postName",this.postName)
+          getEquipmentByCabinet(element.cabinetId,this.postName).then((res) => {
 
-            // console.log("res.data",res.data)
+            // console.log("res",res)
             res.data.forEach((element) => {
               let equipmentObject = {
                 equipmentName: '',
@@ -512,14 +528,16 @@ export default {
     // 窗口大小调整事件监听器
     window.addEventListener('resize', this.handleResize);
 
-
     let that = this
-    setTimeout(function () {
-      that.initCount()
+    setTimeout(async function () {
+      // that.initCount()
       that.echartsDraw()
+      that.visitTotalOfCurrentPost()
       that.init();
       that.loadGltf();
-      that.createSprite();
+      // 等待createSprite函数完成
+      // await that.createSprite()
+      that.createSprite()
       that.animate();
     }, 200);
   },
@@ -563,11 +581,31 @@ export default {
         this.total = response.data.total
         // console.log("this.list",this.list)
         //console.log("List---------");
-        //console.log(this.list)
+        console.log(this.list)
         this.listLoading = false
       })
-
     },
+
+    async searchEquipmentType(){
+      if(this.inputEquipmentType !== ''){
+        let param = {
+          postName:this.postName,
+          machineRoomName:this.machineRoomName,
+          equipmentType:this.inputEquipmentType
+        }
+        try {
+          const res = await getCabinetByEquipmentType(param);
+          this.cabinetArrayByEquipmentType = res.data;
+          await this.createSprite();
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }else{
+        this.cabinetArrayByEquipmentType = []
+        this.createSprite();
+      }
+    },
+
 
     //为解决threejs射线不准问题，设置全屏
     full() {
@@ -774,6 +812,7 @@ export default {
 
     //精灵标签
     createSprite() {
+      this.scene.remove(...this.scene.children.filter(child => child instanceof THREE.Sprite));
       for (let i = 0; i < this.tableData.length; i++) {
         const spriteCanvas = document.createElement('canvas');
         const spriteContext = spriteCanvas.getContext('2d');
@@ -785,24 +824,27 @@ export default {
         spriteContext.fillRect(0, 0, spriteCanvas.width, spriteCanvas.height);
 
         // 设置荧光橙色边框
-        spriteContext.strokeStyle = '#ffa500';
-        spriteContext.lineWidth = 2;
+        spriteContext.strokeStyle = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+          ? '#FF0080' : '#ffa500'
+        spriteContext.lineWidth = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+          ? 4 : 2;
         spriteContext.strokeRect(0, 0, spriteCanvas.width, spriteCanvas.height);
 
-        // 调整文本字体大小
         const fontSize = 14; // 设置字体大小
         spriteContext.font = `Bold ${fontSize}px Arial`;
 
-        const text = this.tableData[i].cabinetName;
-        const textWidth = spriteContext.measureText(text).width;
+        console.log("this.cabinetArrayByEquipmentType",this.cabinetArrayByEquipmentType)
+        // let text = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+        //   ? 'here' : this.tableData[i].cabinetName;
 
+        let text = this.tableData[i].cabinetName;
+        const textWidth = spriteContext.measureText(text).width;
         const centerX = (spriteCanvas.width - textWidth) / 2;
         const centerY = spriteCanvas.height / 2 + fontSize / 2
 
         // 设置荧光蓝色文本颜色
         spriteContext.fillStyle = '#00ffff';
         spriteContext.fillText(text, centerX, centerY);
-
 
         const spriteTexture = new THREE.Texture(spriteCanvas);
         spriteTexture.needsUpdate = true;
@@ -882,21 +924,21 @@ export default {
           }
         }
         //设备移动
-        let shouldStop = true;
-        this.equipmentClickedCount.forEach((elements, index) => {
-          for (const element of Object.keys(elements)) {
-            if (clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)) {
-              //点击后执行移动动画
-              //clickObject为要旋转的模型，index是该模型所处的机柜索引
-              this.moveEquipment(clickObject, index)
-              shouldStop = true;
-              break //结束内层遍历
-            }
-          }
-          if (shouldStop) {
-            return; // 直接返回，结束外层遍历
-          }
-        })
+        // let shouldStop = true;
+        // this.equipmentClickedCount.forEach((elements, index) => {
+        //   for (const element of Object.keys(elements)) {
+        //     if (clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)) {
+        //       //点击后执行移动动画
+        //       //clickObject为要旋转的模型，index是该模型所处的机柜索引
+        //       this.moveEquipment(clickObject, index)
+        //       shouldStop = true;
+        //       break //结束内层遍历
+        //     }
+        //   }
+        //   if (shouldStop) {
+        //     return; // 直接返回，结束外层遍历
+        //   }
+        // })
       }
     },
 
@@ -910,8 +952,8 @@ export default {
         // 根据点击次数的奇偶性来确定目标旋转角度的正负
         const isPositiveRotation = this.cabinetClickCount[targetObject.name] % 2 === 1;
         const targetRotation = isPositiveRotation
-          ? targetObject.rotation.y + Math.PI*2 / 3 // 旋转九十度
-          : targetObject.rotation.y - Math.PI*2 / 3; // 旋转负九十度
+          ? targetObject.rotation.y + Math.PI*2 / 3 // 旋转120°
+          : targetObject.rotation.y - Math.PI*2 / 3; // 旋转-120°
         const initialRotation = targetObject.rotation.y;
         const duration = 1000; // 旋转动画的持续时间为1000毫秒（1秒）
         const startTime = performance.now();
@@ -969,8 +1011,8 @@ export default {
           }
         }
         let cabinetArray = Object.keys(this.cabinetClickCount)
-        console.log(intersects[0].object)
-        console.log(object)
+        // console.log(intersects[0].object)
+        // console.log(object)
         if (cabinetArray.includes(object.name)) {
           // console.log('this.tooltipText',this.tooltipText)
           this.showCabinetData(object.name)
@@ -1032,6 +1074,13 @@ export default {
     handleCurrentChange(val) {
       this.dialogVisible = true
       // this.dialog_description = val
+    },
+
+    //当前单位下属机房被访问次数统计波形图
+    visitTotalOfCurrentPost(){
+      getVisitTotalOfCurrentPost(this.postName).then((res) =>{
+        console.log("res",res)
+      })
     },
 
     //右上角数据

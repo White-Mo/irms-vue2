@@ -275,6 +275,7 @@ export default {
       console.log('this.ComputerRoomCard[index]',this.ComputerRoomCard[index])
       this.machineRoomId = this.ComputerRoomCard[index].machineRoomId
       console.log('this.machineRoomId',this.machineRoomId)
+      console.log("this.ComputerRoomCard[index]",this.ComputerRoomCard[index])
 
       this.$store.commit('machineRoom/SET_UnitId', unitid)
       this.$store.commit('machineRoom/SET_MachineRoomId', machineRoomId)
