@@ -71,11 +71,11 @@ export function resetRouter() {
 export function getAsyncRoutes() {
   return new Promise((resolve, reject) => {
     getMoveRoute().then(response => {
+      console.log("后端返回的路由",response)
       if (response.data.length === 0){
         asyncRoutes = []
       }else {
         const { data } = response
-        console.log("000000000000000000000000000000",data)
         asyncRoutes = filterAsyncRoutes(data) // 全部的路由数据
       }
       resolve()
@@ -149,7 +149,6 @@ export function filterAsyncRoutes(routes) {
       hidden: true
     }
   accessedRoutes.push(firstRouteNode)
-  console.log("2222222222222222222222222222222",accessedRoutes)
   return accessedRoutes // 返回全部的路由数据
 }
 

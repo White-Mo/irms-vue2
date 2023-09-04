@@ -131,17 +131,6 @@
         <el-button type="primary" @click="addAuthor">新 增</el-button>
       </div>
     </el-dialog>
-<!--    <el-dialog
-      title="删除角色"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <span>请确认要删除这条记录吗?</span>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="handdelAuthor">确 定</el-button>
-  </span>
-    </el-dialog>-->
     <el-dialog
       title="编辑"
       :visible.sync="editdialogVisible"
@@ -206,10 +195,10 @@ export default {
       getAutherCount().then((res) => {
         this.total = res.data
       })
-      var data = {
+      const data = {
         start: this.currentPage,
         limit: this.limit
-      }
+      };
       getAuthorData(data).then((res)=> {
         this.tableData = res.data.items
       })
@@ -224,7 +213,7 @@ export default {
       const data = this.addForm
       addAithor(data).then((res) => {
         //console.log(res)
-        if (res.code == 20000) {
+        if (res.code === 20000) {
           this.$message({
             type:'success',
             message:"新增成功"
@@ -292,20 +281,6 @@ export default {
           }
         })
     },
-    // 删除角色 提交
-    // handdelAuthor(){
-    //   this.centerDialogVisible = false
-    //   const data = {id:this.delform.id}
-    //   delAuthor(data).then((res) => {
-    //     if(res.code === 20000) {
-    //       this.$message({
-    //         type:'success',
-    //         message:'删除成功'
-    //       })
-    //       this.datainit()
-    //     }
-    //   })
-    // },
     // 获取 设置菜单权限
     setPermission(index,row) {
       this.mainStatus = false
@@ -318,44 +293,6 @@ export default {
     },
     // 表格合并
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      // if (columnIndex === 0) {
-      //   if (rowIndex === 0) {
-      //     return {
-      //       rowspan:7,
-      //       colspan: 1
-      //     }
-      //   } else if (rowIndex === 7) {
-      //     return {
-      //       rowspan: 4,
-      //       colspan: 1
-      //     }
-      //   } else if (rowIndex === 11) { //  合并第10行到第14行，从第10行开始，共5行
-      //     return {
-      //       rowspan: 5,
-      //       colspan: 1
-      //     }
-      //   }else if (rowIndex === 16 ) { //  合并第10行到第14行，从第10行开始，共5行
-      //     return {
-      //       rowspan: 7,
-      //       colspan: 1
-      //     }
-      //   } else  if (rowIndex === 23 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
-      //     return {
-      //       rowspan: 1,
-      //       colspan: 1
-      //     }
-      //   } else  if (rowIndex === 24 ){ // 其余被合并的行，诸如1、2、3、5、6、7、8、10、11、12、13全都设为0
-      //     return {
-      //       rowspan: 1,
-      //       colspan: 1
-      //     }
-      //   } else {
-      //     return {
-      //       rowspan: 0,
-      //       colspan: 1
-      //     }
-      //   }
-      // }
   },
     //
     upAuthority(){

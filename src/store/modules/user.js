@@ -80,16 +80,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-
         const { roles, realname, roleid , post_name , role_department_id, role_department_name , username, userid ,role_name } = data
-
-        // roles must be a non-empty array
+        // Roles必须为非空数组
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('getInfo: roles必须是非空数组!')
         }
 
         commit('SET_ROLES', roles) // group_name

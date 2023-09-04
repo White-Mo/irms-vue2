@@ -11,7 +11,7 @@
             </el-col>
             <el-col :span="8" style="color:#00c4ff;">
               <div style="font-size: 40px;margin-bottom: 10px;">{{businessSystemCount}}</div>
-              <span style="font-size: 20px"><i class="el-icon-tickets" style="margin-right: 5px;"></i>业务系统</span>
+              <span style="font-size: 20px"><i class="el-icon-tickets" style="margin-right: 5px;"></i>业务子系统</span>
             </el-col>
             <el-col :span="8" style="color:#b7ff00;">
               <div style="font-size: 40px;margin-bottom: 10px;">{{overGuaranteePeriodEquipmentCount}}</div>
