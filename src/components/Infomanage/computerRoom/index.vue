@@ -279,6 +279,7 @@ export default {
       machineModel:null,
       cabinetModel:null,
       cabinetModelArray:[],
+      visitMachineRoom:[]
     };
   },
   created() {
@@ -530,13 +531,10 @@ export default {
 
     let that = this
     setTimeout(async function () {
-      // that.initCount()
       that.echartsDraw()
       that.visitTotalOfCurrentPost()
       that.init();
       that.loadGltf();
-      // 等待createSprite函数完成
-      // await that.createSprite()
       that.createSprite()
       that.animate();
     }, 200);
@@ -596,7 +594,7 @@ export default {
         try {
           const res = await getCabinetByEquipmentType(param);
           this.cabinetArrayByEquipmentType = res.data;
-          await this.createSprite();
+          this.createSprite();
         } catch (error) {
           console.error('Error:', error);
         }
@@ -1079,8 +1077,16 @@ export default {
     //当前单位下属机房被访问次数统计波形图
     visitTotalOfCurrentPost(){
       getVisitTotalOfCurrentPost(this.postName).then((res) =>{
-        console.log("res",res)
+        // console.log("res",res)
+        for(let i=0;i<res.data.length;i++){
+          let data = {
+            name:res.data[i][0].replace("进入","").replace("下属机房",""),
+            value:res.data[i][1]
+          }
+          this.visitMachineRoom.push(data)
+        }
       })
+      console.log("this.visitMachineRoom",this.visitMachineRoom)
     },
 
     //右上角数据
