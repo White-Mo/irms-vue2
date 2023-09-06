@@ -71,8 +71,7 @@ export function resetRouter() {
 export function getAsyncRoutes() {
   return new Promise((resolve, reject) => {
     getMoveRoute().then(response => {
-      console.log("后端返回的路由",response)
-      if (response.data.length === 0){
+      if (response.data.length == 0){
         asyncRoutes = []
       }else {
         const { data } = response

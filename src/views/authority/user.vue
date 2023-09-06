@@ -395,8 +395,7 @@ export default {
 .block {
   text-align: center;
 }
-
-.a {
+.a{
   width: 110px;
 }
 
