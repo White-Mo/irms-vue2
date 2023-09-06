@@ -1086,7 +1086,7 @@ export default {
           this.visitMachineRoom.push(data)
         }
       })
-      console.log("this.visitMachineRoom",this.visitMachineRoom)
+      // console.log("this.visitMachineRoom",this.visitMachineRoom)
     },
 
     //右上角数据
