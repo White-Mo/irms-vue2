@@ -80,7 +80,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    //console.log('err' + error) // for debug
+    console.log('err' + error) // for debug
     Message({
       message: error.message || 'Error',
       type: 'error',

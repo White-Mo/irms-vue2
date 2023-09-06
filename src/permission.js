@@ -33,12 +33,15 @@ router.beforeEach(async(to, from, next) => {
         try {
           //  获取用户信息
           // 注意:角色必须是一个对象数组!例如:['admin']或['developer'，'editor']
+          console.log("1111111111111111")
           const { roles } = await store.dispatch('user/getInfo')
-          console.log("00000000",roles)
+          console.log("2222222222222222 roles",roles)
           // 根据角色生成可访问路由映射
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          console.log("4444444444444444 accessRoutes",accessRoutes)
           // 动态添加可访问路由
           router.addRoutes(accessRoutes)
+          console.log("5555555555555555 router",router)
           if(accessRoutes.length===0){
             next({ path: '/404' })
           }else {

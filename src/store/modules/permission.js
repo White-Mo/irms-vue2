@@ -29,7 +29,6 @@ export function filterAsyncRoutes(routes, roles) {
       res.push(tmp)
     }
   })
-  console.log("3333333333333333333333333",res)
   return res
 }
 
@@ -58,6 +57,7 @@ const actions = {
         else {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         }
+          console.log("33333333333333333 asyncRoutes",asyncRoutes)
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }
