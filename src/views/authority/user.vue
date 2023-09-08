@@ -112,13 +112,13 @@
           <el-table-column align='center' label='操作' width='300px'>
             <template slot-scope='scope'>
               <el-button @click='updateUser(scope.row)' type='info' size='small' icon='el-icon-edit'
-                         :class="scope.row.name == '超级管理员' ? 'a' : 'b'">修改
+                         v-if='scope.row.name !== roles[0]'>修改
               </el-button>
               <el-button @click='deleteUser(scope.row)' type='danger' size='small' icon='el-icon-delete'
-                         v-if='scope.row.name !== "超级管理员"'>删除
+                         v-if='scope.row.name !== roles[0]'>删除
               </el-button>
               <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play'
-                         :class="scope.row.name == '超级管理员' ? 'a' : 'b'"
+                         :class="scope.row.name === roles[0] ? 'a' : 'b'"
               >{{ scope.row.isdel === '冻结' ? '激活' : '冻结' }}
               </el-button>
             </template>
@@ -155,6 +155,11 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   components: { AddUser, UpdateUser },
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
+  },
   data() {
     return {
       ifShow: '0',
@@ -308,7 +313,7 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 //.select-container {
 //  height: 40px;
 //  overflow: hidden;
@@ -397,7 +402,7 @@ export default {
 }
 
 .a {
-  width: 110px;
+  width: 240px;
 }
 
 .b {
