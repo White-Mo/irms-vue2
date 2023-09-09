@@ -118,7 +118,7 @@
                          v-if='scope.row.name !== roles[0]'>删除
               </el-button>
               <el-button @click='isdeleteUser(scope.row)' type='warning' size='small' icon='el-icon-video-play'
-                         :class="scope.row.name === roles[0] ? 'a' : 'b'"
+                         :class="scope.row.name === roles[0] ? 'StyleChange' : 'StyleRemainsUnchanged'"
               >{{ scope.row.isdel === '冻结' ? '激活' : '冻结' }}
               </el-button>
             </template>
@@ -401,11 +401,11 @@ export default {
   text-align: center;
 }
 
-.a {
+.StyleChange {
   width: 240px;
 }
 
-.b {
+.StyleRemainsUnchanged {
 
 }
 </style>
