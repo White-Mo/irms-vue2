@@ -402,7 +402,7 @@ export default {
 }
 
 .StyleChange {
-  width: 240px;
+  text-align: center;
 }
 
 .StyleRemainsUnchanged {
