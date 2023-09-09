@@ -1,5 +1,5 @@
 <template>
-  <div class="infobody">
+  <div class="infobody" :class="{ 'hide-scrollbar': listLoading }">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>全生命周期管理</span></div>
     <div class="app-container">
       <div
@@ -513,5 +513,11 @@ export default {
 //  background-color: #409eff;
 //  border-color: #409eff;
 //}
+.hide-scrollbar {
+  /deep/ ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
 </style>
 
