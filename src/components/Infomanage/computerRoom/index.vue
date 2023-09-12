@@ -1075,7 +1075,6 @@ export default {
     //当前单位下属机房被访问次数统计波形图
     visitTotalOfCurrentPost(){
       getVisitTotalOfCurrentPost(this.postName).then((res) =>{
-        // console.log("res",res)
         for(let i=0;i<res.data.length;i++){
           let data = {
             name:res.data[i][0].replace("进入","").replace("下属机房",""),
@@ -1084,7 +1083,7 @@ export default {
           this.visitMachineRoom.push(data)
         }
       })
-      // console.log("this.visitMachineRoom",this.visitMachineRoom)
+      console.log("this.visitMachineRoom",this.visitMachineRoom)
     },
 
     //右上角数据
