@@ -96,7 +96,7 @@
       </dv-border-box-1></dv-border-box-8>
       <!--左上角数据表格结束-->
 
-    <dv-border-box-8 class="msgTable-echarts" style="top: 30rem;">
+    <dv-border-box-8 class="msgTable-echarts" style="top: 30rem;" v-show="datacard">
       <dv-border-box-1>
         <dv-decoration-7 class="decoration-7-bottom-1" >访问当前单位下属机房频率</dv-decoration-7>
 <!--        <dv-scroll-board style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />-->
@@ -787,6 +787,9 @@ export default {
               if(child.name === '墙B1' || child.name === '墙B2'){
                 child.scale.x *= 2
               }
+              if(child.name === '地面001_1'){
+                child.visible = false
+              }
             }
           });
         }
@@ -1107,7 +1110,7 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       if (intersects.length > 0) {
         let clickObject = intersects[0].object;
-        // console.log("clickObject",clickObject.name)
+        console.log("clickObject",clickObject.name)
         // console.log('intersects[0].objeccct',intersects[0].object.name)
         // for(let i=0;i<intersects.length;i++){
         //   console.log('被点击的所有',intersects[i].object.name)
