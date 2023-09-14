@@ -1056,8 +1056,9 @@ export default {
             },
             data: this.seriesData,
             lineStyle: {
-              color: 'rgba(255, 255, 255, 1)' // 设置线条颜色为荧光白
-            }
+              color: 'rgba(0, 191, 255, 1)' // 设置线条颜色为荧光白
+            },
+            smooth: true // 将线条改成平滑的曲线
           },
 
         ]
