@@ -1,5 +1,5 @@
 <template>
-  <div class="infobody">
+  <div class="infobody" :class="{ 'hide-scrollbar': listLoading }">
     <div class="grid-content bg-purple"><i class="el-icon-s-order" /><span>全生命周期管理</span></div>
     <div class="app-container">
       <div
@@ -121,16 +121,16 @@
             >
               <el-table-column align="center" type="selection" :reserve-selection="true"/>
               <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
-              <af-table-column
+              <el-table-column
                 v-for="(value,key,index) in labels"
                 :key="index"
-                align="center"
-                :label="value"
+                :prop='key'
+                :label='value'
+                align='center'
+                :width=flexColumnWidth(value)
+                show-overflow-tooltip
               >
-                <template slot-scope="scope">
-                  {{ scope.row[key] }}
-                </template>
-              </af-table-column>
+              </el-table-column>
               <el-table-column prop="tag" align="center" label="标签" width="100">
                 <el-tag type="primary">正常</el-tag>
               </el-table-column>
@@ -160,11 +160,16 @@
             >
               <el-table-column align="center" type="selection" />
               <el-table-column align="center" type="index" :index="typeIndex" show-overflow-tooltip/>
-              <af-table-column v-for="(value,key,index) in labels" :key="index" align="center" :label="value">
-                <template slot-scope="scope">
-                  {{ scope.row[key] }}
-                </template>
-              </af-table-column>
+              <el-table-column
+                v-for="(value,key,index) in labels"
+                :key="index"
+                :prop='key'
+                :label='value'
+                align='center'
+                :width=flexColumnWidth(value)
+                show-overflow-tooltip
+              >
+              </el-table-column>
               <el-table-column prop="tag" align="center" label="标签" width="100">
                 <el-tag type="danger">报废</el-tag>
               </el-table-column>
@@ -392,7 +397,28 @@ export default {
       }else {
         this.$message.error('请选择要恢复正常的设备')
       }
-    }
+    },
+    /**
+     * el-table-column 自适应列宽
+     * @param prop_label: 表头
+     */
+    flexColumnWidth(label) {
+      return this.getTextWidth(label) * 1.7 + 40 + 'px'
+    },
+    /**
+     * 使用span标签包裹内容，然后计算span的宽度 width： px
+     * @param valArr
+     */
+    getTextWidth(str) {
+      let width = 0
+      const html = document.createElement('span')
+      html.innerText = str
+      html.className = 'getTextWidth'
+      document.querySelector('body').appendChild(html)
+      width = document.querySelector('.getTextWidth').offsetWidth
+      document.querySelector('.getTextWidth').remove()
+      return width
+    },
   }
 }
 </script>
@@ -513,5 +539,11 @@ export default {
 //  background-color: #409eff;
 //  border-color: #409eff;
 //}
+.hide-scrollbar {
+  /deep/ ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
 </style>
 
