@@ -52,15 +52,16 @@
     </div>
 
     <div id="container" ref="canvasContainer"></div>
-<!--    左上角数据表格-->
+
+      <!--左上角数据表格-->
       <dv-border-box-8  class="msgTable-8-top" v-show="datacard"><dv-border-box-1>
-<!--        标题-->
+      <!--标题-->
         <dv-decoration-7 class="decoration-7-top" >机房信息概况</dv-decoration-7>
-<!--        图标-->
+      <!--图标-->
         <el-col class="top-img">
           <img  class="img" :src=logoSrc+this.unitid+this.logoImgetype  alt="" >
         </el-col>
-<!--        注释1：管理员、机房面积、机房位置-->
+        <!--注释1：管理员、机房面积、机房位置-->
         <table class="top-table" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 45px">
             <th style="color: #FFFFFF;width: 110px;text-align: center;">管理员：</th>
@@ -93,18 +94,26 @@
         </table>
 <!--        注释2结束-->
       </dv-border-box-1></dv-border-box-8>
-<!--    左上角数据表格结束-->
+      <!--左上角数据表格结束-->
 
-    <dv-border-box-8 class="msgTable-echarts" style="height: 45vh;width:24.4vw;position: absolute;top: 7rem;  right: 0.5vw;" v-show="datacard">
+    <dv-border-box-8 class="msgTable-echarts" style="top: 30rem;">
       <dv-border-box-1>
-      <dv-decoration-7 class="decoration-7-bottom-1" >机柜设备数量</dv-decoration-7>
-      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
+        <dv-decoration-7 class="decoration-7-bottom-1" >访问当前单位下属机房频率</dv-decoration-7>
+<!--        <dv-scroll-board style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />-->
+        <div id="echarts" style="height: 30rem;width:28rem;top: 2rem;left:0.7rem;position: absolute;text-align: center;z-index: 98"></div>
       </dv-border-box-1>
     </dv-border-box-8>
 
-    <dv-border-box-8 class="msgTable-8-bottom" :style="{height:boxHeight}"  v-show="datacard">
+    <dv-border-box-8 class="msgTable-echarts" style="height: 30rem;width:30rem;position: absolute;top: 7rem;  right: 0.5rem;" v-show="datacard">
       <dv-border-box-1>
-        <dv-decoration-7 class="decoration-7-bottom" >机房机柜</dv-decoration-7>
+      <dv-decoration-7 class="decoration-7-top" >机柜设备数量</dv-decoration-7>
+      <dv-scroll-board :config="config" style="left:4.5%;width:95%;height:80%;padding-top:3%;text-align: center" />
+      </dv-border-box-1>
+    </dv-border-box-8>
+
+    <dv-border-box-8 class="msgTable-echarts" :style="{height:boxHeight}"  v-show="datacard" style="height: 45vh;width:30rem;position: absolute;top: 40rem;  right: 0.5vw;">
+      <dv-border-box-1>
+        <dv-decoration-7 class="decoration-7-top" >机房机柜</dv-decoration-7>
       <el-row class="el-row-bottom">
         <el-table
         :style="{height:computedHeight}"
@@ -163,6 +172,7 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import axios from 'axios'
 import async from 'async'
 import * as echarts from 'echarts'
+import moment from 'moment/moment'
 
 export default {
   name:'computerRoom',
@@ -276,7 +286,11 @@ export default {
       machineModel:null,
       cabinetModel:null,
       cabinetModelArray:[],
-      visitMachineRoom:[]
+      visitMachineRoom:[],
+      isWidening:false,
+      xAxisData:[],
+      seriesData:[],
+
     };
   },
   created() {
@@ -331,6 +345,84 @@ export default {
   },
 
   async mounted() {
+    //小机房
+    this.spritePosition1 = [
+      //1-5机柜
+      [14,20,32],
+      [14,20,22],
+      [14,20,12],
+      [14,20, 2],
+      [14,20,-8],
+      //6-10机柜
+      [-1,20,32],
+      [-1,20,22],
+      [-1,20,12],
+      [-1,20, 2],
+      [-1,20,-8],
+      //11-15机柜
+      [-16,20,32],
+      [-16,20,22],
+      [-16,20,12],
+      [-16,20, 2],
+      [-16,20,-8],
+      //16-20机柜
+      [-31,20,32],
+      [-31,20,22],
+      [-31,20,12],
+      [-31,20, 2],
+      [-31,20,-8],
+    ],
+    //大机房
+    this.spritePosition2 = [
+      //1-5机柜
+      [44,20,32],
+      [44,20,22],
+      [44,20,12],
+      [44,20, 2],
+      [44,20,-8],
+      //6-10机柜
+      [29,20,32],
+      [29,20,22],
+      [29,20,12],
+      [29,20, 2],
+      [29,20,-8],
+      //11-15机柜
+      [14,20,32],
+      [14,20,22],
+      [14,20,12],
+      [14,20, 2],
+      [14,20,-8],
+      //16-20机柜
+      [-1,20,32],
+      [-1,20,22],
+      [-1,20,12],
+      [-1,20, 2],
+      [-1,20,-8],
+      //21-25机柜
+      [-16,20,32],
+      [-16,20,22],
+      [-16,20,12],
+      [-16,20, 2],
+      [-16,20,-8],
+      //26-30机柜
+      [-31,20,32],
+      [-31,20,22],
+      [-31,20,12],
+      [-31,20, 2],
+      [-31,20,-8],
+      //31-35机柜
+      [-46,20,32],
+      [-46,20,22],
+      [-46,20,12],
+      [-46,20, 2],
+      [-46,20,-8],
+      //36-40机柜
+      [-61,20,32],
+      [-61,20,22],
+      [-61,20,12],
+      [-61,20, 2],
+      [-61,20,-8],
+    ]
     this.spritePosition = [
       //1-5机柜
       [-1,20,32],
@@ -449,6 +541,7 @@ export default {
     this.rotationSpeed = 0.02,
 
     this.initCount()
+    this.visitTotalOfCurrentPost()
 
     window.addEventListener('resize', this.handleResize2);
     // 创建Echarts实例并绘制饼状图
@@ -529,8 +622,9 @@ export default {
 
     let that = this
     setTimeout(async function () {
+
       that.echartsDraw()
-      that.visitTotalOfCurrentPost()
+      that.echartsInit()
       that.init();
       that.loadGltf();
       that.createSprite()
@@ -560,6 +654,8 @@ export default {
     this.raycaster = null
     this.mouse = null
     this.rotationSpeed = null
+    this.spritePosition1 = null
+    this.spritePosition2 = null
 
   },
   methods: {
@@ -673,13 +769,9 @@ export default {
         // self.machineModel.scale.set(5,5,5);//设置大小比例
         self.machineModel.position.set(0, 0, 0);
         if(this.equipmentBaseInfo.cabinetCount > 20){
+          this.isWidening = true
           self.machineModel.traverse((child) => {
             if (child.isMesh) {
-              // self.machineModel.children[4].position.set(-37,0,0)
-              // let floor = gltf.scene.children[4].clone()
-              // floor.position.set(37, 0, 0)
-              // self.scene.add(floor)
-              // gltf.scenes.push(floor)
               if(child.name === '门A'){
                 child.position.x += 33
               }
@@ -704,104 +796,152 @@ export default {
         loader.load('static/cabinet.gltf', (gltf1) => {  //导入机柜模型
           this.cabinetModel = gltf1.scene;
           this.equipmentBaseInfo.cabinetCount = this.tableData.length
-          // this.equipmentBaseInfo.cabinetCount = 40
-          //小于等于5个机柜
-          let param = this.equipmentBaseInfo.cabinetCount < 5 ? this.equipmentBaseInfo.cabinetCount : 5
-          for(let j=0;j<param;j++){
-            let instance = this.cabinetModel.clone();
-            instance.position.set(-1, 2, 32-j*10);
-            self.scene.add(instance);
-            instance.children[1].name = '机柜门01' + (j+1).toString()
-            gltf.scenes.push(instance)
-            this.cabinetModelArray.push(instance)
-          }
-          //小于等于10个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 1){
-            let num = this.equipmentBaseInfo.cabinetCount < 10 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          let column = Math.floor(this.equipmentBaseInfo.cabinetCount / 5)
+          let num = this.equipmentBaseInfo.cabinetCount % 5
+          console.log("column and num",column,num)
+          if(this.isWidening){
+            //大机房
+            for(let i=0;i<column;i++){
+              for(let j=0;j<5;j++){
+                let instance = this.cabinetModel.clone();
+                instance.position.set(44-i*15, 2, 32-j*10);
+                self.scene.add(instance);
+                instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
+                gltf.scenes.push(instance)
+                this.cabinetModelArray.push(instance)
+              }
+            }
             for(let j=0;j<num;j++){
               let instance = this.cabinetModel.clone();
-              instance.position.set(-16, 2, 32-j*10);
+              instance.position.set(44-column*15, 2, 32-j*10);
               self.scene.add(instance);
-              instance.children[1].name = '机柜门02' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于15个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 2){
-            let num = this.equipmentBaseInfo.cabinetCount < 15 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++){
-              let instance = this.cabinetModel.clone();
-              instance.position.set(14, 2, 32-j*10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门03' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于20个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 3){
-            let num = this.equipmentBaseInfo.cabinetCount < 20 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++){
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-31, 2, 32-j*10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门04' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于25个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 4){
-            let num = this.equipmentBaseInfo.cabinetCount < 25 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-46, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门05' + (j + 1).toString()
+              instance.children[1].name = '机柜门0' + (column+1).toString() + (j+1).toString()
               gltf.scenes.push(instance)
               this.cabinetModelArray.push(instance)
             }
-          }
-          //小于等于30个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 5){
-            let num = this.equipmentBaseInfo.cabinetCount < 30 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(29, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门06' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
+          }else {
+            //小机房
+            if(column !== 0){
+              for(let i=0;i<column;i++){
+                for(let j=0;j<5;j++){
+                  let instance = this.cabinetModel.clone();
+                  instance.position.set(14-i*15, 2, 32-j*10);
+                  self.scene.add(instance);
+                  instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
+                  gltf.scenes.push(instance)
+                  this.cabinetModelArray.push(instance)
+                }
+              }
+            }
+            if(num !== 0){
+              for(let j=0;j<num;j++){
+                let instance = this.cabinetModel.clone();
+                instance.position.set(14-column*15, 2, 32-j*10);
+                self.scene.add(instance);
+                instance.children[1].name = '机柜门0' + (column+1).toString() + (j+1).toString()
+                gltf.scenes.push(instance)
+                this.cabinetModelArray.push(instance)
+              }
             }
           }
-          //小于等于35个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 6){
-            let num = this.equipmentBaseInfo.cabinetCount < 35 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-61, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门07' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-            }
-          }
-          //小于等于40个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 7){
-            let num = this.equipmentBaseInfo.cabinetCount < 40 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(44, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门08' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-            }
-          }
+
+          // //小于等于5个机柜
+          // let param = this.equipmentBaseInfo.cabinetCount < 5 ? this.equipmentBaseInfo.cabinetCount : 5
+          // for(let j=0;j<param;j++){
+          //   let instance = this.cabinetModel.clone();
+          //   instance.position.set(-1, 2, 32-j*10);
+          //   self.scene.add(instance);
+          //   instance.children[1].name = '机柜门01' + (j+1).toString()
+          //   gltf.scenes.push(instance)
+          //   this.cabinetModelArray.push(instance)
+          // }
+          // //小于等于10个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 1){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 10 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-16, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门02' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于15个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 2){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 15 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(14, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门03' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于20个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 3){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 20 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-31, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门04' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于25个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 4){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 25 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-46, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门05' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于30个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 5){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 30 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(29, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门06' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于35个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 6){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 35 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-61, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门07' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于40个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 7){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 40 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(44, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门08' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
         });
       })
     },
@@ -847,13 +987,85 @@ export default {
         const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture });
         this.sprite = new THREE.Sprite(spriteMaterial);
         this.sprite.scale.set(10, 5, 1);
-        this.sprite.position.set(this.spritePosition[i][0], this.spritePosition[i][1], this.spritePosition[i][2]);
+        console.log("this.isWidening",this.isWidening)
+        if(this.isWidening){
+          this.sprite.position.set(this.spritePosition2[i][0], this.spritePosition2[i][1], this.spritePosition2[i][2]);
+        }else{
+          this.sprite.position.set(this.spritePosition1[i][0], this.spritePosition1[i][1], this.spritePosition1[i][2]);
+        }
         this.sprite.center.set(0.5, 0);
         this.scene.add(this.sprite);
       }
     },
 
+    echartsInit(){
+      let chartDom = document.getElementById('echarts');
+      let myChart = echarts.init(chartDom);
+      let option;
 
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        grid: {
+          left: '2%',
+          right: '5%',
+          bottom: '5%',
+          top: '10%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: this.xAxisData,
+            axisLabel: {
+              color: 'white' // 设置横轴上的数字颜色为白色
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: 'white' // 设置横轴上的数字颜色为白色
+            }
+          }
+        ],
+        series: [
+          {
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.seriesData,
+            lineStyle: {
+              color: 'rgba(255, 255, 255, 1)' // 设置线条颜色为荧光白
+            }
+          },
+
+        ]
+      };
+      this.myChart = myChart
+      option && myChart.setOption(option);
+
+    },
 
 
     handleResize() {
@@ -1075,15 +1287,20 @@ export default {
     //当前单位下属机房被访问次数统计波形图
     visitTotalOfCurrentPost(){
       getVisitTotalOfCurrentPost(this.postName).then((res) =>{
-        for(let i=0;i<res.data.length;i++){
-          let data = {
-            name:res.data[i][0].replace("进入","").replace("下属机房",""),
-            value:res.data[i][1]
-          }
-          this.visitMachineRoom.push(data)
+        console.log("res-----------------",res)
+        this.counts = res.data
+        this.xAxisData = [] // 处理横坐标日期
+        this.seriesData = [] // 处理纵坐标操作次数
+        const today = moment() // 获取当前日期
+        for (let i = 6; i >= 0; i--) {
+          const date = today.clone().subtract(i, 'days') // 获取最近7天的日期
+          this.xAxisData.push(date.format('MM-DD')) // 格式化日期
+          const item = this.counts.find(item => moment(item[0]).isSame(date, 'day')) // 查找该日期对应的次数
+          this.seriesData.push(item ? item[1] : 0) // 如果有次数，则添加次数，否则添加0
         }
+        console.log(this.xAxisData)
+        console.log(this.seriesData)
       })
-      console.log("this.visitMachineRoom",this.visitMachineRoom)
     },
 
     //右上角数据
@@ -1100,6 +1317,7 @@ export default {
       })
       getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) => {
         this.equipmentBaseInfo.cabinetCount = response.data.total
+        this.isWidening = this.equipmentBaseInfo.cabinetCount > 20 ? true : false
       })
       const params = {
         dataName: ['machineRoomId'],
@@ -1217,9 +1435,9 @@ export default {
   font-size: 18px;
 }
 .decoration-7-bottom-1{
-  width:150px;
+  width:300px;
   height:30px;
-  margin-left: 10.5rem;
+  margin-left: 6rem;
   color: #20dbfd;
   font-size: 18px;
 }
@@ -1411,8 +1629,8 @@ export default {
 }
 .msgTable-echarts{
   z-index:99;
-  height: 45vh;
-  width:25vw;
+  height: 32rem;
+  width:30rem;
   position: absolute;
   top: 25rem;
   margin-left: 10px
