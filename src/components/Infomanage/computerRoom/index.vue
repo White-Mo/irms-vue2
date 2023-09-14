@@ -100,18 +100,18 @@
       <dv-border-box-1>
         <dv-decoration-7 class="decoration-7-bottom-1" >访问当前单位下属机房频率</dv-decoration-7>
 <!--        <dv-scroll-board style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />-->
-        <div id="echarts" style="height: 30rem;width:28rem;top: 2rem;left:0.7rem;position: absolute;text-align: center;z-index: 98"></div>
+        <div id="echarts" style="height: 24rem;width:23rem;top: 2rem;left:0.7rem;position: absolute;text-align: center;z-index: 98"></div>
       </dv-border-box-1>
     </dv-border-box-8>
 
-    <dv-border-box-8 class="msgTable-echarts" style="height: 30rem;width:30rem;position: absolute;top: 7rem;  right: 0.5rem;" v-show="datacard">
+    <dv-border-box-8 class="msgTable-echarts" style="height: 23rem;width:25rem;position: absolute;top: 7rem;  right: 0.5rem;" v-show="datacard">
       <dv-border-box-1>
       <dv-decoration-7 class="decoration-7-top" >机柜设备数量</dv-decoration-7>
-      <dv-scroll-board :config="config" style="left:4.5%;width:95%;height:80%;padding-top:3%;text-align: center" />
+      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
       </dv-border-box-1>
     </dv-border-box-8>
 
-    <dv-border-box-8 class="msgTable-echarts" :style="{height:boxHeight}"  v-show="datacard" style="height: 45vh;width:30rem;position: absolute;top: 40rem;  right: 0.5vw;">
+    <dv-border-box-8 class="msgTable-echarts" :style="{height:boxHeight}"  v-show="datacard" style="height: 40vh;width:25rem;position: absolute;top: 31rem;  right: 0.5vw;">
       <dv-border-box-1>
         <dv-decoration-7 class="decoration-7-top" >机房机柜</dv-decoration-7>
       <el-row class="el-row-bottom">
@@ -741,7 +741,7 @@ export default {
 
       this.camera = new THREE.PerspectiveCamera(fov, k, near, far);
       this.scene.background = new THREE.Color(0x000000);
-      this.camera.position.set(100, 100, 105); // 设置相机位置
+      this.camera.position.set(80, 80, 80); // 设置相机位置
       this.camera.lookAt(100, 100, 100); // 设置相机的焦点位置
 
 
@@ -802,13 +802,15 @@ export default {
           if(this.isWidening){
             //大机房
             for(let i=0;i<column;i++){
-              for(let j=0;j<5;j++){
-                let instance = this.cabinetModel.clone();
-                instance.position.set(44-i*15, 2, 32-j*10);
-                self.scene.add(instance);
-                instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
-                gltf.scenes.push(instance)
-                this.cabinetModelArray.push(instance)
+              if(i<8){
+                for(let j=0;j<5;j++){
+                  let instance = this.cabinetModel.clone();
+                  instance.position.set(44-i*15, 2, 32-j*10);
+                  self.scene.add(instance);
+                  instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
+                  gltf.scenes.push(instance)
+                  this.cabinetModelArray.push(instance)
+                }
               }
             }
             for(let j=0;j<num;j++){
@@ -1406,8 +1408,8 @@ export default {
 }
 .msgTable-8-top{
   z-index:99;
-  height: 20rem;
-  width:30rem;
+  height: 21rem;
+  width:25rem;
   position: absolute;
   top: 7rem;
   margin-left: 10px
@@ -1424,7 +1426,7 @@ export default {
 .decoration-7-top{
   width:150px;
   height:30px;
-  margin-left: 10rem;
+  margin-left: 8rem;
   color: #20dbfd;
   font-size: 18px;
 }
@@ -1438,7 +1440,7 @@ export default {
 .decoration-7-bottom-1{
   width:300px;
   height:30px;
-  margin-left: 6rem;
+  margin-left: 3.5rem;
   color: #20dbfd;
   font-size: 18px;
 }
@@ -1630,10 +1632,10 @@ export default {
 }
 .msgTable-echarts{
   z-index:99;
-  height: 32rem;
-  width:30rem;
+  height: 27rem;
+  width:25rem;
   position: absolute;
-  top: 25rem;
+  top: 24rem;
   margin-left: 10px
 }
 .el-table__fixed-right-patch {
