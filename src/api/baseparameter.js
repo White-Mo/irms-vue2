@@ -75,20 +75,40 @@ export function getEquipmentTypeByPage(obj) {
 }
 
 //获取机房数量wr
-export function getMachineRoomTotal(data) {
+export function getMachineRoomTotal(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'machineRoomName',
+      'postName',
+      'machineArea',
+      'machineLocation',
+      'machineAdministrator'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
     url: '/home/baseparameter/getMachineRoomTotal',
     method: 'get',
-    params: data
+    params,
   })
 }
 
 //通过页码获取机房
-export function getMachineRoomByPage(data) {
+export function getMachineRoomByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'machineRoomName',
+      'postName',
+      'machineArea',
+      'machineLocation',
+      'machineAdministrator'
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
   return request({
+    params,
     url: '/home/baseparameter/getMachineRoomByPage',
     method: 'get',
-    params: data
   })
 }
 //通过页码获取业务系统
