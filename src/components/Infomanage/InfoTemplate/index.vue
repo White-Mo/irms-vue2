@@ -353,16 +353,12 @@ export default {
         //console.log(this.DataName)
         this.initname = ['111']
       } else {
-        // console.log(JSON.parse(JSON.stringify(this.DataName)))
-        if (this.eselect == true) {
-          this.initname = JSON.parse(JSON.stringify(this.cpu_middle_guar))
-        }
         this.initname = JSON.parse(JSON.stringify(this.DataName))
       }
       this.initname=['cabinetId']
       const params = {
         dataName: this.initname,
-        dataValue: this.preRow.cabinetId,
+        dataValue: this.preRow.cabinetId ==null ? this.preRow[0].cabinetId:this.preRow.cabinetId,
         status: "0",
         start: this.start,
         limit: this.limit
