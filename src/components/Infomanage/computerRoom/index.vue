@@ -688,6 +688,13 @@ export default {
         try {
           const res = await getCabinetByEquipmentType(param);
           this.cabinetArrayByEquipmentType = res.data;
+          console.log("res.data",res.data)
+          if(res.data === null){
+            await this.$message({
+              message: '未查询到机柜',
+              type: 'warning'
+            });
+          }
           this.createSprite();
         } catch (error) {
           console.error('Error:', error);
@@ -1023,7 +1030,7 @@ export default {
         },
         toolbox: {
           feature: {
-            saveAsImage: {}
+            // saveAsImage: {}
           }
         },
         grid: {
