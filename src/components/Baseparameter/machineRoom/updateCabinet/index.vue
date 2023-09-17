@@ -6,7 +6,7 @@
     <div>
       <el-row>
         <el-form ref='cabinetFrom' :model='cabinetFrom = this.cabinet' label-width='120px' :rules='rules' :inline='false'>
-          <el-form-item label='机柜名称' prop='machineRoomName'>
+          <el-form-item label='机柜名称' prop='cabinetName'>
             <el-col>
               <el-input v-model='cabinetFrom.cabinetName'/>
             </el-col>
@@ -56,10 +56,11 @@ export default {
       this.$emit('changeDiv', '0')
     },
     onSubmit(formName) {
-      console.log(formName)
+      // console.log('00000',formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const cabinet = {...this.cabinet }
+          // console.log('00001110',this.cabinet)
           updateCabinetAction(cabinet).then(res => {
             this.$alert("更新成功",'提示', {
               confirmButtonText: '确定',
@@ -79,7 +80,7 @@ export default {
       })
     },
     initCabinet() {
-      this.cabinet=this.row
+      this.cabinet=this.row[0]
     },
   }
 }

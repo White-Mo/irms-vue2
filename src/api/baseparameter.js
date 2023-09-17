@@ -92,7 +92,64 @@ export function getMachineRoomTotal(obj) {
     params,
   })
 }
-
+//新增机柜
+export function createCabinet(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/createCabinet',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//通过单位id获取机房
+export function getMachineRoomByPostId(data) {
+  return request({
+    params: {postId: data},
+    url: '/home/baseparameter/getMachineRoomByPostId',
+    method: 'get'
+  })
+}
+//获取机柜数量
+export function getCabinetTotal(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'c.cabinetName',
+      'm.machineRoomName',
+      'm.postName',
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
+  return request({
+    url: '/home/baseparameter/getCabinetTotal',
+    method: 'get',
+    params,
+  })
+}
+//通过页码获取机柜信息
+export function getCabinetByPage(obj) {
+  if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
+    obj.dataName = [
+      'c.cabinetName',
+      'm.machineRoomName',
+      'm.postName',
+    ]
+  }
+  const params = JSON.parse(JSON.stringify(obj));
+  return request({
+    params,
+    url: '/home/baseparameter/getCabinetByPage',
+    method: 'get',
+  })
+}
+//检查机柜是否重复
+export function checkCabinetName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkCabinetName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
 //通过页码获取机房
 export function getMachineRoomByPage(obj) {
   if(obj.dataName[0]=== "111" && obj.dataValue !== " "){
