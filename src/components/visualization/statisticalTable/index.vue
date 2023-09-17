@@ -91,7 +91,7 @@ export default {
   },
 
   methods:{
-    async getDataAndHandlePostName(){
+ async getDataAndHandlePostName(){
       let params={
         postName:this.userName,
         roleId: this.roleId,
@@ -162,9 +162,9 @@ export default {
         }
       })
       this.tableData.sort((a, b) => b.totalEquipmentNumber - a.totalEquipmentNumber);
+      this.$emit('get-table-data', this.tableData)
       this.loading = false
     },
-
   },
 
 }

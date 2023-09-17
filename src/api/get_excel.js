@@ -1,8 +1,9 @@
-import {status} from 'nprogress'
+import { status } from 'nprogress'
 
 const ExcelJS = require('exceljs')
-import {getbasic} from '@/api/table'
+import { getbasic } from '@/api/table'
 import Store from '@/store'
+import { white } from 'mockjs/src/mock/random/color_dict'
 
 function timeFormat(time) {
   if (time == '' || time == 0 || time == null) {
@@ -319,9 +320,9 @@ export async function getExcelDemo1(data) {
       i_list = getListInfo(key, 'basicInfoProtocolPort_list', i, i_list)
       i_list = getListInfo(key, 'basicInfoSoftware_list', i, i_list)
     })
-    i_list.set('guaranteePeriodStart', i['equipment_list']['guaranteePeriod'].split("-")[0])
-    i_list.set('guaranteePeriodEnd', i['equipment_list']['guaranteePeriod'].split("-")[1])
-    i_list.set('isUpdate', "否")
+    i_list.set('guaranteePeriodStart', i['equipment_list']['guaranteePeriod'].split('-')[0])
+    i_list.set('guaranteePeriodEnd', i['equipment_list']['guaranteePeriod'].split('-')[1])
+    i_list.set('isUpdate', '否')
     console.log(i_list.values())
     items.push(Array.from(i_list.values()))
   }
@@ -336,10 +337,10 @@ export async function getExcelDemo1(data) {
   // 表头
   sheet.mergeCells('A1:AT1')
   const title_row = sheet.getCell('A1')
-  title_row.alignment = {vertical: 'middle', horizontal: 'center'}
+  title_row.alignment = { vertical: 'middle', horizontal: 'center' }
   title_row.font = {
     name: 'Arial Black',
-    color: {argb: '000000'},
+    color: { argb: '000000' },
     family: 2,
     size: 18
   }
@@ -347,12 +348,12 @@ export async function getExcelDemo1(data) {
 
   const header_row = sheet.getRow(2)
   header_row.values = header
-  header_row.eachCell({includeEmpty: true}, function (cell, colNumber) {
+  header_row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
     // //console.log('Cell ' + colNumber + ' = ' + cell.value);
-    cell.alignment = {vertical: 'middle', horizontal: 'center'}
+    cell.alignment = { vertical: 'middle', horizontal: 'center' }
     cell.font = {
       name: 'Arial Black',
-      color: {argb: '000'},
+      color: { argb: '000' },
       family: 2,
       size: 12,
       bold: true
@@ -370,12 +371,12 @@ export async function getExcelDemo1(data) {
     row.getCell(17).value = timeFormat(row.getCell(17).value)
     row.getCell(18).value = statusFormat(row.getCell(18).value)
     row.getCell(9).value = trueOrVirtualFormat(row.getCell(9).value)
-    row.eachCell({includeEmpty: true}, function (cell, colNumber) {
+    row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
       // //console.log('Cell ' + colNumber + ' = ' + cell.value);
-      cell.alignment = {vertical: 'middle', horizontal: 'center'}
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
       cell.font = {
         name: 'Black',
-        color: {argb: '000'},
+        color: { argb: '000' },
         family: 2,
         size: 10,
         bold: false
@@ -408,31 +409,31 @@ export async function getExcelDemo2(data_list, data_num) {
     progress_list.push(0)
   }
   //样式
-  const content_row = {vertical: 'middle', horizontal: 'center'}
+  const content_row = { vertical: 'middle', horizontal: 'center' }
   const table_header = {
     name: 'Arial Black',
-    color: {argb: 'ffffff'},
+    color: { argb: 'ffffff' },
     family: 2,
     size: 12,
     bold: true
   }
   const table_header2 = {
     name: 'Arial Black',
-    color: {argb: '000'},
+    color: { argb: '000' },
     family: 2,
     size: 11,
     bold: true
   }
   const table_header3 = {
     name: 'Black',
-    color: {argb: '000'},
+    color: { argb: '000' },
     family: 2,
     size: 11,
     bold: false
   }
   const table_header4 = {
     name: '宋体',
-    color: {argb: 'ffffff'},
+    color: { argb: 'ffffff' },
     family: 2,
     size: 11,
     bold: false
@@ -440,31 +441,31 @@ export async function getExcelDemo2(data_list, data_num) {
   const table_fill1 = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: {argb: '1f4e78'}
+    fgColor: { argb: '1f4e78' }
   }
   const table_fill2 = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: {argb: 'd6dce4'}
+    fgColor: { argb: 'd6dce4' }
   }
   const table_fill3 = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: {argb: 'ffffff'}
+    fgColor: { argb: 'ffffff' }
   }
   const table_fill4 = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: {argb: 'ddebf7'}
+    fgColor: { argb: 'ddebf7' }
   }
   const table_fill5 = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: {argb: 'f2f2f2'}
+    fgColor: { argb: 'f2f2f2' }
   }
-  const black = {style: 'thick', color: {argb: '000'}}
-  const red = {style: 'thick', color: {argb: 'ff0000'}}
-  const white = {style: 'thin', color: {argb: 'ffffff'}}
+  const black = { style: 'thick', color: { argb: '000' } }
+  const red = { style: 'thick', color: { argb: 'ff0000' } }
+  const white = { style: 'thin', color: { argb: 'ffffff' } }
   // 生成表
   for (let file_num of file_list) {
     let workbook = new ExcelJS.Workbook()
@@ -537,7 +538,7 @@ export async function getExcelDemo2(data_list, data_num) {
       C1.alignment = content_row
       C1.font = {
         name: 'Arial Black',
-        color: {argb: '000000'},
+        color: { argb: '000000' },
         family: 2,
         size: 18
       }
@@ -663,7 +664,7 @@ export async function getExcelDemo2(data_list, data_num) {
       // 第六行
       sheet.getRow(6).height = 42.75
       // 垂直左右居中加上自动换行
-      let content_row_item = {vertical: 'middle', horizontal: 'center', wrapText: true}
+      let content_row_item = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
       let C6 = sheet.getCell('C6')
       C6.value = '业  务  机\r\n实  验  机'
@@ -1168,7 +1169,7 @@ export async function getExcelDemo2(data_list, data_num) {
       C20.alignment = content_row
       C20.font = {
         name: 'Arial Black',
-        color: {argb: 'ffffff'},
+        color: { argb: 'ffffff' },
         family: 2,
         size: 14,
         bold: true
@@ -1176,7 +1177,7 @@ export async function getExcelDemo2(data_list, data_num) {
       C20.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: {argb: '5b9bd5'}
+        fgColor: { argb: '5b9bd5' }
       }
       // 第21 +n-1 +n2-1行
       num = 21 + n - 1 + n2 - 1
@@ -1602,7 +1603,7 @@ export async function getExcelDemo2(data_list, data_num) {
       }
       // 四边的
       l = [C24[0], C27[0], C29[0], C30[0], C31[0], C33[0], C36[0]]
-      C28[0].border = {left: black}
+      C28[0].border = { left: black }
       for (let item of [C22, C26, C32]) {
         for (let i of item) {
           l.push(i[0])
@@ -1964,8 +1965,8 @@ export async function getExcelDemo2(data_list, data_num) {
       progress_list[progress_item_num]++
       // //console.log(progress_list)
       window.localStorage.setItem('report_form_info', file_list.toString() + ';' + progress_list.toString())
-      console.log("file_list",file_list)
-      console.log("progress_list",progress_list)
+      console.log('file_list', file_list)
+      console.log('progress_list', progress_list)
     }
     //导出下载
     let buffer = await workbook.xlsx.writeBuffer()
@@ -2022,11 +2023,11 @@ export async function getExcelDemo3(StatisticsData, state) {
 
   //样式
   //文字居中展示
-  const content_row = {vertical: 'middle', horizontal: 'center'}
+  const content_row = { vertical: 'middle', horizontal: 'center' }
   //设置表头文字样式
   const table_header2 = {
     name: 'Arial Black',
-    color: {argb: '000'},
+    color: { argb: '000' },
     family: 2,
     size: 14,
     bold: true
@@ -2035,14 +2036,14 @@ export async function getExcelDemo3(StatisticsData, state) {
   //设置数据文字格式
   const table_header3 = {
     name: 'Black',
-    color: {argb: '000'},
+    color: { argb: '000' },
     family: 2,
     size: 14,
     bold: false
   }
 
   //设置表格边框
-  const black = {style: 'medium', color: {argb: '000'}}
+  const black = { style: 'medium', color: { argb: '000' } }
 
   // 第一列要展示的
   let name_list = [
@@ -2170,98 +2171,40 @@ export async function getExcelDemo3(StatisticsData, state) {
   document.body.removeChild(link)
 }
 
+/*
+将对象数组转为二维数组
+ */
+export function transArrData(arr) {
+  //声明一个新的数组
+  let newArr = []
+  //循环遍历数组
+  arr.forEach(item => {
+    //用obj.value拿到数组里对象的value push到新的数组里
+    newArr.push(Object.values(item))
+  })
+  return newArr
+}
+
 //-----------------田累积-------------------
 export async function getExcelDemo4(data) {
-  let arr_name1 =[];
-  for (let i = 0; i < 6; i++) {
-    if (i === 0) {
-      if (data.business === null) {
-        continue;
-      } else {
-        if (data.business.length === 1) {
-          arr_name1.push(data.business[0][0]);
-        } else {
-          for (let j = 0; j < data.business.length; j++) {
-            arr_name1.push(data.business[j][0]);
-          }
-        }
-      }
-    }
 
-    if (i === 1) {
-      if (data.subCount === null) {
-        continue;
-      } else {
-        if (data.subCount.length === 1) {
-          arr_name1.push(data.subCount[0][0]);
-        } else {
-          for (let j = 0; j < data.subCount.length; j++) {
-            arr_name1.push(data.subCount[j][0]);
-          }
-        }
-      }
-    }
-
-    if (i === 2) {
-      if (data.businessSon === null) {
-        continue;
-      } else {
-        if (data.businessSon.length === 1) {
-          arr_name1.push(data.businessSon[0][0]);
-        } else {
-          for (let j = 0; j < data.businessSon.length; j++) {
-            arr_name1.push(data.businessSon[j][0]);
-          }
-        }
-      }
-    }
-
-    if (i === 3) {
-      if (data.fixCount === null) {
-        continue;
-      } else {
-        if (data.fixCount.length === 1) {
-          arr_name1.push(data.fixCount[0][0]);
-        } else {
-          for (let j = 0; j < data.fixCount.length; j++) {
-            arr_name1.push(data.fixCount[j][0]);
-          }
-        }
-      }
-    }
-
-    if (i === 4) {
-      if (data.normalCount === null) {
-        continue;
-      } else {
-        if (data.normalCount.length === 1) {
-          arr_name1.push(data.normalCount[0][0]);
-        } else {
-          for (let j = 0; j < data.normalCount.length; j++) {
-            arr_name1.push(data.normalCount[j][0]);
-          }
-        }
-      }
-    }
-
-    if (i === 5) {
-      if (data.scrapCount === null) {
-        continue;
-      } else {
-        if (data.scrapCount.length === 1) {
-          arr_name1.push(data.scrapCount[0][0]);
-        } else {
-          for (let j = 0; j < data.scrapCount.length; j++) {
-            arr_name1.push(data.scrapCount[j][0]);
-          }
-        }
-      }
-    }
-  }
-  const arr_name = arr_name1.filter((value, index, self) => {
-    return self.indexOf(value) === index;
-  });
-  arr_name[arr_name.length] = '总计';
+  let arr_name = []
+  let arr = []
+  arr = transArrData(data)//对象数组转二维数组
+  //行名数组
+  for (let i = 0; i < data.length; i++) {
+    arr_name[i] = data[i].postName
+  }//将单位名填入单独数组中，用于第一列的填充
+  arr_name[arr_name.length] = '总计'
+  // 列名数组
+  const columnNames = [
+    '填报设备数量（台）',
+    '在用设备数量（台）',
+    '停用设备数量（台）',
+    '报废设备数量（台）',
+    '业务子系统数量（个）',
+    '业务系统数量（个）'
+  ]
   //创建工作簿↓
   const workbook = new ExcelJS.Workbook()
   //设置工作簿属性↓
@@ -2284,270 +2227,87 @@ export async function getExcelDemo4(data) {
   const sheet = workbook.addWorksheet('1')
   const row = sheet.getRow(1)
 
-  // 列名数组
-  const columnNames = [
-    '填报设备数量（台）',
-    '在用设备数量（台）',
-    '停用设备数量（台）',
-    '报废设备数量（台）',
-    '业务子系统数量（个）',
-    '业务系统数量（个）'
-  ];
+
   //设置行高
-    for(let y=1;y<=14;y++){
-      sheet.getRow(y).height=25;
-    }
+  for (let y = 1; y <= 14; y++) {
+    sheet.getRow(y).height = 25
+  }
 
   // 设置列宽
-  sheet.getColumn(1).width = 35;
-  sheet.getCell(1,1).value = '填报单位';
-  sheet.getCell(1,1).alignment = {horizontal: 'center'};
-  sheet.getCell(1,1).font = {size:18,bold:true};
+  sheet.getColumn(1).width = 50
+  //设置样式
+  sheet.getCell(1, 1).value = '填报单位'
+  sheet.getCell(1, 1).alignment = { horizontal: 'center' }
+  sheet.getCell(1, 1).font = { size: 18, bold: true }
   for (let i = 2; i <= columnNames.length + 2; i++) {
-    sheet.getColumn(i).width = 35;
+    sheet.getColumn(i).width = 35
   }
 
   // 设置列名和样式
   for (let i = 0; i < columnNames.length; i++) {
-    const columnName = columnNames[i];
-    row.getCell(i + 2).value = columnName;
-    row.getCell(i + 2).alignment = {horizontal: 'center'};
-    row.getCell(i + 2).font = {size:18,bold: true};
-    row.getCell(i+1).fill ={
+    const columnName = columnNames[i]
+    row.getCell(i + 2).value = columnName
+    row.getCell(i + 2).alignment = { horizontal: 'center' }
+    row.getCell(i + 2).font = { size: 18, bold: true }
+    row.getCell(i + 1).fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFFFF00' } // 黄色
-      };
+    }
   }
-  sheet.getCell(1,7).fill ={
+  sheet.getCell(1, 7).fill = {
     type: 'pattern',
     pattern: 'solid',
     fgColor: { argb: 'FFFFFF00' } // 黄色
-  };
+  }
   // 将arr_name数组值填写到第一列并设置字体加粗和居中对齐
   for (let i = 0; i < arr_name.length; i++) {
-    const name = arr_name[i];
-    const cell = sheet.getCell(i + 2, 1);
-    cell.value = name;
-    cell.font = {size:18,bold: true};
-    cell.alignment = {horizontal: 'center'};
-    cell.fill ={
+    const name = arr_name[i]
+    const cell = sheet.getCell(i + 2, 1)
+    cell.value = name
+    cell.font = { size: 18, bold: true }
+    cell.alignment = { horizontal: 'center' }
+    cell.fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFADD8E6' } // 蓝色
     }
   }
-  // sheet.getCell(arr_name.length+1,1).value='总计';
-  let num_B=0 ,num_C =0,num_D =0,num_E =0,num_F=0,num_G=0;
-  for (let j = 0; j < 6; j++) {
-    if (j === 0) {
-      if (data.subCount === null ) {
-        continue;
-      } else {
-        for (let i = 0; i < data.subCount.length; i++) {
-          num_B += data.subCount[i][1];
-        }
-      }
-    }
 
-    if (j === 1) {
-      if (data.normalCount === null ) {
-        continue;
-      } else {
-        for (let i = 0; i < data.normalCount.length; i++) {
-          num_C += data.normalCount[i][1];
-        }
-      }
-    }
-
-    if (j === 2) {
-      if (data.fixCount === null ) {
-        continue;
-      } else {
-        for (let i = 0; i < data.fixCount.length; i++) {
-          num_D += data.fixCount[i][1];
-        }
-      }
-    }
-
-    if (j === 3) {
-      if (data.scrapCount === null) {
-        continue;
-      } else {
-        for (let i = 0; i < data.scrapCount.length; i++) {
-          num_E += data.scrapCount[i][1];
-        }
-      }
-    }
-
-    if (j === 4) {
-      if (data.businessSon === null ) {
-        continue;
-      } else {
-        for (let i = 0; i < data.businessSon.length; i++) {
-          num_F += data.businessSon[i][1];
-        }
-      }
-    }
-
-    if (j === 5) {
-      if (data.business === null ) {
-        continue;
-      } else {
-        for (let i = 0; i < data.business.length; i++) {
-          num_G += data.business[i][1];
-        }
-      }
+  //总计数组
+  let sum = []
+  //填充数据并计算总计数组
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 1; j < arr[0].length; j++) {
+      const cell = sheet.getCell(i + 2, j + 1)
+      cell.value = arr[i][j]
+      cell.font = { size: 18}
+      cell.alignment = { horizontal: 'center' }
+      sum[j] = sum[j] == null ? arr[i][j] : sum[j] + arr[i][j]
     }
   }
-  // console.log(num_B)
-  // sheet.getCell(arr_name.length+1,2).value=num_B;
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.business === null){
-      const cell_G = sheet.getCell(i + 2, 7);
-      cell_G.alignment = {horizontal: 'center'};
-      cell_G.font={size:18};
-      cell_G.value =0;
-      continue;
-    }else{
-      for(let u=0;u<data.business.length;u++) {
-        const cell_G = sheet.getCell(i + 2, 7);
-        cell_G.alignment = {horizontal: 'center'};
-        cell_G.font={size:18};
-        if(data.business[u][0] === arr_name[i]){
-          cell_G.value = data.business[u][1];
-          break;
-        }else {
-          cell_G.value =0;
-        }
-      }
-    }
+  //填充总计数组
+  for (let j = 1; j < arr[0].length; j++) {
+    const cell = sheet.getCell(arr.length + 2, j + 1)
+    cell.value = sum[j]
   }
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.businessSon === null){
-      const cell_F = sheet.getCell(i + 2, 6);
-      cell_F.alignment = {horizontal: 'center'};
-      cell_F.font={size:18};
-      cell_F.value =0;
-      continue;
-    }else {
-      for (let j = 0; j < data.businessSon.length; j++) {
-        const cell_F = sheet.getCell(i + 2, 6);
-        cell_F.alignment = {horizontal: 'center'};
-        cell_F.font={size:18};
-        if (data.businessSon[j][0] === arr_name[i]) {
-          cell_F.value = data.businessSon[j][1];
-          break;
-        } else {
-          cell_F.value = 0;
-        }
-      }
-    }
-  }
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.fixCount === null){
-      const cell_D = sheet.getCell(i + 2, 4);
-      cell_D.alignment = {horizontal: 'center'};
-      cell_D.font={size:18};
-      cell_D.value = 0;
-      continue;
-    }else {
-      for(let y=0;y<data.fixCount.length;y++){
-        const cell_D = sheet.getCell(i + 2, 4);
-        cell_D.alignment = {horizontal: 'center'};
-        cell_D.font={size:18};
-        if(data.fixCount[y][0] === arr_name[i]){
-          cell_D.value = data.fixCount[y][1];
-          break;
-        }else{
-          cell_D.value =0;
-        }
-      }
-    }
-  }
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.normalCount === null){
-      const cell_C = sheet.getCell(i + 2, 3);
-      cell_C.alignment = {horizontal: 'center'};
-      cell_C.font={size:18};
-      cell_C.value =0;
-      continue;
-    }else{
-      for(let x=0;x<data.normalCount.length;x++){
-        const cell_C = sheet.getCell(i + 2, 3);
-        cell_C.alignment = {horizontal: 'center'};
-        cell_C.font={size:18};
-        if(data.normalCount[x][0] === arr_name[i]){
-          cell_C.value=data.normalCount[x][1];
-          break;
-        }else{
-          cell_C.value = 0;
-        }
-      }
-    }
-  }
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.scrapCount ===null){
-      const cell_E= sheet.getCell(i + 2, 5);
-      cell_E.alignment = {horizontal: 'center'};
-      cell_E.font={size:18};
-      cell_E.value =0;
-      continue;
-    }else {
-      for(let p=0;p<data.scrapCount.length;p++){
-        const cell_E= sheet.getCell(i + 2, 5);
-        cell_E.alignment = {horizontal: 'center'};
-        cell_E.font={size:18};
-        if(data.scrapCount[p][0] === arr_name[i]){
-          cell_E.value=data.scrapCount[p][1];
-          break;
-        }else{
-          cell_E.value=0;
-        }
-      }
-    }
-  }
-  for (let i = 0; i < arr_name.length; i++) {
-    if(data.subCount === null){
-      const cell_B = sheet.getCell(i + 2, 2);
-      cell_B.alignment = {horizontal: 'center'};
-      cell_B.font={size:18};
-      cell_B.value =0;
-      continue;
-    }else{
-      for(let r=0;r<data.subCount.length;r++){
-        const cell_B = sheet.getCell(i + 2, 2);
-        cell_B.alignment = {horizontal: 'center'};
-        cell_B.font={size:18};
-        if(data.subCount[r][0] === arr_name[i]){
-          cell_B.value=data.subCount[r][1];
-          break;
-        }else{
-          cell_B.value = 0;
-        }
-      }
-    }
-  }
-    sheet.getCell(arr_name.length+1,2).value = num_B;
-    sheet.getCell(arr_name.length+1,3).value = num_C;
-    sheet.getCell(arr_name.length+1,4).value = num_D;
-    sheet.getCell(arr_name.length+1,5).value = num_E;
-    sheet.getCell(arr_name.length+1,6).value = num_F;
-    sheet.getCell(arr_name.length+1,7).value = num_G;
-  for(let i=0;i<7;i++){
-    sheet.getCell(arr_name.length+1,i+1).fill={
+  for (let j = 0; j < arr[0].length; j++) {
+    const cell = sheet.getCell(arr.length + 2, j + 1)
+    cell.font = { size: 18,color :{ argb: 'FFFFFF' } ,bold:true }
+    cell.fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFFF0000' } // 红色
     }
+    cell.alignment = { horizontal: 'center' }
   }
   //导出下载
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer]);
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  document.body.appendChild(link);
-  link.download = '填报信息统计报表.xlsx';
-  link.click();
-  document.body.removeChild(link);
+  const buffer = await workbook.xlsx.writeBuffer()
+  const blob = new Blob([buffer])
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  document.body.appendChild(link)
+  link.download = '填报信息统计报表.xlsx'
+  link.click()
+  document.body.removeChild(link)
 }

@@ -44,6 +44,7 @@
               <el-select v-model="addInformation.businessSystemLevel">
                 <el-option
                   v-for="item in level"
+                  :key="item.sonSystemLevel"
                   :value="item.sonSystemLevel"
                 />
               </el-select>

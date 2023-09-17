@@ -17,10 +17,10 @@
       :visible.sync="dialogVisible"
       width="90%"
     >
-      <statisticalTable></statisticalTable>
+      <statisticalTable @get-table-data='getTableData'></statisticalTable>
       <div style="margin: 60px 50px 20px;">
         <span slot="footer" class="dialog-footer">
-          <el-button class="download" type="primary" @click="downloadStatisticalTable">下 载</el-button>
+          <el-button class="download" type="primary" :loading="buttonLoading" @click="downloadStatisticalTable">下 载</el-button>
           <el-button class="download" type="primary" @click="dialogVisible = false">取 消</el-button>
         </span>
       </div>
@@ -87,6 +87,8 @@ export default {
       userName: this.$store.state.user.post_name,
       roleName: this.$store.state.user.roles,
       resultArray: [],
+      tableData:[],
+      buttonLoading:true
     }
   },
   mounted() {
@@ -95,9 +97,9 @@ export default {
       roleId: this.roleId,
       roleName: this.roleName[0],
     }
-    getInfo(params).then(res => {
-      this.resultArray.push(res.data);
-    })
+    // getInfo(params).then(res => {
+    //   this.resultArray.push(res.data);
+    // })
   },
   methods: {
     async generateStatisticalReports() {
@@ -105,7 +107,11 @@ export default {
     },
     downloadStatisticalTable() {
       this.dialogVisible = false
-      getExcelDemo4(this.resultArray[0])
+      getExcelDemo4(this.tableData)
+    },
+    getTableData(val){
+      this.tableData=val
+      this.buttonLoading=false
     }
   }
 }
