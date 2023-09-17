@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span='24'>
             <div class='grid-content bg-purple-dark'>
-              <span style='color: #ffffff'>机房管理</span>
+              <span style='color: #ffffff'>机柜管理</span>
             </div>
           </el-col>
         </el-row>
@@ -28,7 +28,7 @@
               size='medium'
             >
               <el-option
-                v-for='(item,index) in basicvalue'
+                v-for='(item,index) in setDataName'
                 :key='index'
                 :label='item.label'
                 :value='item.value'
@@ -58,57 +58,11 @@
             <el-button
               size='medium'
               type='primary'
-              @click='addMachine()'
-            >添加机房
-            </el-button>
-          </el-col>
-          <el-col :span='2'>
-            <el-button
-              size='medium'
-              type='primary'
-              @click='importMachine()'
-            >导入机房信息
+              @click='addCabinet()'
+            >添加机柜
             </el-button>
           </el-col>
         </el-row>
-        <el-dialog title='新增机房' :visible.sync='dialogFormVisible'>
-          <el-form :model='form'>
-            <el-form-item label='机房名称' :label-width='formLabelWidth'>
-              <el-input v-model='form.MachineRoomName' autocomplete='off'></el-input>
-            </el-form-item>
-            <el-form-item label='单位' prop='postId' :label-width='formLabelWidth'>
-              <!-- <el-select v-model="value" placeholder="请选择单位" @change="changeSelect">
-                <el-option
-                  v-for="item in options"
-                  :key="item.postId"
-                  :lable="item.name"
-                  :value="item.postId">
-                </el-option>
-              </el-select> -->
-              <el-select v-model='form.postId' placeholder='请选择'>
-                <el-option
-                  v-for='item in postAll'
-                  :key='item.postId'
-                  :label='item.postName'
-                  :value='item.postId'>
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label='机房管理员' :label-width='formLabelWidth'>
-              <el-input v-model='form.machineAdministrator' autocomplete='off'></el-input>
-            </el-form-item>
-            <el-form-item label='机房面积' :label-width='formLabelWidth'>
-              <el-input v-model='form.machineArea' autocomplete='off'></el-input>
-            </el-form-item>
-            <el-form-item label='机房位置' :label-width='formLabelWidth'>
-              <el-input v-model='form.machineLocation' autocomplete='off'></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot='footer' class='dialog-footer'>
-            <el-button @click='dialogFormVisible = false'>取 消</el-button>
-            <el-button type='primary' @click='ceateMachineRoom()'>确 定</el-button>
-          </div>
-        </el-dialog>
         <el-table
           height='70vh'
           :row-style="{height:'6.26vh'}"
@@ -137,20 +91,20 @@
               <el-button
                 type='success' plain
                 size='mini'
-                @click='handleDetail(scope.$index, scope.row)'
+                @click='cabinetDetail(scope.$index, scope.row)'
               >详情
               </el-button>
               <el-button
                 type='primary' plain
                 size='mini'
-                @click='handleEdit(scope.$index, scope.row)'
+                @click='cabinetEdit(scope.$index, scope.row)'
               >编辑
               </el-button>
               <el-button
                 size='mini'
                 type='danger'
                 text
-                @click='handleDelete(scope.$index, scope.row)'
+                @click='cabinetDelete(scope.$index, scope.row)'
               >删除
               </el-button>
             </template>
@@ -170,63 +124,8 @@
       <div v-if="ifUpdate === '1'">
         <InfoTemplate :pre-row='row' @changeDiv='changeDiv' />
       </div>
-      <el-drawer
-        direction='rtl'
-        :visible.sync='drawer'
-        :with-header='false'>
-        <div>
-          <el-table
-            :row-style="{height:'6.26vh'}"
-            :cell-style="{padding:'0px'}"
-            v-loading='listLoading'
-            :disable='true'
-            :data='cabinetAll'
-            element-loading-text='Loading'
-            border
-            highlight-current-row
-            stripe
-          >
-            <el-table-column align='center' type='index' />
-            <el-table-column
-              v-for='(item,index) in cabinetColumn'
-              :key='index'
-              :label='item.label'
-              :prop='item.value'
-              :formatter='item.formatter'
-              align='center'
-            >
-            </el-table-column>
-            <el-table-column align='center' label='操作' width='250px'>
-              <template slot-scope='scope'>
-                <el-button
-                  type='success' plain
-                  size='mini'
-                  @click='cabinetDetail(scope.$index, scope.row)'
-                >详情
-                </el-button>
-                <el-button
-                  type='primary' plain
-                  size='mini'
-                  @click='cabinetEdit(scope.$index, scope.row)'
-                >编辑
-                </el-button>
-                <el-button
-                  size='mini'
-                  type='danger'
-                  text
-                  @click='cabinetDelete(scope.$index, scope.row)'
-                >删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-drawer>
       <div v-if="ifUpdate === '2'">
-        <addMachineRoom @changeDiv='changeDiv' />
-      </div>
-      <div v-if="ifUpdate === '3'">
-        <updateMachineRoom :row='row' :current-show='ifUpdate' @changeDiv='changeDiv' />
+        <addCabinet @changeDiv='changeDiv' />
       </div>
       <div v-if="ifUpdate === '4'">
         <UpdateCabinet :row='row' :current-show='ifUpdate' @changeDiv='changeDiv' />
@@ -241,25 +140,24 @@
 
 <script>
 import {
-  delMachineRoom,
-  getMachineRoomByPage,
-  getMachineRoomTotal,
+  getCabinetTotal,
+  getCabinetByPage,
   delCabinet,
   addMachineRoom
 } from '@/api/baseparameter'
 import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import { getCabinet, getPost } from '@/api/select'
 import { mapGetters } from 'vuex'
-import UpdateMachineRoom from '@/components/Baseparameter/machineRoom/updateMachineRoom/index.vue'
 import UpdateCabinet from '@/components/Baseparameter/machineRoom/updateCabinet/index.vue'
 import AddMachineRoom from '@/components/Baseparameter/machineRoom/addMachineRoom/index.vue'
 import MachineRoomTable from '@/components/Infomanage/importExcel/machineRoomTable.vue'
+import AddCabinet from '@/components/Baseparameter/machineRoom/addCabinet/index.vue'
 
 export default {
   components: {
+    AddCabinet,
     AddMachineRoom,
     UpdateCabinet,
-    UpdateMachineRoom,
     InfoTemplate,
     MachineRoomTable
   },
@@ -277,21 +175,21 @@ export default {
     return {
       postAll: [],
       form: {
-        MachineRoomName: '',
+        cabinetName: '',
         machineRoomId: '',
         postId: '',
         status: '',
-        machineArea: '',
-        machineLocation: '',
-        machineAdministrator: ''
+        machineRoomName: '',
+        postName: '',
+
       },
       formLabelWidth: '120px',
       dialogFormVisible: false,
       cabinetId: '',
       cabinetLoading: true,
       cabinetAll: [],
-      drawer: false,
-      list: null,
+      // drawer: false,
+      list: '',
       total: 0,
       currentPage: 1,
       limit: 10,
@@ -300,38 +198,35 @@ export default {
       dataName: 'all',
       ifUpdate: '0',
       listLoading: true,
-      basicvalue: [
+      setDataName:[
         {
-          value: 'machineRoomName',
-          label: '机房名称'
+          value: 'c.cabinetName',
+          label: '机柜名称'
         },
         {
-          value: 'postName',
+          value: 'm.machineRoomName',
+          label: '所属机房'
+        },
+        {
+          value: 'm.postName',
           label: '所属单位'
         },
+      ],
+      basicvalue: [
         {
-          value: 'machineArea',
-          label: '机房面积(㎡)'
-        },
-        {
-          value: 'machineLocation',
-          label: '机房位置'
-        },
-        {
-          value: 'machineAdministrator',
-          label: '机房管理员'
-        },
-        ],
-      cabinetColumn: [
-        {
-          value: 'cabinetName',
+          value: '0.cabinetName',
           label: '机柜名称'
-        }
+        },
+        {
+          value: '1.machineRoomName',
+          label: '所属机房'
+        },
+        {
+          value: '1.postName',
+          label: '所属单位'
+        },
       ],
       value: '',
-      realRole: '',
-      realChact: '',
-      realRoleid: ''
     }
   },
   computed: {
@@ -341,9 +236,6 @@ export default {
   },
   created() {
     this.fetchData()
-    // this.realChact=this.$store.state.user.role_department_name
-    // this.realRole=this.$store.state.user.role_name.split('/')[0] //这个
-    this.realRoleid = this.$store.state.user.roleid
 
   },
   methods: {
@@ -370,70 +262,30 @@ export default {
         dataName: this.initName,
         dataValue: this.inputValue,
         status: '',
-        start: (this.currentPage - 1) * this.limit,
+        start: this.currentPage - 1,
         limit: this.limit
       }
       const numparams = {
         dataName: this.initName,
         dataValue: this.inputValue,
-        status: '',
+        status: ''
       }
       console.log(112233,params)
       console.log(332211,numparams)
-      getMachineRoomTotal(numparams).then((response) => {
+      getCabinetTotal(numparams).then((response) => {
         this.total = response.data
-        // console.log('111',this.total)
       })
       // console.log(this.initName)
-      getMachineRoomByPage(params).then((response) => {
+      getCabinetByPage(params).then((response) => {
         this.list = response.data.items
         this.listLoading = false
+        console.log("信息",this.list)
       })
     },
 
-    addMachine() {
+    addCabinet() {
       //添加机房组件
       this.ifUpdate = '2'
-
-      // //添加机房弹窗
-      // //清除Form表单上一次输入的值
-      // this.form.machineArea=""
-      // this.form.machineAdministrator=""
-      // this.form.machineLocation=""
-      // this.form.MachineRoomName=""
-      // this.form.postId=""
-      //
-      // // this.ifUpdate ='1'
-      // this.dialogFormVisible = true
-      // // 取值有问题
-      // const data ={
-      //   role:this.roles[0], //这个地方是realRole 写成了roles
-      //   postid:this.realRoleid
-      // }
-      // console.log(data)
-      // getPost(data).then(response => {
-      //   this.postAll = response.data.items
-      // })
-      // // if(this.realChact !=="超级管理员"){
-      // //   this.postAll = []
-      // //   var obj = {
-      // //    postId: this.realRoleid,
-      // //    postName: this.realRole
-      // //   }
-      // //   this.postAll.push(obj)
-      // // }else{
-      // //   getPost().then(response => {
-      // //     // console.log(response.data.items)
-      // //     this.postAll = response.data.items
-      // //     // console.log(this.postAll);
-      // //     // console.log(this.options);
-      // //   })
-      // // }
-
-    },
-
-    importMachine() {
-      this.ifUpdate = 'importMachine'
     },
     ceateMachineRoom() {
       addMachineRoom(this.form).then(response => {
@@ -452,35 +304,8 @@ export default {
     handleDetail(index, row) {
       // this.ifUpdate ='2'
       // this.row = row
-      this.drawer = true
+      // this.drawer = true
       this.fetchCabinet(row)
-    },
-    handleEdit(index, row) {
-      console.log(row)
-      this.row = row
-      this.ifUpdate = '3'
-    },
-    handleDelete(index, row) {
-      this.$alert(`是否永久删除机房：\"${row.machineRoomName}\"`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        callback: (action, instance) => {
-          if (action === 'confirm') {
-            delMachineRoom(row.machineRoomId).then((response) => {
-              console.log('***', row.machineRoomId)
-              this.$alert(response.data, '提示', {
-                confirmButtonText: '确定',
-                type: 'info',
-                showClose: false
-              }).then(() => {
-                this.dataName = ''
-                this.fetchData()
-              })
-            })
-          }
-        }
-      })
     },
     handleSizeChange(val) {
       this.limit = val
@@ -495,10 +320,11 @@ export default {
         start: val - 1,
         limit: this.limit
       }
-      getMachineRoomByPage(params).then((response) => {
+      getCabinetByPage(params).then((response) => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
+        console.log("111",this.list)
       })
     },
     changeDiv(value) {
@@ -508,29 +334,34 @@ export default {
 
     cabinetDetail(index, row) {
       this.row = row
-      this.drawer = false
+      // this.drawer = false
       this.ifUpdate = '1'
     },
     cabinetEdit(index, row) {
       this.row = row
-      this.drawer = false
+
+      // this.drawer = false
       this.ifUpdate = '4'
     },
     cabinetDelete(index, row) {
-      this.$alert(`是否永久删除机柜：\"${row.cabinetName}\"`, '提示', {
+      this.row = row
+      console.log("信息333",this.row)
+      this.$alert(`是否永久删除机柜：\"${row[0].cabinetName}\"`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         callback: (action, instance) => {
           if (action === 'confirm') {
-            delCabinet(row.cabinetId).then((response) => {
+            delCabinet(row[0].cabinetId).then((response) => {
+              console.log("123123123",row[0].cabinetId)
               this.$alert(response.data, '提示', {
                 confirmButtonText: '确定',
                 type: 'info',
                 showClose: false
               }).then(() => {
-                this.dataName = 'all'
+                this.dataName = []
                 this.drawer = false
+                this.fetchData()
               })
             })
           }
@@ -539,12 +370,13 @@ export default {
     },
     confirm() {
       alert(this.cabinetId)
-
     },
     fetchCabinet(val) {
       this.cabinetLoading = true
       getCabinet(val.machineRoomId).then(response => {
+        console.log("333",val.machineRoomId)
         this.cabinetAll = response.data.items
+        console.log("444",this.cabinetAll)
         this.cabinetLoading = false
       })
     },
