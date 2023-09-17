@@ -36,76 +36,85 @@
           <el-col :span="3"><dv-decoration-8 :color=datavcolor style="width:300px;height:50px;position: absolute;left: 0" /></el-col>
           <el-col :span="8" :offset="5"><h1 style="text-align: center;position:relative;color:#20dbfd;;text-shadow:0 0 25px #00d8ff;font-weight: 900">{{computerTitle}}</h1></el-col>
           <el-col :span="3" :offset="3" ><dv-decoration-8 :color=datavcolor :reverse="true" style="width:300px;height:50px;position: absolute;right: 0" /></el-col>
+
+          <el-input v-model="inputEquipmentType" clearable style="z-index:99;position: absolute;bottom: -20px;right: 320px;width: 220px" placeholder="请输入设备类型"></el-input>
+          <el-button  type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 240px;" @click="searchEquipmentType">搜索</el-button>
+
           <el-button id="getcomputerroom" type="danger"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="datacard" @click="handchangedatacardstate" >关闭机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 100px;" v-show="showButton" plain @click="handchangedatacardstate">打开机房信息</el-button>
           <el-button id="getcomputerroom" type="primary"  style="z-index:99;position: absolute;bottom: -20px;right: 20px;" @click="backPage">返回</el-button>
         </el-row >
         <el-row :gutter="20" style="height: 2rem">
-          <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" style=" width:100%;height:40px;position: relative;bottom:2rem" /></el-col>
+          <el-col :span="8" :offset="8" style="text-align: center;color: #cdddf7"><dv-decoration-5 :color=datavcolor :dur="2" class="dv-decoration-5"  /></el-col>
         </el-row >
-        <dv-decoration-10 style="width:100%;height:5px; position: relative;bottom:1rem" />
+        <dv-decoration-10 class="dv-decoration-10"  />
       </el-header>
     </div>
 
     <div id="container" ref="canvasContainer"></div>
 
-    <dv-border-box-11 class="msgTable" title="机房信息概况"style="height: 15rem;width:25vw;position: absolute;top: 9rem;margin-left: 10px" v-show="datacard">
-      <div style="display: flex;  height: 70%; width: 90%; position: absolute; left: 1rem; top: 22%;">
-        <el-col style="width: 35%;height: 100%;display: flex;text-align: center;align-items: center;justify-content: center;">
-          <img  :src=logoSrc+this.unitid+this.logoImgetype  alt="" style="height:4rem;border-radius: 4rem;position: relative;z-index: 99;bottom: 0">
+      <!--左上角数据表格-->
+      <dv-border-box-8  class="msgTable-8-top" v-show="datacard"><dv-border-box-1>
+      <!--标题-->
+        <dv-decoration-7 class="decoration-7-top" >机房信息概况</dv-decoration-7>
+      <!--图标-->
+        <el-col class="top-img">
+          <img  class="img" :src=logoSrc+this.unitid+this.logoImgetype  alt="" >
         </el-col>
-        <el-col style="width: 65%;height: 100%;display: flex;align-items: center;">
-          <table style="opacity: 1;width: 100%;color: #FFFFFF;text-align: left;position: relative;font-size:20px" border="1" cellspacing="0" cellpadding="0">
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 110px">管理员：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900;">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
-            </tr>
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 80px">机房面积：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
-            </tr>
-            <tr style="height: 45px">
-              <th style="color: #FFFFFF;width: 80px">机房位置：</th>
-              <th><span style="display: flex; justify-content: center; align-items: center;color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-size:20px;font-family:yjsz;font-weight: 900">{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
-            </tr>
-          </table>
-
-        </el-col>
-      </div>
-    </dv-border-box-11>
-
-    <dv-border-box-12 class="msgTable-echarts" style="height: 45vh;width:25vw;position: absolute;top: 25rem;margin-left: 10px" v-show="datacard">
-      <h2 style="text-align: center;color: #FFFFFF;height: 1px;">机柜设备数量</h2>
-      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
-    </dv-border-box-12>
-
-    <dv-border-box-11 class="msgTable" title="设备概况" style="height: 15rem;width:25vw;position: absolute;right: 0vw;top: 9rem;margin-right: 10px" v-show="datacard">
-      <div style="opacity: 0.8;height:35%;width:100%;position: absolute;left:10px;top: 35%;">
-        <table style="width: 90%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px;" border="1" cellspacing="0" cellpadding="0">
+        <!--注释1：管理员、机房面积、机房位置-->
+        <table class="top-table" border="1" cellspacing="0" cellpadding="0">
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 110px;text-align: center;">管理员：</th>
+            <th><span class="top-span-1">{{this.roomBasicInfo.machineAdministrator === undefined ? "数据格式错误" : this.roomBasicInfo.machineAdministrator}}</span></th>
+          </tr>
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 80px;text-align: center;">机房面积：</th>
+            <th><span class="top-span-2" >{{this.roomBasicInfo.machineArea === undefined ? "数据格式错误" : this.roomBasicInfo.machineArea}}</span></th>
+          </tr>
+          <tr style="height: 45px">
+            <th style="color: #FFFFFF;width: 80px;text-align: center;">机房位置：</th>
+            <th><span class="top-span-3" >{{this.roomBasicInfo.machineLocation === undefined ? "数据格式错误" : this.roomBasicInfo.machineLocation}}</span></th>
+          </tr>
+        </table>
+<!--        注释1结束-->
+<!--        注释2：设备总数、单位机房数、机房机柜数、机房设备数-->
+        <table style="width: 92%;color: #FFFFFF;position: relative;left: 3%;top:-10px;font-size:20px;" border="1" cellspacing="0" cellpadding="0">
           <tr style="height: 60px;width: 55%">
-            <th>设备总数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px">{{this.equipmentBaseInfo.total}}</th>
-            <th>单位机房数:</th>
-            <th  style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px;width: 15%">{{this.equipmentBaseInfo.machineRoomCount}}</th>
+            <th style="width: 34.9%;">设备总数:</th>
+            <th class="th-1">{{this.equipmentBaseInfo.total}}</th>
+            <th style="width: 34.9%;">单位机房数:</th>
+            <th class="th-2" >{{this.equipmentBaseInfo.machineRoomCount}}</th>
           </tr>
           <tr style="height: 60px;width: 45%" >
             <th>机房机柜数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px ">{{this.equipmentBaseInfo.cabinetCount}}</th>
+            <th class="th-3">{{this.equipmentBaseInfo.cabinetCount}}</th>
             <th>机房设备数:</th>
-            <th style="color:#20dbfd;text-shadow:0 0 25px #00d8ff;font-family:yjsz;font-weight: 900;text-align: center;padding-right: 10px">{{this.equipmentBaseInfo.equipmentCount}}</th>
+            <th class="th-4">{{this.equipmentBaseInfo.equipmentCount}}</th>
           </tr>
         </table>
-      </div>
-    </dv-border-box-11>
+<!--        注释2结束-->
+      </dv-border-box-1></dv-border-box-8>
+      <!--左上角数据表格结束-->
 
-    <dv-border-box-12 class="msgTable"
-                      :style="{height:boxHeight}" style="width:25vw; position: absolute; right: 0vw; top:25rem; marginRight:10px" v-show="datacard">
-      <el-row style="display:flex;text-align: center;top:0%;">
-        <div style="width: 25vw; display:flex;justify-content: center;text-align: center;">
-          <h2 style="display:flex; text-align: center;color: #FFFFFF">机房机柜</h2>
-        </div>
-      </el-row>
-      <el-row style="display:flex;justify-content: center;width:90%;height:86%;left: 5%;position: absolute;top: 4rem">
+    <dv-border-box-8 class="msgTable-echarts" style="top: 30rem;" v-show="datacard">
+      <dv-border-box-1>
+        <dv-decoration-7 class="decoration-7-bottom-1" >访问当前单位下属机房频率</dv-decoration-7>
+<!--        <dv-scroll-board style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />-->
+        <div id="echarts" style="height: 24rem;width:23rem;top: 2rem;left:0.7rem;position: absolute;text-align: center;z-index: 98"></div>
+      </dv-border-box-1>
+    </dv-border-box-8>
+
+    <dv-border-box-8 class="msgTable-echarts" style="height: 23rem;width:25rem;position: absolute;top: 7rem;  right: 0.5rem;" v-show="datacard">
+      <dv-border-box-1>
+      <dv-decoration-7 class="decoration-7-top" >机柜设备数量</dv-decoration-7>
+      <dv-scroll-board :config="config" style="left:4.5%;width:90%;height:80%;padding-top:3%;text-align: center" />
+      </dv-border-box-1>
+    </dv-border-box-8>
+
+    <dv-border-box-8 class="msgTable-echarts" :style="{height:boxHeight}"  v-show="datacard" style="height: 40vh;width:25rem;position: absolute;top: 31rem;  right: 0.5vw;">
+      <dv-border-box-1>
+        <dv-decoration-7 class="decoration-7-top" >机房机柜</dv-decoration-7>
+      <el-row class="el-row-bottom">
         <el-table
         :style="{height:computedHeight}"
           border
@@ -134,7 +143,8 @@
           </el-table-column>
         </el-table>
       </el-row>
-    </dv-border-box-12>
+      </dv-border-box-1>
+    </dv-border-box-8>
 
     <el-dialog
       :visible.sync="showEquipment"
@@ -157,11 +167,12 @@ import InfoTemplate from '@/components/Infomanage/InfoTemplate'
 import {getEquipmentCount} from "@/api/cockpit_data";
 import {getPostMachineRoom,getEquipmentNum} from "@/api/dashboard";
 import {getList} from "@/api/table";
-import { getEquipmentByCabinet } from '@/api/baseparameter'
+import { getCabinetByEquipmentType, getEquipmentByCabinet, getVisitTotalOfCurrentPost } from '@/api/baseparameter'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import axios from 'axios'
 import async from 'async'
 import * as echarts from 'echarts'
+import moment from 'moment/moment'
 
 export default {
   name:'computerRoom',
@@ -199,6 +210,8 @@ export default {
       clickedCabinet:[],
       clickedCabinetName:'',
 
+      inputEquipmentType:'',
+
       equipmentTableData:[],
       equipmentTableColumns:[
         {
@@ -216,42 +229,42 @@ export default {
       ],
 
       isRotating:false,
-      equipmentClickedCount:[
-        //机柜1中设备(从右向左)
-        {'服务器022':0,
-          '服务器023':0,
-          '服务器024':0,
-          '服务器025':0,
-          '服务器026':0
-        },
-        //机柜2中设备
-        {
-          '服务器016':0,
-          '服务器017':0,
-          '服务器018':0,
-          '服务器019':0,
-          '服务器020':0,
-          '服务器021':0
-        },
-        //机柜3中设备
-        {
-          '服务器009':0,
-          '服务器010':0,
-          '服务器011':0,
-          '服务器012':0,
-          '服务器013':0,
-          '服务器014':0
-        },
-        //机柜4中设备
-        {
-          '服务器002':0,
-          '服务器003':0,
-          '服务器004':0,
-          '服务器005':0,
-          '服务器006':0,
-          '服务器007':0
-        }
-      ],
+      // equipmentClickedCount:[
+      //   //机柜1中设备(从右向左)
+      //   {'服务器022':0,
+      //     '服务器023':0,
+      //     '服务器024':0,
+      //     '服务器025':0,
+      //     '服务器026':0
+      //   },
+      //   //机柜2中设备
+      //   {
+      //     '服务器016':0,
+      //     '服务器017':0,
+      //     '服务器018':0,
+      //     '服务器019':0,
+      //     '服务器020':0,
+      //     '服务器021':0
+      //   },
+      //   //机柜3中设备
+      //   {
+      //     '服务器009':0,
+      //     '服务器010':0,
+      //     '服务器011':0,
+      //     '服务器012':0,
+      //     '服务器013':0,
+      //     '服务器014':0
+      //   },
+      //   //机柜4中设备
+      //   {
+      //     '服务器002':0,
+      //     '服务器003':0,
+      //     '服务器004':0,
+      //     '服务器005':0,
+      //     '服务器006':0,
+      //     '服务器007':0
+      //   }
+      // ],
       equipmentClickedSum:0,
       isMoving:false,
 
@@ -263,7 +276,7 @@ export default {
 
       machineRoomId:this.machineRoomId,
 
-
+      cabinetArrayByEquipmentType:[],
 
       unitid:'',
       logoSrc:'/unitLogo/',// logo放在public 文件夹下 使用绝对路径即可
@@ -273,12 +286,25 @@ export default {
       machineModel:null,
       cabinetModel:null,
       cabinetModelArray:[],
+      visitMachineRoom:[],
+      isWidening:false,
+      xAxisData:[],
+      seriesData:[],
+
     };
   },
   created() {
     // this.full()
     this.isFullScreen = true
   },
+  // watch: {
+  //   '$data.inputEquipmentType':{
+  //     handler(oldData,newData){
+  //       console.log("this.inputEquipmentType",this.inputEquipmentType)
+  //     },
+  //     deep: true
+  //   },
+  // },
   computed: {
     boxHeight() {
       if (this.equipmentBaseInfo.cabinetCount === 0) {
@@ -317,7 +343,86 @@ export default {
       }
     },
   },
+
   async mounted() {
+    //小机房
+    this.spritePosition1 = [
+      //1-5机柜
+      [14,20,32],
+      [14,20,22],
+      [14,20,12],
+      [14,20, 2],
+      [14,20,-8],
+      //6-10机柜
+      [-1,20,32],
+      [-1,20,22],
+      [-1,20,12],
+      [-1,20, 2],
+      [-1,20,-8],
+      //11-15机柜
+      [-16,20,32],
+      [-16,20,22],
+      [-16,20,12],
+      [-16,20, 2],
+      [-16,20,-8],
+      //16-20机柜
+      [-31,20,32],
+      [-31,20,22],
+      [-31,20,12],
+      [-31,20, 2],
+      [-31,20,-8],
+    ],
+    //大机房
+    this.spritePosition2 = [
+      //1-5机柜
+      [44,20,32],
+      [44,20,22],
+      [44,20,12],
+      [44,20, 2],
+      [44,20,-8],
+      //6-10机柜
+      [29,20,32],
+      [29,20,22],
+      [29,20,12],
+      [29,20, 2],
+      [29,20,-8],
+      //11-15机柜
+      [14,20,32],
+      [14,20,22],
+      [14,20,12],
+      [14,20, 2],
+      [14,20,-8],
+      //16-20机柜
+      [-1,20,32],
+      [-1,20,22],
+      [-1,20,12],
+      [-1,20, 2],
+      [-1,20,-8],
+      //21-25机柜
+      [-16,20,32],
+      [-16,20,22],
+      [-16,20,12],
+      [-16,20, 2],
+      [-16,20,-8],
+      //26-30机柜
+      [-31,20,32],
+      [-31,20,22],
+      [-31,20,12],
+      [-31,20, 2],
+      [-31,20,-8],
+      //31-35机柜
+      [-46,20,32],
+      [-46,20,22],
+      [-46,20,12],
+      [-46,20, 2],
+      [-46,20,-8],
+      //36-40机柜
+      [-61,20,32],
+      [-61,20,22],
+      [-61,20,12],
+      [-61,20, 2],
+      [-61,20,-8],
+    ]
     this.spritePosition = [
       //1-5机柜
       [-1,20,32],
@@ -436,6 +541,7 @@ export default {
     this.rotationSpeed = 0.02,
 
     this.initCount()
+    this.visitTotalOfCurrentPost()
 
     window.addEventListener('resize', this.handleResize2);
     // 创建Echarts实例并绘制饼状图
@@ -469,16 +575,18 @@ export default {
       let machineRoomId = this.$store.state.machineRoom.machineRoomId
       await getCabinet(machineRoomId).then((res) => {
         this.tableData = res.data.items
-        console.log('this.tableData',this.tableData)
+        console.log('res',res)
         for (let i = 0; i < this.tableData.length; i++) {
           this.tableData[i].clickedCount = 0
           this.clickedCabinet.push(this.tableData[i])
         }
         this.clickedCabinet.forEach((element) => {
           let equipmentArray = []
-          getEquipmentByCabinet(element.cabinetId).then((res) => {
+          console.log("element.cabinetId",element.cabinetId)
+          console.log("this.postName",this.postName)
+          getEquipmentByCabinet(element.cabinetId,this.postName).then((res) => {
 
-            // console.log("res.data",res.data)
+            // console.log("res",res)
             res.data.forEach((element) => {
               let equipmentObject = {
                 equipmentName: '',
@@ -512,14 +620,14 @@ export default {
     // 窗口大小调整事件监听器
     window.addEventListener('resize', this.handleResize);
 
-
     let that = this
-    setTimeout(function () {
-      that.initCount()
+    setTimeout(async function () {
+
       that.echartsDraw()
+      that.echartsInit()
       that.init();
       that.loadGltf();
-      that.createSprite();
+      that.createSprite()
       that.animate();
     }, 200);
   },
@@ -546,6 +654,8 @@ export default {
     this.raycaster = null
     this.mouse = null
     this.rotationSpeed = null
+    this.spritePosition1 = null
+    this.spritePosition2 = null
 
   },
   methods: {
@@ -563,11 +673,31 @@ export default {
         this.total = response.data.total
         // console.log("this.list",this.list)
         //console.log("List---------");
-        //console.log(this.list)
+        console.log(this.list)
         this.listLoading = false
       })
-
     },
+
+    async searchEquipmentType(){
+      if(this.inputEquipmentType !== ''){
+        let param = {
+          postName:this.postName,
+          machineRoomName:this.machineRoomName,
+          equipmentType:this.inputEquipmentType
+        }
+        try {
+          const res = await getCabinetByEquipmentType(param);
+          this.cabinetArrayByEquipmentType = res.data;
+          this.createSprite();
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }else{
+        this.cabinetArrayByEquipmentType = []
+        this.createSprite();
+      }
+    },
+
 
     //为解决threejs射线不准问题，设置全屏
     full() {
@@ -611,7 +741,7 @@ export default {
 
       this.camera = new THREE.PerspectiveCamera(fov, k, near, far);
       this.scene.background = new THREE.Color(0x000000);
-      this.camera.position.set(100, 100, 105); // 设置相机位置
+      this.camera.position.set(80, 80, 80); // 设置相机位置
       this.camera.lookAt(100, 100, 100); // 设置相机的焦点位置
 
 
@@ -639,13 +769,9 @@ export default {
         // self.machineModel.scale.set(5,5,5);//设置大小比例
         self.machineModel.position.set(0, 0, 0);
         if(this.equipmentBaseInfo.cabinetCount > 20){
+          this.isWidening = true
           self.machineModel.traverse((child) => {
             if (child.isMesh) {
-              // self.machineModel.children[4].position.set(-37,0,0)
-              // let floor = gltf.scene.children[4].clone()
-              // floor.position.set(37, 0, 0)
-              // self.scene.add(floor)
-              // gltf.scenes.push(floor)
               if(child.name === '门A'){
                 child.position.x += 33
               }
@@ -661,6 +787,9 @@ export default {
               if(child.name === '墙B1' || child.name === '墙B2'){
                 child.scale.x *= 2
               }
+              if(child.name === '地面001_1'){
+                child.visible = false
+              }
             }
           });
         }
@@ -670,110 +799,161 @@ export default {
         loader.load('static/cabinet.gltf', (gltf1) => {  //导入机柜模型
           this.cabinetModel = gltf1.scene;
           this.equipmentBaseInfo.cabinetCount = this.tableData.length
-          // this.equipmentBaseInfo.cabinetCount = 40
-          //小于等于5个机柜
-          let param = this.equipmentBaseInfo.cabinetCount < 5 ? this.equipmentBaseInfo.cabinetCount : 5
-          for(let j=0;j<param;j++){
-            let instance = this.cabinetModel.clone();
-            instance.position.set(-1, 2, 32-j*10);
-            self.scene.add(instance);
-            instance.children[1].name = '机柜门01' + (j+1).toString()
-            gltf.scenes.push(instance)
-            this.cabinetModelArray.push(instance)
-          }
-          //小于等于10个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 1){
-            let num = this.equipmentBaseInfo.cabinetCount < 10 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          let column = Math.floor(this.equipmentBaseInfo.cabinetCount / 5)
+          let num = this.equipmentBaseInfo.cabinetCount % 5
+          console.log("column and num",column,num)
+          if(this.isWidening){
+            //大机房
+            for(let i=0;i<column;i++){
+              if(i<8){
+                for(let j=0;j<5;j++){
+                  let instance = this.cabinetModel.clone();
+                  instance.position.set(44-i*15, 2, 32-j*10);
+                  self.scene.add(instance);
+                  instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
+                  gltf.scenes.push(instance)
+                  this.cabinetModelArray.push(instance)
+                }
+              }
+            }
             for(let j=0;j<num;j++){
               let instance = this.cabinetModel.clone();
-              instance.position.set(-16, 2, 32-j*10);
+              instance.position.set(44-column*15, 2, 32-j*10);
               self.scene.add(instance);
-              instance.children[1].name = '机柜门02' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于15个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 2){
-            let num = this.equipmentBaseInfo.cabinetCount < 15 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++){
-              let instance = this.cabinetModel.clone();
-              instance.position.set(14, 2, 32-j*10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门03' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于20个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 3){
-            let num = this.equipmentBaseInfo.cabinetCount < 20 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++){
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-31, 2, 32-j*10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门04' + (j+1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-              // console.log("instance",instance)
-            }
-          }
-          //小于等于25个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 4){
-            let num = this.equipmentBaseInfo.cabinetCount < 25 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-46, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门05' + (j + 1).toString()
+              instance.children[1].name = '机柜门0' + (column+1).toString() + (j+1).toString()
               gltf.scenes.push(instance)
               this.cabinetModelArray.push(instance)
             }
-          }
-          //小于等于30个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 5){
-            let num = this.equipmentBaseInfo.cabinetCount < 30 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(29, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门06' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
+          }else {
+            //小机房
+            if(column !== 0){
+              for(let i=0;i<column;i++){
+                for(let j=0;j<5;j++){
+                  let instance = this.cabinetModel.clone();
+                  instance.position.set(14-i*15, 2, 32-j*10);
+                  self.scene.add(instance);
+                  instance.children[1].name = '机柜门0' + (i+1).toString() + (j+1).toString()
+                  gltf.scenes.push(instance)
+                  this.cabinetModelArray.push(instance)
+                }
+              }
+            }
+            if(num !== 0){
+              for(let j=0;j<num;j++){
+                let instance = this.cabinetModel.clone();
+                instance.position.set(14-column*15, 2, 32-j*10);
+                self.scene.add(instance);
+                instance.children[1].name = '机柜门0' + (column+1).toString() + (j+1).toString()
+                gltf.scenes.push(instance)
+                this.cabinetModelArray.push(instance)
+              }
             }
           }
-          //小于等于35个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 6){
-            let num = this.equipmentBaseInfo.cabinetCount < 35 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(-61, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门07' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-            }
-          }
-          //小于等于40个机柜
-          if(this.equipmentBaseInfo.cabinetCount / 5 >= 7){
-            let num = this.equipmentBaseInfo.cabinetCount < 40 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
-            for(let j=0;j<num;j++) {
-              let instance = this.cabinetModel.clone();
-              instance.position.set(44, 2, 32 - j * 10);
-              self.scene.add(instance);
-              instance.children[1].name = '机柜门08' + (j + 1).toString()
-              gltf.scenes.push(instance)
-              this.cabinetModelArray.push(instance)
-            }
-          }
+
+          // //小于等于5个机柜
+          // let param = this.equipmentBaseInfo.cabinetCount < 5 ? this.equipmentBaseInfo.cabinetCount : 5
+          // for(let j=0;j<param;j++){
+          //   let instance = this.cabinetModel.clone();
+          //   instance.position.set(-1, 2, 32-j*10);
+          //   self.scene.add(instance);
+          //   instance.children[1].name = '机柜门01' + (j+1).toString()
+          //   gltf.scenes.push(instance)
+          //   this.cabinetModelArray.push(instance)
+          // }
+          // //小于等于10个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 1){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 10 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-16, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门02' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于15个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 2){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 15 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(14, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门03' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于20个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 3){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 20 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++){
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-31, 2, 32-j*10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门04' + (j+1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //     // console.log("instance",instance)
+          //   }
+          // }
+          // //小于等于25个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 4){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 25 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-46, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门05' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于30个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 5){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 30 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(29, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门06' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于35个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 6){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 35 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(-61, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门07' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
+          // //小于等于40个机柜
+          // if(this.equipmentBaseInfo.cabinetCount / 5 >= 7){
+          //   let num = this.equipmentBaseInfo.cabinetCount < 40 ? this.equipmentBaseInfo.cabinetCount % 5 : 5
+          //   for(let j=0;j<num;j++) {
+          //     let instance = this.cabinetModel.clone();
+          //     instance.position.set(44, 2, 32 - j * 10);
+          //     self.scene.add(instance);
+          //     instance.children[1].name = '机柜门08' + (j + 1).toString()
+          //     gltf.scenes.push(instance)
+          //     this.cabinetModelArray.push(instance)
+          //   }
+          // }
         });
       })
     },
 
     //精灵标签
     createSprite() {
+      this.scene.remove(...this.scene.children.filter(child => child instanceof THREE.Sprite));
       for (let i = 0; i < this.tableData.length; i++) {
         const spriteCanvas = document.createElement('canvas');
         const spriteContext = spriteCanvas.getContext('2d');
@@ -785,17 +965,21 @@ export default {
         spriteContext.fillRect(0, 0, spriteCanvas.width, spriteCanvas.height);
 
         // 设置荧光橙色边框
-        spriteContext.strokeStyle = '#ffa500';
-        spriteContext.lineWidth = 2;
+        spriteContext.strokeStyle = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+          ? '#FF0080' : '#ffa500'
+        spriteContext.lineWidth = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+          ? 4 : 2;
         spriteContext.strokeRect(0, 0, spriteCanvas.width, spriteCanvas.height);
 
-        // 调整文本字体大小
         const fontSize = 14; // 设置字体大小
         spriteContext.font = `Bold ${fontSize}px Arial`;
 
-        const text = this.tableData[i].cabinetName;
-        const textWidth = spriteContext.measureText(text).width;
+        console.log("this.cabinetArrayByEquipmentType",this.cabinetArrayByEquipmentType)
+        // let text = this.cabinetArrayByEquipmentType.includes(this.tableData[i].cabinetName)
+        //   ? 'here' : this.tableData[i].cabinetName;
 
+        let text = this.tableData[i].cabinetName;
+        const textWidth = spriteContext.measureText(text).width;
         const centerX = (spriteCanvas.width - textWidth) / 2;
         const centerY = spriteCanvas.height / 2 + fontSize / 2
 
@@ -803,19 +987,91 @@ export default {
         spriteContext.fillStyle = '#00ffff';
         spriteContext.fillText(text, centerX, centerY);
 
-
         const spriteTexture = new THREE.Texture(spriteCanvas);
         spriteTexture.needsUpdate = true;
         const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture });
         this.sprite = new THREE.Sprite(spriteMaterial);
         this.sprite.scale.set(10, 5, 1);
-        this.sprite.position.set(this.spritePosition[i][0], this.spritePosition[i][1], this.spritePosition[i][2]);
+        console.log("this.isWidening",this.isWidening)
+        if(this.isWidening){
+          this.sprite.position.set(this.spritePosition2[i][0], this.spritePosition2[i][1], this.spritePosition2[i][2]);
+        }else{
+          this.sprite.position.set(this.spritePosition1[i][0], this.spritePosition1[i][1], this.spritePosition1[i][2]);
+        }
         this.sprite.center.set(0.5, 0);
         this.scene.add(this.sprite);
       }
     },
 
+    echartsInit(){
+      let chartDom = document.getElementById('echarts');
+      let myChart = echarts.init(chartDom);
+      let option;
 
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        grid: {
+          left: '2%',
+          right: '5%',
+          bottom: '5%',
+          top: '10%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: this.xAxisData,
+            axisLabel: {
+              color: 'white' // 设置横轴上的数字颜色为白色
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: 'white' // 设置横轴上的数字颜色为白色
+            }
+          }
+        ],
+        series: [
+          {
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.seriesData,
+            lineStyle: {
+              color: 'rgba(0, 191, 255, 1)' // 设置线条颜色为荧光白
+            },
+            smooth: true // 将线条改成平滑的曲线
+          },
+
+        ]
+      };
+      this.myChart = myChart
+      option && myChart.setOption(option);
+
+    },
 
 
     handleResize() {
@@ -854,7 +1110,7 @@ export default {
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       if (intersects.length > 0) {
         let clickObject = intersects[0].object;
-        // console.log("clickObject",clickObject.name)
+        console.log("clickObject",clickObject.name)
         // console.log('intersects[0].objeccct',intersects[0].object.name)
         // for(let i=0;i<intersects.length;i++){
         //   console.log('被点击的所有',intersects[i].object.name)
@@ -882,21 +1138,21 @@ export default {
           }
         }
         //设备移动
-        let shouldStop = true;
-        this.equipmentClickedCount.forEach((elements, index) => {
-          for (const element of Object.keys(elements)) {
-            if (clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)) {
-              //点击后执行移动动画
-              //clickObject为要旋转的模型，index是该模型所处的机柜索引
-              this.moveEquipment(clickObject, index)
-              shouldStop = true;
-              break //结束内层遍历
-            }
-          }
-          if (shouldStop) {
-            return; // 直接返回，结束外层遍历
-          }
-        })
+        // let shouldStop = true;
+        // this.equipmentClickedCount.forEach((elements, index) => {
+        //   for (const element of Object.keys(elements)) {
+        //     if (clickObject.name === element && Object.values(this.cabinetClickCount[index] % 2 === 1)) {
+        //       //点击后执行移动动画
+        //       //clickObject为要旋转的模型，index是该模型所处的机柜索引
+        //       this.moveEquipment(clickObject, index)
+        //       shouldStop = true;
+        //       break //结束内层遍历
+        //     }
+        //   }
+        //   if (shouldStop) {
+        //     return; // 直接返回，结束外层遍历
+        //   }
+        // })
       }
     },
 
@@ -910,8 +1166,8 @@ export default {
         // 根据点击次数的奇偶性来确定目标旋转角度的正负
         const isPositiveRotation = this.cabinetClickCount[targetObject.name] % 2 === 1;
         const targetRotation = isPositiveRotation
-          ? targetObject.rotation.y + Math.PI*2 / 3 // 旋转九十度
-          : targetObject.rotation.y - Math.PI*2 / 3; // 旋转负九十度
+          ? targetObject.rotation.y + Math.PI*2 / 3 // 旋转120°
+          : targetObject.rotation.y - Math.PI*2 / 3; // 旋转-120°
         const initialRotation = targetObject.rotation.y;
         const duration = 1000; // 旋转动画的持续时间为1000毫秒（1秒）
         const startTime = performance.now();
@@ -969,8 +1225,8 @@ export default {
           }
         }
         let cabinetArray = Object.keys(this.cabinetClickCount)
-        console.log(intersects[0].object)
-        console.log(object)
+        // console.log(intersects[0].object)
+        // console.log(object)
         if (cabinetArray.includes(object.name)) {
           // console.log('this.tooltipText',this.tooltipText)
           this.showCabinetData(object.name)
@@ -1034,6 +1290,25 @@ export default {
       // this.dialog_description = val
     },
 
+    //当前单位下属机房被访问次数统计波形图
+    visitTotalOfCurrentPost(){
+      getVisitTotalOfCurrentPost(this.postName).then((res) =>{
+        console.log("res-----------------",res)
+        this.counts = res.data
+        this.xAxisData = [] // 处理横坐标日期
+        this.seriesData = [] // 处理纵坐标操作次数
+        const today = moment() // 获取当前日期
+        for (let i = 6; i >= 0; i--) {
+          const date = today.clone().subtract(i, 'days') // 获取最近7天的日期
+          this.xAxisData.push(date.format('MM-DD')) // 格式化日期
+          const item = this.counts.find(item => moment(item[0]).isSame(date, 'day')) // 查找该日期对应的次数
+          this.seriesData.push(item ? item[1] : 0) // 如果有次数，则添加次数，否则添加0
+        }
+        console.log(this.xAxisData)
+        console.log(this.seriesData)
+      })
+    },
+
     //右上角数据
     initCount() {
       this.roomBasicInfo.machineArea = this.$store.state.machineRoom.machineArea
@@ -1048,6 +1323,7 @@ export default {
       })
       getCabinet(this.$store.state.machineRoom.machineRoomId).then((response) => {
         this.equipmentBaseInfo.cabinetCount = response.data.total
+        this.isWidening = this.equipmentBaseInfo.cabinetCount > 20 ? true : false
       })
       const params = {
         dataName: ['machineRoomId'],
@@ -1061,6 +1337,7 @@ export default {
       })
     },
 
+    //田累积
     echartsDraw() {
       for(let i=0;i<this.tableData.length;i++){
         this.AllechartsData.push({
@@ -1109,7 +1386,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .mains{
   cursor: pointer;
   position:absolute;
@@ -1132,8 +1409,183 @@ export default {
   width:100%;
   height:100%;
 }
-.msgTable{
-  z-index:99
+.msgTable-8-top{
+  z-index:99;
+  height: 21rem;
+  width:25rem;
+  position: absolute;
+  top: 7rem;
+  margin-left: 10px
+}
+.msgTable-8-bottom{
+  z-index:99;
+  width:30rem;
+  position: absolute;
+  right: 0vw;
+  margin-right: 10px;
+  top:37.5rem;
+
+}
+.decoration-7-top{
+  width:150px;
+  height:30px;
+  margin-left: 8rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.decoration-7-bottom{
+  width:150px;
+  height:30px;
+  margin-left: 10rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.decoration-7-bottom-1{
+  width:300px;
+  height:30px;
+  margin-left: 3.5rem;
+  color: #20dbfd;
+  font-size: 18px;
+}
+.el-row-bottom{
+  display:flex;
+  justify-content: center;
+  width:90%;
+  height:86%;
+  left: 5%;
+  position: absolute;
+  top: 3rem
+}
+.top-img{
+  width: 35%;
+  height: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.img{
+  width:7rem;
+  height:7rem;
+  border-radius: 4rem;
+  position: relative;
+  z-index: 99;
+  bottom: 0;
+  margin-left: 1rem;
+}
+.top-table{
+  margin-top: 0.9rem;
+  opacity: 1;
+  width: 60%;
+  color: #FFFFFF;
+  text-align: left;
+  position: relative;
+  font-size:20px
+}
+.top-span-1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-weight: 800;
+}
+.top-span-2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-family:yjsz;
+  font-weight: 900
+}
+.top-span-3{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-size:20px;
+  font-family:yjsz;
+  font-weight: 900
+}
+.th-1{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.th-2{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px;
+  width: 15%
+}
+.th-3{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.th-4{
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-family:yjsz;
+  font-weight: 900;
+  text-align: center;
+  padding-right: 10px
+}
+.dv-decoration-8-1{
+  width:300px;
+  height:50px;
+  position: absolute;
+  left: 0
+}
+.dv-decoration-8-2{
+  width:300px;
+  height:50px;
+  position: absolute;
+  right: 0
+}
+.el-button-1{
+  z-index:99;
+  position: absolute;
+  bottom: -20px;
+  right: 100px;
+}
+.el-button-2{
+  z-index:99;
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+}
+.dv-decoration-5{
+  width:100%;
+  height:40px;
+  position: relative;
+  bottom:2rem
+}
+.dv-decoration-10{
+  width:100%;
+  height:5px;
+  position: relative;
+  bottom:1rem
+}
+.h1-top{
+  text-align: center;
+  position:relative;
+  color:#20dbfd;
+  text-shadow:0 0 25px #00d8ff;
+  font-weight: 900
 }
 .tooltip {
   position: absolute;
@@ -1183,10 +1635,10 @@ export default {
 }
 .msgTable-echarts{
   z-index:99;
-  height: 45vh;
-  width:25vw;
+  height: 27rem;
+  width:25rem;
   position: absolute;
-  top: 25rem;
+  top: 24rem;
   margin-left: 10px
 }
 .el-table__fixed-right-patch {
