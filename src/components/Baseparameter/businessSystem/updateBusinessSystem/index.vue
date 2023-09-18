@@ -44,7 +44,7 @@
               <el-select v-model="editInBusinessSystemFormation.businessSystemLevel">
                 <el-option
                   v-for="item in level"
-                  :key="item.sonSystemLevel"
+                  :key="item.value"
                   :value="item.sonSystemLevel"
                 />
               </el-select>

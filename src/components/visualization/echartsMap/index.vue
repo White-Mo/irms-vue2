@@ -203,7 +203,7 @@ export default {
                 }
               },
               {
-                name: '上海省',
+                name: '上海市',
                 itemStyle: {
                   areaColor: unit.includes("上海地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
@@ -307,7 +307,7 @@ export default {
               {
                 name: '广西壮族自治区',
                 itemStyle: {
-                  areaColor: unit.includes("广西壮族自治区地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
+                  areaColor: unit.includes("广西地震局") ? 'rgba(255,196,0,0.93)' : 'rgba(158,161,161,0.82)' // 背景颜色
                 }
               },
               {

@@ -12,7 +12,7 @@
                 <!--:popper-append-to-body ="false"使此元素可以跳出全局样式另外设置-->
                 <el-option
                   v-for='item in postAll'
-                  :key='item.value'
+                  :key="item.value"
                   :value='item.postName'
                 />
               </el-select>

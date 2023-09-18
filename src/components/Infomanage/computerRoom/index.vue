@@ -24,6 +24,7 @@
         <el-table-column
           v-for="columns in equipmentTableColumns"
           :prop="columns.prop"
+          :key='columns.index'
           :label="columns.label"
           width="183">
         </el-table-column>
