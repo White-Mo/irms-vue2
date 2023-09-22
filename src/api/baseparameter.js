@@ -616,3 +616,11 @@ export function getCabinetByEquipmentType(data){
     responseType: 'json'
   })
 }
+//获取自定义字段
+export function getCustomFieldData(){
+  return request({
+    url:'/home/baseparameter/getCustomFieldData',
+    method: 'get',
+    responseType: 'json'
+  })
+}

@@ -182,7 +182,7 @@
               align='center'
               :width=flexColumnWidth(item.label,item.value)
               show-overflow-tooltip
-              sortable='custom'
+              :sortable='item.sortable'
             >
             </el-table-column>
             <el-table-column
@@ -261,6 +261,7 @@ import {
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import searchTemplate from '@/components/Infomanage/searchTemplate'
+import { getCustomFieldData } from '@/api/baseparameter'
 
 export default {
   // 引用vue reload方法
@@ -339,11 +340,11 @@ export default {
       // 定义表格列配置
       counter: 1,
       dataname: [
-        { value: 'sequenceNumber', label: '序号' },
-        { value: 'basicInfoId', label: '设备编号' },
-        { value: 'postName', label: '所属单位名称' },
-        { value: 'departmentName', label: '所属部门名称' },
-        { value: 'equipmentTypeName', label: '设备类型' },
+        { value: 'sequenceNumber', label: '序号' ,sortable:'custom'},
+        { value: 'basicInfoId', label: '设备编号',sortable:'custom' },
+        { value: 'postName', label: '所属单位名称',sortable:'custom'},
+        { value: 'departmentName', label: '所属部门名称',sortable:'custom' },
+        { value: 'equipmentTypeName', label: '设备类型',sortable:'custom' },
         {
           value: 'trueOrVirtual',
           label: '实体机/虚拟机',
@@ -351,13 +352,14 @@ export default {
             let trueOrVirtual = row.trueOrVirtual === '1' ? '实体机' : row.trueOrVirtual === '' ? '' : '虚拟机'
             return trueOrVirtual
           }
+          ,sortable:'custom'
         },
-        { value: 'isChinaLocalization', label: '是否国产化' },
-        { value: 'equipmentName', label: '设备名称' },
-        { value: 'equipmentAdminName', label: '设备管理员' },
-        { value: 'equipmentAdminPhone', label: '设备管理员电话' },
-        { value: 'appAdminName', label: '应用管理员' },
-        { value: 'appAdminPhone', label: '应用管理员电话' },
+        { value: 'isChinaLocalization', label: '是否国产化',sortable:'custom' },
+        { value: 'equipmentName', label: '设备名称',sortable:'custom' },
+        { value: 'equipmentAdminName', label: '设备管理员',sortable:'custom' },
+        { value: 'equipmentAdminPhone', label: '设备管理员电话',sortable:'custom' },
+        { value: 'appAdminName', label: '应用管理员',sortable:'custom' },
+        { value: 'appAdminPhone', label: '应用管理员电话',sortable:'custom' },
         {
           value: 'onlineTime',
           label: '上线时间',
@@ -379,6 +381,7 @@ export default {
               return year + '-' + month + '-' + day
             }
           }
+          ,sortable:'custom'
         },
         {
           value: 'offlineTime',
@@ -404,6 +407,7 @@ export default {
               return year + '-' + month + '-' + day
             }
           }
+          ,sortable:'custom'
         },
         {
           value: 'status',
@@ -427,33 +431,34 @@ export default {
             }
             return status
           }
+          ,sortable:'custom'
 
         },
-        { value: 'isTransfer', label: '是否存在调拨' },
-        { value: 'transferRecord', label: '设备调拨记录' },
-        { value: 'transferRecordTime', label: '设备调拨时间' },
-        { value: 'isMoving', label: '是否存在移动' },
-        { value: 'movingRecord', label: '设备移动记录' },
-        { value: 'movingRecordTime', label: '设备移动时间' },
-        { value: 'machineRoomName', label: '安装位置' },
-        { value: 'cabinetName', label: '机柜号' },
-        { value: 'cabinetUStart', label: '机柜开始U位' },
-        { value: 'cabinetUEnd', label: '机柜结束U位' },
-        { value: 'guaranteePeriod', label: '保修期' },
-        { value: 'pool', label: '所属资源池' },
-        { value: 'hostName', label: '主机名' },
-        { value: 'businessApplicationName', label: '业务应用名称' },
-        { value: 'businessSystem', label: '所属业务子系统' },
-        { value: 'businessSystemLevel', label: '所属业务子系统等保等级' },
-        { value: 'businessSystemFirstName', label: '所属业务系统' },
-        { value: 'isTestBusinessSystem', label: '正式业务/实验业务' },
-        { value: 'ipAddress', label: 'IP地址' },
-        { value: 'macAddress', label: 'MAC地址' },
-        { value: 'type', label: 'CPU型号' },
-        { value: 'configMemoryCorenessOrCapacity', label: '内存容量（GB）' },
-        { value: 'softwareOperatingSystemEdition', label: '操作系统版本' },
-        { value: 'edition', label: '中间件品牌规格' },
-        { value: 'softwareDatabaseEdition', label: '数据库版本' },
+        { value: 'isTransfer', label: '是否存在调拨' ,sortable:'custom'},
+        { value: 'transferRecord', label: '设备调拨记录' ,sortable:'custom'},
+        { value: 'transferRecordTime', label: '设备调拨时间',sortable:'custom' },
+        { value: 'isMoving', label: '是否存在移动' ,sortable:'custom'},
+        { value: 'movingRecord', label: '设备移动记录' ,sortable:'custom'},
+        { value: 'movingRecordTime', label: '设备移动时间' ,sortable:'custom'},
+        { value: 'machineRoomName', label: '安装位置' ,sortable:'custom'},
+        { value: 'cabinetName', label: '机柜号' ,sortable:'custom'},
+        { value: 'cabinetUStart', label: '机柜开始U位',sortable:'custom' },
+        { value: 'cabinetUEnd', label: '机柜结束U位',sortable:'custom' },
+        { value: 'guaranteePeriod', label: '保修期',sortable:'custom' },
+        { value: 'pool', label: '所属资源池',sortable:'custom' },
+        { value: 'hostName', label: '主机名' ,sortable:'custom'},
+        { value: 'businessApplicationName', label: '业务应用名称' ,sortable:'custom'},
+        { value: 'businessSystem', label: '所属业务子系统',sortable:'custom' },
+        { value: 'businessSystemLevel', label: '所属业务子系统等保等级' ,sortable:'custom'},
+        { value: 'businessSystemFirstName', label: '所属业务系统',sortable:'custom' },
+        { value: 'isTestBusinessSystem', label: '正式业务/实验业务' ,sortable:'custom'},
+        { value: 'ipAddress', label: 'IP地址',sortable:'custom' },
+        { value: 'macAddress', label: 'MAC地址',sortable:'custom' },
+        { value: 'type', label: 'CPU型号',sortable:'custom' },
+        { value: 'configMemoryCorenessOrCapacity', label: '内存容量（GB）',sortable:'custom' },
+        { value: 'softwareOperatingSystemEdition', label: '操作系统版本',sortable:'custom' },
+        { value: 'edition', label: '中间件品牌规格',sortable:'custom' },
+        { value: 'softwareDatabaseEdition', label: '数据库版本',sortable:'custom' },
         {
           value: 'businessOrExperimental',
           label: '业务机/实验机',
@@ -461,6 +466,7 @@ export default {
             let businessOrExperimental = row.businessOrExperimental === '1' ? '实验机' : (row.businessOrExperimental==='0' ? '业务机': '')
             return businessOrExperimental
           }
+          ,sortable:'custom'
         },
         {
           value: 'mainOrBackup',
@@ -469,6 +475,7 @@ export default {
             let mainOrBackup = row.mainOrBackup === '0' ? '主机' : (row.mainOrBackup ==='' ? '':'备机')
             return mainOrBackup
           }
+          ,sortable:'custom'
         },
         {
           value: 'migratable',
@@ -477,6 +484,7 @@ export default {
             let migratable = row.migratable === '0' ? '是' : (row.migratable ==='' ? '':'否')
             return migratable
           }
+          ,sortable:'custom'
         },
         {
           value: 'shelfOff',
@@ -485,29 +493,31 @@ export default {
             let shelfOff = row.shelfOff === '0' ? '是' : (row.shelfOff ==='' ? '':'否')
             return shelfOff
           }
+          ,sortable:'custom'
         },
-        { value: 'brandName', label: '品牌' },
-        { value: 'brandModelName', label: '型号' },
-        { value: 'serialNumber', label: '序列号' },
-        { value: 'deploymentEnvironment', label: '部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）' },
-        { value: 'remarks', label: '备注' },
-        { value: 'singleAndDoublePowerSupply', label: '单双电源' },
-        { value: 'agreedToTemporaryShutdown', label: '是否同意临时关停（是/否）' },
-        { value: 'installSafetyMonitoringSoftware', label: '是否安装安全监测软件' },
-        { value: 'deployStrongPassword', label: '是否部署强口令' },
-        { value: 'cloudServiceUnit', label: '云服务单位' },
-        { value: 'leasedComputingResources', label: '租用计算资源情况（CPU核数）（个）' },
-        { value: 'leasedStorageResources', label: '租用存储资源情况（TB）' },
-        { value: 'leasedNetworkBandwidth', label: '租用网络带宽（兆）' },
-        { value: 'termOfLease', label: '租用期限（年）' },
+        { value: 'brandName', label: '品牌' ,sortable:'custom'},
+        { value: 'brandModelName', label: '型号' ,sortable:'custom'},
+        { value: 'serialNumber', label: '序列号' ,sortable:'custom'},
+        { value: 'deploymentEnvironment',sortable:'custom', label: '部署环境（互联网/地震行业网/政务外网/应急指挥信息网/其他）' },
+        { value: 'remarks', label: '备注',sortable:'custom' },
+        { value: 'singleAndDoublePowerSupply', label: '单双电源' ,sortable:'custom'},
+        { value: 'agreedToTemporaryShutdown', label: '是否同意临时关停（是/否）',sortable:'custom' },
+        { value: 'installSafetyMonitoringSoftware', label: '是否安装安全监测软件' ,sortable:'custom'},
+        { value: 'deployStrongPassword', label: '是否部署强口令',sortable:'custom' },
+        { value: 'cloudServiceUnit', label: '云服务单位' ,sortable:'custom'},
+        { value: 'leasedComputingResources', label: '租用计算资源情况（CPU核数）（个）',sortable:'custom' },
+        { value: 'leasedStorageResources', label: '租用存储资源情况（TB）' ,sortable:'custom'},
+        { value: 'leasedNetworkBandwidth', label: '租用网络带宽（兆）' ,sortable:'custom'},
+        { value: 'termOfLease', label: '租用期限（年）' ,sortable:'custom'},
         // { value: 'domainName', label: '域名' },
         // { value: 'domainNameRegistrationService', label: '域名注册服务商' },
-        { value: 'ns', label: 'NS记录' },
-        { value: 'cname', label: 'CNAME记录（别名）' },
-        { value: 'useCDN', label: '是否使用CDN' },
-        { value: 'networkArea', label: '网络区域' },
-        { value: 'allowVulnerabilityScanning', label: '是否允许漏洞扫描' },
-        { value: 'accessLocation', label: '接入位置' }
+        { value: 'ns', label: 'NS记录' ,sortable:'custom'},
+        { value: 'cname', label: 'CNAME记录（别名）' ,sortable:'custom'},
+        { value: 'useCDN', label: '是否使用CDN' ,sortable:'custom'},
+        { value: 'networkArea', label: '网络区域' ,sortable:'custom'},
+        { value: 'allowVulnerabilityScanning', label: '是否允许漏洞扫描' ,sortable:'custom'},
+        { value: 'accessLocation', label: '接入位置' ,sortable:'custom'},
+
 
 
       ],
@@ -629,7 +639,8 @@ export default {
           value: 'serialNumber',
           label: '序列号',
           width: '200px'
-        }
+        },
+
       ],
       value: '',
       isMultiline: false,
@@ -664,16 +675,35 @@ export default {
           label: '一年后过保'
         }
 
-      ]
+      ],
     }
   },
-  created() {
-    this.fetchData()
-    // 初始化新列顺序
-    this.newList=this.dataname
+ created() {
+    // 初始化列顺序
+   this.newList=this.dataname
   },
-  mounted() {
+  async mounted() {
     this.restaurants = this.loadAll()
+    //获取自定义字段
+    await getCustomFieldData().then(res=>{
+      class customField{
+        constructor(label, value) {
+          this.value=value;
+          this.label=label;
+          this.width='200px';
+        }
+      }
+      for(let i=0;i<res.data.total;i++){
+        console.log(res.data.items[i])
+        let customFieldInstance=new customField;
+        customFieldInstance.label=res.data.items[i].fieldLabel
+        customFieldInstance.value='customField.'+res.data.items[i].fieldName
+        console.log(customFieldInstance)
+        this.dataname.push(customFieldInstance)
+      }
+      this.newList=this.dataname
+    })
+    this.fetchData()
     this.columnDrop()
   },
   methods: {
@@ -694,7 +724,6 @@ export default {
         onMove: evt => {
           const deltaX = evt.willInsertAfter
           console.log(deltaX)
-
           if (deltaX === true) {
             bodyWrapper.scrollLeft = bodyWrapper.scrollLeft + (evt.draggedRect.left)
           } else {
