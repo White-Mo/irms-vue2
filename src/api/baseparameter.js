@@ -557,7 +557,13 @@ export function delCabinet(data) {
     params: {cabinetId : data}
   })
 }
-
+export function delCustomField(data) {
+  return request({
+    url: '/home/baseparameter/delCustomField',
+    method: 'delete',
+    params: {id : data}
+  })
+}
 
 //修改机房
 export function updateCabinetAction(data) {
@@ -621,6 +627,47 @@ export function getCustomFieldData(){
   return request({
     url:'/home/baseparameter/getCustomFieldData',
     method: 'get',
+    responseType: 'json'
+  })
+}
+export function getCustomFieldByPage(data){
+  return request({
+    url:'/home/baseparameter/getCustomFieldByPage',
+    method: 'get',
+    params: data
+  })
+}
+export function createCustomField(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/createCustomField',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+
+export function checkFieldName(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkFieldName',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+//检查标签是否重复
+export function checkFieldLabel(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/checkFieldLabel',
+    method: 'post',
+    responseType: 'json'
+  })
+}
+export function updateCustomField(data) {
+  return request({
+    params: data,
+    url: '/home/baseparameter/updateCustomField',
+    method: 'post',
     responseType: 'json'
   })
 }

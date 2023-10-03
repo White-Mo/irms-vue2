@@ -517,9 +517,6 @@ export default {
         { value: 'networkArea', label: '网络区域' ,sortable:'custom'},
         { value: 'allowVulnerabilityScanning', label: '是否允许漏洞扫描' ,sortable:'custom'},
         { value: 'accessLocation', label: '接入位置' ,sortable:'custom'},
-
-
-
       ],
       // 解决下拉框的部分字段数据顺序和表格中不一致的需求
       dataname_option: [
