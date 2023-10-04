@@ -17,10 +17,22 @@
             :gutter='10'
             class='bg-condition'
           >
-            <el-col :span='2'>
+            <el-col
+              :xs="2"
+              :sm="2"
+              :md="2"
+              :lg="2"
+              :xl="2"
+            >
               <span>查询条件：</span>
             </el-col>
-            <el-col :span='2'>
+            <el-col
+              :xs="3"
+              :sm="3"
+              :md="3"
+              :lg="3"
+              :xl="3"
+            >
               <el-select
                 v-model='dataName'
                 placeholder='详细字段查询'

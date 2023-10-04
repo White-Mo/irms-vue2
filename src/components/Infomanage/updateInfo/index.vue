@@ -12,17 +12,8 @@
     </el-row>
     <el-tabs v-model='tab_name' type='border-card' @tab-click='changeTab'>
       <el-tab-pane label='综合表' name='0' style='height: 75vh'>
-        <el-form ref='form' :model='form = row' label-width='120px' :inline='true' class='demo-form-inline'>
+        <el-form ref='form' :model='form = this.row' label-width='120px' :inline='true' class='demo-form-inline'>
           <el-row style='background: rgba(94,135,217,0.4)' v-show="currentShow === '2'">
-            <!--            <el-form-item label='单位'>
-                          <el-input v-model='form.postName' />
-                        </el-form-item>
-                        <el-form-item label='部门'>
-                          <el-input v-model='form.departmentName' />
-                        </el-form-item>
-                        <el-form-item label='设备类型'>
-                          <el-input v-model='form.equipmentTypeName' />
-                        </el-form-item>-->
             <el-col :span='2'>
               <div class='label-style'>单位</div>
             </el-col>
@@ -110,6 +101,21 @@
               <div class='label-style'>
                 <el-input v-model='connectedA' :value='connectedA' />
               </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <div class='label-style'>自定义字段</div>
+          </el-row>
+          <el-row style='background: rgba(94,135,217,0.4)'>
+            <el-col :span='6' v-for='item in customFieldData' :key='item.label'>
+              <el-col :span='8'>
+                <div class='label-style'>{{item.label }}</div>
+              </el-col>
+              <el-col :span='16'>
+                <div class='label-style'>
+                  <el-input  v-model='form.customField[item.value]' />
+                </div>
+              </el-col>
             </el-col>
           </el-row>
           <hr>
@@ -206,7 +212,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.equipmentAdminPhone' size='medium'class='phone' />
+                          <el-input v-model='form.equipmentAdminPhone' size='medium' class='phone' />
                         </div>
                       </el-col>
                       <el-col :span='2'>
@@ -344,7 +350,8 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-date-picker v-model='form.offlineTime' readonly='readonly' size='medium' :clearable='false'
+                          <el-date-picker v-model='form.offlineTime' readonly='readonly' size='medium'
+                                          :clearable='false'
                                           format='yyyy-MM-dd' value-format='yyyy-MM-dd' style='width:100%' />
                         </div>
                       </el-col>
@@ -424,7 +431,7 @@
                       </el-col>
                       <el-col :span='6'>
                         <div class='label-style'>
-                          <el-radio-group v-model='form.trueOrVirtual' :disabled="true">
+                          <el-radio-group v-model='form.trueOrVirtual' :disabled='true'>
                             <el-radio label='1'>实 体 机</el-radio>
                             <el-radio label='0'>虚 拟 机</el-radio>
                           </el-radio-group>
@@ -505,8 +512,9 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName' :disabled='isBanned === false'
-                                     placeholder='请选择' filterable  :popper-append-to-body='false'>
+                          <el-select v-model='form.machineRoomName' @change='SelectmachineRoomName'
+                                     :disabled='isBanned === false'
+                                     placeholder='请选择' filterable :popper-append-to-body='false'>
                             <el-option
                               v-for='item in machineRoomNames'
                               :key='item.value'
@@ -520,7 +528,8 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-select v-model='form.cabinetName' placeholder='请选择' :disabled='isBanned === false' clearable>
+                          <el-select v-model='form.cabinetName' placeholder='请选择' :disabled='isBanned === false'
+                                     clearable>
                             <el-option
                               v-for='item in cabinetAll'
                               :key='item.value'
@@ -542,7 +551,7 @@
                       </el-col>
                       <el-col :span='4'>
                         <div class='label-style'>
-                          <el-input v-model='form.cabinetUEnd':disabled='isBanned === false'size='medium' />
+                          <el-input v-model='form.cabinetUEnd' :disabled='isBanned === false' size='medium' />
                         </div>
                       </el-col>
                     </el-row>
@@ -1106,7 +1115,7 @@ import { getCabinet, getDepartment, getEquipmentType, getMachineRoom, getPost } 
 import { addEquipment, getbasic, getEquipmentsByBaseInfoId } from '@/api/table'
 import user from '@/store/modules/user'
 import { analysisReply } from '@/utils/xlsx'
-import { getAllFirstLevelBusinessSystem, getBusinessSystemAll } from '@/api/baseparameter'
+import { getAllFirstLevelBusinessSystem, getBusinessSystemAll, getCustomFieldData } from '@/api/baseparameter'
 
 export default {
   components: {
@@ -1124,6 +1133,7 @@ export default {
   },
   data() {
     return {
+      customFieldData: [],//自定义表头
       isBanned: true,
       determineLevel: '',//确定的等保等级
       successbusinessSubsystem: [],//筛选之后的业务子系统
@@ -1236,10 +1246,11 @@ export default {
           isMoving: false,//是否存在移动
           movingRecord: '',//设备移动记录
           movingRecordTime: '',//设备移动记录时间
-          businessApplicationName: ''//业务应用名称、
+          businessApplicationName: '',//业务应用名称、
+          customField: ''
         },
         config: [{ projectName: '', type: '', frequency: '', corenessOrCapacity: '', quantity: '' }],
-        software: [{ project: '', projectName: '', edition: '', type: '' , softwareIsChinaLocalization:''}],
+        software: [{ project: '', projectName: '', edition: '', type: '', softwareIsChinaLocalization: '' }],
         network: [{ networkCardName: '', ipAddress: '', macAddress: '', networkCardPort: '', switchInfo: '' }],
         protocolPort: [{ protocolName: '', appName: '', networkCardPort: '' }],
         appSystemUser: [{
@@ -1265,11 +1276,17 @@ export default {
         corenessOrCapacity: '核数/容量'
         // quantity: '数量'
       },
-      softwareLable: { project: '项目', projectName: '名称', edition: '版本', type: '类型', softwareIsChinaLocalization: '软件是否国产' },
+      softwareLable: {
+        project: '项目',
+        projectName: '名称',
+        edition: '版本',
+        type: '类型',
+        softwareIsChinaLocalization: '软件是否国产'
+      },
       networkLable: {
         networkCardName: '网卡',
         ipAddress: 'IP地址',
-        macAddress: 'MAC地址',
+        macAddress: 'MAC地址'
         // networkCardPort: '交换机',
         // switchInfo: '端口'
       },
@@ -1309,7 +1326,7 @@ export default {
       KeySet: {
         config: ['projectName', 'type', 'frequency', 'corenessOrCapacity'],
         software: ['project', 'projectName', 'edition', 'type', 'softwareIsChinaLocalization'],
-        network: ['networkCardName', 'ipAddress',  'macAddress'],
+        network: ['networkCardName', 'ipAddress', 'macAddress'],
         protocolPort: ['protocolName', 'appName', 'networkCardPort'],
         appSoftware: ['softwareName', 'softwareEdition', 'softwarePort', 'softwareOnlineTime', 'softwareDevelopCompany', 'softwareLiaison'],
         appSystemUser: ['userName', 'realName', 'userLevel', 'localAccessMode', 'remoteAccessMode', 'createDate', 'other'],
@@ -1353,7 +1370,26 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
+    await getCustomFieldData().then(res => {
+      class customField {
+        constructor(label, value , data) {
+          this.value = value
+          this.label = label
+          this.width = '200px'
+          this.data = data
+        }
+      }
+      for (let i = 0; i < res.data.total; i++) {
+        let customFieldInstance = new customField
+        customFieldInstance.label = res.data.items[i].fieldLabel
+        customFieldInstance.value = res.data.items[i].fieldName
+        if (this.row.customField ==null){
+          this.row.customField={}
+        }
+        this.customFieldData.push(customFieldInstance)
+      }
+    })
     const list = document.getElementsByClassName('update_detail')[0]
     const inputDom = list.getElementsByTagName('input')
     if (this.currentShow === '2') {
@@ -1416,16 +1452,6 @@ export default {
       this.listLoading = true
       this.row.onlineTime = new Date(this.row.onlineTime)
       this.row.offlineTime = new Date(this.row.offlineTime)
-      /*      getPost().then(response => {
-              console.log(response)
-              this.postAll = response.data.items
-              this.postAll.forEach(element => {
-                if (element.postId === this.roleid) {
-                  console.log(element.postName)
-                  this.equipment.equipmentBaseInfo.postName = element.postName
-                }
-              })
-            })*/
       getMachineRoom(this.roleid).then(response => {
         this.machineRoomNames = response.data.items
       })
@@ -1777,13 +1803,15 @@ export default {
 /deep/ .el-input.is-disabled .el-input__inner {
   color: #898585;
 }
+
 //选择框输入框保持一致
 .el-select {
   display: inline-block;
   position: relative;
   width: 100%; /* 设置 el-select 宽度为100% */
 }
-/deep/.el-form--inline .el-form-item__content {
+
+/deep/ .el-form--inline .el-form-item__content {
   width: 100%;
 }
 
@@ -1793,10 +1821,12 @@ export default {
   flex: 1 0 20%;
   margin: 10px;
 }
+
 .phone {
   height: 1px !important;
   width: 100%;
 }
+
 /deep/ .el-select-dropdown__list {
   margin: 5px 20px 20px 5px !important;
   height: auto !important;
@@ -1808,7 +1838,7 @@ export default {
   align-content: flex-start !important;
   align-items: stretch !important;
   max-height: 100vh !important;
-  overflow-y: auto!important; /* 启用垂直滚动 */
+  overflow-y: auto !important; /* 启用垂直滚动 */
 }
 
 /deep/ .el-select-dropdown__list::-webkit-scrollbar {
