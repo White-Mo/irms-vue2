@@ -696,11 +696,12 @@ export default {
         customFieldInstance.label=res.data.items[i].fieldLabel
         customFieldInstance.value='customField.'+res.data.items[i].fieldName
         console.log(customFieldInstance)
-        this.dataname.push(customFieldInstance)
+        this.newList.push(customFieldInstance)
       }
-      this.newList=this.dataname
     })
     this.fetchData()
+
+
     this.columnDrop()
   },
   methods: {
@@ -936,6 +937,9 @@ export default {
           this.listLoading = false
         })
       }
+      this.$nextTick(() => {
+        this.$refs.table.doLayout(); // 解决表格错位
+      });
     },
     addInfo() {
       this.ifUpdate = '1'
