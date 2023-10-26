@@ -671,3 +671,15 @@ export function updateCustomField(data) {
     responseType: 'json'
   })
 }
+
+export function searchByPage(obj) {
+
+  obj.fieldNames = [
+    'basicInfoId'
+  ]
+  return request({
+    url: '/EquipmentController/search',
+    method: 'get',
+    params: obj
+  })
+}

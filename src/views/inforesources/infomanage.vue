@@ -152,7 +152,7 @@
             ref='table'
             v-loading='listLoading'
             :diisable='true'
-            :data='list'
+            :data='tableData'
             element-loading-text='Loading'
             height='70vh'
             border
@@ -261,7 +261,7 @@ import {
 import addInfo from '@/components/Infomanage/addInfo'
 import updateInfo from '@/components/Infomanage/updateInfo'
 import searchTemplate from '@/components/Infomanage/searchTemplate'
-import { getCustomFieldData } from '@/api/baseparameter'
+import { getCustomFieldData, searchByPage } from '@/api/baseparameter'
 
 export default {
   // 引用vue reload方法
@@ -296,6 +296,7 @@ export default {
   },
   data() {
     return {
+      tableData: [],
       scrollLeft: 0,
       newTable: false,
       showTable: true,
@@ -702,8 +703,21 @@ export default {
     })
     this.fetchData()
     this.columnDrop()
+    this.dataInit()
   },
   methods: {
+    dataInit() {
+      const params = {
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
+        inputValue: this.inputValue
+      }
+      searchByPage(params).then(res => {
+        const { total, list } = res.data
+        this.tableData = list
+        this.total = total
+      })
+    },
     // 列拖拽
     columnDrop() {
       // 创建列拖拽实例

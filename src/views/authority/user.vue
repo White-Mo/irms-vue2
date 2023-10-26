@@ -31,7 +31,7 @@
             :lg='3'
             :xl='3'
           >
-            <el-select
+            <el-selec
               v-model='dataName'
               placeholder='详细字段查询'
               multiple
@@ -45,7 +45,7 @@
                 :value='item.value'
                 class='searchInput'
               />
-            </el-select>
+            </el-selec>
           </el-col>
           <el-col
             :xs='4'
