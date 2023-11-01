@@ -54,7 +54,7 @@
             <el-button type="primary" size="medium" icon="el-icon-download" @click="exportExcel(2)">统计表导出</el-button>
           </el-col>-->
           <el-col :span="3">
-            <el-button type="primary" size="medium" icon="el-icon-download" @click="ExportTable">填报表导出</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click="generateStatisticalReports">设备填报情况统计表</el-button>
           </el-col>
           <el-col :span="2">
             <el-button
@@ -72,6 +72,19 @@
           style="margin-top: -80px;"
           custom-class="transparent-dialog">
           <dataStatementMakeSearchTemplate @changList="receiveAllSearchData"></dataStatementMakeSearchTemplate>
+        </el-dialog>
+        <el-dialog
+          title="设备填报情况统计表"
+          :visible.sync="sumReportDialogVisible"
+          width="90%"
+        >
+          <statisticalTable @get-table-data='getTableData'></statisticalTable>
+          <div style="margin: 60px 50px 0px;text-align: center">
+            <span slot="footer" class="dialog-footer">
+              <el-button class="download" type="primary" :loading="buttonLoading" @click="downloadStatisticalTable">下 载</el-button>
+              <el-button class="download" type="primary" @click="sumReportDialogVisible = false">取 消</el-button>
+            </span>
+          </div>
         </el-dialog>
         <div class="grid-content form_table_class" >
           <el-table
@@ -149,11 +162,11 @@
     </div>
   </div>
 
+
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getExcelDemo1, getExcelDemo2, getExcelDemo3 } from '@/api/get_excel'
 import { getbasic, getBasicInfoAll, searchComprehensiveInfoByMultipleConditions } from '@/api/table'
 import { getList, getdataCount } from '@/api/table'
 import Progress from "@/components/progress"
@@ -167,11 +180,15 @@ import {
 } from '@/api/cockpit_data'
 import { getPost } from '@/api/select'
 const {getInfo} = require("@/api/dashboard");
-const {getExcelDemo4} = require("@/api/get_excel");
+const {getExcelDemo1, getExcelDemo2, getExcelDemo3,getExcelDemo4} = require("@/api/get_excel");
+import statisticalTable from "@/components/visualization/statisticalTable";
 export default {
-
   data() {
     return {
+      sumTableData:[],
+      buttonLoading:false,
+      sumReportDialogVisible: false,
+      downloadReport: "生成统计报表",
       roleId:this.$store.state.user.roleid,
       userName:this.$store.state.user.post_name,
       roleName:this.$store.state.user.roles[0],
@@ -418,7 +435,8 @@ export default {
   },
   components:{
     Progress,
-    dataStatementMakeSearchTemplate
+    dataStatementMakeSearchTemplate,
+    statisticalTable
   },
   computed: {
     ...mapGetters(['name', 'roles']),
@@ -996,6 +1014,17 @@ export default {
       document.querySelector('.getTextWidth').remove()
       return width
     },
+    async generateStatisticalReports() {
+      this.sumReportDialogVisible = true
+    },
+    downloadStatisticalTable() {
+      this.sumReportDialogVisible = false
+      getExcelDemo4(this.sumTableData)
+    },
+    getTableData(val){
+      this.sumTableData=val
+      this.buttonLoading=false
+    }
   }
 }
 </script>

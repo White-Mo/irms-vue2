@@ -1,23 +1,24 @@
 <template>
-  <div class="update_detail">
-    <div class="source">
-      <el-page-header content="字段信息" @back="back" />
+  <div class='update_detail'>
+    <div class='source'>
+      <el-page-header content='字段信息' @back='back' />
     </div>
-    <div class="source">
+    <div class='source'>
       <el-row>
-        <el-form ref="fieldForm" :model="fieldForm = this.field" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
-          <el-form-item label="字段名称" prop="fieldName">
-            <el-col :span="10">
-              <el-input v-model="fieldForm.fieldName" />
+        <el-form ref='fieldForm' :model='fieldForm = this.field' label-width='auto' :inline='false'
+                 class='demo-form-inline' :rules='rules'>
+          <el-form-item label='字段名称（数据库标识）' prop='fieldName'>
+            <el-col :span='10'>
+              <el-input :disabled='true' v-model='fieldForm.fieldName' ></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="字段标签" prop="fieldLabel">
-            <el-col :span="10">
-              <el-input v-model="fieldForm.fieldLabel" />
+          <el-form-item label='字段标签(页面显示文字)' prop='fieldLabel'>
+            <el-col :span='10'>
+              <el-input v-model='fieldForm.fieldLabel' />
             </el-col>
           </el-form-item>
           <el-form-item v-show="currentShow === '3'">
-            <el-button type="primary" @click="onSubmit('fieldForm')">完成修改</el-button>
+            <el-button type='primary' @click="onSubmit('fieldForm')">完成修改</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { checkFieldName, checkFieldLabel, updateCustomField} from '@/api/baseparameter'
+import { checkFieldName, checkFieldLabel, updateCustomField } from '@/api/baseparameter'
 
 export default {
   name: 'updateCustomField',
@@ -41,7 +42,7 @@ export default {
     }
   },
   data() {
-    var checkName =async (rule, value, callback) => {
+    var checkName = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('单位不能为空'))
       } else {
@@ -54,7 +55,7 @@ export default {
       }
       callback()
     }
-    var checkLabel =async (rule, value, callback) => {
+    var checkLabel = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('单位代码不能为空'))
       } else {
@@ -71,8 +72,8 @@ export default {
       nameRules: false,
       labelRules: false,
       field: {
-        id:'',
-        fieldName:'',
+        id: '',
+        fieldName: '',
         fieldLabel: ''
       },
       rules: {
@@ -122,7 +123,7 @@ export default {
         if (valid) {
           const field = { ...this.field }
           updateCustomField(field).then(res => {
-            this.$alert("修改成功", '提示', {
+            this.$alert('修改成功', '提示', {
               confirmButtonText: '确定',
               type: 'info',
               showClose: false
@@ -134,16 +135,16 @@ export default {
           })
         } else {
           //console.log('error submit!!');
-          return false;
+          return false
         }
-      });
+      })
     },
     // 验证用户名是否存在
     async getNameRules() {
       const params = {
-        id:this.field.id,
+        id: this.field.id,
         fieldName: this.field.fieldName,
-        action:"update"
+        action: 'update'
       }
       await checkFieldName(params).then((res) => {
         if (res.data.valid === true) {
@@ -156,9 +157,9 @@ export default {
     },
     async getLabelRules() {
       const params = {
-        id:this.field.id,
+        id: this.field.id,
         fieldLabel: this.field.fieldLabel,
-        action:"update"
+        action: 'update'
       }
       await checkFieldLabel(params).then((res) => {
         if (res.data.valid === true) {
@@ -169,14 +170,14 @@ export default {
         }
       })
     },
-    initFieldData(){
-      this.field=this.row
+    initFieldData() {
+      this.field = this.row
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 .source {
   padding: 24px;
 }

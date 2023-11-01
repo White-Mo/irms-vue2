@@ -138,12 +138,15 @@
               @click='addInfo()'
             >添加设备信息
             </el-button>
+            <el-tooltip content="点击此处进行全体数据的高级搜索，并非对当前搜索结果进行筛选" placement="bottom" effect="light">
             <el-button
               size='medium'
               type='primary'
               @click='search()'
-            >筛选
+            >
+              筛选
             </el-button>
+            </el-tooltip>
           </el-col>
         </el-row>
 

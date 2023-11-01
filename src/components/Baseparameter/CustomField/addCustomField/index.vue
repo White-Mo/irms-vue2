@@ -5,19 +5,19 @@
     </div>
     <div class="source">
       <el-row>
-        <el-form ref="fieldForm" :model="fieldForm = field" label-width="120px" :inline="false" class="demo-form-inline" :rules="rules">
-          <el-form-item label="字段名称" prop="fieldName">
+        <el-form ref="fieldForm" :model="fieldForm = field" label-width="auto" :inline="false" class="demo-form-inline" :rules="rules">
+          <el-form-item label="字段名称(数据库标识)" prop="fieldName">
             <el-col :span="10">
               <el-input v-model="fieldForm.fieldName" />
             </el-col>
           </el-form-item>
-          <el-form-item label="字段标签" prop="fieldLabel">
+          <el-form-item label="字段标签（页面显示文字）" prop="fieldLabel">
             <el-col :span="10">
               <el-input v-model="fieldForm.fieldLabel" />
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('fieldForm')">添加单位</el-button>
+            <el-button type="primary" @click="onSubmit('fieldForm')">添加字段</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -31,26 +31,26 @@ import { checkFieldLabel, checkFieldName, createCustomField } from '@/api/basepa
 export default {
   name: 'addField',
   data() {
-    var checkName =async (rule, value, callback) => {
+    let checkName =async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('字段名称不能为空'))
       } else {
         await this.getNameRules()
         if (!this.nameRules) {
-          callback(new Error('单位已存在，请重新输入'))
+          callback(new Error('字段已存在，请重新输入'))
         } else {
           callback()
         }
       }
       callback()
     }
-    var checkCode =async (rule, value, callback) => {
+    let checkCode =async (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('单位代码不能为空'))
+        return callback(new Error('字段不能为空'))
       } else {
         await this.getLabelRules()
         if (!this.codeRules) {
-          callback(new Error('单位代码已存在，请重新输入'))
+          callback(new Error('字段标签已存在，请重新输入'))
         } else {
           callback()
         }

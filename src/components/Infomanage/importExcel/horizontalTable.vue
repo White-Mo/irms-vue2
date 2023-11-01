@@ -26,7 +26,7 @@
               <el-button style='margin-left:10px' size='large' type='primary' @click='downloadFile()'
                          icon='el-icon-download'>下载模板
               </el-button>
-              <el-button size='large' type='success' @click='checkoutFile' icon='el-icon-upload el-icon--right'>
+              <el-button :loading=fileUpdateLoading size='large' type='success' @click='checkoutFile' icon='el-icon-upload el-icon--right'>
                 上传文件
               </el-button>
               <div slot='tip' class='el-upload__tip'>只能上传Excel文件</div>
@@ -91,6 +91,7 @@ export default {
   data() {
     return {
       value: '信息资产统计综合表',
+      fileUpdateLoading:false,
       fileList: [],
       checkList: [],
       tableData: [],
@@ -139,6 +140,7 @@ export default {
     },
     // 确认文件
     checkoutFile() {
+      this.fileUpdateLoading=true
       this.checkList = this.fileList
       this.submitUpload()
       this.fileList = []
@@ -242,6 +244,7 @@ export default {
           callback: action => {
             this.percent = 0
             this.tableData = this.repalyInfo
+            this.fileUpdateLoading=false
           }
         })
       }
