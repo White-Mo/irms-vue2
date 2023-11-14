@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="所属机房" prop="machineRoomName">
             <el-col :span="10">
-              <el-select v-model="machineRoomFrom.machineRoomName" placeholder="请选择" :popper-append-to-body ="false">
+              <el-select @change='changeMachineRoom' v-model="machineRoomFrom.machineRoomName" placeholder="请选择" :popper-append-to-body ="false">
                 <el-option
                   v-for="item in machineRoomAll"
                   :key="item.value"
@@ -147,6 +147,13 @@ export default {
             this.machineRoomAll = response.data.items
             this.machineRoomFrom.machineName = this.machineRoomAll[0].machineName
           })
+        }
+      })
+    },
+    changeMachineRoom(val) {
+      this.machineRoomAll.forEach(element => {
+        if (element.machineRoomName == val) {
+          this.machineRoomFrom.machineNameId=element.machineRoomId
         }
       })
     },
