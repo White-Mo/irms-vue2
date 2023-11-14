@@ -151,9 +151,10 @@ export default {
       })
     },
     changeMachineRoom(val) {
+      console.log("选择的机房名称：",val)
       this.machineRoomAll.forEach(element => {
         if (element.machineRoomName == val) {
-          this.machineRoomFrom.machineNameId=element.machineRoomId
+          this.machineRoomFrom.machineRoomId=element.machineRoomId
         }
       })
     },
