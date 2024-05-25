@@ -854,6 +854,7 @@ function getRowBaseinfo(outdata) {
     equipmentBaseInfo.status=3
   }else {
     const message = {}
+    message.type='填写错误'
     message.erro ='设备状态错误'
     readStatus0.push(message)
   }
@@ -965,6 +966,7 @@ function getRowBaseinfo(outdata) {
   } else {
     const onlineTimeRegex = {}
     onlineTimeRegex.erro = '上线时间格式错误'
+    onlineTimeRegex.type = '填写错误'
     readStatus13.push(onlineTimeRegex)
   }
 
